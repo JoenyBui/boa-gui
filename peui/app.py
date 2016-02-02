@@ -20,6 +20,12 @@ import wx
 from peui.main.window import MainWindow
 
 if __name__ == '__main__':
+    #TODO: Smart Textbox
+    #TODO: Undo-Redo Model
+    #TODO: Cut & Paste
+    #TODO: Printing Pdf & Docx
+    #TODO: Open & Close Project
+
     app = wx.App(False)
     frame = MainWindow(parent=None, title='Sample Editor')
     app.MainLoop()
