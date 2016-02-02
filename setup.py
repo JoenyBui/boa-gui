@@ -26,7 +26,7 @@ def get_packages(package):
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
-version = get_version('keydeck')
+version = get_version('peui')
 
 setup(
       name="peui",
