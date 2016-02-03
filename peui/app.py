@@ -16,8 +16,11 @@
 """
 
 import wx
+import wx.aui
 
-from peui.main.window import MainWindow
+from main.window import MainWindow
+from controller.main import MainController
+from model.project import Project
 
 if __name__ == '__main__':
     #TODO: Smart Textbox
@@ -26,6 +29,10 @@ if __name__ == '__main__':
     #TODO: Printing Pdf & Docx
     #TODO: Open & Close Project
 
+    project = Project()
+    controller = MainController(project)
+
     app = wx.App(False)
     frame = MainWindow(parent=None, title='Sample Editor')
+    app.SetTopWindow(frame=frame)
     app.MainLoop()

@@ -1,5 +1,6 @@
 import wx
-import wx.aui
+# import wx.aui
+import wx.lib.agw.aui as aui
 
 from menubar import CustomMenuBar
 from statusbar import CustomStatusBar
@@ -16,7 +17,10 @@ class MainWindow(wx.Frame):
         wx.Frame.__init__(self, parent, title=title, size=(width, height))
 
         self._parent = parent
-        self._mgr = wx.aui.AuiManager(self)
+        self._mgr = aui.AuiManager(self)
+
+        # notify AUI which frame to use
+        self._mgr.SetManagedWindow(self)
 
         # create several text controls
         text1 = wx.TextCtrl(self, -1, 'Pane 1 - sample text',
@@ -27,16 +31,16 @@ class MainWindow(wx.Frame):
                             wx.DefaultPosition, wx.Size(200,150),
                             wx.NO_BORDER | wx.TE_MULTILINE)
 
-        # text3 = wx.TextCtrl(self, -1, 'Main content window',
-        #                     wx.DefaultPosition, wx.Size(200,150),
-        #                     wx.NO_BORDER | wx.TE_MULTILINE)
+        text3 = wx.TextCtrl(self, -1, 'Main content window',
+                            wx.DefaultPosition, wx.Size(200,150),
+                            wx.NO_BORDER | wx.TE_MULTILINE)
 
         self._tree = wx.TreeCtrl(self, -1)
 
         # add the panes to the manager
         self._mgr.AddPane(text1, wx.LEFT, 'Pane Number One')
         self._mgr.AddPane(text2, wx.BOTTOM, 'Pane Number Two')
-        # self._mgr.AddPane(text3, wx.CENTER)
+        self._mgr.AddPane(text3, wx.CENTER)
         self._mgr.AddPane(self._tree, wx.RIGHT, 'COME ON')
 
         # Notebook
@@ -48,8 +52,6 @@ class MainWindow(wx.Frame):
         # self._mgr.AddPane(self._notebook, wx.CENTER)
                           # wx.aui.AuiPaneInfo().Name("notebook_content").CenterPane().PaneBorder(False))
         # self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
-        # self._notebook.Refresh()
-        # self._notebook.Update()
 
         # self._mgr.AddPane(self)
         # tell the manager to 'commit' all the changes just made
@@ -61,21 +63,23 @@ class MainWindow(wx.Frame):
 
         # # self.CreateStatusBar()
         #
-        filemenu = wx.Menu()
+        # filemenu = wx.Menu()
+        #
+        # menuAbout = filemenu.Append(wx.ID_ABOUT, "&About", " Information about this program.")
+        # filemenu.AppendSeparator()
+        # menuExit = filemenu.Append(wx.ID_EXIT, "E&xit", "Terminate the program")
+        #
+        # # Creating the menubar.
+        # menuBar = wx.MenuBar()
+        # menuBar.Append(filemenu, "&File")
+        self._menu_bar = CustomMenuBar(self)
+        self.SetMenuBar(self._menu_bar)
 
-        menuAbout = filemenu.Append(wx.ID_ABOUT, "&About", " Information about this program.")
-        filemenu.AppendSeparator()
-        menuExit = filemenu.Append(wx.ID_EXIT, "E&xit", "Terminate the program")
+        # self.SetMenuBar(self._menu_bar)
 
-        # Creating the menubar.
-        menuBar = wx.MenuBar()
-        menuBar.Append(filemenu, "&File")
-        self.SetMenuBar(menuBar)
-
-        # Set events.
-        self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
-        self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
-
+        # # Set events.
+        # self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
+        # self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
 
         # Status Bar
         self.status_bar = CustomStatusBar(self)
@@ -97,3 +101,4 @@ class MainWindow(wx.Frame):
         self._mgr.UnInit()
         # delete the frame
         self.Destroy()
+        event.Skip()
