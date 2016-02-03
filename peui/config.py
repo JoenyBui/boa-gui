@@ -1,20 +1,80 @@
+from collections import OrderedDict
+
 import wx
 
 __author__ = 'jbui'
 
 # There are method keys that corresponds to a specific controller action from the project.
-METHOD_OPEN_PROJECT = 1
-METHOD_SAVE_PROJECT = 2
-METHOD_SAVE_AS_PROJECT = 3
-METHOD_CLOSE_PROJECT = 4
+METHOD_NEW_PROJECT = wx.ID_NEW
+METHOD_OPEN_PROJECT = wx.ID_OPEN
+METHOD_SAVE_PROJECT = wx.ID_SAVE
+METHOD_SAVE_AS_PROJECT = wx.ID_SAVEAS
+METHOD_CLOSE_ALL = wx.ID_CLOSE_ALL
+METHOD_EXIT_PROJECT = wx.ID_EXIT
+METHOD_FILE = wx.ID_FILE
 
-MASTER_KEY = dict(
-    open_project=dict(id=METHOD_OPEN_PROJECT, menuitem='Open Project', )
-)
+METHOD_VIEW = wx.NewId()
+METHOD_WINDOW = wx.NewId()
+METHOD_WINDOW_TREE = wx.NewId()
+METHOD_WINDOW_CONSOLE = wx.NewId()
 
-MENU_BAR_KEY = dict(
-    file=dict(id=None)
-)
+MASTER_KEY = {
+    METHOD_NEW_PROJECT:     dict(name='New Project'),
+    METHOD_OPEN_PROJECT:    dict(name='Open Project'),
+    METHOD_SAVE_PROJECT:    dict(name='Save Project'),
+    METHOD_SAVE_AS_PROJECT: dict(name='Save Project As'),
+    METHOD_CLOSE_ALL:       dict(name='Close All Projects'),
+    METHOD_EXIT_PROJECT:    dict(name='Exit'),
+}
+
+MENU_BAR_KEY = [
+    OrderedDict(
+        name='&File',
+        id=METHOD_FILE,
+        keys=[
+            OrderedDict(
+                id=METHOD_NEW_PROJECT,
+                name='&New Project'
+            ),
+            OrderedDict(
+                id=METHOD_OPEN_PROJECT,
+                name='&Open Project'
+            ),
+            OrderedDict(
+                id=METHOD_SAVE_PROJECT,
+                name='Save Project'
+            ),
+            OrderedDict(
+                id=METHOD_SAVE_AS_PROJECT,
+                name='Save As Project'
+            ),
+            OrderedDict(
+                id=METHOD_EXIT_PROJECT,
+                name='E&xit'
+            )
+        ]
+    ),
+    OrderedDict(
+        name='View',
+        id=METHOD_VIEW,
+        keys=[
+            OrderedDict(
+                id=METHOD_WINDOW,
+                name='Window',
+                keys=[
+                    OrderedDict(
+                        id=METHOD_WINDOW_TREE,
+                        name='Project Tree'
+                    ),
+                    OrderedDict(
+                        id=METHOD_WINDOW_CONSOLE,
+                        name='Consolve'
+                    ),
+                ]
+            ),
+        ]
+    )
+]
 
 CONTEXT_MENU_KEY = dict(
 

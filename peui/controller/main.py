@@ -1,4 +1,6 @@
-from ..controller.main import *
+from ..config import *
+
+from ..main.menubar import CustomMenuBar
 
 __author__ = 'jbui'
 
@@ -8,7 +10,7 @@ class MainController(object):
     Main Controller
     """
 
-    def __init__(self, project):
+    def __init__(self, project, master_key, **kwargs):
         self.project = project
 
         # Add controller to project
@@ -16,12 +18,41 @@ class MainController(object):
 
         self.frame = None
 
-        self.binds = dict(
-            METHOD_OPEN_PROJECT=self.open_project,
-            METHOD_SAVE_PROJECT=self.save_project,
-            METHOD_SAVE_AS_PROJECT=self.save_as_project,
-            METHOD_CLOSE_PROJECT=self.close_project
-        )
+        self.master_key = master_key
+
+        self.bind_methods()
+
+    def bind_methods(self):
+        """
+        Connect the keys to the function for binding at the menu bar, context menu, shortcut, etc...
+        :return:
+        """
+        self.master_key[METHOD_NEW_PROJECT]['method'] = self.new_project
+        self.master_key[METHOD_OPEN_PROJECT]['method'] = self.open_project
+        self.master_key[METHOD_SAVE_PROJECT]['method'] = self.save_project
+        self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.save_as_project
+        self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
+
+    def set_key(self, key):
+        """
+        Establish the menu bar items.
+        :param key:
+        :return:
+        """
+        menu_bar = CustomMenuBar(self.frame, self)
+        menu_bar.set_menu_item(key)
+
+        for id, menu in menu_bar.menus.items():
+            if self.master_key.get(id):
+                if self.master_key[id].get('method'):
+                    if menu:
+                        self.frame.Bind(wx.EVT_MENU, self.master_key[id]['method'], menu)
+
+        self.frame.menu_bar = menu_bar
+        self.frame.SetMenuBar(self.frame.menu_bar)
+
+    def new_project(self, event):
+        pass
 
     def open_project(self, event):
         pass
@@ -32,7 +63,7 @@ class MainController(object):
     def save_as_project(self, event):
         pass
 
-    def close_project(self, event):
+    def exit_project(self, event):
         self.frame.Close(True)
         self.frame.Destroy()
         event.Skip()

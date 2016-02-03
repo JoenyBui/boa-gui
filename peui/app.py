@@ -14,25 +14,48 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Protection Engineering Consultants.
 """
+import os
+import sys
 
 import wx
 import wx.aui
 
-from main.window import MainWindow
-from controller.main import MainController
-from model.project import Project
 
-if __name__ == '__main__':
+if __name__ == '__main__' and __package__ is None:
+    # Relative Import Hack
+    package_name = 'peui'
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.sys.path.insert(1, parent_dir)
+    mod = __import__(package_name)
+    sys.modules[package_name] = mod
+    __package__ = package_name
+
+    from .main.window import MainWindow
+    from .controller.main import MainController
+    from .model.project import Project
+
+    from .config import MASTER_KEY, MENU_BAR_KEY
+
     #TODO: Smart Textbox
     #TODO: Undo-Redo Model
     #TODO: Cut & Paste
     #TODO: Printing Pdf & Docx
     #TODO: Open & Close Project
+    #TODO: License Manager
+    #TODO: Backup Temp File
+    #TODO: Periodic Savings
 
-    project = Project()
-    controller = MainController(project)
-
+    # Initialize Application
     app = wx.App(False)
-    frame = MainWindow(parent=None, title='Sample Editor')
+    project = Project()
+    controller = MainController(project, master_key=MASTER_KEY)
+
+    frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
+
+    # Set Components.
+    controller.set_key(MENU_BAR_KEY)
+
+    # Load Model
+    frame.Show(True)
     app.SetTopWindow(frame=frame)
     app.MainLoop()

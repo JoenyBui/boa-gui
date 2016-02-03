@@ -6,3 +6,7 @@ __copyright__ = 'Copyright @ Protection Engineering Consultants, LLC'
 
 # Version synonym
 VERSION = __version__
+
+__all__ = [
+    'main',
+]

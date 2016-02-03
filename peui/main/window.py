@@ -2,7 +2,7 @@ import wx
 # import wx.aui
 import wx.lib.agw.aui as aui
 
-from menubar import CustomMenuBar
+
 from statusbar import CustomStatusBar
 from ..panel.general import GeneralPanel
 
@@ -13,10 +13,14 @@ class MainWindow(wx.Frame):
     """
     Main Window
     """
-    def __init__(self, parent=None, title='', width=800, height=600, **kwargs):
+    def __init__(self, parent, controller, title='', width=800, height=600, **kwargs):
         wx.Frame.__init__(self, parent, title=title, size=(width, height))
 
-        self._parent = parent
+        self.parent = parent
+
+        self.controller = controller
+        self.controller.frame = self
+
         self._mgr = aui.AuiManager(self)
 
         # notify AUI which frame to use
@@ -72,8 +76,8 @@ class MainWindow(wx.Frame):
         # # Creating the menubar.
         # menuBar = wx.MenuBar()
         # menuBar.Append(filemenu, "&File")
-        self._menu_bar = CustomMenuBar(self)
-        self.SetMenuBar(self._menu_bar)
+        self.menu_bar = None
+
 
         # self.SetMenuBar(self._menu_bar)
 
@@ -85,8 +89,6 @@ class MainWindow(wx.Frame):
         self.status_bar = CustomStatusBar(self)
         self.SetStatusBar(self.status_bar)
 
-        # Show Window
-        self.Show(True)
 
     def OnAbout(self, e):
         dlg = wx.MessageDialog(self, "A small text editor", "About Sample Editor", wx.OK)
