@@ -33,6 +33,8 @@ if __name__ == '__main__' and __package__ is None:
     from .main.window import MainWindow
     from .controller.main import MainController
     from .model.project import Project
+    from .tree.project import ProjectTree
+    from .panel.general import GeneralPanel
 
     from .config import MASTER_KEY, MENU_BAR_KEY
 
@@ -54,6 +56,14 @@ if __name__ == '__main__' and __package__ is None:
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)
+
+    # Tree Panel.
+    pt = ProjectTree(frame, controller, project)
+    frame.add_pane(pt, wx.LEFT, 'Project Tree')
+
+    # General Panel
+    gp = GeneralPanel(parent=frame)
+    frame.add_pane(gp, wx.CENTER, 'View')
 
     # Load Model
     frame.Show(True)

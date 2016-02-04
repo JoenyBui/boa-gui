@@ -1,6 +1,8 @@
 from ..config import *
 
 from ..main.menubar import CustomMenuBar
+from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
+from ..form.about import AboutDialog
 
 __author__ = 'jbui'
 
@@ -32,6 +34,7 @@ class MainController(object):
         self.master_key[METHOD_SAVE_PROJECT]['method'] = self.save_project
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.save_as_project
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
+        self.master_key[METHOD_ABOUT]['method'] = self.about
 
     def set_key(self, key):
         """
@@ -52,16 +55,20 @@ class MainController(object):
         self.frame.SetMenuBar(self.frame.menu_bar)
 
     def new_project(self, event):
-        pass
+        dlg = NewProjectDialog(self)
+        res = dlg.ShowModal()
 
     def open_project(self, event):
-        pass
+        dlg = OpenProjectDialog(self)
+        res = dlg.ShowModal()
 
     def save_project(self, event):
-        pass
+        dlg = SaveProjectDialog(self)
+        res = dlg.ShowModal()
 
     def save_as_project(self, event):
-        pass
+        dlg = SaveAsProjectDialog(self)
+        res = dlg.ShowModal()
 
     def exit_project(self, event):
         self.frame.Close(True)
@@ -69,4 +76,6 @@ class MainController(object):
         event.Skip()
 
     def about(self, event):
-        pass
+        abt = AboutDialog(name='Generic Gui')
+        abt.show()
+

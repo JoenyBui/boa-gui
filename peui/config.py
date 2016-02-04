@@ -18,6 +18,9 @@ METHOD_WINDOW = wx.NewId()
 METHOD_WINDOW_TREE = wx.NewId()
 METHOD_WINDOW_CONSOLE = wx.NewId()
 
+METHOD_HELP = wx.ID_HELP
+METHOD_ABOUT = wx.ID_ABOUT
+
 MASTER_KEY = {
     METHOD_NEW_PROJECT:     dict(name='New Project'),
     METHOD_OPEN_PROJECT:    dict(name='Open Project'),
@@ -25,6 +28,9 @@ MASTER_KEY = {
     METHOD_SAVE_AS_PROJECT: dict(name='Save Project As'),
     METHOD_CLOSE_ALL:       dict(name='Close All Projects'),
     METHOD_EXIT_PROJECT:    dict(name='Exit'),
+
+    METHOD_HELP:            dict(name='&Help'),
+    METHOD_ABOUT:           dict(name='&About')
 }
 
 MENU_BAR_KEY = [
@@ -71,6 +77,16 @@ MENU_BAR_KEY = [
                         name='Consolve'
                     ),
                 ]
+            ),
+        ]
+    ),
+    OrderedDict(
+        name='Help',
+        id=METHOD_HELP,
+        keys=[
+            OrderedDict(
+                id=METHOD_ABOUT,
+                name='About',
             ),
         ]
     )
