@@ -2,6 +2,8 @@ import os
 
 import wx
 
+from ..textbox.textbox import TextSmartBox
+
 __author__ = 'jbui'
 
 
@@ -29,8 +31,8 @@ class NewProjectPanel(wx.Panel):
         wx.Panel.__init__(self, parent, *args, **kwargs)
 
         # Attributes
-        self._field1 = wx.TextCtrl(self)
-        self._field2 = wx.TextCtrl(self)
+        self._field1 = TextSmartBox(self)
+        self._field2 = TextSmartBox(self)
 
         self._do_layout()
 
