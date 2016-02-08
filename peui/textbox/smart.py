@@ -28,7 +28,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     """
     def __init__(self, parent, *args, **kwargs):
-        wx.BoxSizer.__init__(self, parent, *args, **kwargs)
+
+        wx.BoxSizer.__init__(self, wx.HORIZONTAL)
+
+        self.parent = parent
 
         self.label = None
         self.textbox = None
@@ -37,14 +40,16 @@ class SmartInputLayout(wx.BoxSizer):
         # Call do_layout after you have populate the label, textbox, and/or postbox
 
     def do_layout(self):
+        """
+
+        :return:
+        """
         if self.label:
-            self.AddSpacer(10)
-            self.Add(self.label)
+            self.Add(wx.StaticText(self.parent, label=self.label), 0,
+                     wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
 
         if self.textbox:
-            self.AddSpacer(5)
-            self.Add(self.textbox)
+            self.Add(self.textbox, 1, wx.EXPAND)
 
         if self.postbox:
-            self.AddSpacer(5)
-            self.Add(self.postbox)
+            self.Add(self.postbox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT)

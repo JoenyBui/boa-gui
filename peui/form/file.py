@@ -2,18 +2,27 @@ import os
 
 import wx
 
-from ..textbox.textbox import TextSmartBox
+from ..textbox.textbox import TextSmartBox, TextInputLayout
+from ..textbox.pathbox import PathSmartBox, PathInputLayout
 
 __author__ = 'jbui'
 
 
 class NewProjectDialog(wx.Dialog):
-    def __init__(self, parent, **kwargs):
-        wx.Dialog.__init__(self, None, title=kwargs.get('title', ''))
+    """
+    New Project Dialog
+
+
+    """
+    def __init__(self, parent, style=wx.OK, **kwargs):
+        wx.Dialog.__init__(self, None, title=kwargs.get('title', 'New Project'),
+                           size=(kwargs.get('width', 500), kwargs.get('height', 300)))
 
         self.parent = parent
 
         # Attributes
+        self.flags = style
+
         self.panel = NewProjectPanel(self)
 
         # Layout
@@ -21,6 +30,19 @@ class NewProjectDialog(wx.Dialog):
         sizer.Add(self.panel, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self.SetInitialSize()
+
+        self.bind()
+
+    def bind(self):
+        self.Bind(wx.EVT_BUTTON, self.on_okay, self.panel.btn_okay)
+        self.Bind(wx.EVT_BUTTON, self.on_cancel, self.panel.btn_cancel)
+
+    def on_okay(self, event):
+        print("On Okay")
+        self.Close()
+
+    def on_cancel(self, event):
+        self.Close()
 
 
 class NewProjectPanel(wx.Panel):
@@ -30,44 +52,45 @@ class NewProjectPanel(wx.Panel):
     def __init__(self, parent, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
 
+        self.parent = parent
+
         # Attributes
-        self._field1 = TextSmartBox(self)
-        self._field2 = TextSmartBox(self)
+        self.tb_project = TextSmartBox(self)
+        self.tb_author = TextSmartBox(self)
+        self.tb_path = PathSmartBox(self)
 
-        self._do_layout()
+        self.btn_okay = wx.Button(self, wx.ID_ANY, 'OK')
+        self.btn_cancel = wx.Button(self, wx.ID_ANY, 'Cancel')
 
-    def _do_layout(self):
-        """Layout the controls"""
+        self.do_layout()
+
+    def do_layout(self):
+        """
+        Layout the controls
+        """
         vsizer = wx.BoxSizer(wx.VERTICAL)
-        field1_sz = wx.BoxSizer(wx.HORIZONTAL)
-        field2_sz = wx.BoxSizer(wx.HORIZONTAL)
 
-        # Make the labels
-        field1_lbl = wx.StaticText(self, label="Field 1:")
-        field2_lbl = wx.StaticText(self, label="Field 2:")
+        field1_sz = TextInputLayout(self, label='Project Name:', textbox=self.tb_project)
+        field2_sz = TextInputLayout(self, label='Author Name:', textbox=self.tb_author)
+        field3_sz = PathInputLayout(self, label='Path', textbox=self.tb_path)
 
-        # Make the first row by adding the label and field
-        # to the first horizontal sizer
-        field1_sz.AddSpacer(50)
-        field1_sz.Add(field1_lbl)
-        field1_sz.AddSpacer(5) # put 5px of space between
-        field1_sz.Add(self._field1)
-        field1_sz.AddSpacer(50)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(self.btn_okay, 0, wx.ALL | wx.LEFT, 5)
+        btnSizer.Add(self.btn_cancel, 0, wx.ALL | wx.RIGHT, 5)
 
-        # Do the same for the second row
-        field2_sz.AddSpacer(50)
-        field2_sz.Add(field2_lbl)
-        field2_sz.AddSpacer(5)
-        field2_sz.Add(self._field2)
-        field2_sz.AddSpacer(50)
+        # Now finish the layout by adding the two sizers to the main vertical sizer.
+        vsizer.AddStretchSpacer()
 
-        # Now finish the layout by adding the two sizers
-        # to the main vertical sizer.
-        vsizer.AddSpacer(50)
-        vsizer.Add(field1_sz)
+        BOTH_SIDES = wx.EXPAND | wx.LEFT | wx.RIGHT
+
+        vsizer.Add(field1_sz, 0, BOTH_SIDES | wx.TOP, 20)
         vsizer.AddSpacer(15)
-        vsizer.Add(field2_sz)
-        vsizer.AddSpacer(50)
+        vsizer.Add(field2_sz, 0, BOTH_SIDES, 20)
+        vsizer.AddSpacer(15)
+        vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
+        vsizer.AddSpacer(15)
+        vsizer.Add(btnSizer, 0, BOTH_SIDES | wx.BOTTOM, 20)
+        vsizer.AddStretchSpacer()
 
         # Finally assign the main outer sizer to the panel
         self.SetSizer(vsizer)

@@ -17,7 +17,11 @@ class TextInputLayout(SmartInputLayout):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
         self.label = kwargs.get('label', 'Textbox Label:')
-        self.textbox = kwargs.get('textbox', TextSmartBox(parent))
+
+        if kwargs.get('textbox'):
+            self.textbox = kwargs.get('textbox')
+        else:
+            self.textbox = TextSmartBox(parent)
 
         if kwargs.get('postbox'):
             self.postbox = kwargs.get('postbox')

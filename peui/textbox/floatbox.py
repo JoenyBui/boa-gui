@@ -17,7 +17,11 @@ class FloatInputLayout(SmartInputLayout):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
         self.label = kwargs.get('label', 'Float Label:')
-        self.textbox = kwargs.get('textbox', FloatInputLayout(parent))
+
+        if kwargs.get('textbox'):
+            self.textbox = kwargs.get('textbox')
+        else:
+            self.textbox = FloatInputLayout(parent)
 
         if kwargs.get('postbox'):
             self.postbox = kwargs.get('postbox')

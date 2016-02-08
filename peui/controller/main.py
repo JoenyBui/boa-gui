@@ -92,8 +92,12 @@ class MainController(object):
         pass
 
     def new_project(self, event):
-        dlg = NewProjectDialog(self)
-        res = dlg.ShowModal()
+        dlg = NewProjectDialog(self, width=4000, height=3000)
+
+        if dlg.ShowModal():
+            pass
+
+        dlg.Destroy()
 
     def open_project(self, event):
         dlg = OpenProjectDialog(self.frame)
