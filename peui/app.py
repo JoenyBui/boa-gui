@@ -20,7 +20,6 @@ import sys
 import wx
 import wx.aui
 
-
 if __name__ == '__main__' and __package__ is None:
     # Relative Import Hack
     package_name = 'peui'
@@ -35,6 +34,8 @@ if __name__ == '__main__' and __package__ is None:
     from .model.project import Project
     from .tree.project import ProjectTree
     from .panel.general import GeneralPanel
+    from .panel.grid import PropGrid
+    from .chart.ch2d import Chart2d
 
     from .config import MASTER_KEY, MENU_BAR_KEY
 
@@ -58,12 +59,20 @@ if __name__ == '__main__' and __package__ is None:
     controller.set_key(MENU_BAR_KEY)
 
     # Tree Panel.
-    pt = ProjectTree(frame, controller, project)
-    frame.add_pane(pt, wx.LEFT, 'Project Tree')
+    controller.windows['tree'] = ProjectTree(frame, controller, project)
+    frame.add_pane(controller.windows['tree'], wx.LEFT, 'Project Tree')
 
     # General Panel
-    gp = GeneralPanel(parent=frame)
-    frame.add_pane(gp, wx.CENTER, 'View')
+    # controller.windows['general'] = GeneralPanel(parent=frame)
+    # frame.add_pane(controller.windows['general'], wx.CENTER, 'View')
+
+    controller.windows['chart_2d'] = Chart2d(parent=frame)
+    frame.add_pane(controller.windows['chart_2d'], wx.CENTER, 'Chart 2d')
+    # controller.windows['chart_2d'].plot()
+
+    controller.windows['prop grid'] = PropGrid(frame, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER)
+    frame.add_pane(controller.windows['prop grid'], wx.CENTER, 'Prop Grid')
+
 
     # Load Model
     frame.Show(True)

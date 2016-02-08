@@ -1,3 +1,5 @@
+import os
+
 from ..config import *
 
 from ..main.menubar import CustomMenuBar
@@ -19,14 +21,29 @@ class MainController(object):
         self.project.controller = self
 
         self.frame = None
+        self.windows = {}
 
         self.master_key = master_key
 
         self.bind_methods()
 
+    def show_pane(self, ctrl):
+        """
+        Switch pane.
+        :param ctrl:
+        :return:
+        """
+        pane = self.frame.mgr.GetPane(ctrl)
+
+        pane.Show(not pane.IsShown())
+
+        self.refresh_view()
+
     def bind_methods(self):
         """
         Connect the keys to the function for binding at the menu bar, context menu, shortcut, etc...
+
+        THIS METHOD MUST BE OVERRIDEN BY CHILD CLASS.
         :return:
         """
         self.master_key[METHOD_NEW_PROJECT]['method'] = self.new_project
@@ -35,6 +52,8 @@ class MainController(object):
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.save_as_project
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
         self.master_key[METHOD_ABOUT]['method'] = self.about
+        self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_tree
+        self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_console
 
     def set_key(self, key):
         """
@@ -54,21 +73,53 @@ class MainController(object):
         self.frame.menu_bar = menu_bar
         self.frame.SetMenuBar(self.frame.menu_bar)
 
+    def refresh(self):
+        self.refresh_model()
+        self.refresh_view()
+
+    def refresh_view(self):
+        """
+        Refresh specifically the view.
+        :return:
+        """
+        self.frame.refresh()
+
+    def refresh_model(self):
+        """
+        Refresh the model -> view.
+        :return:
+        """
+        pass
+
     def new_project(self, event):
         dlg = NewProjectDialog(self)
         res = dlg.ShowModal()
 
     def open_project(self, event):
-        dlg = OpenProjectDialog(self)
-        res = dlg.ShowModal()
+        dlg = OpenProjectDialog(self.frame)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            mypath = os.path.basename(path)
+
+        dlg.Destroy()
 
     def save_project(self, event):
-        dlg = SaveProjectDialog(self)
-        res = dlg.ShowModal()
+        #TODO: Check if there if the file already exists.
+        dlg = SaveProjectDialog(self.frame)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+
+        dlg.Destroy()
 
     def save_as_project(self, event):
-        dlg = SaveAsProjectDialog(self)
-        res = dlg.ShowModal()
+        dlg = SaveAsProjectDialog(self.frame)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+
+        dlg.Destroy()
 
     def exit_project(self, event):
         self.frame.Close(True)
@@ -79,3 +130,10 @@ class MainController(object):
         abt = AboutDialog(name='Generic Gui')
         abt.show()
 
+    def view_tree(self, event):
+        if self.windows.get('tree'):
+            self.show_pane(self.windows.get('tree'))
+
+    def view_console(self, event):
+        if self.windows.get('console'):
+            self.show_pane(self.windows.get('console'))

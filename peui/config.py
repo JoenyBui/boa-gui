@@ -29,6 +29,9 @@ MASTER_KEY = {
     METHOD_CLOSE_ALL:       dict(name='Close All Projects'),
     METHOD_EXIT_PROJECT:    dict(name='Exit'),
 
+    METHOD_WINDOW_TREE:     dict(name='Window Tree'),
+    METHOD_WINDOW_CONSOLE:  dict(name='Window Console'),
+
     METHOD_HELP:            dict(name='&Help'),
     METHOD_ABOUT:           dict(name='&About')
 }

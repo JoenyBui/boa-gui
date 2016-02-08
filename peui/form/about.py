@@ -29,9 +29,12 @@ class AboutDialog(wx.AboutDialogInfo):
         self.SetCopyright('(C) 2016 Protection Engineer Consultants')
         self.SetWebSite('http://www.protection-consultants.com/')
         self.SetLicence(self.licence)
-        self.AddDeveloper('Joeny Bui')
-        self.AddDocWriter('Joeny Bui')
-        self.AddTranslator('Joeny Bui')
+
+        if kwargs.get('developer'):
+            self.AddDeveloper(kwargs.get('developer'))
+
+        if kwargs.get('writer'):
+            self.AddDocWriter(kwargs.get('writer'))
 
     def show(self):
         wx.AboutBox(self)

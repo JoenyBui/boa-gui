@@ -21,11 +21,11 @@ class MainWindow(wx.Frame):
         self.controller = controller
         self.controller.frame = self
 
-        self._mgr = aui.AuiManager(self)
+        self.mgr = aui.AuiManager(self)
 
         # notify AUI which frame to use
-        self._mgr.SetManagedWindow(self)
-        self._mgr.Update()
+        self.mgr.SetManagedWindow(self)
+        self.mgr.Update()
 
         self.Bind(wx.EVT_CLOSE, self.on_close)
 
@@ -43,18 +43,11 @@ class MainWindow(wx.Frame):
         :param name:
         :return:
         """
-        self._mgr.AddPane(panel, area, name)
-        self._mgr.Update()
+        self.mgr.AddPane(panel, area, name)
+        self.mgr.Update()
 
-    def on_about(self, event):
-        """
-
-        :param event:
-        :return:
-        """
-        dlg = wx.MessageDialog(self, "A small text editor", "About Sample Editor", wx.OK)
-        dlg.ShowModal()
-        dlg.Destroy()
+    def refresh(self):
+        self.mgr.Update()
 
     def on_exit(self, event):
         """
@@ -71,7 +64,7 @@ class MainWindow(wx.Frame):
         :return:
         """
         # De-initialize the frame manager
-        self._mgr.UnInit()
+        self.mgr.UnInit()
 
         # delete the frame
         self.Destroy()
