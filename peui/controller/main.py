@@ -3,8 +3,9 @@ import os
 from ..config import *
 
 from ..main.menubar import CustomMenuBar
-from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
-from ..form.about import AboutDialog
+
+from .dlg import DlgController
+from .view import ViewController
 
 __author__ = 'jbui'
 
@@ -12,8 +13,9 @@ __author__ = 'jbui'
 class MainController(object):
     """
     Main Controller
-    """
 
+    Mixins are defined right to left.
+    """
     def __init__(self, project, master_key, **kwargs):
         self.project = project
 
@@ -25,38 +27,31 @@ class MainController(object):
         self.frame = None
         self.windows = {}
 
+        # Extend Controllers
+        self.dlg_ctrl = DlgController(self)
+        self.view_ctrl = ViewController(self)
+
         self.master_key = master_key
 
         self.bind_methods()
-
-    def show_pane(self, ctrl):
-        """
-        Switch pane.
-        :param ctrl:
-        :return:
-        """
-        pane = self.frame.mgr.GetPane(ctrl)
-
-        pane.Show(not pane.IsShown())
-
-        self.refresh_view()
 
     def bind_methods(self):
         """
         Connect the keys to the function for binding at the menu bar, context menu, shortcut, etc...
 
-        THIS METHOD MUST BE OVERRIDEN BY CHILD CLASS.
+        THIS METHOD MUST BE OVERRIDDEN BY CHILD CLASS.
         :return:
         """
-        self.master_key[METHOD_NEW_PROJECT]['method'] = self.new_project
-        self.master_key[METHOD_OPEN_PROJECT]['method'] = self.open_project
-        self.master_key[METHOD_SAVE_PROJECT]['method'] = self.save_project
-        self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.save_as_project
+        self.master_key[METHOD_NEW_PROJECT]['method'] = self.dlg_ctrl.new_project_dialog
+        self.master_key[METHOD_OPEN_PROJECT]['method'] = self.dlg_ctrl.open_project_dialog
+        self.master_key[METHOD_SAVE_PROJECT]['method'] = self.dlg_ctrl.save_project_dialog
+        self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.dlg_ctrl.save_as_project_dialog
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
-        self.master_key[METHOD_ABOUT]['method'] = self.about
-        self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_tree
-        self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_console
-
+        self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
+        self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
+        self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
+        self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
+        
     def set_key(self, key):
         """
         Establish the menu bar items.
@@ -93,53 +88,19 @@ class MainController(object):
         """
         pass
 
-    def new_project(self, event):
-        dlg = NewProjectDialog(self, width=4000, height=3000)
+    def show_pane(self, ctrl):
+        """
+        Switch pane view.
+        :param ctrl:
+        :return:
+        """
+        pane = self.frame.mgr.GetPane(ctrl)
 
-        if dlg.ShowModal():
-            pass
+        pane.Show(not pane.IsShown())
 
-        dlg.Destroy()
-
-    def open_project(self, event):
-        dlg = OpenProjectDialog(self.frame)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            mypath = os.path.basename(path)
-
-        dlg.Destroy()
-
-    def save_project(self, event):
-        #TODO: Check if there if the file already exists.
-        dlg = SaveProjectDialog(self.frame)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-
-        dlg.Destroy()
-
-    def save_as_project(self, event):
-        dlg = SaveAsProjectDialog(self.frame)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-
-        dlg.Destroy()
+        self.refresh_view()
 
     def exit_project(self, event):
         self.frame.Close(True)
         self.frame.Destroy()
         event.Skip()
-
-    def about(self, event):
-        abt = AboutDialog(name='Generic Gui')
-        abt.show()
-
-    def view_tree(self, event):
-        if self.windows.get('tree'):
-            self.show_pane(self.windows.get('tree'))
-
-    def view_console(self, event):
-        if self.windows.get('console'):
-            self.show_pane(self.windows.get('console'))

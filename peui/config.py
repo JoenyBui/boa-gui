@@ -17,6 +17,7 @@ METHOD_VIEW = wx.NewId()
 METHOD_WINDOW = wx.NewId()
 METHOD_WINDOW_TREE = wx.NewId()
 METHOD_WINDOW_CONSOLE = wx.NewId()
+METHOD_WINDOW_PROP_GRID = wx.NewId()
 
 METHOD_HELP = wx.ID_HELP
 METHOD_ABOUT = wx.ID_ABOUT
@@ -31,7 +32,7 @@ MASTER_KEY = {
 
     METHOD_WINDOW_TREE:     dict(name='Window Tree'),
     METHOD_WINDOW_CONSOLE:  dict(name='Window Console'),
-
+    METHOD_WINDOW_PROP_GRID:dict(name='Window Property'),
     METHOD_HELP:            dict(name='&Help'),
     METHOD_ABOUT:           dict(name='&About')
 }
@@ -76,8 +77,12 @@ MENU_BAR_KEY = [
                         name='Project Tree'
                     ),
                     OrderedDict(
+                        id=METHOD_WINDOW_PROP_GRID,
+                        name='Property'
+                    ),
+                    OrderedDict(
                         id=METHOD_WINDOW_CONSOLE,
-                        name='Consolve'
+                        name='Console'
                     ),
                 ]
             ),
