@@ -36,6 +36,7 @@ if __name__ == '__main__' and __package__ is None:
     from .panel.general import GeneralPanel
     from .panel.grid import PropGrid
     from .chart.ch2d import Chart2d
+    from .setting import Setting
 
     from .config import MASTER_KEY, MENU_BAR_KEY
 
@@ -48,10 +49,14 @@ if __name__ == '__main__' and __package__ is None:
     #TODO: Backup Temp File
     #TODO: Periodic Savings
 
+    setting = Setting()
+
     # Initialize Application
     app = wx.App(False)
+
+    # Check if the a file path is passed with the executable.
     project = Project()
-    controller = MainController(project, master_key=MASTER_KEY)
+    controller = MainController(project, master_key=MASTER_KEY, setting=setting)
 
     frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
 
@@ -67,12 +72,11 @@ if __name__ == '__main__' and __package__ is None:
     # frame.add_pane(controller.windows['general'], wx.CENTER, 'View')
 
     controller.windows['chart_2d'] = Chart2d(parent=frame)
-    frame.add_pane(controller.windows['chart_2d'], wx.CENTER, 'Chart 2d')
+    # frame.add_pane(controller.windows['chart_2d'], wx.CENTER, 'Chart 2d')
     # controller.windows['chart_2d'].plot()
 
-    controller.windows['prop grid'] = PropGrid(frame, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER)
-    frame.add_pane(controller.windows['prop grid'], wx.CENTER, 'Prop Grid')
-
+    controller.windows['prop grid'] = PropGrid(frame, controller, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER)
+    frame.add_pane(controller.windows['prop grid'], wx.BOTTOM, 'Prop Grid')
 
     # Load Model
     frame.Show(True)

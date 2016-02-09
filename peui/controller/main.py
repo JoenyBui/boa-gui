@@ -20,6 +20,8 @@ class MainController(object):
         # Add controller to project
         self.project.controller = self
 
+        self.setting = kwargs.get('setting')
+
         self.frame = None
         self.windows = {}
 

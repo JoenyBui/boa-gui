@@ -23,7 +23,7 @@ class NewProjectDialog(wx.Dialog):
         # Attributes
         self.flags = style
 
-        self.panel = NewProjectPanel(self)
+        self.panel = NewProjectPanel(self, parent.setting)
 
         # Layout
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -49,15 +49,15 @@ class NewProjectPanel(wx.Panel):
     """
 
     """
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, default_settings, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
 
         self.parent = parent
 
         # Attributes
-        self.tb_project = TextSmartBox(self)
-        self.tb_author = TextSmartBox(self)
-        self.tb_path = PathSmartBox(self)
+        self.tb_project = TextSmartBox(self, value=default_settings.project_name)
+        self.tb_author = TextSmartBox(self, value=default_settings.author)
+        self.tb_path = PathSmartBox(self, value=default_settings.path)
 
         self.btn_okay = wx.Button(self, wx.ID_ANY, 'OK')
         self.btn_cancel = wx.Button(self, wx.ID_ANY, 'Cancel')
