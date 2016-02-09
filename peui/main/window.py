@@ -14,6 +14,16 @@ class MainWindow(wx.Frame):
     Main Window
     """
     def __init__(self, parent, controller, title='', width=800, height=600, **kwargs):
+        """
+        Main Window.
+        :param parent:
+        :param controller:
+        :param title:
+        :param width:
+        :param height:
+        :param kwargs:
+        :return:
+        """
         wx.Frame.__init__(self, parent, title=title, size=(width, height))
 
         self.parent = parent
@@ -47,11 +57,15 @@ class MainWindow(wx.Frame):
         self.mgr.Update()
 
     def refresh(self):
+        """
+        Refresh manager.
+        :return:
+        """
         self.mgr.Update()
 
     def on_exit(self, event):
         """
-
+        Exit Window.
         :param event:
         :return:
         """
@@ -59,7 +73,7 @@ class MainWindow(wx.Frame):
 
     def on_close(self, event):
         """
-
+        Close Window.
         :param event:
         :return:
         """

@@ -31,6 +31,8 @@ class MainController(object):
         self.dlg_ctrl = DlgController(self)
         self.view_ctrl = ViewController(self)
 
+        self.childs = []        # Controller for specific views, dlgs, etc...
+
         self.master_key = master_key
 
         self.bind_methods()
@@ -51,6 +53,20 @@ class MainController(object):
         self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
+
+    def add_pane(self, panel, key, area, name):
+        """
+        Add Pane to the main view.
+        :param key:
+        :param panel:
+        :return:
+        """
+        self.windows[key] = panel
+
+        self.frame.add_pane(panel, area, name)
+
+        if panel.__dict__.get('controller'):
+            self.childs.append(panel.controller)
 
     def set_key(self, key):
         """
@@ -98,6 +114,9 @@ class MainController(object):
         Refresh specifically the view.
         :return:
         """
+        for child in self.childs:
+            child.refresh()
+
         self.frame.refresh()
 
     def refresh_model(self):

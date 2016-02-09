@@ -17,6 +17,11 @@ class DlgController(object):
         self.frame = parent.frame
 
     def new_project_dialog(self, event):
+        """
+        New Project Dialog.
+        :param event:
+        :return:
+        """
         dlg = NewProjectDialog(self.parent, width=4000, height=3000)
 
         if dlg.ShowModal():
@@ -25,6 +30,11 @@ class DlgController(object):
         dlg.Destroy()
 
     def open_project_dialog(self, event):
+        """
+        Open Project Dialog.
+        :param event:
+        :return:
+        """
         dlg = OpenProjectDialog(self.frame)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -34,6 +44,11 @@ class DlgController(object):
         dlg.Destroy()
 
     def save_project_dialog(self, event):
+        """
+        Save Project Dialog.
+        :param event:
+        :return:
+        """
         #TODO: Check if there if the file already exists.
         dlg = SaveProjectDialog(self.frame)
 
@@ -43,6 +58,11 @@ class DlgController(object):
         dlg.Destroy()
 
     def save_as_project_dialog(self, event):
+        """
+        Save As Project Dialog.
+        :param event:
+        :return:
+        """
         dlg = SaveAsProjectDialog(self.frame)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -51,5 +71,10 @@ class DlgController(object):
         dlg.Destroy()
 
     def about_dialog(self, event):
+        """
+        About Model Dialog.
+        :param event:
+        :return:
+        """
         abt = AboutDialog(name='Generic Gui')
         abt.show()

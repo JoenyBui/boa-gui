@@ -20,6 +20,8 @@ import sys
 import wx
 import wx.aui
 
+DEBUG = True
+
 if __name__ == '__main__' and __package__ is None:
     # Relative Import Hack
     package_name = 'peui'
@@ -71,14 +73,21 @@ if __name__ == '__main__' and __package__ is None:
     # controller.windows['general'] = GeneralPanel(parent=frame)
     # frame.add_pane(controller.windows['general'], wx.CENTER, 'View')
 
-    controller.windows['chart_2d'] = Chart2d(parent=frame)
+    # controller.windows['chart_2d'] = Chart2d(parent=frame)
     # frame.add_pane(controller.windows['chart_2d'], wx.CENTER, 'Chart 2d')
     # controller.windows['chart_2d'].plot()
-
-    controller.windows['prop grid'] = PropGrid(frame, controller, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER)
-    frame.add_pane(controller.windows['prop grid'], wx.BOTTOM, 'Prop Grid')
+    #
+    # controller.windows['prop grid'] =
+    # frame.add_pane(controller.windows['prop grid'], wx.BOTTOM, 'Prop Grid')
+    controller.add_pane(
+        PropGrid(frame, controller, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
+        'prop grid',
+        wx.BOTTOM,
+        'Property'
+    )
 
     # Load Model
     frame.Show(True)
     app.SetTopWindow(frame=frame)
+    controller.refresh()
     app.MainLoop()
