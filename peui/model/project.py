@@ -1,3 +1,4 @@
+import os
 import json
 
 __author__ = 'jbui'
@@ -12,7 +13,9 @@ class Project(object):
 
         self.controller = None
 
-        self.name = kwargs.get('name', '')
+        self.name = kwargs.get('name', 'NA Project')
+        self.author = kwargs.get('author', 'Anonymous')
+        self.project_folder = kwargs.get('project_folder', os.getcwd())
 
     def save(self, path):
         """
@@ -45,6 +48,18 @@ class Project(object):
     @name.setter
     def name(self, value):
         self.keys['name'] = value
+
+    @property
+    def author(self):
+        """
+        Author of the model.
+        :return:
+        """
+        return self.keys.get('author')
+
+    @author.setter
+    def author(self, value):
+        self.keys['author'] = value
 
     @property
     def project_folder(self):

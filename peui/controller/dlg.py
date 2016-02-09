@@ -1,6 +1,7 @@
 import os
 import wx
 
+from ..model.project import Project
 from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
 from ..form.about import AboutDialog
 
@@ -16,10 +17,10 @@ class DlgController(object):
         self.frame = parent.frame
 
     def new_project_dialog(self, event):
-        dlg = NewProjectDialog(self, width=4000, height=3000)
+        dlg = NewProjectDialog(self.parent, width=4000, height=3000)
 
         if dlg.ShowModal():
-            pass
+            self.parent.new_project(dlg.get_project())
 
         dlg.Destroy()
 

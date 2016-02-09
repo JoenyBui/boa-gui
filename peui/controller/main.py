@@ -51,7 +51,7 @@ class MainController(object):
         self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
-        
+
     def set_key(self, key):
         """
         Establish the menu bar items.
@@ -70,7 +70,26 @@ class MainController(object):
         self.frame.menu_bar = menu_bar
         self.frame.SetMenuBar(self.frame.menu_bar)
 
+    def new_project(self, project):
+        """
+        New Project is transferred.
+        :param project:
+        :return:
+        """
+        #TODO: Need to see if there is an existing project that is not save.
+        if self.project:
+            pass
+
+        self.project = project
+        self.project.controller = self
+
+        self.refresh()
+
     def refresh(self):
+        """
+        Total refresh of all the components.
+        :return:
+        """
         self.refresh_model()
         self.refresh_view()
 

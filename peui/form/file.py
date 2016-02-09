@@ -2,6 +2,7 @@ import os
 
 import wx
 
+from ..model.project import Project
 from ..textbox.textbox import TextSmartBox, TextInputLayout
 from ..textbox.pathbox import PathSmartBox, PathInputLayout
 
@@ -11,8 +12,6 @@ __author__ = 'jbui'
 class NewProjectDialog(wx.Dialog):
     """
     New Project Dialog
-
-
     """
     def __init__(self, parent, style=wx.OK, **kwargs):
         wx.Dialog.__init__(self, None, title=kwargs.get('title', 'New Project'),
@@ -33,16 +32,23 @@ class NewProjectDialog(wx.Dialog):
 
         self.bind()
 
+    def get_project(self):
+        """
+        Return the project object.
+        """
+        return Project(name=self.panel.tb_project.GetValue(),
+                       author=self.panel.tb_author.GetValue(),
+                       project_folder=self.panel.tb_path.GetValue())
+
     def bind(self):
         self.Bind(wx.EVT_BUTTON, self.on_okay, self.panel.btn_okay)
         self.Bind(wx.EVT_BUTTON, self.on_cancel, self.panel.btn_cancel)
 
     def on_okay(self, event):
-        print("On Okay")
         self.Close()
 
     def on_cancel(self, event):
-        self.Close()
+        self.Destroy()
 
 
 class NewProjectPanel(wx.Panel):
