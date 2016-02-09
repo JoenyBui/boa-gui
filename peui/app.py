@@ -20,6 +20,8 @@ import sys
 import wx
 import wx.aui
 
+import wx.lib.agw.aui as aui
+
 DEBUG = True
 
 if __name__ == '__main__' and __package__ is None:
@@ -66,14 +68,26 @@ if __name__ == '__main__' and __package__ is None:
     controller.set_key(MENU_BAR_KEY)
 
     # Tree Panel.
-    # controller.windows['tree'] = ProjectTree(frame, controller, project)
-    # frame.add_pane(controller.windows['tree'], wx.LEFT, 'Project Tree')
     controller.add_pane(
         ProjectTree(frame, controller, project),
         'tree',
         wx.LEFT,
         'Project Tree'
     )
+
+    # Property Panel
+    controller.add_pane(
+        PropGrid(frame, controller, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
+        'prop grid',
+        wx.BOTTOM,
+        'Property'
+    )
+
+    nb = aui.AuiNotebook(frame)
+    frame.add_pane(nb, wx.CENTER, 'area')
+    nb.AddPage(GeneralPanel(parent=frame), 'General')
+    nb.AddPage(Chart2d(parent=frame), 'Chart')
+
     # General Panel
     # controller.windows['general'] = GeneralPanel(parent=frame)
     # frame.add_pane(controller.windows['general'], wx.CENTER, 'View')
@@ -81,15 +95,6 @@ if __name__ == '__main__' and __package__ is None:
     # controller.windows['chart_2d'] = Chart2d(parent=frame)
     # frame.add_pane(controller.windows['chart_2d'], wx.CENTER, 'Chart 2d')
     # controller.windows['chart_2d'].plot()
-    #
-    # controller.windows['prop grid'] =
-    # frame.add_pane(controller.windows['prop grid'], wx.BOTTOM, 'Prop Grid')
-    controller.add_pane(
-        PropGrid(frame, controller, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
-        'prop grid',
-        wx.BOTTOM,
-        'Property'
-    )
 
     # Load Model
     frame.Show(True)
