@@ -66,9 +66,14 @@ if __name__ == '__main__' and __package__ is None:
     controller.set_key(MENU_BAR_KEY)
 
     # Tree Panel.
-    controller.windows['tree'] = ProjectTree(frame, controller, project)
-    frame.add_pane(controller.windows['tree'], wx.LEFT, 'Project Tree')
-
+    # controller.windows['tree'] = ProjectTree(frame, controller, project)
+    # frame.add_pane(controller.windows['tree'], wx.LEFT, 'Project Tree')
+    controller.add_pane(
+        ProjectTree(frame, controller, project),
+        'tree',
+        wx.LEFT,
+        'Project Tree'
+    )
     # General Panel
     # controller.windows['general'] = GeneralPanel(parent=frame)
     # frame.add_pane(controller.windows['general'], wx.CENTER, 'View')

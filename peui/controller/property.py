@@ -2,7 +2,10 @@ __author__ = 'jbui'
 
 
 class PropertyGridController(object):
+    """
+    Property Grid Controller
 
+    """
     def __init__(self, parent, view, *args, **kwargs):
         """
 

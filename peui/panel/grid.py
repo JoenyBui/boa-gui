@@ -19,7 +19,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param kwargs:
         :return:
         """
-        propgrid.PropertyGrid.__init__(self, parent, *args, **kwargs)
+        propgrid.PropertyGrid.__init__(self, parent, size=(200, 150), *args, **kwargs)
 
         self.controller = PropertyGridController(controller, self)
 
