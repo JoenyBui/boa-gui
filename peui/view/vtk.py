@@ -1,7 +1,8 @@
 import wx
 
 import vtk
-from vtk.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+
+from .wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
 
 __author__ = 'jbui'
 

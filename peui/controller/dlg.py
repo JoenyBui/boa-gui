@@ -14,7 +14,14 @@ class DlgController(object):
     """
     def __init__(self, parent):
         self.parent = parent
-        self.frame = parent.frame
+
+    @property
+    def frame(self):
+        return self.parent.frame
+
+    @frame.setter
+    def frame(self, value):
+        self.parent.frame = value
 
     def new_project_dialog(self, event):
         """

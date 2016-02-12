@@ -11,24 +11,28 @@ class TreeController(object):
     def __init__(self, parent, view, *args, **kwargs):
 
         self.parent = parent
-        self.project = parent.project
         self.view = view
+        self.do_layout()
 
     def do_layout(self):
         """
 
         :return:
         """
-        directory = pecutil.folder.get_directory_structure(self.project.project_folder)
+        directory = pecutil.folder.get_directory_structure(self.parent.project.project_folder)
 
         # if self.view.IsEmpty():
         self.view.DeleteAllItems()
 
         self.view.add_root(directory)
 
+    def update_layout(self):
+        pass
+
     def refresh(self):
         """
         Refresh model.
         :return:
         """
-        self.do_layout()
+
+        self.update_layout()

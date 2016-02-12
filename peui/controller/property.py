@@ -16,14 +16,21 @@ class PropertyGridController(object):
         :return:
         """
         self.parent = parent
-        self.project = parent.project
         self.view = view
+        self.cells = dict()
+
+        self.do_layout()
 
     def do_layout(self):
         self.view.add_category_property('General Information')
-        self.view.add_string_property('File Name', 'name', self.project.name, 'Project File Name.')
-        self.view.add_string_property('Author Name', 'author', self.project.author, 'Author Name')
-        self.view.add_file_property('Project Path', 'path', self.project.project_folder, 'Project Folder')
+        self.cells['name'] = self.view.add_string_property('File Name', 'name', self.parent.project.name, 'Project File Name.')
+        self.cells['author'] = self.view.add_string_property('Author Name', 'author', self.parent.project.author, 'Author Name')
+        self.cells['project_folder'] = self.view.add_file_property('Project Path', 'project_folder', self.parent.project.project_folder, 'Project Folder')
+
+    def update_layout(self):
+        self.cells['name'].m_value = self.parent.project.name
+        self.cells['author'].m_value = self.parent.project.author
+        self.cells['project_folder'].m_value = self.parent.project.project_folder
 
     def refresh(self):
-        self.do_layout()
+        self.update_layout()

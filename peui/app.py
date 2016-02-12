@@ -17,6 +17,8 @@
 import os
 import sys
 
+import matplotlib
+
 import wx
 import wx.lib.mixins.inspection as WIT
 import wx.aui
@@ -24,6 +26,8 @@ import wx.aui
 import wx.lib.agw.aui as aui
 
 DEBUG = True
+
+matplotlib.use('WXAgg')
 
 if __name__ == '__main__' and __package__ is None:
     # Relative Import Hack
@@ -42,6 +46,7 @@ if __name__ == '__main__' and __package__ is None:
     from .panel.grid import PropGrid
     from .chart.ch2d import Chart2d
     from .setting import Setting
+    from .view.vtk import VtkViewer
 
     from .config import MASTER_KEY, MENU_BAR_KEY
 
@@ -92,7 +97,7 @@ if __name__ == '__main__' and __package__ is None:
     )
 
     controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
-    controller.add_page(Chart2d(parent=frame), 'chart2d', 'Chart')
+    controller.add_page(Chart2d(frame, 111), 'chart2d', 'Chart')
 
     # Load Model
     frame.Show(True)

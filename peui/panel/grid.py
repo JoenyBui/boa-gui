@@ -29,26 +29,36 @@ class PropGrid(propgrid.PropertyGrid):
         else:
             self.controller = PropertyGridController(controller, self)
 
-    def add_category_property(self, name):
+    def add_category_property(self, name, **kwargs):
         self.Append(propgrid.PropertyCategory(name))
 
-    def add_file_property(self, name, key, value, status):
-        self.Append(propgrid.FileProperty(name, key, value=value))
+    def add_file_property(self, name, key, value, status, **kwargs):
+        item = propgrid.FileProperty(name, key, value=value)
+        self.Append(item)
         self.SetPropertyHelpString(key, status)
+        return item
 
-    def add_int_property(self, name, key, value, status):
-        self.Append(propgrid.IntProperty(name, key, value=value))
+    def add_int_property(self, name, key, value, status, **kwargs):
+        item = propgrid.IntProperty(name, key, value=value)
+        self.Append(item)
         self.SetPropertyHelpString(key, status)
+        return item
 
-    def add_string_property(self, name, key, value, status):
-        self.Append(propgrid.StringProperty(name, key, value=value))
+    def add_string_property(self, name, key, value, status, **kwargs):
+        item = propgrid.StringProperty(name, key, value=value)
+        self.Append(item)
         self.SetPropertyHelpString(key, status)
+        return item
 
-    def add_float_property(self, name, key, value, status):
-        self.Append(propgrid.FloatProperty(name, key, value=value))
+    def add_float_property(self, name, key, value, status, **kwargs):
+        item = propgrid.FloatProperty(name, key, value=value)
+        self.Append(item)
         self.SetPropertyHelpString(key, status)
+        return item
 
     def add_bool_property(self, name, key, value, status, **kwargs):
-        self.Append(propgrid.BoolProperty(name, key, value=value))
+        item = propgrid.BoolProperty(name, key, value=value)
+        self.Append(item)
         self.SetPropertyAttribute(key, "UseCheckbox", True)
         self.SetPropertyHelpString(key, status)
+        return item
