@@ -21,6 +21,9 @@ class TreeController(object):
         """
         directory = pecutil.folder.get_directory_structure(self.project.project_folder)
 
+        # if self.view.IsEmpty():
+        self.view.DeleteAllItems()
+
         self.view.add_root(directory)
 
     def refresh(self):

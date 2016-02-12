@@ -18,6 +18,7 @@ import os
 import sys
 
 import wx
+import wx.lib.mixins.inspection as WIT
 import wx.aui
 
 import wx.lib.agw.aui as aui
@@ -56,13 +57,20 @@ if __name__ == '__main__' and __package__ is None:
     setting = Setting()
 
     # Initialize Application
-    app = wx.App(False)
+    if DEBUG:
+        # Use Ctrl-Alt-I to open the Widget Inspection Tool
+        # http://wiki.wxpython.org/Widget%20Inspection%20Tool
+        app = WIT.InspectableApp()
+
+    else:
+        app = wx.App(False)
 
     # Check if the a file path is passed with the executable.
     project = Project()
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
-
     frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
+    controller.notebook = aui.AuiNotebook(frame)
+    controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)
@@ -83,21 +91,12 @@ if __name__ == '__main__' and __package__ is None:
         'Property'
     )
 
-    nb = aui.AuiNotebook(frame)
-    frame.add_pane(nb, wx.CENTER, 'area')
-    nb.AddPage(GeneralPanel(parent=frame), 'General')
-    nb.AddPage(Chart2d(parent=frame), 'Chart')
-
-    # General Panel
-    # controller.windows['general'] = GeneralPanel(parent=frame)
-    # frame.add_pane(controller.windows['general'], wx.CENTER, 'View')
-
-    # controller.windows['chart_2d'] = Chart2d(parent=frame)
-    # frame.add_pane(controller.windows['chart_2d'], wx.CENTER, 'Chart 2d')
-    # controller.windows['chart_2d'].plot()
+    controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
+    controller.add_page(Chart2d(parent=frame), 'chart2d', 'Chart')
 
     # Load Model
     frame.Show(True)
     app.SetTopWindow(frame=frame)
     controller.refresh()
+
     app.MainLoop()

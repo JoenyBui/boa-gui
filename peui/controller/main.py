@@ -1,5 +1,7 @@
 import os
 
+import wx.lib.agw.aui as aui
+
 from ..config import *
 
 from ..main.menubar import CustomMenuBar
@@ -26,6 +28,7 @@ class MainController(object):
 
         self.frame = None
         self.windows = {}
+        self.notebook = None
 
         # Extend Controllers
         self.dlg_ctrl = DlgController(self)
@@ -67,6 +70,18 @@ class MainController(object):
 
         if panel.__dict__.get('controller'):
             self.childs.append(panel.controller)
+
+    def add_page(self, page, key, name):
+        """
+        Add page to the central view.
+        :param page:
+        :param key:
+        :param name:
+        :return:
+        """
+        self.windows[key] = page
+
+        self.notebook.AddPage(page, name)
 
     def set_key(self, key):
         """
@@ -117,7 +132,8 @@ class MainController(object):
         for child in self.childs:
             child.refresh()
 
-        self.frame.refresh()
+        if self.frame:
+            self.frame.refresh()
 
     def refresh_model(self):
         """

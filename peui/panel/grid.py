@@ -19,15 +19,25 @@ class PropGrid(propgrid.PropertyGrid):
         :param kwargs:
         :return:
         """
-        propgrid.PropertyGrid.__init__(self, parent, size=(200, 150), *args, **kwargs)
+        if not kwargs.get('size'):
+            kwargs['size'] = (200, 150)
 
-        self.controller = PropertyGridController(controller, self)
+        propgrid.PropertyGrid.__init__(self, parent, *args, **kwargs)
+
+        if kwargs.get('grid_controller'):
+            self.controller = kwargs.get('self_controller')
+        else:
+            self.controller = PropertyGridController(controller, self)
 
     def add_category_property(self, name):
         self.Append(propgrid.PropertyCategory(name))
 
     def add_file_property(self, name, key, value, status):
         self.Append(propgrid.FileProperty(name, key, value=value))
+        self.SetPropertyHelpString(key, status)
+
+    def add_int_property(self, name, key, value, status):
+        self.Append(propgrid.IntProperty(name, key, value=value))
         self.SetPropertyHelpString(key, status)
 
     def add_string_property(self, name, key, value, status):
