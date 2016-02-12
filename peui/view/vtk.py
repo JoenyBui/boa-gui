@@ -64,7 +64,7 @@ class VtkViewer(wx.Panel):
             self.marker = vtk.vtkOrientationMarkerWidget()
             self.marker.SetInteractor( self.widget._Iren )
             self.marker.SetOrientationMarker( axes )
-            self.marker.SetViewport(0.75,0,1,0.25)
+            self.marker.SetViewport(0.75, 0, 1, 0.25)
             self.marker.SetEnabled(1)
 
         self.ren.ResetCamera()

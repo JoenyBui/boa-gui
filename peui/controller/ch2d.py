@@ -1,7 +1,10 @@
+from . import ChildController
+
 __author__ = 'jbui'
 
 
-class Chart2dController(object):
+class Chart2dController(ChildController):
 
-    def __init__(self):
-        pass
+    def __init__(self, parent, view):
+        ChildController.__init__(self.parent, view)
+

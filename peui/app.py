@@ -48,6 +48,7 @@ if __name__ == '__main__' and __package__ is None:
     from .setting import Setting
     from .view.vtk import VtkViewer
     from .panel.xlsx import SpreadSheet
+    from .view.terminal import Console
 
     from .config import MASTER_KEY, MENU_BAR_KEY
 
@@ -97,13 +98,20 @@ if __name__ == '__main__' and __package__ is None:
         'Property'
     )
 
+    controller.add_pane(
+        Console(frame, controller), 'console',
+        wx.BOTTOM,
+        'Output'
+    )
+
     controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
     controller.add_page(Chart2d(frame, 111), 'chart2d', 'Chart')
-    controller.add_page(SpreadSheet(frame), 'xlsx', 'XLSX')
+    controller.add_page(SpreadSheet(frame, controller), 'xlsx', 'XLSX')
 
     # Load Model
     frame.Show(True)
     app.SetTopWindow(frame=frame)
     controller.refresh()
 
+    print('App Started')
     app.MainLoop()

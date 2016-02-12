@@ -1,17 +1,17 @@
 import pecutil.folder
 
+from . import ChildController
+
 __author__ = 'jbui'
 
 
-class TreeController(object):
+class TreeController(ChildController):
     """
     Tree Controller
 
     """
     def __init__(self, parent, view, *args, **kwargs):
-
-        self.parent = parent
-        self.view = view
+        ChildController.__init__(self, parent, view)
 
     def do_layout(self):
         """

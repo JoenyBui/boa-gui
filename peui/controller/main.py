@@ -5,6 +5,7 @@ import wx.lib.agw.aui as aui
 from ..config import *
 
 from ..main.menubar import CustomMenuBar
+from ..main.ribbon import CustomRibbonBar
 
 from .dlg import DlgController
 from .view import ViewController
@@ -89,7 +90,14 @@ class MainController(object):
         :param key:
         :return:
         """
+        if True:
+            self.set_menu_bar(key)
+        else:
+            self.set_ribbon_bar(key)
+
+    def set_menu_bar(self, key):
         menu_bar = CustomMenuBar(self.frame, self)
+
         menu_bar.set_menu_item(key)
 
         for id, menu in menu_bar.menus.items():
@@ -100,6 +108,14 @@ class MainController(object):
 
         self.frame.menu_bar = menu_bar
         self.frame.SetMenuBar(self.frame.menu_bar)
+
+    def set_ribbon_bar(self, key):
+        menu_bar = CustomRibbonBar(self.frame, self)
+
+        self.frame.menu_bar = menu_bar
+        self.add_pane(self.frame.menu_bar, 'ribbon', wx.TOP, 'RIBBON')
+
+        # self.frame.SetMenuBar(self.frame.menu_bar)
 
     def new_project(self, project):
         """
