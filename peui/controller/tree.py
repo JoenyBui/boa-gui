@@ -12,7 +12,6 @@ class TreeController(object):
 
         self.parent = parent
         self.view = view
-        self.do_layout()
 
     def do_layout(self):
         """

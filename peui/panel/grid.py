@@ -29,6 +29,8 @@ class PropGrid(propgrid.PropertyGrid):
         else:
             self.controller = PropertyGridController(controller, self)
 
+        self.controller.do_layout()
+
     def add_category_property(self, name, **kwargs):
         self.Append(propgrid.PropertyCategory(name))
 

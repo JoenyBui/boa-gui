@@ -25,6 +25,8 @@ class ProjectTree(ct.CustomTreeCtrl):
 
         self.SetImageList(self.il)
 
+        self.controller.do_layout()
+
     def add_root(self, directory):
 
         for key, item in directory.items():

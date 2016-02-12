@@ -19,8 +19,6 @@ class PropertyGridController(object):
         self.view = view
         self.cells = dict()
 
-        self.do_layout()
-
     def do_layout(self):
         self.view.add_category_property('General Information')
         self.cells['name'] = self.view.add_string_property('File Name', 'name', self.parent.project.name, 'Project File Name.')

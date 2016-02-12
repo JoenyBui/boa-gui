@@ -47,6 +47,7 @@ if __name__ == '__main__' and __package__ is None:
     from .chart.ch2d import Chart2d
     from .setting import Setting
     from .view.vtk import VtkViewer
+    from .panel.xlsx import SpreadSheet
 
     from .config import MASTER_KEY, MENU_BAR_KEY
 
@@ -98,6 +99,7 @@ if __name__ == '__main__' and __package__ is None:
 
     controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
     controller.add_page(Chart2d(frame, 111), 'chart2d', 'Chart')
+    controller.add_page(SpreadSheet(frame), 'xlsx', 'XLSX')
 
     # Load Model
     frame.Show(True)
