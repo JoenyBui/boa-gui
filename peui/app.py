@@ -105,7 +105,7 @@ if __name__ == '__main__' and __package__ is None:
     )
 
     controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
-    controller.add_page(Chart2d(frame, 111), 'chart2d', 'Chart')
+    controller.add_page(Chart2d(frame, controller, 111), 'chart2d', 'Chart')
     controller.add_page(SpreadSheet(frame, controller), 'xlsx', 'XLSX')
 
     # Load Model

@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
 
+from ..controller.ch2d import Chart2dController
+
 __author__ = 'jbui'
 
 
@@ -22,13 +24,18 @@ class Chart2d(wx.Panel):
     """
     Chart 2d Panel.
     """
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, controller, *args, **kwargs):
         """
 
         :param parent:
         :return:
         """
         wx.Panel.__init__(self, parent)
+
+        if kwargs.get('self_controller'):
+            self.controller = kwargs.get('self_controller')
+        else:
+            self.controller = Chart2dController(controller, self)
 
         self.figure = plt.Figure()
         # self.axes = self.figure.add_subplot(111)
