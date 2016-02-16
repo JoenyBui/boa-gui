@@ -9,7 +9,9 @@ class Chart2dController(ChildController):
         ChildController.__init__(self, parent, view)
 
     def do_layout(self):
-        pass
+        data = self.parent.project.data
+
+        self.view.axes.plot(data[0], data[1])
 
     def update_layout(self):
         pass

@@ -58,7 +58,7 @@ class MainController(object):
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
 
-    def add_pane(self, panel, key, area, name):
+    def add_pane(self, panel, key, area=None, name=None):
         """
         Add Pane to the main view.
         :param key:
@@ -67,10 +67,12 @@ class MainController(object):
         """
         self.windows[key] = panel
 
-        self.frame.add_pane(panel, area, name)
+        pane = self.frame.add_pane(panel, area, name)
 
         if panel.__dict__.get('controller'):
             self.childs.append(panel.controller)
+
+        return pane
 
     def add_page(self, page, key, name):
         """

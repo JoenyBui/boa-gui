@@ -18,6 +18,8 @@ import os
 import sys
 
 import matplotlib
+import pandas as pd
+import numpy as np
 
 import wx
 import wx.lib.mixins.inspection as WIT
@@ -79,6 +81,9 @@ if __name__ == '__main__' and __package__ is None:
     controller.notebook = aui.AuiNotebook(frame)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
+    # Add test data
+    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01))]
+
     # Set Components.
     controller.set_key(MENU_BAR_KEY)
 
@@ -92,7 +97,7 @@ if __name__ == '__main__' and __package__ is None:
 
     # Property Panel
     controller.add_pane(
-        PropGrid(frame, controller, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
+        PropGrid(frame, controller, None, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
         'prop grid',
         wx.BOTTOM,
         'Property'
@@ -105,7 +110,8 @@ if __name__ == '__main__' and __package__ is None:
     )
 
     controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
-    controller.add_page(Chart2d(frame, controller, 111), 'chart2d', 'Chart')
+
+    controller.add_page(Chart2d(frame, controller, None, 111), 'chart2d', 'Chart')
     controller.add_page(SpreadSheet(frame, controller), 'xlsx', 'XLSX')
 
     # Load Model

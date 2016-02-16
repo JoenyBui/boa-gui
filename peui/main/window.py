@@ -45,16 +45,18 @@ class MainWindow(wx.Frame):
         self.status_bar = CustomStatusBar(self)
         self.SetStatusBar(self.status_bar)
 
-    def add_pane(self, panel, area, name):
+    def add_pane(self, panel, arg1=None, arg2=None, target=None):
         """
         Add the pane panel.
         :param panel:
-        :param area: wx.LEFT, wx.RIGHT, wx.BOTTOM, wx.TOP, wx.CENTER
-        :param name:
+        :param arg1: AuiPaneInfo or an integer value (direction) wx.LEFT, wx.RIGHT, wx.BOTTOM, wx.TOP, wx.CENTER
+        :param arg2: AuiPaneInfo or a Point drop position
+        :param target: AuiPaneInfo to be turned into a notebook
         :return:
         """
-        self.mgr.AddPane(panel, area, name)
+        pane = self.mgr.AddPane(panel, arg1=arg1, arg2=arg2, target=target)
         self.mgr.Update()
+        return pane
 
     def refresh(self):
         """

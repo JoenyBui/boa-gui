@@ -10,6 +10,11 @@ class PathSmartBox(SmartTextBox):
     def __init__(self, parent, *args, **kwargs):
         SmartTextBox.__init__(self, parent, *args, **kwargs)
 
+        self.Bind(wx.EVT_KEY_DOWN, self.key_down)
+
+    def key_down(self, event=None):
+        pass
+
 
 class PathInputLayout(SmartInputLayout):
 

@@ -4,14 +4,10 @@ import numpy as np
 
 import wx
 
-# comment out the following to use wx rather than wxagg
 import matplotlib
-
-from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
-
-from matplotlib.backends.backend_wx import NavigationToolbar2Wx
-
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
+from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
 
@@ -24,27 +20,23 @@ class Chart2d(wx.Panel):
     """
     Chart 2d Panel.
     """
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, local, *args, **kwargs):
         """
 
         :param parent:
+        :param controller: parent controller
+        :param local: local controller
         :return:
         """
         wx.Panel.__init__(self, parent)
 
-        if kwargs.get('self_controller'):
-            self.controller = kwargs.get('self_controller')
+        if local:
+            self.controller = local
         else:
             self.controller = Chart2dController(controller, self)
 
         self.figure = plt.Figure()
-        # self.axes = self.figure.add_subplot(111)
         self.axes = self.figure.add_subplot(*args, **kwargs)
-
-        t = np.arange(0.0, 3.0, 0.01)
-        s = np.sin(2 * np.pi * t)
-
-        self.axes.plot(t, s)
         self.canvas = FigureCanvas(self, -1, self.figure)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -55,6 +47,12 @@ class Chart2d(wx.Panel):
         self.toolbar = None
 
         self.add_toolbar()
+
+        if not local:
+            self.controller.do_layout()
+
+    def plot(self, xs, ys, *args, **kwargs):
+        self.axes.plot(xs, ys, *args, **kwargs)
 
     def add_toolbar(self):
         """

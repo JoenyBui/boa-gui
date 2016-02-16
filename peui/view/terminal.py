@@ -12,7 +12,7 @@ class Console(wx.Panel):
 
         # Add a panel so it looks the correct on all platforms
         style = wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL
-        log = wx.TextCtrl(self, wx.ID_ANY, size=(300, 100), style=style)
+        log = wx.TextCtrl(self, wx.ID_ANY, size=(800, 300), style=style)
 
         # Add widgets to a sizer
         sizer = wx.BoxSizer(wx.VERTICAL)
