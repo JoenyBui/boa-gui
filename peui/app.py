@@ -52,7 +52,8 @@ if __name__ == '__main__' and __package__ is None:
     from .panel.xlsx import SpreadSheet
     from .view.terminal import Console
 
-    from .config import MASTER_KEY, MENU_BAR_KEY
+    from .config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
+    from .main.toolbar import CustomToolBar
 
     #TODO: Smart Textbox
     #TODO: Undo-Redo Model
@@ -107,6 +108,21 @@ if __name__ == '__main__' and __package__ is None:
         Console(frame, controller), 'console',
         wx.BOTTOM,
         'Output'
+    )
+
+    # tb = CustomToolBar(frame)
+    # tb.SetAuiManager(frame.mgr)
+    #
+    # controller.add_pane(
+    #     CustomToolBar(frame, controller),
+    #     'toolbar',
+    #     wx.TOP,
+    #     'tb'
+    # )
+    controller.add_pane(
+        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
+        'Toolbar',
+        aui.AuiPaneInfo().Name('mtoolbar').Caption('Tool Bar').ToolbarPane().Top().Gripper()
     )
 
     controller.add_page(GeneralPanel(parent=frame), 'general', 'General')

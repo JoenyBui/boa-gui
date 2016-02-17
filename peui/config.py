@@ -5,6 +5,8 @@ import wx
 __author__ = 'jbui'
 
 # There are method keys that corresponds to a specific controller action from the project.
+METHOD_SEPARATOR = wx.ID_SEPARATOR
+
 METHOD_NEW_PROJECT = wx.ID_NEW
 METHOD_OPEN_PROJECT = wx.ID_OPEN
 METHOD_SAVE_PROJECT = wx.ID_SAVE
@@ -21,6 +23,10 @@ METHOD_COPY = wx.ID_COPY
 METHOD_PASTE = wx.ID_PASTE
 
 METHOD_VIEW = wx.NewId()
+METHOD_TOOLBAR = wx.NewId()
+METHOD_TOOLBAR_STANDARD = wx.NewId()
+METHOD_TOOLBAR_MODEL = wx.NewId()
+
 METHOD_WINDOW = wx.NewId()
 METHOD_WINDOW_TREE = wx.NewId()
 METHOD_WINDOW_CONSOLE = wx.NewId()
@@ -44,12 +50,80 @@ MASTER_KEY = {
     METHOD_COPY:                dict(name='Copy'),
     METHOD_PASTE:               dict(name='Paste'),
 
+    METHOD_TOOLBAR_STANDARD:    dict(name='Toolbar Standard'),
+    METHOD_TOOLBAR_MODEL:       dict(name='Toolbar Model'),
+
     METHOD_WINDOW_TREE:         dict(name='Window Tree'),
     METHOD_WINDOW_CONSOLE:      dict(name='Window Console'),
     METHOD_WINDOW_PROP_GRID:    dict(name='Window Property'),
     METHOD_HELP:                dict(name='&Help'),
     METHOD_ABOUT:               dict(name='&About')
 }
+
+
+TOOLBAR_FILE_KEY = [
+    OrderedDict(
+        id=METHOD_NEW_PROJECT,
+        label='New Project',
+        bitmap=wx.ART_NEW,
+    ),
+    OrderedDict(
+        id=METHOD_OPEN_PROJECT,
+        label='Open Project',
+        bitmap=wx.ART_FILE_OPEN
+    ),
+    OrderedDict(
+        id=METHOD_SEPARATOR,
+        label='Separate',
+    ),
+    OrderedDict(
+        id=METHOD_SAVE_PROJECT,
+        label='Save Project',
+        bitmap=wx.ART_FILE_SAVE
+    ),
+    OrderedDict(
+        id=METHOD_SAVE_AS_PROJECT,
+        label='Save As Project',
+        bitmap=wx.ART_FILE_SAVE_AS
+    ),
+    OrderedDict(
+        id=METHOD_EXIT_PROJECT,
+        label='Exit',
+        bitmap=wx.ART_CLOSE
+    ),
+    OrderedDict(
+        id=METHOD_SEPARATOR
+    ),
+    OrderedDict(
+        id=METHOD_CUT,
+        label='Cut',
+        bitmap=wx.ART_CUT
+    ),
+    OrderedDict(
+        id=METHOD_COPY,
+        label='Copy',
+        bitmap=wx.ART_COPY
+    ),
+    OrderedDict(
+        id=METHOD_PASTE,
+        label='Paste',
+        bitmap=wx.ART_PASTE
+    ),
+    OrderedDict(
+        id=METHOD_SEPARATOR,
+    ),
+    OrderedDict(
+        id=METHOD_UNDO,
+        label='Undo',
+        bitmap=wx.ART_UNDO
+    ),
+    OrderedDict(
+        id=METHOD_REDO,
+        label='Redo',
+        bitmap=wx.ART_REDO
+    )
+]
+
 
 MENU_BAR_KEY = [
     OrderedDict(
@@ -65,12 +139,20 @@ MENU_BAR_KEY = [
                 name='&Open Project'
             ),
             OrderedDict(
+                id=METHOD_SEPARATOR,
+                name='Separator'
+            ),
+            OrderedDict(
                 id=METHOD_SAVE_PROJECT,
                 name='Save Project'
             ),
             OrderedDict(
                 id=METHOD_SAVE_AS_PROJECT,
                 name='Save As Project'
+            ),
+            OrderedDict(
+                id=METHOD_SEPARATOR,
+                name='Separator'
             ),
             OrderedDict(
                 id=METHOD_EXIT_PROJECT,
@@ -91,6 +173,10 @@ MENU_BAR_KEY = [
                 name='&Redo',
             ),
             OrderedDict(
+                id=METHOD_SEPARATOR,
+                name='Separator'
+            ),
+            OrderedDict(
                 id=METHOD_CUT,
                 name='Cu&t'
             ),
@@ -108,6 +194,20 @@ MENU_BAR_KEY = [
         name='&View',
         id=METHOD_VIEW,
         keys=[
+            OrderedDict(
+                id=METHOD_TOOLBAR,
+                name='Toolbar',
+                keys=[
+                    OrderedDict(
+                        id=METHOD_TOOLBAR_STANDARD,
+                        name='Standard'
+                    ),
+                    # OrderedDict(
+                    #     id=METHOD_TOOLBAR_MODEL,
+                    #     name='Model'
+                    # )
+                ]
+            ),
             OrderedDict(
                 id=METHOD_WINDOW,
                 name='Window',

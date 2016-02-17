@@ -5,6 +5,7 @@ from ..controller.property import PropertyGridController
 
 __author__ = 'jbui'
 
+propgrid.PropertyGridManager
 
 class PropGrid(propgrid.PropertyGrid):
     """
@@ -88,3 +89,13 @@ class PropGrid(propgrid.PropertyGrid):
         self.Append(item)
         self.SetPropertyHelpString(key, status)
         return item
+
+    def add_multi_button(self):
+
+        buttons = propgrid.PGMultiButton(self, wx.Size(10, 10))
+        buttons.Add('...')
+        buttons.Add('A')
+
+        buttons.Finalize(self, wx.Point(1,1))
+
+        self.Append(buttons)
