@@ -45,6 +45,8 @@ class MainWindow(wx.Frame):
         self.status_bar = CustomStatusBar(self)
         self.SetStatusBar(self.status_bar)
 
+        self.controller.bind_methods()
+
     def add_pane(self, panel, arg1=None, arg2=None, target=None):
         """
         Add the pane panel.

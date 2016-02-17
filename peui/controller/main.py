@@ -32,14 +32,14 @@ class MainController(object):
         self.notebook = None
 
         # Extend Controllers
-        self.dlg_ctrl = DlgController(self)
-        self.view_ctrl = ViewController(self)
+        self.dlg_ctrl = kwargs.get('dlg_ctrl', DlgController(self))
+        self.view_ctrl = kwargs.get('view_ctrl', ViewController(self))
 
         self.childs = []        # Controller for specific views, dlgs, etc...
 
         self.master_key = master_key
 
-        self.bind_methods()
+        # self.bind_methods()
 
     def bind_methods(self):
         """
@@ -54,9 +54,12 @@ class MainController(object):
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.dlg_ctrl.save_as_project_dialog
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
         self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
+
         self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
+
+        self.master_key[METHOD_TOOLBAR_STANDARD]['method'] = self.view_ctrl.view_toolbar_standard
 
     def add_pane(self, panel, key, area=None, name=None):
         """

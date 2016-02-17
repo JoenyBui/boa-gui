@@ -25,7 +25,7 @@ METHOD_PASTE = wx.ID_PASTE
 METHOD_VIEW = wx.NewId()
 METHOD_TOOLBAR = wx.NewId()
 METHOD_TOOLBAR_STANDARD = wx.NewId()
-METHOD_TOOLBAR_MODEL = wx.NewId()
+
 
 METHOD_WINDOW = wx.NewId()
 METHOD_WINDOW_TREE = wx.NewId()
@@ -122,8 +122,6 @@ TOOLBAR_FILE_KEY = [
         bitmap=wx.ART_REDO
     )
 ]
-
-MB_ICON_SIZE = wx.Size(16, 16)
 
 MENU_BAR_KEY = [
     OrderedDict(

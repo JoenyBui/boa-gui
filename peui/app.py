@@ -135,5 +135,4 @@ if __name__ == '__main__' and __package__ is None:
     app.SetTopWindow(frame=frame)
     controller.refresh()
 
-    print('App Started')
     app.MainLoop()
