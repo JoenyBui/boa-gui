@@ -210,7 +210,8 @@ MENU_BAR_KEY = [
                 keys=[
                     OrderedDict(
                         id=METHOD_TOOLBAR_STANDARD,
-                        name='Standard'
+                        name='Standard',
+
                     ),
                     # OrderedDict(
                     #     id=METHOD_TOOLBAR_MODEL,

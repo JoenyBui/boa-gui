@@ -2,6 +2,8 @@ import wx
 
 __author__ = 'jbui'
 
+MB_ICON_SIZE = wx.Size(14, 14)
+
 
 class CustomMenuBar(wx.MenuBar):
     """
@@ -15,9 +17,12 @@ class CustomMenuBar(wx.MenuBar):
         self.menus = {}
 
     def build_sub_menu(self, menu_item):
+        """
+        Build Sub Menu Items.
+        :param menu_item:
+        :return:
+        """
         sub_menu_object = wx.Menu()
-
-        MB_ICON_SIZE = wx.Size(14, 14)
 
         if menu_item.get('keys'):
             for item in menu_item['keys']:
@@ -28,12 +33,12 @@ class CustomMenuBar(wx.MenuBar):
 
                 title, sub_menu = self.build_sub_menu(item)
 
-                # self.menus[item['id']] = sub_menu_object.AppendMenu(item['id'], title, sub_menu)
-
                 mi = wx.MenuItem(sub_menu_object, item['id'], title)
 
                 if item.get('bitmap'):
                     mi.SetBitmap(wx.ArtProvider.GetBitmap(item['bitmap'], wx.ART_MENU, MB_ICON_SIZE))
+
+                mi.SetSubMenu(sub_menu)
 
                 self.menus[item['id']] = mi
 
@@ -45,7 +50,7 @@ class CustomMenuBar(wx.MenuBar):
 
     def set_menu_item(self, menus):
         """
-
+        Set Menu Item.
         :param menu_key:
         :return:
         """
