@@ -51,7 +51,6 @@ MASTER_KEY = {
     METHOD_PASTE:               dict(name='Paste'),
 
     METHOD_TOOLBAR_STANDARD:    dict(name='Toolbar Standard'),
-    METHOD_TOOLBAR_MODEL:       dict(name='Toolbar Model'),
 
     METHOD_WINDOW_TREE:         dict(name='Window Tree'),
     METHOD_WINDOW_CONSOLE:      dict(name='Window Console'),
@@ -124,6 +123,7 @@ TOOLBAR_FILE_KEY = [
     )
 ]
 
+MB_ICON_SIZE = wx.Size(16, 16)
 
 MENU_BAR_KEY = [
     OrderedDict(
@@ -132,11 +132,13 @@ MENU_BAR_KEY = [
         keys=[
             OrderedDict(
                 id=METHOD_NEW_PROJECT,
-                name='&New Project'
+                name='&New Project',
+                bitmap=wx.ART_NEW
             ),
             OrderedDict(
                 id=METHOD_OPEN_PROJECT,
-                name='&Open Project'
+                name='&Open Project',
+                bitmap=wx.ART_FILE_OPEN
             ),
             OrderedDict(
                 id=METHOD_SEPARATOR,
@@ -144,11 +146,13 @@ MENU_BAR_KEY = [
             ),
             OrderedDict(
                 id=METHOD_SAVE_PROJECT,
-                name='Save Project'
+                name='Save Project',
+                bitmap=wx.ART_FILE_SAVE
             ),
             OrderedDict(
                 id=METHOD_SAVE_AS_PROJECT,
-                name='Save As Project'
+                name='Save As Project',
+                bitmap=wx.ART_FILE_SAVE_AS
             ),
             OrderedDict(
                 id=METHOD_SEPARATOR,
@@ -156,7 +160,8 @@ MENU_BAR_KEY = [
             ),
             OrderedDict(
                 id=METHOD_EXIT_PROJECT,
-                name='E&xit'
+                name='E&xit',
+                bitmap=wx.ART_CLOSE
             )
         ]
     ),
@@ -166,11 +171,13 @@ MENU_BAR_KEY = [
         keys=[
             OrderedDict(
                 id=METHOD_UNDO,
-                name='&Undo'
+                name='&Undo',
+                bitmap=wx.ART_UNDO
             ),
             OrderedDict(
                 id=METHOD_REDO,
                 name='&Redo',
+                bitmap=wx.ART_REDO
             ),
             OrderedDict(
                 id=METHOD_SEPARATOR,
@@ -178,15 +185,18 @@ MENU_BAR_KEY = [
             ),
             OrderedDict(
                 id=METHOD_CUT,
-                name='Cu&t'
+                name='Cu&t',
+                bitmap=wx.ART_CUT
             ),
             OrderedDict(
                 id=METHOD_COPY,
-                name='&Copy'
+                name='&Copy',
+                bitmap=wx.ART_COPY
             ),
             OrderedDict(
                 id=METHOD_PASTE,
-                name='&Paste'
+                name='&Paste',
+                bitmap=wx.ART_PASTE
             )
         ]
     ),
