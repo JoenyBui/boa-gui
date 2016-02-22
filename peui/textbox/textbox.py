@@ -27,3 +27,4 @@ class TextInputLayout(SmartInputLayout):
             self.postbox = kwargs.get('postbox')
 
         self.do_layout()
+

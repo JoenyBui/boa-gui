@@ -4,6 +4,10 @@ import wx
 
 __author__ = 'jbui'
 
+COLOR_NORMAL = (255, 255, 255)
+COLOR_FORMAT_ERROR = (228, 115, 115)
+COLOR_RANGE_ERROR = (244, 67, 54)
+
 # There are method keys that corresponds to a specific controller action from the project.
 METHOD_SEPARATOR = wx.ID_SEPARATOR
 
@@ -26,11 +30,15 @@ METHOD_VIEW = wx.NewId()
 METHOD_TOOLBAR = wx.NewId()
 METHOD_TOOLBAR_STANDARD = wx.NewId()
 
+METHOD_NOTEBOOK = wx.NewId()
 
 METHOD_WINDOW = wx.NewId()
 METHOD_WINDOW_TREE = wx.NewId()
 METHOD_WINDOW_CONSOLE = wx.NewId()
 METHOD_WINDOW_PROP_GRID = wx.NewId()
+METHOD_WINDOW_GENERAL = wx.NewId()
+METHOD_WINDOW_CHART = wx.NewId()
+METHOD_WINDOW_XLSX = wx.NewId()
 
 METHOD_HELP = wx.ID_HELP
 METHOD_ABOUT = wx.ID_ABOUT
@@ -55,6 +63,10 @@ MASTER_KEY = {
     METHOD_WINDOW_TREE:         dict(name='Window Tree'),
     METHOD_WINDOW_CONSOLE:      dict(name='Window Console'),
     METHOD_WINDOW_PROP_GRID:    dict(name='Window Property'),
+    METHOD_WINDOW_GENERAL:      dict(name='Window General'),
+    METHOD_WINDOW_CHART:        dict(name='Window Chart'),
+    METHOD_WINDOW_XLSX:         dict(name='Window XLSX'),
+
     METHOD_HELP:                dict(name='&Help'),
     METHOD_ABOUT:               dict(name='&About')
 }
@@ -221,6 +233,22 @@ MENU_BAR_KEY = [
                 id=METHOD_WINDOW,
                 name='Window',
                 keys=[
+                    # OrderedDict(
+                    #     id=METHOD_WINDOW_GENERAL,
+                    #     name='General'
+                    # ),
+                    # OrderedDict(
+                    #     id=METHOD_WINDOW_CHART,
+                    #     name='Chart'
+                    # ),
+                    # OrderedDict(
+                    #     id=METHOD_WINDOW_XLSX,
+                    #     name='XLSX'
+                    # ),
+                    # OrderedDict(
+                    #     id=METHOD_SEPARATOR,
+                    #     name='Separator'
+                    # ),
                     OrderedDict(
                         id=METHOD_WINDOW_TREE,
                         name='Project Tree'

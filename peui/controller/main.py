@@ -53,13 +53,63 @@ class MainController(object):
         self.master_key[METHOD_SAVE_PROJECT]['method'] = self.dlg_ctrl.save_project_dialog
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.dlg_ctrl.save_as_project_dialog
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
-        self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
+
+        self.master_key[METHOD_UNDO]['method'] = self.evt_undo
+        self.master_key[METHOD_REDO]['method'] = self.evt_redo
+        self.master_key[METHOD_CUT]['method'] = self.evt_cut
+        self.master_key[METHOD_COPY]['method'] = self.evt_copy
+        self.master_key[METHOD_PASTE]['method'] = self.evt_paste
 
         self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
+        # self.master_key[METHOD_WINDOW_GENERAL]['method'] = self.view_ctrl.view_general_window
+        # self.master_key[METHOD_WINDOW_CHART]['method'] = self.view_ctrl.view_chart_window
+        # self.master_key[METHOD_WINDOW_XLSX]['method'] = self.view_ctrl.view_xlsx_window
 
         self.master_key[METHOD_TOOLBAR_STANDARD]['method'] = self.view_ctrl.view_toolbar_standard
+
+        self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
+
+    def evt_undo(self, event=None):
+        """
+
+        :param event:
+        :return:
+        """
+        print('Undo')
+
+    def evt_redo(self, event=None):
+        """
+
+        :param event:
+        :return:
+        """
+        print('Redo')
+
+    def evt_cut(self, event=None):
+        """
+
+        :param event:
+        :return:
+        """
+        print('Cut')
+
+    def evt_copy(self, event=None):
+        """
+
+        :param event:
+        :return:
+        """
+        print('Copy')
+
+    def evt_paste(self, event=None):
+        """
+
+        :param event:
+        :return:
+        """
+        print('Paste')
 
     def add_pane(self, panel, key, area=None, name=None):
         """
@@ -77,7 +127,7 @@ class MainController(object):
 
         return pane
 
-    def add_page(self, page, key, name):
+    def add_page(self, page, key, name, close=True):
         """
         Add page to the central view.
         :param page:
@@ -87,7 +137,18 @@ class MainController(object):
         """
         self.windows[key] = page
 
-        self.notebook.AddPage(page, name)
+        pane = self.notebook.AddPage(page, name)
+
+        if not close:
+
+            ctrl, idx = self.notebook.FindTab(page)
+
+            self.notebook.SetCloseButton(idx, False)
+
+        if page.__dict__.get('controller'):
+            self.childs.append(page.controller)
+
+        return pane
 
     def set_key(self, key):
         """
@@ -101,6 +162,11 @@ class MainController(object):
             self.set_ribbon_bar(key)
 
     def set_menu_bar(self, key):
+        """
+
+        :param key:
+        :return:
+        """
         menu_bar = CustomMenuBar(self.frame, self)
 
         menu_bar.set_menu_item(key)
@@ -115,6 +181,11 @@ class MainController(object):
         self.frame.SetMenuBar(self.frame.menu_bar)
 
     def set_ribbon_bar(self, key):
+        """
+
+        :param key:
+        :return:
+        """
         menu_bar = CustomRibbonBar(self.frame, self)
 
         self.frame.menu_bar = menu_bar
@@ -172,6 +243,14 @@ class MainController(object):
         pane = self.frame.mgr.GetPane(ctrl)
 
         pane.Show(not pane.IsShown())
+
+        # self.refresh_view()
+
+    def show_page(self, ctrl):
+        ctrl, idx = self.notebook.FindTab(ctrl)
+        page = self.notebook.GetPage(idx)
+        #TODO: Page is now shown.
+        page.Show(not page.IsShown())
 
         self.refresh_view()
 

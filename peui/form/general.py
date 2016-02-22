@@ -1,5 +1,9 @@
 import wx
 
+from ..textbox.smart import SmartComboBox
+from ..textbox.floatbox import FloatSmartBox, FloatInputLayout
+from ..textbox.intbox import IntSmartBox, IntInputLayout
+
 __author__ = 'jbui'
 
 
@@ -17,8 +21,10 @@ class GeneralDialog(wx.Dialog):
     def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL):
         wx.Dialog.__init__(self, parent)
 
+        self.parent = parent
         self.controller = controller
         self.local = local
+        self.layouts = {}
 
         # Layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
@@ -36,5 +42,18 @@ class GeneralDialog(wx.Dialog):
     def do_layout(self):
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
+        self.layouts['float'] = FloatInputLayout(self, label='Float',
+                                                 textbox=FloatSmartBox(self),
+                                                 postbox=SmartComboBox(self))
+
+        self.layouts['int'] = IntInputLayout(self, label='Int',
+                                             textbox=IntSmartBox(self),
+                                             postbox=SmartComboBox(self))
+
+        vsizer.AddSpacer(10)
+        vsizer.Add(self.layouts['charge_weight'], 0, wx.EXPAND | wx.ALL, 5)
+        vsizer.AddSpacer(10)
+        vsizer.Add(self.layouts['standoff'], 0, wx.EXPAND | wx.ALL, 5)
 
         return vsizer
+

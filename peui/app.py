@@ -52,17 +52,19 @@ if __name__ == '__main__' and __package__ is None:
     from .panel.xlsx import SpreadSheet
     from .view.terminal import Console
 
+    import config as cfg
     from .config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from .main.toolbar import CustomToolBar
 
     #TODO: Smart Textbox
     #TODO: Undo-Redo Model
-    #TODO: Cut & Paste
+    #TODO: Cut, Copy & Paste
     #TODO: Printing Pdf & Docx
     #TODO: Open & Close Project
     #TODO: License Manager
     #TODO: Backup Temp File
     #TODO: Periodic Savings
+    #TODO: Save Perspective View
 
     setting = Setting()
 
@@ -79,7 +81,7 @@ if __name__ == '__main__' and __package__ is None:
     project = Project()
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
     frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
-    controller.notebook = aui.AuiNotebook(frame)
+    controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
     # Add test data
@@ -91,7 +93,7 @@ if __name__ == '__main__' and __package__ is None:
     # Tree Panel.
     controller.add_pane(
         ProjectTree(frame, controller, project),
-        'tree',
+        cfg.METHOD_WINDOW_TREE,
         wx.LEFT,
         'Project Tree'
     )
@@ -99,36 +101,44 @@ if __name__ == '__main__' and __package__ is None:
     # Property Panel
     controller.add_pane(
         PropGrid(frame, controller, None, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
-        'prop grid',
+        cfg.METHOD_WINDOW_PROP_GRID,
         wx.BOTTOM,
         'Property'
     )
 
     controller.add_pane(
-        Console(frame, controller), 'console',
+        Console(frame, controller),
+        cfg.METHOD_WINDOW_CONSOLE,
         wx.BOTTOM,
         'Output'
     )
 
-    # tb = CustomToolBar(frame)
-    # tb.SetAuiManager(frame.mgr)
-    #
-    # controller.add_pane(
-    #     CustomToolBar(frame, controller),
-    #     'toolbar',
-    #     wx.TOP,
-    #     'tb'
-    # )
     controller.add_pane(
         CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
-        'Toolbar',
-        aui.AuiPaneInfo().Name('mtoolbar').Caption('Tool Bar').ToolbarPane().Top().Gripper()
+        cfg.METHOD_TOOLBAR_STANDARD,
+        aui.AuiPaneInfo().Name('std_tb').Caption('Standard Toolbar').ToolbarPane().Top().Gripper()
     )
 
-    controller.add_page(GeneralPanel(parent=frame), 'general', 'General')
+    controller.add_page(
+        GeneralPanel(parent=frame),
+        cfg.METHOD_WINDOW_GENERAL,
+        'General',
+        False
+    )
 
-    controller.add_page(Chart2d(frame, controller, None, 111), 'chart2d', 'Chart')
-    controller.add_page(SpreadSheet(frame, controller), 'xlsx', 'XLSX')
+    controller.add_page(
+        Chart2d(frame, controller, None, 111),
+        cfg.METHOD_WINDOW_CHART,
+        'Chart',
+        True
+    )
+
+    controller.add_page(
+        SpreadSheet(frame, controller),
+        cfg.METHOD_WINDOW_XLSX,
+        'XLSX',
+        True
+    )
 
     # Load Model
     frame.Show(True)

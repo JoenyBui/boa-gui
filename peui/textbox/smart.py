@@ -13,7 +13,41 @@ class SmartTextBox(wx.TextCtrl):
     def __init__(self, parent, *args, **kwargs):
         wx.TextCtrl.__init__(self, parent, *args, **kwargs)
 
+        self.keys = kwargs.get('keys', {})
         self.parent = parent
+
+    @property
+    def min(self):
+        return self.keys.get('min')
+
+    @min.setter
+    def min(self, value):
+        self.keys['min'] = value
+
+    @property
+    def max(self):
+        return self.keys.get('max')
+
+    @max.setter
+    def max(self, value):
+        self.keys['max'] = value
+
+    def get_value(self, key):
+        val = self.GetValue()
+        digit = chr(key)
+
+        pos = self.GetInsertionPoint()
+        if pos == len(val):
+            val += digit
+        else:
+            val = val[:pos] + digit + val[pos:]
+
+        return val
+
+
+class SmartComboBox(wx.ComboBox):
+    def __init__(self, parent, *args, **kwargs):
+        wx.ComboBox.__init__(self, parent, *args, **kwargs)
 
 
 class SmartInputLayout(wx.BoxSizer):
