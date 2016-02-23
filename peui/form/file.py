@@ -13,7 +13,7 @@ class NewProjectDialog(wx.Dialog):
     """
     New Project Dialog
     """
-    def __init__(self, parent, style=wx.OK, **kwargs):
+    def __init__(self, parent, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, **kwargs):
         wx.Dialog.__init__(self, None, title=kwargs.get('title', 'New Project'),
                            size=(kwargs.get('width', 500), kwargs.get('height', 300)))
 
@@ -25,12 +25,15 @@ class NewProjectDialog(wx.Dialog):
         self.panel = NewProjectPanel(self, parent.setting)
 
         # Layout
+        btnsizer = self.CreateButtonSizer(btn_flags)
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.panel, 1, wx.EXPAND)
+        sizer.Add(btnsizer, 0, wx.EXPAND | wx.ALL, 5)
+
         self.SetSizer(sizer)
         self.SetInitialSize()
 
-        self.bind()
+        # self.bind()
 
     def get_project(self):
         """
@@ -40,15 +43,15 @@ class NewProjectDialog(wx.Dialog):
                        author=self.panel.tb_author.GetValue(),
                        project_folder=self.panel.tb_path.GetValue())
 
-    def bind(self):
-        self.Bind(wx.EVT_BUTTON, self.on_okay, self.panel.btn_okay)
-        self.Bind(wx.EVT_BUTTON, self.on_cancel, self.panel.btn_cancel)
-
-    def on_okay(self, event):
-        self.Close()
-
-    def on_cancel(self, event):
-        self.Destroy()
+    # def bind(self):
+    #     self.Bind(wx.EVT_BUTTON, self.on_okay, self.panel.btn_okay)
+    #     self.Bind(wx.EVT_BUTTON, self.on_cancel, self.panel.btn_cancel)
+    #
+    # def on_okay(self, event):
+    #     self.Close()
+    #
+    # def on_cancel(self, event):
+    #     self.Destroy()
 
 
 class NewProjectPanel(wx.Panel):
@@ -65,8 +68,8 @@ class NewProjectPanel(wx.Panel):
         self.tb_author = TextSmartBox(self, value=default_settings.author)
         self.tb_path = PathSmartBox(self, value=default_settings.path)
 
-        self.btn_okay = wx.Button(self, wx.ID_ANY, 'OK')
-        self.btn_cancel = wx.Button(self, wx.ID_ANY, 'Cancel')
+        # self.btn_okay = wx.Button(self, wx.ID_ANY, 'OK')
+        # self.btn_cancel = wx.Button(self, wx.ID_ANY, 'Cancel')
 
         self.do_layout()
 
@@ -76,13 +79,13 @@ class NewProjectPanel(wx.Panel):
         """
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        field1_sz = TextInputLayout(self, label='Project Name:', textbox=self.tb_project)
-        field2_sz = TextInputLayout(self, label='Author Name:', textbox=self.tb_author)
-        field3_sz = PathInputLayout(self, label='Path', textbox=self.tb_path)
+        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project)
+        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author)
+        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path)
 
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(self.btn_okay, 0, wx.ALL | wx.LEFT, 5)
-        btnSizer.Add(self.btn_cancel, 0, wx.ALL | wx.RIGHT, 5)
+        # btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        # btnSizer.Add(self.btn_okay, 0, wx.ALL | wx.LEFT, 5)
+        # btnSizer.Add(self.btn_cancel, 0, wx.ALL | wx.RIGHT, 5)
 
         # Now finish the layout by adding the two sizers to the main vertical sizer.
         vsizer.AddStretchSpacer()
@@ -95,8 +98,8 @@ class NewProjectPanel(wx.Panel):
         vsizer.AddSpacer(15)
         vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
         vsizer.AddSpacer(15)
-        vsizer.Add(btnSizer, 0, BOTH_SIDES | wx.BOTTOM, 20)
-        vsizer.AddStretchSpacer()
+        # vsizer.Add(btnSizer, 0, BOTH_SIDES | wx.BOTTOM, 20)
+        # vsizer.AddStretchSpacer()
 
         # Finally assign the main outer sizer to the panel
         self.SetSizer(vsizer)

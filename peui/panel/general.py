@@ -17,16 +17,17 @@ class GeneralPanel(wx.Panel):
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
         vsizer.Add(self.do_layout())
+
         self.SetSizer(vsizer)
 
     def do_layout(self):
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.layouts['float'] = FloatInputLayout(self, label='Float',
+        self.layouts['float'] = FloatInputLayout(self, name='Float',
                                                  textbox=FloatSmartBox(self, signs=True, decimal=True, exponential=True),
                                                  postbox=SmartComboBox(self))
 
-        self.layouts['int'] = IntInputLayout(self, label='Int',
+        self.layouts['int'] = IntInputLayout(self, name='Int',
                                              textbox=IntSmartBox(self, signs=True),
                                              postbox=SmartComboBox(self))
 

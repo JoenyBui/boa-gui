@@ -5,7 +5,6 @@ from ..controller.property import PropertyGridController
 
 __author__ = 'jbui'
 
-propgrid.PropertyGridManager
 
 class PropGrid(propgrid.PropertyGrid):
     """

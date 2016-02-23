@@ -1,6 +1,7 @@
 import re
 
 import wx
+from wx import GridSizer
 
 __author__ = 'jbui'
 
@@ -67,9 +68,26 @@ class SmartInputLayout(wx.BoxSizer):
 
         self.parent = parent
 
-        self.label = None
+        label_width = 150
+        if kwargs.get('label_width'):
+            label_width = kwargs.get('label_width')
+
+        if kwargs.get('label'):
+            self.label = None
+        else:
+            if kwargs.get('name'):
+                self.label = wx.StaticText(self.parent,
+                                           label=kwargs.get('name'),
+                                           size=(label_width, -1))
+            else:
+                self.label = wx.StaticText(self.parent,
+                                           label="TextBox Label:",
+                                           size=(label_width, -1))
+
         self.textbox = None
-        self.postbox = None     # Additional placeholder that is significant (unit box, path button, etc.)
+
+        self.postbox = kwargs.get('postbox', None)
+        # Additional placeholder that is significant (unit box, path button, etc.)
 
         # Call do_layout after you have populate the label, textbox, and/or postbox
 
@@ -78,12 +96,13 @@ class SmartInputLayout(wx.BoxSizer):
 
         :return:
         """
+        border_space = 10
+
         if self.label:
-            self.Add(wx.StaticText(self.parent, label=self.label), 0,
-                     wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
+            self.Add(self.label, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border_space)
 
         if self.textbox:
-            self.Add(self.textbox, 1, wx.EXPAND)
+            self.Add(self.textbox, 0, wx.EXPAND, border_space)
 
         if self.postbox:
-            self.Add(self.postbox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
+            self.Add(self.postbox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border_space)

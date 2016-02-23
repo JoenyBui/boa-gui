@@ -21,7 +21,7 @@ class PathInputLayout(SmartInputLayout):
     def __init__(self, parent, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
-        self.label = kwargs.get('label', 'Path:')
+        # self.label = kwargs.get('label', 'Path:')
 
         if kwargs.get('textbox'):
             self.textbox = kwargs.get('textbox')
@@ -35,8 +35,9 @@ class PathInputLayout(SmartInputLayout):
 
         self.do_layout()
 
-        self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
-        self.postbox.SetToolTip(wx.ToolTip("Choose Path"))
+        if self.postbox:
+            self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
+            self.postbox.SetToolTip(wx.ToolTip("Choose Path"))
 
     def pick_folder_path(self, event):
         dlg = wx.DirDialog(self.parent)

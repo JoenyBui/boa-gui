@@ -64,15 +64,15 @@ class IntInputLayout(SmartInputLayout):
     def __init__(self, parent, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
-        self.label = kwargs.get('label', 'Input Label:')
+        # self.label = kwargs.get('label', 'Input Label:')
 
         if kwargs.get('textbox'):
             self.textbox = kwargs.get('textbox')
         else:
             self.textbox = IntSmartBox(parent, **kwargs)
 
-        if kwargs.get('postbox'):
-            self.postbox = kwargs.get('postbox')
+        # if kwargs.get('postbox'):
+        #     self.postbox = kwargs.get('postbox')
 
         self.do_layout()
 
