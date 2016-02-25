@@ -2,6 +2,8 @@ import os
 
 import wx.lib.agw.aui as aui
 
+from pecutil.threads import threaded
+
 from ..config import *
 
 from ..main.menubar import CustomMenuBar

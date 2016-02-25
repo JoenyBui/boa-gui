@@ -61,7 +61,7 @@ class IntSmartBox(SmartTextBox):
 
 class IntInputLayout(SmartInputLayout):
 
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, value=None, unit=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
         # self.label = kwargs.get('label', 'Input Label:')
@@ -71,8 +71,11 @@ class IntInputLayout(SmartInputLayout):
         else:
             self.textbox = IntSmartBox(parent, **kwargs)
 
-        # if kwargs.get('postbox'):
-        #     self.postbox = kwargs.get('postbox')
+        if value:
+            self.textbox.Value = str(value)
+
+        if unit:
+            self.postbox.Value = unit
 
         self.do_layout()
 
@@ -81,14 +84,14 @@ class IntRangeValidator(wx.PyValidator):
     """
     Int Range Validator
     """
-    def __init__(self, **kwargs):
+    def __init__(self, signs=False, *args, **kwargs):
         wx.PyValidator.__init__(self)
 
         self.signs = kwargs.get('signs', False)
-        self.decimal = kwargs.get('decimal', False)
-        self.exponential = kwargs.get('exponential', False)
+        # self.decimal = kwargs.get('decimal', False)
+        # self.exponential = kwargs.get('exponential', False)
 
-        self.fmt = get_number_fmt(signs=self.signs, decimal=self.decimal, exponential=self.exponential)
+        self.fmt = get_number_fmt(signs=self.signs, decimal=False, exponential=False)
 
         self.allow_keys = [wx.WXK_RETURN, wx.WXK_DELETE, wx.WXK_BACK]
         if self.signs:
@@ -107,8 +110,6 @@ class IntRangeValidator(wx.PyValidator):
         """
         return IntRangeValidator(
             signs=self.signs,
-            decimal=self.decimal,
-            exponential=self.exponential,
             min=self._min,
             max=self._max
         )

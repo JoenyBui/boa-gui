@@ -13,10 +13,10 @@ __author__ = 'jbui'
 
 class FloatSmartBox(SmartTextBox):
     """
-
+    Float Smart Box.
     """
-    def __init__(self, parent, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, *args)
+    def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None, range_error=None, *args, **kwargs):
+        SmartTextBox.__init__(self, parent, *args, **kwargs)
 
         self.signs = kwargs.get('signs', False)
         self.decimal = kwargs.get('decimal', True)
@@ -87,18 +87,29 @@ class FloatInputLayout(SmartInputLayout):
     """
 
     """
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, value=None, unit=None, type=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
-
-        # self.label = kwargs.get('label', 'Float Label:')
 
         if kwargs.get('textbox'):
             self.textbox = kwargs.get('textbox')
         else:
             self.textbox = FloatSmartBox(parent, **kwargs)
-        #
-        # if kwargs.get('postbox'):
-        #     self.postbox = kwargs.get('postbox')
+
+        if type:
+            if type == 'length':
+                self.postbox.activate_length()
+            elif type == 'mass':
+                self.postbox.activate_mass()
+            elif type == 'charge':
+                self.postbox.activate_charge()
+            elif type == 'pressure':
+                self.postbox.activate_pressure()
+
+        if value:
+            self.textbox.Value = str(value)
+
+        if unit:
+            self.postbox.Value = unit
 
         self.do_layout()
 
