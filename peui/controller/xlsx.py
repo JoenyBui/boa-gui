@@ -16,3 +16,6 @@ class XlsxController(ChildController):
 
     def refresh(self):
         pass
+
+    def sync_data(self):
+        pass

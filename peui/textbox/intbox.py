@@ -79,6 +79,18 @@ class IntInputLayout(SmartInputLayout):
 
         self.do_layout()
 
+    def set_value(self, value, post=None, label=None):
+        self.textbox.Value = str(value)
+
+        if post and self.postbox:
+            self.postbox.Value = str(post)
+
+        if label:
+            self.label.Label = str(label)
+
+    def validate(self):
+        return False
+
 
 class IntRangeValidator(wx.PyValidator):
     """

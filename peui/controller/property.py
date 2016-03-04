@@ -1,7 +1,9 @@
+from . import BaseController
+
 __author__ = 'jbui'
 
 
-class PropertyGridController(object):
+class PropertyGridController(BaseController):
     """
     Property Grid Controller
 
@@ -15,6 +17,8 @@ class PropertyGridController(object):
         :param kwargs:
         :return:
         """
+        BaseController.__init__(self)
+
         self.parent = parent
         self.view = view
         self.cells = dict()
@@ -32,3 +36,6 @@ class PropertyGridController(object):
 
     def refresh(self):
         self.update_layout()
+
+    def sync_data(self):
+        pass

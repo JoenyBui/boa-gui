@@ -18,8 +18,8 @@ class GeneralDialog(wx.Dialog):
         wx.HELP             Creates a Help button
         wx.NO_DEFAULT       Sets the No button as the default
     """
-    def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL):
-        wx.Dialog.__init__(self, parent)
+    def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+        wx.Dialog.__init__(self, parent, **kwargs)
 
         self.parent = parent
         self.controller = controller
@@ -29,11 +29,11 @@ class GeneralDialog(wx.Dialog):
         # Layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        btnsizer = self.CreateButtonSizer(btn_flags)
+        self.btnsizer = self.CreateButtonSizer(btn_flags)
 
         vsizer.Add(self.do_layout())
         vsizer.AddSpacer(10)
-        vsizer.Add(btnsizer, 0, wx.EXPAND | wx.ALL, 5)
+        vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
         self.SetSizer(vsizer)
         self.SetInitialSize()
@@ -56,4 +56,3 @@ class GeneralDialog(wx.Dialog):
         vsizer.Add(self.layouts['standoff'], 0, wx.EXPAND | wx.ALL, 5)
 
         return vsizer
-

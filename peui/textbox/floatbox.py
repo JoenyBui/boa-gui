@@ -5,6 +5,9 @@ import re
 import wx
 
 from pecutil.refmt import get_number_fmt, parse_number
+from pecutil.types import isFloat
+
+from peui import units
 
 from .smart import SmartTextBox, SmartInputLayout
 
@@ -85,7 +88,7 @@ class FloatSmartBox(SmartTextBox):
 
 class FloatInputLayout(SmartInputLayout):
     """
-
+    Float Textbox set.
     """
     def __init__(self, parent, value=None, unit=None, type=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
@@ -96,14 +99,18 @@ class FloatInputLayout(SmartInputLayout):
             self.textbox = FloatSmartBox(parent, **kwargs)
 
         if type:
-            if type == 'length':
+            if type == units.UNIT_LENGTH_KEY:
                 self.postbox.activate_length()
-            elif type == 'mass':
+                self.type = type
+            elif type == units.UNIT_MASS_KEY:
                 self.postbox.activate_mass()
-            elif type == 'charge':
+                self.type = type
+            elif type == units.UNIT_CHARGE_KEY:
                 self.postbox.activate_charge()
-            elif type == 'pressure':
+                self.type = type
+            elif type == units.UNIT_PRESSURE_KEY:
                 self.postbox.activate_pressure()
+                self.type = type
 
         if value:
             self.textbox.Value = str(value)
@@ -112,6 +119,32 @@ class FloatInputLayout(SmartInputLayout):
             self.postbox.Value = unit
 
         self.do_layout()
+
+    def set_value(self, value, post=None, label=None):
+        self.textbox.Value = str(value)
+
+        if post and self.postbox:
+            self.postbox.Value = str(post)
+
+        if label:
+            self.label.Label = str(label)
+
+    def validate(self):
+        base_value = units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
+
+        if self.min:
+            base_min = units.get_base_value(self.type, self.min[0], self.min[1])
+
+            if base_value < base_min:
+                return False
+
+        if self.max:
+            base_max = units.get_base_value(self.type, self.max[0], self.max[1])
+
+            if base_value > base_max:
+                return False
+
+        return True
 
 
 class FloatRangeValidator(wx.PyValidator):
@@ -162,8 +195,8 @@ class FloatRangeValidator(wx.PyValidator):
         val = txtCtrl.GetValue()
         isValid = False
 
-        if val.isdigit():
-            digit = int(val)
+        if isFloat(val):
+            digit = float(val)
             if digit >= self._min and digit <= self._max:
                 isValid = True
 

@@ -1,20 +1,26 @@
 import os
 import wx
 
+from . import BaseController
 from .. import config as cfg
 
 __author__ = 'jbui'
 
 
-class ViewController(object):
+class ViewController(BaseController):
     """
     Isolate the view controlling methods to this class controller.
     """
     def __init__(self, parent):
+        BaseController.__init__(self)
+
         self.parent = parent
         self.windows = parent.windows
         self.show_pane = parent.show_pane
         self.show_page = parent.show_page
+
+    def sync_data(self):
+        pass
 
     def view_tree_window(self, event=None):
         if self.windows.get(cfg.METHOD_WINDOW_TREE):

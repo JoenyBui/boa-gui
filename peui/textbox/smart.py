@@ -134,6 +134,9 @@ class SmartInputLayout(wx.BoxSizer):
         self.border_space_textbox = kwargs.get('border_space_textbox', self.border_space)
         self.border_space_postbox = kwargs.get('border_space_postbox', self.border_space)
 
+        self.min = min
+        self.max = max
+
     def do_layout(self):
         """
         Do Layout.
@@ -148,3 +151,6 @@ class SmartInputLayout(wx.BoxSizer):
 
         if self.postbox:
             self.Add(self.postbox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_postbox)
+
+    def validate(self):
+        pass

@@ -23,6 +23,9 @@ class DlgController(object):
     def frame(self, value):
         self.parent.frame = value
 
+    def sync_data(self):
+        pass
+
     def new_project_dialog(self, event):
         """
         New Project Dialog.

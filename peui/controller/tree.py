@@ -35,3 +35,6 @@ class TreeController(ChildController):
         """
 
         self.update_layout()
+
+    def sync_data(self):
+        pass
