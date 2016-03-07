@@ -1,7 +1,9 @@
 import re
 
 import wx
+
 from wx import GridSizer
+from wx.lib.agw.supertooltip import SuperToolTip
 
 from peui.units import length, charge, pressure, mass
 
@@ -126,6 +128,11 @@ class SmartInputLayout(wx.BoxSizer):
         self.textbox = None
 
         self.postbox = kwargs.get('postbox', None)
+
+        self.tooltip = kwargs.get('tooltip', SuperToolTip("HELP"))
+        # self.tooltip.SetIcon(wx.ICON_WARNING)
+        # self.tooltip.SetTarget(self.textbox)
+
         # Additional placeholder that is significant (unit box, path button, etc.)
 
         # Call do_layout after you have populate the label, textbox, and/or postbox

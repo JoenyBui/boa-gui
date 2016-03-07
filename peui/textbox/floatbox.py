@@ -78,13 +78,15 @@ class FloatSmartBox(SmartTextBox):
 
     def set_normal_color(self):
         self.SetBackgroundColour(self.color_normal)
+        self.Refresh()
 
     def set_format_error_color(self):
         self.SetBackgroundColour(self.color_format_error)
+        self.Refresh()
 
     def set_range_error_color(self):
         self.SetBackgroundColour(self.color_range_error)
-
+        self.Refresh()
 
 class FloatInputLayout(SmartInputLayout):
     """
@@ -136,13 +138,30 @@ class FloatInputLayout(SmartInputLayout):
             base_min = units.get_base_value(self.type, self.min[0], self.min[1])
 
             if base_value < base_min:
+                self.textbox.set_range_error_color()
+
+                self.tooltip.SetTarget(self.textbox)
+                self.tooltip.SetHeader("Hello World")
+
+                self.tooltip.SetDrawHeaderLine(True)
+
+                self.tooltip.ApplyStyle("Office 2007 Blue")
+
+                self.tooltip.SetDropShadow(True)
+
                 return False
 
         if self.max:
             base_max = units.get_base_value(self.type, self.max[0], self.max[1])
 
             if base_value > base_max:
+                self.textbox.set_range_error_color()
+
+                self.tooltip.SetTarget(self.textbox)
+
                 return False
+
+        self.textbox.set_normal_color()
 
         return True
 
