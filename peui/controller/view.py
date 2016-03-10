@@ -1,5 +1,7 @@
 import os
+
 import wx
+from wx.lib.pubsub import pub
 
 from . import BaseController
 from .. import config as cfg

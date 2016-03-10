@@ -1,6 +1,9 @@
 import os
+import uuid
 
+import wx
 import wx.lib.agw.aui as aui
+from wx.lib.pubsub import pub
 
 from pecutil.threads import threaded
 
@@ -33,6 +36,11 @@ class MainController(object):
         self.windows = {}
         self.notebook = None
 
+        # File History
+        self.filehistory = wx.FileHistory(8)
+        self.config = wx.Config("peui", style=wx.CONFIG_USE_LOCAL_FILE)
+        self.filehistory.Load(self.config)
+
         # Extend Controllers
         self.dlg_ctrl = kwargs.get('dlg_ctrl', DlgController(self))
         self.view_ctrl = kwargs.get('view_ctrl', ViewController(self))
@@ -41,7 +49,21 @@ class MainController(object):
 
         self.master_key = master_key
 
-        # self.bind_methods()
+        self.uuid = str(uuid.uuid4())
+
+        self.subscribe_methods()
+
+    @property
+    def evt_open_project(self):
+        return 'EVT_OPEN_PROJECT'
+
+    @property
+    def evt_refresh_view(self):
+        return 'EVT_REFRESH_VIEW'
+
+    def subscribe_methods(self):
+        pub.subscribe(self.refresh_view, self.evt_refresh_view)
+        pub.subscribe(self.refresh_open_project, self.evt_open_project)
 
     def bind_methods(self):
         """
@@ -75,7 +97,7 @@ class MainController(object):
 
     def evt_undo(self, event=None):
         """
-
+        Event Undo.
         :param event:
         :return:
         """
@@ -83,7 +105,7 @@ class MainController(object):
 
     def evt_redo(self, event=None):
         """
-
+        Event Redo.
         :param event:
         :return:
         """
@@ -182,6 +204,19 @@ class MainController(object):
         self.frame.menu_bar = menu_bar
         self.frame.SetMenuBar(self.frame.menu_bar)
 
+        # Add History
+        self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
+
+    def on_file_history(self, event):
+        fileNum = event.GetId() - wx.ID_FILE1
+        path = self.filehistory.GetHistoryFile(fileNum)
+        self.filehistory.AddFileToHistory(path)  # move up the list
+
+        # do whatever you want with the file path...
+        self.open_project(path)
+
+        pub.sendMessage(self.evt_open_project)
+
     def set_ribbon_bar(self, key):
         """
 
@@ -209,6 +244,18 @@ class MainController(object):
         self.project.controller = self
 
         self.refresh()
+
+    def save_project(self, path):
+        self.project.save(path)
+
+    def open_project(self, path):
+        self.project.load(path)
+
+    def refresh_open_project(self):
+        self.refresh_clear_project()
+
+    def refresh_clear_project(self):
+        pass
 
     def refresh(self):
         """
@@ -245,8 +292,6 @@ class MainController(object):
         pane = self.frame.mgr.GetPane(ctrl)
 
         pane.Show(not pane.IsShown())
-
-        # self.refresh_view()
 
     def show_page(self, ctrl):
         ctrl, idx = self.notebook.FindTab(ctrl)

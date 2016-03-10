@@ -141,7 +141,7 @@ class FloatInputLayout(SmartInputLayout):
                 self.textbox.set_range_error_color()
 
                 self.tooltip.SetTarget(self.textbox)
-                self.tooltip.SetHeader("Hello World")
+                self.tooltip.SetHeader("Error")
 
                 self.tooltip.SetDrawHeaderLine(True)
 

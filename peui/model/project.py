@@ -22,11 +22,9 @@ class Project(object):
 
         :param path:
         """
-        data = {
-            'keys': self.keys
-        }
+        data = self.get_json()
 
-        json.dump(data, open(path, "wb"))
+        json.dump(data, open(path, "wb"), sort_keys=True, indent=4)
 
     def load(self, path):
         """
@@ -35,7 +33,7 @@ class Project(object):
         """
         data = json.load(open(path, "rb"))
 
-        self.keys = data['keys']
+        self.load_json(data)
 
     @property
     def name(self):
@@ -72,3 +70,13 @@ class Project(object):
     @project_folder.setter
     def project_folder(self, value):
         self.keys['project_folder'] = value
+
+    def get_json(self):
+        return {
+            'name': self.name,
+            'author': self.author,
+        }
+
+    def load_json(self, data):
+        self.name = data.get('name')
+        self.author = data.get('author')

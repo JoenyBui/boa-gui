@@ -31,9 +31,20 @@ class CustomMenuBar(wx.MenuBar):
                     sub_menu_object.AppendSeparator()
                     continue
 
+                if item.get('history'):
+                    recent = wx.Menu()
+                    self.controller.filehistory.UseMenu(recent)
+                    self.controller.filehistory.AddFilesToMenu()
+
+                    sub_menu_object.AppendMenu(item['id'], item['name'], recent)
+                    continue
+
                 title, sub_menu = self.build_sub_menu(item)
 
-                mi = wx.MenuItem(sub_menu_object, item['id'], title)
+                if item.get('kind'):
+                    mi = wx.MenuItem(sub_menu_object, item['id'], title, kind=item.get('kind'))
+                else:
+                    mi = wx.MenuItem(sub_menu_object, item['id'], title)
 
                 if item.get('bitmap'):
                     mi.SetBitmap(wx.ArtProvider.GetBitmap(item['bitmap'], wx.ART_MENU, MB_ICON_SIZE))
@@ -43,6 +54,7 @@ class CustomMenuBar(wx.MenuBar):
                 self.menus[item['id']] = mi
 
                 sub_menu_object.AppendItem(self.menus[item['id']])
+
         else:
             sub_menu_object = None
 

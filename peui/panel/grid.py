@@ -33,41 +33,132 @@ class PropGrid(propgrid.PropertyGrid):
         if not local:
             self.controller.do_layout()
 
-    def add_category_property(self, name, **kwargs):
-        self.Append(propgrid.PropertyCategory(name))
+    def add_category_property(self, name, enabled=True, **kwargs):
+        """
+        Add category property.
+        :param name:
+        :param kwargs:
+        :return:
+        """
 
-    def add_file_property(self, name, key, value, status, **kwargs):
+        return self.Append(propgrid.PropertyCategory(name))
+
+    def add_file_property(self, name, key, value, status, enabled=True, **kwargs):
+        """
+        Add file property.
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param kwargs:
+        :return:
+        """
         item = propgrid.FileProperty(name, key, value=value)
         self.Append(item)
         self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
         return item
 
-    def add_int_property(self, name, key, value, status, **kwargs):
+    def add_int_property(self, name, key, value, status, enabled=True, **kwargs):
+        """
+
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param kwargs:
+        :return:
+        """
         item = propgrid.IntProperty(name, key, value=value)
         self.Append(item)
         self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
         return item
 
-    def add_string_property(self, name, key, value, status, **kwargs):
+    def add_string_property(self, name, key, value, status, enabled=True, **kwargs):
+        """
+
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param kwargs:
+        :return:
+        """
         item = propgrid.StringProperty(name, key, value=value)
         self.Append(item)
         self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
         return item
 
-    def add_float_property(self, name, key, value, status, **kwargs):
+    def add_float_property(self, name, key, value, status, enabled=True, **kwargs):
+        """
+
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param kwargs:
+        :return:
+        """
         item = propgrid.FloatProperty(name, key, value=value)
         self.Append(item)
         self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
         return item
 
-    def add_bool_property(self, name, key, value, status, **kwargs):
+    def add_bool_property(self, name, key, value, status, enabled=True, **kwargs):
+        """
+
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param kwargs:
+        :return:
+        """
         item = propgrid.BoolProperty(name, key, value=value)
         self.Append(item)
         self.SetPropertyAttribute(key, "UseCheckbox", True)
         self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
         return item
 
-    def add_enum_property(self, name, key, value, status, **kwargs):
+    def add_enum_property(self, name, key, value, status, enabled=True, **kwargs):
+        """
+
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param kwargs:
+        :return:
+        """
         if isinstance(value, tuple):
             arr_label = []
             arr_values = []
@@ -87,14 +178,30 @@ class PropGrid(propgrid.PropertyGrid):
 
         self.Append(item)
         self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
         return item
 
-    def add_multi_button(self):
-
+    def add_multi_button(self, enabled=True, **kwargs):
+        """
+        Add multi-button.
+        :return:
+        """
         buttons = propgrid.PGMultiButton(self, wx.Size(10, 10))
         buttons.Add('...')
         buttons.Add('A')
 
-        buttons.Finalize(self, wx.Point(1,1))
+        buttons.Finalize(self, wx.Point(1, 1))
 
         self.Append(buttons)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
+        return buttons

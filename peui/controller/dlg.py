@@ -1,5 +1,7 @@
 import os
+
 import wx
+from wx.lib.pubsub import pub
 
 from ..model.project import Project
 from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
@@ -51,6 +53,16 @@ class DlgController(object):
             path = dlg.GetPath()
             mypath = os.path.basename(path)
 
+            # Add to file history.
+            self.parent.filehistory.AddFileToHistory(path)
+            self.parent.filehistory.Save(self.parent.config)
+            self.parent.config.Flush()
+
+            self.parent.open_project(path)
+
+            pub.sendMessage(self.parent.evt_open_project)
+
+
         dlg.Destroy()
 
     def save_project_dialog(self, event):
@@ -65,6 +77,8 @@ class DlgController(object):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
 
+            self.parent.save_project(path)
+
         dlg.Destroy()
 
     def save_as_project_dialog(self, event):
@@ -77,6 +91,8 @@ class DlgController(object):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
+
+            self.parent.save_project(path)
 
         dlg.Destroy()
 
