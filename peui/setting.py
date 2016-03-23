@@ -29,7 +29,10 @@ class Setting(object):
         keys = dict(
             author=self.author,
             project_name=self.project_name,
-            path=self.get_home_folder()
+            path=self.get_home_folder(),
+            esignature=self.esignature,
+            ekey=self.ekey,
+            efile=self.efile
         )
 
         self.keys = keys
@@ -57,6 +60,30 @@ class Setting(object):
     @path.setter
     def path(self, value):
         self.keys['path'] = value
+
+    @property
+    def efile(self):
+        return self.keys.get('efile', 'FILE')
+
+    @efile.setter
+    def efile(self, value):
+        self.keys['efile'] = value
+
+    @property
+    def ekey(self):
+        return self.keys.get('ekey', 'KEY')
+
+    @ekey.setter
+    def ekey(self, value):
+        self.keys['ekey'] = value
+
+    @property
+    def esignature(self):
+        return self.keys.get('esignature', 'SIGNATURE')
+
+    @esignature.setter
+    def esignature(self, value):
+        self.keys['esignature'] = value
 
     @staticmethod
     def get_home_folder():
