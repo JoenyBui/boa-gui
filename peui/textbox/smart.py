@@ -103,18 +103,18 @@ class SmartInputLayout(wx.BoxSizer):
     * --------------------------------------------*
 
     """
-    def __init__(self, parent, label_width=None, max=None, min=None, *args, **kwargs):
+    def __init__(self, parent, label_width=150, max=None, min=None, *args, **kwargs):
 
         wx.BoxSizer.__init__(self, wx.HORIZONTAL)
 
         self.parent = parent
 
-        label_width = 150
-        if kwargs.get('label_width'):
-            label_width = kwargs.get('label_width')
+        label_width = label_width
+        # if kwargs.get('label_width'):
+        #     label_width = kwargs.get('label_width')
 
         if kwargs.get('label'):
-            self.label = None
+            self.label = kwargs.get('label')
         else:
             if kwargs.get('name'):
                 self.label = wx.StaticText(self.parent,

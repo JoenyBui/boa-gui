@@ -12,17 +12,16 @@ class TextSmartBox(SmartTextBox):
 
 
 class TextInputLayout(SmartInputLayout):
+    """
 
-    def __init__(self, parent, *args, **kwargs):
+    """
+    def __init__(self, parent, textbox=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
+        #
+        # self.label = wx.StaticText(self.parent, label=label, size=(150, -1))
 
-        # if kwargs.get('label'):
-        #     self.label = kwargs.get('label')
-        # else:
-        #     self.label = wx.StaticText(self.parent, label="TextBox Label:", size=(150, -1))
-
-        if kwargs.get('textbox'):
-            self.textbox = kwargs.get('textbox')
+        if textbox:
+            self.textbox = textbox
         else:
             self.textbox = TextSmartBox(parent)
 

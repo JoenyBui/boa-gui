@@ -51,8 +51,8 @@ class GeneralDialog(wx.Dialog):
                                              postbox=SmartComboBox(self))
 
         vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['charge_weight'], 0, wx.EXPAND | wx.ALL, 5)
+        vsizer.Add(self.layouts['float'], 0, wx.EXPAND | wx.ALL, 5)
         vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['standoff'], 0, wx.EXPAND | wx.ALL, 5)
+        vsizer.Add(self.layouts['int'], 0, wx.EXPAND | wx.ALL, 5)
 
         return vsizer

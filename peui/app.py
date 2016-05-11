@@ -27,7 +27,7 @@ import wx.aui
 
 import wx.lib.agw.aui as aui
 
-from license.manager import LicenseClientManager
+from pelm.manager import LicenseClientManager
 
 DEBUG = False
 

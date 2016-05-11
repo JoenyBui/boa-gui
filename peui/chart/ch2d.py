@@ -12,6 +12,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
 
 from ..controller.ch2d import Chart2dController
+from .toolbar import CustomToolbar
 
 __author__ = 'jbui'
 
@@ -59,7 +60,7 @@ class Chart2d(wx.Panel):
         Add toolbar into the chart.
         :return:
         """
-        self.toolbar = NavigationToolbar2Wx(self.canvas)
+        self.toolbar = CustomToolbar(self.canvas, self)
         self.toolbar.Realize()
 
         # By adding toolbar in sizer, we are able to put it at the bottom
