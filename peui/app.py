@@ -29,7 +29,7 @@ import wx.lib.agw.aui as aui
 
 from pelm.manager import LicenseClientManager
 
-DEBUG = False
+DEBUG = True
 
 matplotlib.use('WXAgg')
 

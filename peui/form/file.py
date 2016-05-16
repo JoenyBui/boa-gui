@@ -13,7 +13,7 @@ class NewProjectDialog(wx.Dialog):
     """
     New Project Dialog
     """
-    def __init__(self, parent, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+    def __init__(self, parent, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, panel=None, **kwargs):
         wx.Dialog.__init__(self, None, title=kwargs.get('title', 'New Project'),
                            size=(kwargs.get('width', 500), kwargs.get('height', 300)))
 
@@ -22,7 +22,10 @@ class NewProjectDialog(wx.Dialog):
         # Attributes
         self.flags = style
 
-        self.panel = NewProjectPanel(self, parent.setting)
+        if panel:
+            self.panel = panel
+        else:
+            self.panel = NewProjectPanel(self, parent.setting)
 
         # Layout
         btnsizer = self.CreateButtonSizer(btn_flags)

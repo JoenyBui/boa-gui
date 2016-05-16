@@ -42,6 +42,12 @@ DEFAULT_PRESSURE_LIST = [
 
 
 def get_pressure_conversion_factor(origin, destination):
+    """
+
+    :param origin:
+    :param destination:
+    :return:
+    """
     origin_factor = PRESSURE_KEY.get(origin)
     destination_factor = PRESSURE_KEY.get(destination)
 

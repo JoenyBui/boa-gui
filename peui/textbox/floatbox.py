@@ -77,16 +77,26 @@ class FloatSmartBox(SmartTextBox):
         event.Skip()
 
     def set_normal_color(self):
+        """
+
+        """
         self.SetBackgroundColour(self.color_normal)
         self.Refresh()
 
     def set_format_error_color(self):
+        """
+
+        """
         self.SetBackgroundColour(self.color_format_error)
         self.Refresh()
 
     def set_range_error_color(self):
+        """
+
+        """
         self.SetBackgroundColour(self.color_range_error)
         self.Refresh()
+
 
 class FloatInputLayout(SmartInputLayout):
     """
@@ -123,6 +133,10 @@ class FloatInputLayout(SmartInputLayout):
         self.do_layout()
 
     def set_value(self, value, post=None, label=None):
+        """
+        Set the value.
+        """
+
         self.textbox.Value = str(value)
 
         if post and self.postbox:

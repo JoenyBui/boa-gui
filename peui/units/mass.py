@@ -42,8 +42,23 @@ DEFAULT_MASS_LIST = [
     'lbm'
 ]
 
+DEFAULT_IMPERIAL_LIST = [
+    'lbm'
+]
+
+DEFAULT_METRIC_LIST = [
+    'g',
+    'kg'
+]
+
 
 def get_mass_conversion_factor(origin, destination):
+    """
+
+    :param origin:
+    :param destination:
+    :return:
+    """
     origin_factor = MASS_KEY.get(origin)
     destination_factor = MASS_KEY.get(destination)
 

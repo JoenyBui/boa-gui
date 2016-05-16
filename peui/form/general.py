@@ -31,13 +31,17 @@ class GeneralDialog(wx.Dialog):
 
         self.btnsizer = self.CreateButtonSizer(btn_flags)
 
-        vsizer.Add(self.do_layout())
+        vsizer.Add(self.do_layout(), 0, wx.EXPAND, wx.ALL, 5)
         vsizer.AddSpacer(10)
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
         self.SetSizer(vsizer)
         self.SetInitialSize()
         self.CenterOnParent()
+        self.Fit()
+
+    def add_layout(self, key, object):
+        self.layouts[key] = object
 
     def do_layout(self):
         vsizer = wx.BoxSizer(wx.VERTICAL)
