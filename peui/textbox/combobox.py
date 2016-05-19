@@ -8,7 +8,9 @@ __author__ = 'jbui'
 
 
 class ComboBoxInputLayout(wx.BoxSizer):
-
+    """
+    ComboBox Input Layout
+    """
     def __init__(self, parent, label_width=150, *args, **kwargs):
         wx.BoxSizer.__init__(self, wx.HORIZONTAL)
 
@@ -42,7 +44,18 @@ class ComboBoxInputLayout(wx.BoxSizer):
     def do_layout(self):
 
         if self.label:
-            self.Add(self.label, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_label)
+            self.Add(self.label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_label)
+            # self.Add(self.label, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_label)
 
         if self.combobox:
-            self.Add(self.combobox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_postbox)
+            # self.Add(self.combobox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_postbox)
+            self.Add(self.combobox, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_postbox)
+
+        self.AddStretchSpacer()
+
+    def set_value(self, value, label=None):
+        if value:
+            self.combobox.Value = str(value)
+
+        if label:
+            self.label.Label = str(label)

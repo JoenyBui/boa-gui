@@ -46,12 +46,12 @@ DEFAULT_VOLUME_LIST = [
     'in3'
 ]
 
-DEFAULT_ENGLISH_VOLUME_LIST = [
+DEFAULT_IMPERIAL_LIST = [
     'ft3',
     'in3'
 ]
 
-DEFAULT_METRIC_VOLUME_LIST = [
+DEFAULT_METRIC_LIST = [
     'm3',
     'mm3'
 ]

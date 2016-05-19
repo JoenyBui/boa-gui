@@ -5,21 +5,37 @@ from .mass import get_mass_conversion_factor
 
 __author__ = 'jbui'
 
+KEY_IMPERIAL = 'imperial'
+KEY_METRIC = 'metric'
+
+UNIT_AREA_KEY = 'area'
 UNIT_CHARGE_KEY = 'charge'
+UNIT_INERTIA_KEY = 'inertia'
 UNIT_LENGTH_KEY = 'length'
 UNIT_MASS_KEY = 'mass'
 UNIT_PRESSURE_KEY = 'pressure'
+UNIT_VOLUME_KEY = 'volume'
 
 
 BASE_UNITS = dict(
+    area='m2',
     charge='TNT',
+    inertia='m4',
     length='meter',
     mass='gram',
-    pressure='Pa'
+    pressure='Pa',
+    volume='m3'
 )
 
 
 def get_base_value(type, value, unit):
+    """
+    Get the base value.
+    :param type:
+    :param value:
+    :param unit:
+    :return:
+    """
     value = float(value)
 
     if type == UNIT_CHARGE_KEY:

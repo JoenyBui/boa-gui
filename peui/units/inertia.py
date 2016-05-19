@@ -48,12 +48,12 @@ DEFAULT_INERTIA_LIST = [
     'in4'
 ]
 
-DEFAULT_ENGLISH_INERTIA_LIST = [
+DEFAULT_IMPERIAL_LIST = [
     'ft4',
     'in4'
 ]
 
-DEFAULT_METRIC_INERTIA_LIST = [
+DEFAULT_METRIC_LIST = [
     'm4',
     'mm4'
 ]

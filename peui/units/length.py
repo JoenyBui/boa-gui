@@ -64,7 +64,7 @@ DEFAULT_LENGTH_LIST = [
     'm'
 ]
 
-DEFAULT_IMPERIAL__LIST = [
+DEFAULT_IMPERIAL_LIST = [
     'in',
     'ft',
     'yd',
@@ -81,7 +81,7 @@ DEFAULT_METRIC_LIST = [
 
 def get_length_conversion_factor(origin, destination):
     """
-
+    Get the length conversion factor.
     :param origin:
     :param destination:
     :return:

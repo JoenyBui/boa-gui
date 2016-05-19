@@ -1,6 +1,7 @@
 import os
 import sys
 import re
+import types
 
 import wx
 
@@ -102,7 +103,7 @@ class FloatInputLayout(SmartInputLayout):
     """
     Float Textbox set.
     """
-    def __init__(self, parent, value=None, unit=None, type=None, *args, **kwargs):
+    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
         if kwargs.get('textbox'):
@@ -110,25 +111,43 @@ class FloatInputLayout(SmartInputLayout):
         else:
             self.textbox = FloatSmartBox(parent, **kwargs)
 
-        if type:
-            if type == units.UNIT_LENGTH_KEY:
-                self.postbox.activate_length()
-                self.type = type
-            elif type == units.UNIT_MASS_KEY:
-                self.postbox.activate_mass()
-                self.type = type
-            elif type == units.UNIT_CHARGE_KEY:
-                self.postbox.activate_charge()
-                self.type = type
-            elif type == units.UNIT_PRESSURE_KEY:
-                self.postbox.activate_pressure()
-                self.type = type
-
         if value:
             self.textbox.Value = str(value)
 
-        if unit:
-            self.postbox.Value = unit
+        if self.postbox:
+            self.postbox.unit_system = unit_system
+            if type:
+                if type == units.UNIT_AREA_KEY:
+                    self.postbox.activate_area()
+                    self.type = type
+                elif type == units.UNIT_CHARGE_KEY:
+                    self.postbox.activate_charge()
+                    self.type = type
+                elif type == units.UNIT_INERTIA_KEY:
+                    self.postbox.activate_inertia()
+                    self.type = type
+                elif type == units.UNIT_LENGTH_KEY:
+                    self.postbox.activate_length()
+                    self.type = type
+                elif type == units.UNIT_MASS_KEY:
+                    self.postbox.activate_mass()
+                    self.type = type
+                elif type == units.UNIT_PRESSURE_KEY:
+                    self.postbox.activate_pressure()
+                    self.type = type
+                elif type == units.UNIT_VOLUME_KEY:
+                    self.postbox.activate_volume()
+                    self.type = type
+
+            if unit:
+                if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
+                    if units.KEY_IMPERIAL == unit_system:
+                        self.postbox.Value = unit[0]
+                    elif units.KEY_METRIC == unit_system:
+                        self.postbox.Value = unit[1]
+
+                else:
+                    self.postbox.Value = unit
 
         self.do_layout()
 
@@ -136,8 +155,8 @@ class FloatInputLayout(SmartInputLayout):
         """
         Set the value.
         """
-
-        self.textbox.Value = str(value)
+        if value:
+            self.textbox.Value = str(value)
 
         if post and self.postbox:
             self.postbox.Value = str(post)

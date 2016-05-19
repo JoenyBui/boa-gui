@@ -70,6 +70,14 @@ DEFAULT_CHARGE_LIST = [
     'TRITONAL'
 ]
 
+DEFAULT_IMPERIAL_LIST = [
+    'TNT'
+]
+
+DEFAULT_METRIC_LIST = [
+    'TNT'
+]
+
 
 def get_charge_conversion_factor(origin, destination):
     origin_factor = CHARGE_KEY.get(origin)

@@ -1,9 +1,12 @@
 import os
 import sys
+import types
 
 import wx
 
 from pecutil.refmt import get_number_fmt, parse_number
+
+from peui import units
 
 from .smart import SmartTextBox, SmartInputLayout
 
@@ -61,7 +64,7 @@ class IntSmartBox(SmartTextBox):
 
 class IntInputLayout(SmartInputLayout):
 
-    def __init__(self, parent, value=None, unit=None, *args, **kwargs):
+    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
         # self.label = kwargs.get('label', 'Input Label:')
@@ -71,16 +74,41 @@ class IntInputLayout(SmartInputLayout):
         else:
             self.textbox = IntSmartBox(parent, **kwargs)
 
+        self.postbox.unit_system = unit_system
+        if type:
+            if type == units.UNIT_AREA_KEY:
+                pass
+            elif type == units.UNIT_CHARGE_KEY:
+                pass
+            elif type == units.UNIT_INERTIA_KEY:
+                pass
+            elif type == units.UNIT_LENGTH_KEY:
+                pass
+            elif type == units.UNIT_MASS_KEY:
+                pass
+            elif type == units.UNIT_PRESSURE_KEY:
+                pass
+            elif type == units.UNIT_VOLUME_KEY:
+                pass
+
         if value:
             self.textbox.Value = str(value)
 
         if unit:
-            self.postbox.Value = unit
+            if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
+                if units.KEY_IMPERIAL == unit_system:
+                    self.postbox.Value = unit[0]
+                elif units.KEY_METRIC == unit_system:
+                    self.postbox.Value = unit[1]
+            else:
+
+                self.postbox.Value = unit
 
         self.do_layout()
 
     def set_value(self, value, post=None, label=None):
-        self.textbox.Value = str(value)
+        if value:
+            self.textbox.Value = str(value)
 
         if post and self.postbox:
             self.postbox.Value = str(post)

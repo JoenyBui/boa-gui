@@ -40,6 +40,16 @@ DEFAULT_PRESSURE_LIST = [
     'Pa'
 ]
 
+DEFAULT_IMPERIAL_LIST = [
+    'psi',
+    'ksi'
+]
+
+DEFAULT_METRIC_LIST = [
+    'Pa',
+    'kPA'
+]
+
 
 def get_pressure_conversion_factor(origin, destination):
     """
