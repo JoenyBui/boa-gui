@@ -151,6 +151,20 @@ class FloatInputLayout(SmartInputLayout):
 
         self.do_layout()
 
+    def enable(self):
+        if self.textbox:
+            self.textbox.Enable(True)
+
+        if self.postbox:
+            self.postbox.Enable(True)
+
+    def disable(self):
+        if self.textbox:
+            self.textbox.Enable(False)
+
+        if self.postbox:
+            self.postbox.Enable(False)
+
     def set_value(self, value, post=None, label=None):
         """
         Set the value.
