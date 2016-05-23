@@ -11,7 +11,7 @@ class ComboBoxInputLayout(wx.BoxSizer):
     """
     ComboBox Input Layout
     """
-    def __init__(self, parent, label_width=150, *args, **kwargs):
+    def __init__(self, parent, label_width=150, event_on_select=None, *args, **kwargs):
         wx.BoxSizer.__init__(self, wx.HORIZONTAL)
 
         self.parent = parent
@@ -31,6 +31,9 @@ class ComboBoxInputLayout(wx.BoxSizer):
                                            size=(label_width, -1))
 
         self.combobox = kwargs.get('combobox', None)
+        if event_on_select:
+            self.combobox.Bind(wx.EVT_COMBOBOX, event_on_select)
+
         self.tooltip = kwargs.get('tooltip', SuperToolTip)
 
         # Call do_layout after you have populate the label, textbox, and/or postbox
@@ -53,9 +56,24 @@ class ComboBoxInputLayout(wx.BoxSizer):
 
         self.AddStretchSpacer()
 
+    def get_value(self):
+        return self.combobox.Value
+
     def set_value(self, value, label=None):
         if value:
             self.combobox.Value = str(value)
 
         if label:
             self.label.Label = str(label)
+
+    def set_list(self, list_values):
+        self.combobox.SetItems(list_values)
+
+    def set_selection(self, value):
+        self.combobox.SetSelection(value)
+
+    def append(self, label, obj):
+        self.combobox.Append(label, obj)
+
+    def get_data(self):
+        return self.combobox.GetClientData(self.combobox.GetSelection())
