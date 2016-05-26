@@ -19,7 +19,7 @@ class FloatSmartBox(SmartTextBox):
     """
     Float Smart Box.
     """
-    def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None, range_error=None, *args, **kwargs):
+    def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None, range_error=None, key_up=None, *args, **kwargs):
         SmartTextBox.__init__(self, parent, *args, **kwargs)
 
         self.signs = kwargs.get('signs', False)
@@ -30,6 +30,9 @@ class FloatSmartBox(SmartTextBox):
 
         # self.Bind(wx.EVT_CHAR, self.on_key_char, self)
         # self.Bind(wx.EVT_CHAR_HOOK, self.on_key_char_hook, self)
+        if key_up:
+            self.Bind(wx.EVT_KEY_UP, key_up, self)
+
         # self.Bind(wx.EVT_KEY_UP, self.on_key_up, self)
         # self.Bind(wx.EVT_KEY_DOWN, self.on_key_down, self)
         self.Bind(wx.EVT_TEXT, self.on_text, self)
@@ -109,7 +112,7 @@ class FloatInputLayout(SmartInputLayout):
         if kwargs.get('textbox'):
             self.textbox = kwargs.get('textbox')
         else:
-            self.textbox = FloatSmartBox(parent, **kwargs)
+            self.textbox = FloatSmartBox(parent)
 
         if value:
             self.textbox.Value = str(value)
@@ -177,6 +180,30 @@ class FloatInputLayout(SmartInputLayout):
 
         if label:
             self.label.Label = str(label)
+
+    def get_value(self, unit):
+        """
+
+        :param unit:
+        :return:
+        """
+        conversion_factor = 1.0
+        if self.type == units.UNIT_AREA_KEY:
+            conversion_factor = units.get_area_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_CHARGE_KEY:
+            conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_LENGTH_KEY:
+            conversion_factor = units.get_length_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_INERTIA_KEY:
+            conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_MASS_KEY:
+            conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_PRESSURE_KEY:
+            conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_VOLUME_KEY:
+            conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
+
+        return conversion_factor * float(self.textbox.Value)
 
     def validate(self):
         base_value = units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
