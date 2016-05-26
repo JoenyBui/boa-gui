@@ -79,4 +79,4 @@ def get_area_conversion_factor(origin, destination):
     origin_factor = AREA_KEY.get(origin)
     destination_factor = AREA_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor

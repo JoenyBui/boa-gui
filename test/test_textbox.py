@@ -1,0 +1,44 @@
+from unittest import TestCase
+
+import wx
+
+from peui.units import KEY_IMPERIAL, KEY_METRIC
+
+from peui.textbox.combobox import SmartComboBox
+from peui.textbox.floatbox import FloatInputLayout, FloatSmartBox
+from peui.textbox.intbox import IntInputLayout
+
+
+class TestFloatInputLayout(TestCase):
+
+    def setUp(self):
+        app = wx.App()
+        frame = wx.Frame(None, -1, 'simple')
+
+        self.tl = FloatInputLayout(frame,
+                                   value=18.0,
+                                   unit='in',
+                                   unit_system=KEY_IMPERIAL,
+                                   type='length',
+                                   textbox=FloatSmartBox(frame),
+                                   postbox=SmartComboBox(frame))
+
+    def test_get_value_length(self):
+        self.assertEqual(self.tl.get_value('ft'), 1.5)
+        self.assertEqual(self.tl.get_value('yd'), 0.5)
+        self.assertEqual(self.tl.get_value('m'), 0.4572)
+        self.assertEqual(self.tl.get_value('cm'), 45.72)
+        self.assertEqual(self.tl.get_value('mm'), 457.2)
+        self.assertAlmostEqual(self.tl.get_value('km'), 0.0004572, 6)
+
+
+class TestIntInputLayout(TestCase):
+
+    def setUp(self):
+        app = wx.App()
+        frame = wx.Frame(None, -1, 'simple')
+
+        self.tl = IntInputLayout(frame, value=18, unit='in', unit_system=KEY_IMPERIAL, type='length')
+
+    def test_get_value_length(self):
+        self.assertEqual(self.tl.get_value('ft'), 1.5)

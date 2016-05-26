@@ -69,4 +69,4 @@ def get_inertia_conversion_factor(origin, destination):
     origin_factor = INERTIA_KEY.get(origin)
     destination_factor = INERTIA_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
