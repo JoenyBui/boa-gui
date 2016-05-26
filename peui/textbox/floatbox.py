@@ -169,7 +169,7 @@ class FloatInputLayout(SmartInputLayout):
         """
         Set the value.
         """
-        if value:
+        if value != None:
             self.textbox.Value = str(value)
 
         if post and self.postbox:
