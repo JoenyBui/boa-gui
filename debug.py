@@ -1,11 +1,10 @@
-__author__ = 'jbui'
-
-length = [
-
-]
-
 import os
 import sys
+
+# Added for build
+# import tkinter
+# # import Tkinter
+# import FileDialog
 import matplotlib
 import pandas as pd
 import numpy as np
@@ -16,21 +15,24 @@ import wx.aui
 
 import wx.lib.agw.aui as aui
 
-from peui.main.window import MainWindow
-from peui.controller.main import MainController
-from peui.model.project import Project
-from peui.tree.project import ProjectTree
-from peui.panel.general import GeneralPanel
-from peui.panel.grid import PropGrid
-from peui.chart.ch2d import Chart2d
-from peui.setting import Setting
-from peui.view.vtk import VtkViewer
-from peui.panel.xlsx import SpreadSheet
-from peui.view.terminal import Console
+__author__ = 'jbui'
 
-import config as cfg
-from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
-from peui.main.toolbar import CustomToolBar
+import ctypes
+import os
+import sys
+
+if getattr(sys, 'frozen', False):
+  # Override dll search path.
+  # ctypes.windll.kernel32.SetDllDirectoryW('C:/Anaconda/Library/bin')
+  # Init code to load external dll
+  ctypes.CDLL('mkl_avx2.dll')
+  ctypes.CDLL('mkl_def.dll')
+  ctypes.CDLL('mkl_vml_avx2.dll')
+  ctypes.CDLL('mkl_vml_def.dll')
+
+  # Restore dll search path.
+  ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
+
 
 DEBUG = True
 
@@ -74,31 +76,49 @@ PlJhR2Gg+UlnGbXRcO9uo134SAy894BZ06oJfpcx5HvowMBgUyeSFfnWbutU4/p7
 ywIDAQAB
 -----END PUBLIC KEY-----"""
 
+
 if __name__ == '__main__':
+    from peui.main.window import MainWindow
+    from peui.controller.main import MainController
+    from peui.model.project import Project
+    from peui.tree.project import ProjectTree
+    from peui.panel.general import GeneralPanel
+    from peui.panel.grid import PropGrid
+    from peui.chart.ch2d import Chart2d
+    from peui.setting import Setting
+    from peui.view.vtk import VtkViewer
+    from peui.panel.xlsx import SpreadSheet
+    from peui.view.terminal import Console
+
+    import peui.config as cfg
+    from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
+    from peui.main.toolbar import CustomToolBar
 
     setting = Setting()
 
-    # Initialize Application
-    if DEBUG:
-        # Use Ctrl-Alt-I to open the Widget Inspection Tool
-        # http://wiki.wxpython.org/Widget%20Inspection%20Tool
-        app = WIT.InspectableApp()
+    # # Initialize Application
+    # if DEBUG:
+    #     # Use Ctrl-Alt-I to open the Widget Inspection Tool
+    #     # http://wiki.wxpython.org/Widget%20Inspection%20Tool
+    #     app = WIT.InspectableApp()
+    #
+    # else:
+    #     lm = LicenseClientManager()
+    #     lm.load_private_key(PRIVATE_KEY)
+    #     lm.load_public_key(PUBLIC_KEY)
+    #     lm.open_encrypted_file(setting.efile)
+    #     lm.open_encrypted_key(setting.ekey)
+    #     lm.open_encrypted_signature(setting.esignature)
+    #
+    #     if lm.unencrypted_file() is False:
+    #         exit()
+    #
+    #     if (lm.check_username() and lm.check_system_name() and lm.check_mac_address() and lm.check_end_date()) is False:
+    #         exit()
+    #
+    #     app = wx.App(False)
 
-    else:
-        lm = LicenseClientManager()
-        lm.load_private_key(PRIVATE_KEY)
-        lm.load_public_key(PUBLIC_KEY)
-        lm.open_encrypted_file(setting.efile)
-        lm.open_encrypted_key(setting.ekey)
-        lm.open_encrypted_signature(setting.esignature)
-
-        if lm.unencrypted_file() is False:
-            exit()
-
-        if (lm.check_username() and lm.check_system_name() and lm.check_mac_address() and lm.check_end_date()) is False:
-            exit()
-
-        app = wx.App(False)
+    app = wx.App(False)
 
     # Check if the a file path is passed with the executable.
     project = Project()
@@ -169,3 +189,4 @@ if __name__ == '__main__':
     controller.refresh()
 
     app.MainLoop()
+
