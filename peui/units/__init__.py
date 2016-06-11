@@ -5,6 +5,7 @@ from .length import get_length_conversion_factor
 from .mass import get_mass_conversion_factor
 from .pressure import get_pressure_conversion_factor
 from .volume import get_volume_conversion_factor
+from .tnt import get_tnt_conversion_factor
 
 __author__ = 'jbui'
 
@@ -18,6 +19,7 @@ UNIT_LENGTH_KEY = 'length'
 UNIT_MASS_KEY = 'mass'
 UNIT_PRESSURE_KEY = 'pressure'
 UNIT_VOLUME_KEY = 'volume'
+UNIT_TNT_KEY = 'tnt'
 
 
 BASE_UNITS = dict(
@@ -27,7 +29,8 @@ BASE_UNITS = dict(
     length='meter',
     mass='gram',
     pressure='Pa',
-    volume='m3'
+    volume='m3',
+    tnt='ton'
 )
 
 
@@ -56,5 +59,7 @@ def get_base_value(type, value, unit):
         return value*get_pressure_conversion_factor(unit, BASE_UNITS[type])
     elif type == UNIT_VOLUME_KEY:
         return value*get_volume_conversion_factor(unit, BASE_UNITS[type])
+    elif type == UNIT_TNT_KEY:
+        return value * get_tnt_conversion_factor(unit, BASE_UNITS[type])
     else:
         return None
