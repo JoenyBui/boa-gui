@@ -49,6 +49,9 @@ class CustomMenuBar(wx.MenuBar):
                 if item.get('bitmap'):
                     mi.SetBitmap(wx.ArtProvider.GetBitmap(item['bitmap'], wx.ART_MENU, MB_ICON_SIZE))
 
+                # if item.get('icon'):
+                #     mi.SetBitmap(wx.Icon(item['icon'], wx.BITMAP_TYPE_ICO))
+
                 mi.SetSubMenu(sub_menu)
 
                 self.menus[item['id']] = mi

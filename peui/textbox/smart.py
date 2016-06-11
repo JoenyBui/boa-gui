@@ -5,7 +5,7 @@ import wx
 from wx import GridSizer
 from wx.lib.agw.supertooltip import SuperToolTip
 
-from peui.units import area, charge, inertia, length, mass, pressure, volume
+from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt
 
 from ..units import KEY_IMPERIAL, KEY_METRIC
 
@@ -168,6 +168,18 @@ class SmartComboBox(wx.ComboBox):
 
         self.SetSelection(kwargs.get('default', 0))
         self.convert = volume.get_volume_conversion_factor
+
+    def activate_tnt(self, **kwargs):
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = tnt.get_tnt_conversion_factor
+
 
     def get_factor(self, destination):
         return self.convert()

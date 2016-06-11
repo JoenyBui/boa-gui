@@ -141,6 +141,9 @@ class FloatInputLayout(SmartInputLayout):
                 elif type == units.UNIT_VOLUME_KEY:
                     self.postbox.activate_volume()
                     self.type = type
+                elif type == units.UNIT_TNT_KEY:
+                    self.postbox.activate_tnt()
+                    self.type = type
 
             if unit:
                 if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
@@ -172,7 +175,7 @@ class FloatInputLayout(SmartInputLayout):
         """
         Set the value.
         """
-        if value:
+        if value != None:
             self.textbox.Value = str(value)
 
         if post and self.postbox:
