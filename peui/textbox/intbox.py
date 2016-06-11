@@ -148,7 +148,7 @@ class IntInputLayout(SmartInputLayout):
         elif self.type == units.UNIT_VOLUME_KEY:
             conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
 
-        return conversion_factor * float(self.textbox.Value)
+        return int(conversion_factor * int(self.textbox.Value))
 
     def validate(self):
         return False

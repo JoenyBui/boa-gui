@@ -32,13 +32,3 @@ class TestFloatInputLayout(TestCase):
         self.assertAlmostEqual(self.tl.get_value('km'), 0.0004572, 6)
 
 
-class TestIntInputLayout(TestCase):
-
-    def setUp(self):
-        app = wx.App()
-        frame = wx.Frame(None, -1, 'simple')
-
-        self.tl = IntInputLayout(frame, value=18, unit='in', unit_system=KEY_IMPERIAL, type='length')
-
-    def test_get_value_length(self):
-        self.assertEqual(self.tl.get_value('ft'), 1.5)
