@@ -9,10 +9,13 @@ __author__ = 'jbui'
 
 class Chart2dController(ChildController):
 
-    def __init__(self, parent, view):
+    def __init__(self, parent, view, figure_setting=None):
         ChildController.__init__(self, parent, view)
 
-        self.figure_setting = FigureSetting()
+        if figure_setting:
+            self.figure_setting = figure_setting
+        else:
+            self.figure_setting = FigureSetting()
 
     def do_layout(self):
         data = self.parent.project.data

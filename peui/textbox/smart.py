@@ -259,6 +259,5 @@ class SmartInputLayout(wx.BoxSizer):
 
         # self.AddStretchSpacer()
 
-
     def validate(self):
         pass

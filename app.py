@@ -1,38 +1,31 @@
 import os
 import sys
 
-# Added for build
-# import tkinter
-# # import Tkinter
-# import FileDialog
+if getattr(sys, 'frozen', False):
+    import ctypes
+    # Override dll search path.
+    # ctypes.windll.kernel32.SetDllDirectoryW('C:/Anaconda/Library/bin')
+    # Init code to load external dll
+    ctypes.CDLL('mkl_avx2.dll')
+    ctypes.CDLL('mkl_def.dll')
+    ctypes.CDLL('mkl_vml_avx2.dll')
+    ctypes.CDLL('mkl_vml_def.dll')
+
+    # Restore dll search path.
+    ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
+
 import matplotlib
+# matplotlib.use('GTKAgg')
+
 import pandas as pd
 import numpy as np
 
 import wx
 import wx.lib.mixins.inspection as WIT
 import wx.aui
-
 import wx.lib.agw.aui as aui
 
-__author__ = 'jbui'
-
-import ctypes
-import os
-import sys
-
-if getattr(sys, 'frozen', False):
-  # Override dll search path.
-  # ctypes.windll.kernel32.SetDllDirectoryW('C:/Anaconda/Library/bin')
-  # Init code to load external dll
-  ctypes.CDLL('mkl_avx2.dll')
-  ctypes.CDLL('mkl_def.dll')
-  ctypes.CDLL('mkl_vml_avx2.dll')
-  ctypes.CDLL('mkl_vml_def.dll')
-
-  # Restore dll search path.
-  ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
-
+from pelm.client import LicenseClientManager
 
 DEBUG = True
 
@@ -76,8 +69,15 @@ PlJhR2Gg+UlnGbXRcO9uo134SAy894BZ06oJfpcx5HvowMBgUyeSFfnWbutU4/p7
 ywIDAQAB
 -----END PUBLIC KEY-----"""
 
-
 if __name__ == '__main__':
+    # Relative Import Hack
+    package_name = 'peui'
+    # parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # os.sys.path.insert(1, parent_dir)
+    # mod = __import__(package_name)
+    # sys.modules[package_name] = mod
+    # __package__ = package_name
+
     from peui.main.window import MainWindow
     from peui.controller.main import MainController
     from peui.model.project import Project
@@ -94,31 +94,40 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
+
+    #TODO: Smart Textbox
+    #TODO: Undo-Redo Model
+    #TODO: Cut, Copy & Paste
+    #TODO: Printing Pdf & Docx
+    #TODO: Open & Close Project
+    #TODO: License Manager
+    #TODO: Backup Temp File
+    #TODO: Periodic Savings
+    #TODO: Save Perspective View
+
     setting = Setting()
 
-    # # Initialize Application
-    # if DEBUG:
-    #     # Use Ctrl-Alt-I to open the Widget Inspection Tool
-    #     # http://wiki.wxpython.org/Widget%20Inspection%20Tool
-    #     app = WIT.InspectableApp()
-    #
-    # else:
-    #     lm = LicenseClientManager()
-    #     lm.load_private_key(PRIVATE_KEY)
-    #     lm.load_public_key(PUBLIC_KEY)
-    #     lm.open_encrypted_file(setting.efile)
-    #     lm.open_encrypted_key(setting.ekey)
-    #     lm.open_encrypted_signature(setting.esignature)
-    #
-    #     if lm.unencrypted_file() is False:
-    #         exit()
-    #
-    #     if (lm.check_username() and lm.check_system_name() and lm.check_mac_address() and lm.check_end_date()) is False:
-    #         exit()
-    #
-    #     app = wx.App(False)
+    # Initialize Application
+    if DEBUG:
+        # Use Ctrl-Alt-I to open the Widget Inspection Tool
+        # http://wiki.wxpython.org/Widget%20Inspection%20Tool
+        app = WIT.InspectableApp()
 
-    app = wx.App(False)
+    else:
+        lm = LicenseClientManager()
+        lm.load_private_key(PRIVATE_KEY)
+        lm.load_public_key(PUBLIC_KEY)
+        lm.open_encrypted_file(setting.efile)
+        lm.open_encrypted_key(setting.ekey)
+        lm.open_encrypted_signature(setting.esignature)
+
+        if lm.unencrypted_file() is False:
+            exit()
+
+        if (lm.check_username() and lm.check_system_name() and lm.check_mac_address() and lm.check_end_date()) is False:
+            exit()
+
+        app = wx.App(False)
 
     # Check if the a file path is passed with the executable.
     project = Project()
@@ -189,4 +198,3 @@ if __name__ == '__main__':
     controller.refresh()
 
     app.MainLoop()
-
