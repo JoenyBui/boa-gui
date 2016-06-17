@@ -13,7 +13,11 @@ class ProjectTree(ct.CustomTreeCtrl):
 
     def __init__(self, parent, controller, project=None, **kwargs):
         id = kwargs.get('id', -1)
-        ct.CustomTreeCtrl.__init__(self, parent, size=kwargs.get('size', wx.Size(200, 150)), id=id, agwStyle=wx.TR_DEFAULT_STYLE)
+        ct.CustomTreeCtrl.__init__(self,
+                                   parent,
+                                   size=kwargs.get('size', wx.Size(200, 150)),
+                                   id=id,
+                                   agwStyle=wx.TR_DEFAULT_STYLE)
 
         self.controller = TreeController(controller, self)
 

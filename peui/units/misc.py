@@ -17,54 +17,41 @@
 
 __author__ = 'jbui'
 
-# UNITY_VALUE == PA
-FACTOR_PRESSURE_PASCAL = 1.0
-FACTOR_PRESSURE_PSI = 0.000145038
-FACTOR_PRESSURE_PSF = 0.00174045
-FACTOR_PRESSURE_KSI = 0.000000145038
-FACTOR_PRESSURE_ATM = 9.8692e-6
 
-ID_NAME_PRESSURE_PASCAL = ("Pa", "pa", "pascal")
-ID_NAME_PRESSURE_PSI = ("psi", "PSI")
-ID_NAME_PRESSURE_PSF = ("psf", "PSF")
-ID_NAME_PRESSURE_KSI = ("ksi", "KSI")
-
-
-PRESSURE_KEY = {
-    'psi': FACTOR_PRESSURE_PSI,
-    'psf': FACTOR_PRESSURE_PSF,
-    'ksi': FACTOR_PRESSURE_KSI,
-    'Pa': FACTOR_PRESSURE_PASCAL,
-}
-
-DEFAULT_PRESSURE_LIST = [
-    'psi',
-    'psf',
-    'ksi',
-    'Pa'
+DEFAULT_MISC_LIST = [
+    'lb/in',
+    'lb-in/in',
+    'in4/in',
+    'in3/in',
+    'lb/ft'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'psi',
-    'psf',
-    'ksi'
+    'lb/in',
+    'lb-in/in',
+    'in4/in',
+    'in3/in',
+    'lb/ft'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'Pa',
-    'kPA'
+    'lb/in',
+    'lb-in/in',
+    'in4/in',
+    'in3/in',
+    'lb/ft'
 ]
 
 
-def get_pressure_conversion_factor(origin, destination):
+def get_misc_conversion_factor(origin, destination):
     """
 
     :param origin:
     :param destination:
     :return:
     """
-    origin_factor = PRESSURE_KEY.get(origin)
-    destination_factor = PRESSURE_KEY.get(destination)
-
-    return destination_factor / origin_factor
-
+    pass
+    # origin_factor = TORQUE_KEY.get(origin)
+    # destination_factor = TORQUE_KEY.get(destination)
+    #
+    # return destination_factor / origin_factor

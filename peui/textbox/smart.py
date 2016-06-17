@@ -5,7 +5,7 @@ import wx
 from wx import GridSizer
 from wx.lib.agw.supertooltip import SuperToolTip
 
-from peui.units import area, charge, inertia, length, mass, pressure, volume
+from peui.units import area, charge, inertia, length, mass, pressure, volume, density, torque, misc
 
 from ..units import KEY_IMPERIAL, KEY_METRIC
 
@@ -168,6 +168,39 @@ class SmartComboBox(wx.ComboBox):
 
         self.SetSelection(kwargs.get('default', 0))
         self.convert = volume.get_volume_conversion_factor
+
+    def activate_density(self, **kwargs):
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = density.get_density_conversion_factor
+
+    def activate_torque(self, **kwargs):
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', torque.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', torque.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', torque.DEFAULT_TORQUE_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = torque.get_torque_conversion_factor
+
+    def activate_misc(self, **kwargs):
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', misc.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', misc.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', misc.DEFAULT_MISC_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = misc.get_misc_conversion_factor
 
     def get_factor(self, destination):
         return self.convert()

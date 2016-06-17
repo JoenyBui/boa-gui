@@ -141,6 +141,15 @@ class FloatInputLayout(SmartInputLayout):
                 elif type == units.UNIT_VOLUME_KEY:
                     self.postbox.activate_volume()
                     self.type = type
+                elif type == units.UNIT_DENSITY_KEY:
+                    self.postbox.activate_density()
+                    self.type = type
+                elif type == units.UNIT_TORQUE_KEY:
+                    self.postbox.activate_torque()
+                    self.type = type
+                elif type == units.UNIT_MISC_KEY:
+                    self.postbox.activate_misc()
+                    self.type = type
 
             if unit:
                 if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
@@ -204,6 +213,31 @@ class FloatInputLayout(SmartInputLayout):
             conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
 
         return conversion_factor * float(self.textbox.Value)
+
+    def set_value_convert(self, original_unit, destination_unit):
+        """
+
+        :param original_unit:
+        :param destination_unit:
+        :return:
+        """
+        conversion_factor = 1.0
+        if self.type == units.UNIT_AREA_KEY:
+            conversion_factor = units.get_area_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_CHARGE_KEY:
+            conversion_factor = units.get_charge_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_LENGTH_KEY:
+            conversion_factor = units.get_length_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_INERTIA_KEY:
+            conversion_factor = units.get_inertia_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_MASS_KEY:
+            conversion_factor = units.get_mass_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_PRESSURE_KEY:
+            conversion_factor = units.get_pressure_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_VOLUME_KEY:
+            conversion_factor = units.get_volume_conversion_factor(original_unit, destination_unit)
+
+        self.textbox.Value = str(conversion_factor * float(self.textbox.Value))
 
     def validate(self):
         base_value = units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
