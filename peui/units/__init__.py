@@ -6,6 +6,8 @@ from .mass import get_mass_conversion_factor
 from .pressure import get_pressure_conversion_factor
 from .volume import get_volume_conversion_factor
 from .tnt import get_tnt_conversion_factor
+from .density import get_density_conversion_factor
+from .torque import get_torque_conversion_factor
 
 __author__ = 'jbui'
 
@@ -20,6 +22,9 @@ UNIT_MASS_KEY = 'mass'
 UNIT_PRESSURE_KEY = 'pressure'
 UNIT_VOLUME_KEY = 'volume'
 UNIT_TNT_KEY = 'tnt'
+UNIT_DENSITY_KEY = 'density'
+UNIT_TORQUE_KEY = 'torque'
+UNIT_MISC_KEY = 'misc'
 
 
 BASE_UNITS = dict(
@@ -30,7 +35,10 @@ BASE_UNITS = dict(
     mass='gram',
     pressure='Pa',
     volume='m3',
-    tnt='ton'
+    tnt='ton',
+    density='lb/ft3',
+    torque='lb-in',
+    misc='lb-in/in'
 )
 
 
@@ -61,5 +69,11 @@ def get_base_value(type, value, unit):
         return value*get_volume_conversion_factor(unit, BASE_UNITS[type])
     elif type == UNIT_TNT_KEY:
         return value * get_tnt_conversion_factor(unit, BASE_UNITS[type])
+    elif type == UNIT_DENSITY_KEY:
+        return value*get_density_conversion_factor(unit, BASE_UNITS[type])
+    elif type == UNIT_TORQUE_KEY:
+        return value*get_torque_conversion_factor(unit, BASE_UNITS[type])
+    elif type == UNIT_MISC_KEY:
+        return value
     else:
         return None

@@ -17,8 +17,8 @@ class IntSmartBox(SmartTextBox):
     """
     Integer Smart Box.
     """
-    def __init__(self, parent, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, *args)
+    def __init__(self, parent, key_up=None, *args, **kwargs):
+        SmartTextBox.__init__(self, parent, key_up=key_up, *args)
 
         self.fmt = get_number_fmt(signs=kwargs.get('signs'), decimal=False, exponential=False)
 
@@ -66,8 +66,9 @@ class IntInputLayout(SmartInputLayout):
     """
     IntBox Layout.
     """
-    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, *args, **kwargs):
-        SmartInputLayout.__init__(self, parent, *args, **kwargs)
+    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None, layout=None, *args, **kwargs):
+
+        SmartInputLayout.__init__(self, parent, max=max, min=min, layout=layout, *args, **kwargs)
 
         # self.label = kwargs.get('label', 'Input Label:')
 
@@ -79,8 +80,10 @@ class IntInputLayout(SmartInputLayout):
         if value:
             self.textbox.Value = str(value)
 
-        if self.postbox:
+        if kwargs.get('postbox'):
+            self.postbox = kwargs.get('postbox')
             self.postbox.unit_system = unit_system
+
             if type:
                 if type == units.UNIT_AREA_KEY:
                     self.postbox.activate_area()

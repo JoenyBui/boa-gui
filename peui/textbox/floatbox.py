@@ -18,9 +18,24 @@ __author__ = 'jbui'
 class FloatSmartBox(SmartTextBox):
     """
     Float Smart Box.
+
     """
     def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None, range_error=None, key_up=None, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, *args, **kwargs)
+        """
+        Constructor.
+
+        :param parent:
+        :param signs:
+        :param decimal:
+        :param exponential:
+        :param normal:
+        :param format_error:
+        :param range_error:
+        :param key_up: event handler
+        :param args:
+        :param kwargs:
+        """
+        SmartTextBox.__init__(self, parent, key_up=key_up, *args, **kwargs)
 
         self.signs = kwargs.get('signs', False)
         self.decimal = kwargs.get('decimal', True)
@@ -47,6 +62,8 @@ class FloatSmartBox(SmartTextBox):
     def on_text(self, event=None):
         """
         Check Validity of the data.
+
+        :param event:
         """
         val = self.GetValue()
         values, src = parse_number(val, self.fmt)
@@ -67,21 +84,38 @@ class FloatSmartBox(SmartTextBox):
         event.Skip()
 
     def on_key_up(self, event=None):
+        """
+
+        :param event:
+        """
         event.Skip()
 
     def on_key_down(self, event=None):
+        """
+
+        :param event:
+        """
         event.Skip()
 
     def on_key_char(self, event=None):
+        """
+
+        :param event:
+        """
         kc = event.GetKeyCode()
         event.Skip()
 
     def on_key_char_hook(self, event=None):
+        """
+
+        :param event:
+        """
         kc = event.GetKeyCode()
         event.Skip()
 
     def set_normal_color(self):
         """
+        Set normal color.
 
         """
         self.SetBackgroundColour(self.color_normal)
@@ -89,6 +123,7 @@ class FloatSmartBox(SmartTextBox):
 
     def set_format_error_color(self):
         """
+        Set format error color.
 
         """
         self.SetBackgroundColour(self.color_format_error)
@@ -96,6 +131,7 @@ class FloatSmartBox(SmartTextBox):
 
     def set_range_error_color(self):
         """
+        Set range error color.
 
         """
         self.SetBackgroundColour(self.color_range_error)
@@ -106,19 +142,39 @@ class FloatInputLayout(SmartInputLayout):
     """
     Float Textbox set.
     """
-    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, *args, **kwargs):
-        SmartInputLayout.__init__(self, parent, *args, **kwargs)
+    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None, layout=None,
+                 textbox=None, postbox=None, *args, **kwargs):
+        """
 
-        if kwargs.get('textbox'):
-            self.textbox = kwargs.get('textbox')
+        :param parent:
+        :param value:
+        :param unit:
+        :param unit_system:
+        :param type:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        SmartInputLayout.__init__(self, parent, max=max, min=min, layout=layout, *args, **kwargs)
+
+        #  Add in Textbox.
+        if textbox:
+            self.textbox = textbox
         else:
             self.textbox = FloatSmartBox(parent)
+
+        self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
 
         if value:
             self.textbox.Value = str(value)
 
-        if self.postbox:
+        if postbox:
+            # Add in Unit System.
+            self.postbox = postbox
+            self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
+
             self.postbox.unit_system = unit_system
+
             if type:
                 if type == units.UNIT_AREA_KEY:
                     self.postbox.activate_area()
@@ -144,6 +200,15 @@ class FloatInputLayout(SmartInputLayout):
                 elif type == units.UNIT_TNT_KEY:
                     self.postbox.activate_tnt()
                     self.type = type
+                elif type == units.UNIT_DENSITY_KEY:
+                    self.postbox.activate_density()
+                    self.type = type
+                elif type == units.UNIT_TORQUE_KEY:
+                    self.postbox.activate_torque()
+                    self.type = type
+                elif type == units.UNIT_MISC_KEY:
+                    self.postbox.activate_misc()
+                    self.type = type
 
             if unit:
                 if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
@@ -158,6 +223,11 @@ class FloatInputLayout(SmartInputLayout):
         self.do_layout()
 
     def enable(self):
+        """
+        Enable textbox and/or postbox.
+
+        :return:
+        """
         if self.textbox:
             self.textbox.Enable(True)
 
@@ -165,6 +235,11 @@ class FloatInputLayout(SmartInputLayout):
             self.postbox.Enable(True)
 
     def disable(self):
+        """
+        Disable textbox and/or postbox.
+
+        :return:
+        """
         if self.textbox:
             self.textbox.Enable(False)
 
@@ -174,6 +249,10 @@ class FloatInputLayout(SmartInputLayout):
     def set_value(self, value, post=None, label=None):
         """
         Set the value.
+
+        :param value:
+        :param post:
+        :param label:
         """
         if value != None:
             self.textbox.Value = str(value)
@@ -208,7 +287,36 @@ class FloatInputLayout(SmartInputLayout):
 
         return conversion_factor * float(self.textbox.Value)
 
+    def set_value_convert(self, original_unit, destination_unit):
+        """
+
+        :param original_unit:
+        :param destination_unit:
+        :return:
+        """
+        conversion_factor = 1.0
+        if self.type == units.UNIT_AREA_KEY:
+            conversion_factor = units.get_area_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_CHARGE_KEY:
+            conversion_factor = units.get_charge_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_LENGTH_KEY:
+            conversion_factor = units.get_length_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_INERTIA_KEY:
+            conversion_factor = units.get_inertia_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_MASS_KEY:
+            conversion_factor = units.get_mass_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_PRESSURE_KEY:
+            conversion_factor = units.get_pressure_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_VOLUME_KEY:
+            conversion_factor = units.get_volume_conversion_factor(original_unit, destination_unit)
+
+        self.textbox.Value = str(conversion_factor * float(self.textbox.Value))
+
     def validate(self):
+        """
+
+        :return:
+        """
         base_value = units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
 
         if self.min:
@@ -246,8 +354,14 @@ class FloatInputLayout(SmartInputLayout):
 class FloatRangeValidator(wx.PyValidator):
     """
     Float Range Validator
+
     """
     def __init__(self, **kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
         wx.PyValidator.__init__(self)
 
         self.signs = kwargs.get('signs', False)
@@ -274,6 +388,10 @@ class FloatRangeValidator(wx.PyValidator):
     def Clone(self, *args, **kwargs):
         """
         Require override.
+
+        :param arg:
+        :param kwargs:
+        :return:
         """
         return FloatRangeValidator(
             signs=self.signs,
@@ -286,6 +404,11 @@ class FloatRangeValidator(wx.PyValidator):
     def Validate(self, win, *args, **kwargs):
         """
         Override called to validate the window's value.
+
+        :param win:
+        :param args:
+        :param kwargs:
+        :return: type-boolean
         """
         txtCtrl = self.GetWindow()
         val = txtCtrl.GetValue()
@@ -305,6 +428,11 @@ class FloatRangeValidator(wx.PyValidator):
         return isValid
 
     def OnChar(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         txtCtrl = self.GetWindow()
         key = event.GetKeyCode()
         isDigit = False
@@ -342,7 +470,17 @@ class FloatRangeValidator(wx.PyValidator):
         return
 
     def TransferToWindow(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         return True
 
     def TransferFromWindow(self):
+        """
+
+        :return:
+        """
         return True

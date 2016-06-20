@@ -5,8 +5,9 @@ import wx
 from wx import GridSizer
 from wx.lib.agw.supertooltip import SuperToolTip
 
-from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt
+from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque, misc
 
+from . import LayoutDimensions
 from ..units import KEY_IMPERIAL, KEY_METRIC
 
 __author__ = 'jbui'
@@ -22,29 +23,59 @@ class SmartTextBox(wx.TextCtrl):
     2.) wx.EVT_TEXT: Validate that the input is actually a number.
     3.) Validate(): Check against the tolerance level.
     """
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, key_up=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        """
         wx.TextCtrl.__init__(self, parent, *args, **kwargs)
 
         self.keys = kwargs.get('keys', {})
         self.parent = parent
 
+        if key_up:
+            self.Bind(wx.EVT_KEY_UP, key_up, self)
+
     @property
     def min(self):
+        """
+
+        :return: minimum value
+        """
         return self.keys.get('min')
 
     @min.setter
     def min(self, value):
+        """
+
+        :param value:
+        """
         self.keys['min'] = value
 
     @property
     def max(self):
+        """
+
+        :return: return max value
+        """
         return self.keys.get('max')
 
     @max.setter
     def max(self, value):
+        """
+
+        :param: value
+        """
         self.keys['max'] = value
 
     def get_value(self, key):
+        """
+
+        :param key:
+        :return:
+        """
         val = self.GetValue()
         digit = chr(key)
 
@@ -76,6 +107,8 @@ class SmartComboBox(wx.ComboBox):
     def activate_area(self, **kwargs):
         """
         Activate the area.
+
+        :param kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', area.DEFAULT_IMPERIAL__LIST))
@@ -90,6 +123,8 @@ class SmartComboBox(wx.ComboBox):
     def activate_charge(self, **kwargs):
         """
         Activate charge weight.
+
+        :param kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', charge.DEFAULT_IMPERIAL_LIST))
@@ -104,6 +139,8 @@ class SmartComboBox(wx.ComboBox):
     def activate_inertia(self, **kwargs):
         """
         Activate Inertia
+
+        :param: kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', inertia.DEFAULT_IMPERIAL_LIST))
@@ -118,6 +155,8 @@ class SmartComboBox(wx.ComboBox):
     def activate_length(self, **kwargs):
         """
         Activate length.
+
+        :param kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', length.DEFAULT_IMPERIAL_LIST))
@@ -132,6 +171,8 @@ class SmartComboBox(wx.ComboBox):
     def activate_mass(self, **kwargs):
         """
         Activate the mass units.
+
+        :param kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', mass.DEFAULT_IMPERIAL_LIST))
@@ -146,6 +187,8 @@ class SmartComboBox(wx.ComboBox):
     def activate_pressure(self, **kwargs):
         """
         Activate the pressure.
+
+        :param kwargs:
         """
 
         if self.unit_system == KEY_IMPERIAL:
@@ -159,6 +202,10 @@ class SmartComboBox(wx.ComboBox):
         self.convert = pressure.get_pressure_conversion_factor
 
     def activate_volume(self, **kwargs):
+        """
+
+        :param kwargs:
+        """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', volume.DEFAULT_IMPERIAL_LIST))
         elif self.unit_system == KEY_METRIC:
@@ -169,7 +216,56 @@ class SmartComboBox(wx.ComboBox):
         self.SetSelection(kwargs.get('default', 0))
         self.convert = volume.get_volume_conversion_factor
 
+    def activate_density(self, **kwargs):
+        """
+
+        :param kwargs:
+        """
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = density.get_density_conversion_factor
+
+    def activate_torque(self, **kwargs):
+        """
+
+        :param kwargs:
+        """
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', torque.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', torque.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', torque.DEFAULT_TORQUE_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = torque.get_torque_conversion_factor
+
+    def activate_misc(self, **kwargs):
+        """
+
+        :param kwargs:
+        """
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', misc.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', misc.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', misc.DEFAULT_MISC_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = misc.get_misc_conversion_factor
+
     def activate_tnt(self, **kwargs):
+        """
+
+        :param kwargs:
+        """
         if self.unit_system == KEY_IMPERIAL:
             self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
         elif self.unit_system == KEY_METRIC:
@@ -180,47 +276,81 @@ class SmartComboBox(wx.ComboBox):
         self.SetSelection(kwargs.get('default', 0))
         self.convert = tnt.get_tnt_conversion_factor
 
-
     def get_factor(self, destination):
-        return self.convert()
+        """
+
+        :param destination:
+        """
+        return self.convert
 
 
 class SmartInputLayout(wx.BoxSizer):
     """
     Create the horizontal layout of smart textbox.
 
+    /---------------- OVERALL WIDTH ----------------------/
+    |                                                     |
+    |                                                     |
 
-    * --------------------------------------------*
-    * |     |                      |              |
-    * |     |                      |              |
-    * --------------------------------------------*
+    *******************************************************     ----/
+    *    *     * *                     * *              * *         |
+    *******************************************************         |
+    *    *     * *                     * *              * *
+    *    * (1) * *         (2)         * *     (3)      * *     OVERALL HEIGHT
+    *    *     * *                     * *              * *
+    *******************************************************         |
+    *    *     * *                     * *              * *         |
+    *******************************************************     ----/
 
     """
-    def __init__(self, parent, label_width=150, max=None, min=None, *args, **kwargs):
 
-        wx.BoxSizer.__init__(self, wx.HORIZONTAL)
+    MAKE_VERTICAL_STRETCHABLE = 1
 
+    def __init__(self, parent, max=None, min=None, layout=None, *args, **kwargs):
+        """
+        Constructor.
+
+        :param parent:
+        :param width:
+        :param max: maximum value for the textbox
+        :param min: minimum value for the textbox
+        :param overall_width:
+        :param overall_height:
+        :param args:
+        :param kwargs:
+        """
+        wx.BoxSizer.__init__(self, wx.VERTICAL)
+
+        self.components = []
         self.parent = parent
+        self.hsizer = None
+        self._next_id = 0
+        self.INDEX_LABEL = None
+        self.INDEX_TEXTBOX = None
+        self.INDEX_POSTBOX = None
+        self.INDEX_COMBOBOX = None
 
-        label_width = label_width
-        # if kwargs.get('label_width'):
-        #     label_width = kwargs.get('label_width')
+        if layout:
+            self.layout = layout
+        else:
+            self.layout = LayoutDimensions()
 
+        # Add in the label.
         if kwargs.get('label'):
             self.label = kwargs.get('label')
         else:
             if kwargs.get('name'):
                 self.label = wx.StaticText(self.parent,
-                                           label=kwargs.get('name'),
-                                           size=(label_width, -1))
+                                           label=kwargs.get('name'))
             else:
                 self.label = wx.StaticText(self.parent,
-                                           label="TextBox Label:",
-                                           size=(label_width, -1))
+                                           label="TextBox Label:")
 
-        self.textbox = None
-
-        self.postbox = kwargs.get('postbox', None)
+        self.label.SetSize(self.layout.get_size(self.INDEX_LABEL))
+        #
+        # self.textbox = None
+        #
+        # self.postbox = kwargs.get('postbox', None)
 
         self.tooltip = kwargs.get('tooltip', SuperToolTip("HELP"))
         # self.tooltip.SetIcon(wx.ICON_WARNING)
@@ -229,35 +359,208 @@ class SmartInputLayout(wx.BoxSizer):
         # Additional placeholder that is significant (unit box, path button, etc.)
 
         # Call do_layout after you have populate the label, textbox, and/or postbox
-        self.border_space = kwargs.get('border_space', 5)
-        self.border_space_label = kwargs.get('border_space_label', self.border_space)
-        self.border_space_textbox = kwargs.get('border_space_textbox', self.border_space)
-        self.border_space_postbox = kwargs.get('border_space_postbox', self.border_space)
+        # self.border_space = kwargs.get('border_space', 5)
+        # self.border_space_label = kwargs.get('border_space_label', self.border_space)
+        # self.border_space_textbox = kwargs.get('border_space_textbox', self.border_space)
+        # self.border_space_postbox = kwargs.get('border_space_postbox', self.border_space)
 
         self.min = min
         self.max = max
 
+    @property
+    def next_id(self):
+        nid = self._next_id
+        self._next_id += 1
+        return nid
+
+    @property
+    def label(self):
+        return self.components[self.INDEX_LABEL]
+
+    @label.setter
+    def label(self, value):
+        if value is None:
+            return
+
+        self.INDEX_LABEL = self.next_id
+        self.components.append(value)
+
+    @property
+    def textbox(self):
+        return self.components[self.INDEX_TEXTBOX]
+
+    @textbox.setter
+    def textbox(self, value):
+        if value is None:
+            return
+
+        self.INDEX_TEXTBOX = self.next_id
+        self.components.append(value)
+
+    @property
+    def postbox(self):
+        return self.components[self.INDEX_POSTBOX]
+
+    @postbox.setter
+    def postbox(self, value):
+        if value is None:
+            return
+
+        self.INDEX_POSTBOX = self.next_id
+        self.components.append(value)
+
+    @property
+    def combobox(self):
+        return self.components[self.INDEX_COMBOBOX]
+
+    @combobox.setter
+    def combobox(self, value):
+        if value is None:
+            return
+
+        self.INDEX_COMBOBOX = self.next_id
+        self.components.append(value)
+
     def do_layout(self):
         """
         Do Layout.
+
         :return:
         """
 
-        if self.label:
-            self.Add(self.label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_label)
-            # self.Add(self.label, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_label)
+        # Start with the vertical margin.
+        self.AddSpacer(self.layout.top)
 
-        if self.textbox:
-            self.Add(self.textbox, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_textbox)
-            # self.Add(self.textbox, 0, wx.EXPAND, self.border_space_textbox)
+        # Move from left to right.
+        self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.hsizer.AddSpacer(self.layout.left)
 
-        if self.postbox:
-            # self.Add(self.postbox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_postbox)
+        for component in self.components:
+            self.hsizer.AddSpacer(self.layout.interior)
+            self.hsizer.Add(component,
+                            self.layout.make_stretchable,
+                            wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                            0)
 
-            # self.Add(self.postbox, 0, wx.ALIGN_RIGHT, self.border_space_postbox)
-            self.Add(self.postbox)
+        #
+        # if self.label:
+        #     self.hsizer.Add(self.label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_label)
+        #
+        # if self.textbox:
+        #     self.hsizer.AddSpacer(self.layout.interior)
+        #     self.hsizer.Add(self.textbox, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_textbox)
+        #
+        # if self.postbox:
+        #     self.hsizer.AddSpacer(self.layout.interior)
+        #     self.hsizer.Add(self.postbox)
 
-        # self.AddStretchSpacer()
+        self.hsizer.AddSpacer(self.layout.right)
+
+        self.Add(self.hsizer, self.layout.make_stretchable)
+        self.AddSpacer(self.layout.bottom)
+
+    def add(self, item, proportion=0, flag=0, border=0, userData=None):
+        """
+        Appends a child item to the sizer.
+
+        :param item: The item can be one of three kind of objects:
+
+            * window: A wx.Window to be managed by the sizer. Its minimal size (either set explicitly by the user or
+                calculated internally when constructed with wx.DefaultSize) is interpreted as the minimal size to use
+                when laying out item in the sizer. This is particularly useful in connection with
+                wx.Window.SetSizeHints.
+
+            * sizer: The (child-)sizer to be added to the sizer. This allows placing a child sizer in a sizer and thus
+                to create hierarchies of sizers (for example a vertical box as the top sizer and several horizontal
+                boxes on the level beneath).
+
+            * size: A wx.Size or a 2-element sequence of integers that represents the width and height of a spacer to
+                be added to the sizer. Adding spacers to sizers gives more flexibility in the design of dialogs;
+                imagine for example a horizontal box with two buttons at the bottom of a dialog: you might want to
+                insert a space between the two buttons and make that space stretchable using the proportion value and
+                the result will be that the left button will be aligned with the left side of the dialog and the right
+                button with the right side - the space in between will shrink and grow with the dialog.
+
+        :param proportion: Although the meaning of this parameter is undefined in wx.Sizer, it is used in wx.BoxSizer
+            to indicate if a child of a sizer can change its size in the main orientation of the wx.BoxSizer - where 0
+            stands for not changeable and a value of more than zero is interpreted relative (a proportion of the total)
+            to the value of other children of the same wx.BoxSizer. For example, you might have a horizontal
+            wx.BoxSizer with three children, two of which are supposed to change their size with the sizer. Then the
+            two stretchable windows should each be given proportion value of 1 to make them grow and shrink equally
+            with the sizer's horizontal dimension. But if one of them had a proportion value of 2 then it would get a
+            double share of the space available after the fixed size items are positioned.
+
+            (type int)
+
+        :param flag: This parameter can be used to set a number of flags which can be combined using the binary OR
+            operator |. Two main behaviours are defined using these flags. One is the border around a window: the
+            border parameter determines the border width whereas the flags given here determine which side(s) of the
+            item that the border will be added. The other flags determine how the sizer item behaves when the space
+            allotted to the sizer changes, and is somewhat dependent on the specific kind of sizer used.
+
+            * wx.TOP
+            * wx.BOTTOM
+            * wx.LEFT
+            * wx.RIGHT
+            * wx.ALL
+
+            * wx.EXPAND
+
+            * wx.SHAPED
+
+            * wx.FIXED_MINSIZE
+
+            * wx.ALIGN_CENTER
+            * wx.ALIGN_LEFT
+            * wx.ALIGN_RIGHT
+            * wx.ALIGN_TOP
+            * wx.ALIGN_BOTTOM
+            * wx.ALIGN_CENTER_VERTICAL
+            * wx.ALIGN_CENTER_HORIZONTAL
+
+            (type int)
+
+        :param border: Determines the border width, if the flag parameter is set to include any border flag.
+
+            (type int)
+
+        :param userData: Allows an extra object to be attached to the sizer item, for use in derived classes when
+            sizing information is more complex than the proportion and flag will allow for.
+
+            (type=PyObject)
+        """
+        self.Add(item, proportion, flag, border, userData)
+
+    def add_stretch_spacer(self, prop=1):
+        """
+        Add a stretchable spacer.
+
+        :param prop:
+        :return:
+        """
+        self.AddStretchSpacer(prop=prop)
+
+    def add_spacer(self, size):
+        """
+        Add a spacer that is (size, size) pixels.
+
+        :param size:
+        :return:
+        """
+        self.AddSpacer(size)
+
+    def fit(self, window):
+        """
+        Tell the sizer to resize the window to match the sizer's minimal size. This is commonly done in the constructor
+        of the window itself in order to set its initial size to match the needs of the children as determined by the
+        sizer. Returns the new size.
+
+        For a top level window this is the total window size, not the client size.
+
+        :param window:
+        :return:
+        """
+        self.Fit(window)
 
     def validate(self):
         pass

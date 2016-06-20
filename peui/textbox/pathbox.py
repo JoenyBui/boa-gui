@@ -6,7 +6,10 @@ __author__ = 'jbui'
 
 
 class PathSmartBox(SmartTextBox):
+    """
+    Path Smart Box.
 
+    """
     def __init__(self, parent, *args, **kwargs):
         SmartTextBox.__init__(self, parent, *args, **kwargs)
 
@@ -17,9 +20,20 @@ class PathSmartBox(SmartTextBox):
 
 
 class PathInputLayout(SmartInputLayout):
+    """
+    Path Input Layout.
 
-    def __init__(self, parent, *args, **kwargs):
-        SmartInputLayout.__init__(self, parent, *args, **kwargs)
+    """
+    def __init__(self, parent, layout=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param layout:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        SmartInputLayout.__init__(self, parent, layout=layout, *args, **kwargs)
 
         # self.label = kwargs.get('label', 'Path:')
 
@@ -33,11 +47,11 @@ class PathInputLayout(SmartInputLayout):
         else:
             self.postbox = wx.Button(parent, id=wx.ID_ANY, size=(24, 24))
 
-        self.do_layout()
-
         if self.postbox:
             self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
             self.postbox.SetToolTip(wx.ToolTip("Choose Path"))
+
+        self.do_layout()
 
     def pick_folder_path(self, event):
         dlg = wx.DirDialog(self.parent)
