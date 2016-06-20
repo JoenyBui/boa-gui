@@ -34,7 +34,7 @@ class DlgController(object):
         :param event:
         :return:
         """
-        dlg = NewProjectDialog(self.parent)
+        dlg = NewProjectDialog(self.frame, self.parent.setting)
 
         if dlg.ShowModal():
             self.parent.new_project(dlg.get_project())

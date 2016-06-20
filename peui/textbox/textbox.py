@@ -6,27 +6,39 @@ __author__ = 'jbui'
 
 
 class TextSmartBox(SmartTextBox):
-
-    def __init__(self, parent, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, *args, **kwargs)
+    """
+    Text Smart Box.
+    """
+    def __init__(self, parent, key_up=None, *args, **kwargs):
+        SmartTextBox.__init__(self, parent, key_up=key_up, *args, **kwargs)
 
 
 class TextInputLayout(SmartInputLayout):
     """
+    Text Input Layout
 
     """
-    def __init__(self, parent, textbox=None, *args, **kwargs):
-        SmartInputLayout.__init__(self, parent, *args, **kwargs)
-        #
-        # self.label = wx.StaticText(self.parent, label=label, size=(150, -1))
+    def __init__(self, parent, textbox=None, value=None, layout=None, *args, **kwargs):
+        """
+        Constructor.
+
+        :param parent:
+        :param textbox:
+        :param value:
+        :param layout:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        SmartInputLayout.__init__(self, parent, layout=layout, *args, **kwargs)
 
         if textbox:
             self.textbox = textbox
         else:
             self.textbox = TextSmartBox(parent)
 
-        # if kwargs.get('postbox'):
-        #     self.postbox = kwargs.get('postbox')
+        if value:
+            self.textbox.Value = str(value)
 
         self.do_layout()
 

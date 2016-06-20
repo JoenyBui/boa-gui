@@ -1,3 +1,5 @@
+import os
+
 from collections import OrderedDict
 
 import wx
@@ -7,6 +9,14 @@ __author__ = 'jbui'
 COLOR_NORMAL = (255, 255, 255)
 COLOR_FORMAT_ERROR = (228, 115, 115)
 COLOR_RANGE_ERROR = (244, 67, 54)
+
+SOFTWARE_FULL_TITLE = "GUI"
+
+path = os.path.join(os.path.dirname(__file__), 'ico')
+
+ICONS = {
+    'dplot': os.path.join(path, 'dplot.bmp')
+}
 
 # There are method keys that corresponds to a specific controller action from the project.
 METHOD_SEPARATOR = wx.ID_SEPARATOR
