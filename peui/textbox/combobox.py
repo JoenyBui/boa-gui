@@ -21,30 +21,12 @@ class ComboBoxInputLayout(SmartInputLayout):
         if combobox:
             self.combobox = combobox
         else:
-            self.combobox = wx.ComboBox(self)
-
-
-        # self.combobox.SetSize(self.layout.get_size(self.INDEX_COMBOBOX))
+            self.combobox = SmartComboBox(self)
 
         if event_on_select:
             self.combobox.Bind(wx.EVT_COMBOBOX, event_on_select)
 
         self.do_layout()
-
-    # def do_layout(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     if self.label:
-    #         self.Add(self.label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_label)
-    #         # self.Add(self.label, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_label)
-    #
-    #     if self.combobox:
-    #         # self.Add(self.combobox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_postbox)
-    #         self.Add(self.combobox, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_postbox)
-    #
-    #     self.AddStretchSpacer()
 
     def get_value(self):
         """

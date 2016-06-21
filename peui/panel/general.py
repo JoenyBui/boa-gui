@@ -3,7 +3,7 @@ import copy
 import wx
 
 from ..textbox import LayoutDimensions
-from ..textbox.smart import SmartComboBox
+from ..textbox.smart import SmartComboBox, SmartButton
 from ..textbox.floatbox import FloatSmartBox, FloatInputLayout
 from ..textbox.intbox import IntSmartBox, IntInputLayout
 from ..textbox.combobox import ComboBoxInputLayout
@@ -72,7 +72,7 @@ class GeneralPanel(wx.Panel):
                                                  layout=ld)
 
         self.layouts['combobox'] = ComboBoxInputLayout(self, name='ComboBox',
-                                                       combobox=SmartComboBox(self),
+                                                       combobox=SmartComboBox(self, message='I am a combobox'),
                                                        layout=cd)
 
         vsizer.AddSpacer(10)
@@ -88,7 +88,7 @@ class GeneralPanel(wx.Panel):
         vsizer.AddSpacer(10)
         vsizer.Add(self.layouts['combobox'], 0, wx.EXPAND | wx.ALL, 5)
 
-        self.layouts['btn'] = wx.Button(self, id=wx.ID_ANY, style=0, name='Click Me')
+        self.layouts['btn'] = SmartButton(self, id=wx.ID_ANY, style=0, label='Click Me')
 
         vsizer.Add(self.layouts['btn'])
 

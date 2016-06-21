@@ -97,8 +97,20 @@ class SmartTextBox(wx.TextCtrl):
 class SmartComboBox(wx.ComboBox):
     """
     Smart ComboBox is used for units conversion.
+
     """
-    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', *args, **kwargs):
+    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param data:
+        :param style:
+        :param value:
+        :param message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.ComboBox.__init__(self, parent, style=style, *args, **kwargs)
 
         self.convert = None
@@ -109,6 +121,10 @@ class SmartComboBox(wx.ComboBox):
 
         if value:
             self.Value = value
+
+        if message:
+            self.tooltip = wx.ToolTip(message)
+            self.SetToolTip(self.tooltip)
 
     def activate_area(self, **kwargs):
         """
@@ -602,3 +618,19 @@ class SmartInputLayout(wx.BoxSizer):
 
     def validate(self):
         pass
+
+
+class SmartButton(wx.Button):
+    """
+    Smarter Button Class
+
+    """
+    def __init__(self, parent, label='', evt_button=None, message=None, *args, **kwargs):
+        wx.Button.__init__(self, parent, label=label, *args, **kwargs)
+
+        if evt_button:
+            self.Bind(wx.EVT_BUTTON, evt_button)
+
+        if message:
+            self.tooltip = wx.ToolTip(message)
+            self.SetToolTip(self.tooltip)
