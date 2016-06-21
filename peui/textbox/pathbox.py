@@ -72,7 +72,8 @@ class PathInputLayout(SmartInputLayout):
         """
         dlg = wx.DirDialog(self.parent)
 
-        if dlg.ShowModal():
+        if dlg.ShowModal() == wx.ID_OK:
+            # Change the path string..
             self.textbox.SetValue(dlg.GetPath())
 
         dlg.Destroy()

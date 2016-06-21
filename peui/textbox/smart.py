@@ -474,7 +474,7 @@ class SmartInputLayout(wx.BoxSizer):
 
         # Move from left to right.
         self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.hsizer.SetMinSize(wx.Size(self.layout.overall_width, self.layout.height))
+        # self.hsizer.SetMinSize(wx.Size(self.layout.overall_width, self.layout.height))
 
         self.hsizer.AddSpacer(self.layout.left)
 

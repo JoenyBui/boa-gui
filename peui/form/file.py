@@ -3,6 +3,7 @@ import os
 import wx
 
 from ..model.project import Project
+from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextSmartBox, TextInputLayout
 from ..textbox.pathbox import PathSmartBox, PathInputLayout
 
@@ -12,6 +13,7 @@ __author__ = 'jbui'
 class NewProjectDialog(wx.Dialog):
     """
     New Project Dialog
+
     """
     def __init__(self, parent, default_settings, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, **kwargs):
         """
@@ -71,21 +73,25 @@ class NewProjectDialog(wx.Dialog):
         """
         BOTH_SIDES = wx.EXPAND | wx.LEFT | wx.RIGHT
 
+        layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2, widths=(125, 175, 25), stretch_factor=(0, 0, 1))
+        layout.calculate()
+
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project)
-        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author)
-        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path)
+        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project, layout=layout)
+        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author, layout=layout)
+        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path, layout=layout)
 
         # Now finish the layout by adding the two sizers to the main vertical sizer.
-        vsizer.AddStretchSpacer()
+        # vsizer.AddStretchSpacer()
 
-        vsizer.Add(field1_sz, 0, BOTH_SIDES | wx.TOP, 20)
-        vsizer.AddSpacer(15)
+        vsizer.AddSpacer(10)
+        vsizer.Add(field1_sz, 0, BOTH_SIDES, 20)
+        vsizer.AddSpacer(10)
         vsizer.Add(field2_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(15)
+        vsizer.AddSpacer(10)
         vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(15)
+        vsizer.AddSpacer(10)
 
         return vsizer
 
