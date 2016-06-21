@@ -23,10 +23,12 @@ class SmartTextBox(wx.TextCtrl):
     2.) wx.EVT_TEXT: Validate that the input is actually a number.
     3.) Validate(): Check against the tolerance level.
     """
-    def __init__(self, parent, key_up=None, *args, **kwargs):
+    def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
         """
 
         :param parent:
+        :param key_up: bind key up handler
+        :param message: add in tooltip message
         :param args:
         :param kwargs:
         """
@@ -37,6 +39,10 @@ class SmartTextBox(wx.TextCtrl):
 
         if key_up:
             self.Bind(wx.EVT_KEY_UP, key_up, self)
+
+        if message:
+            self.tooltip = wx.ToolTip(message)
+            self.SetToolTip(self.tooltip)
 
     @property
     def min(self):

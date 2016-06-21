@@ -23,6 +23,7 @@ class ComboBoxInputLayout(SmartInputLayout):
         else:
             self.combobox = wx.ComboBox(self)
 
+
         # self.combobox.SetSize(self.layout.get_size(self.INDEX_COMBOBOX))
 
         if event_on_select:

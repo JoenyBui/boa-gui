@@ -20,7 +20,8 @@ class FloatSmartBox(SmartTextBox):
     Float Smart Box.
 
     """
-    def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None, range_error=None, key_up=None, *args, **kwargs):
+    def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None,
+                 range_error=None, key_up=None, message=None, *args, **kwargs):
         """
         Constructor.
 
@@ -35,7 +36,7 @@ class FloatSmartBox(SmartTextBox):
         :param args:
         :param kwargs:
         """
-        SmartTextBox.__init__(self, parent, key_up=key_up, *args, **kwargs)
+        SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
         self.signs = kwargs.get('signs', False)
         self.decimal = kwargs.get('decimal', True)

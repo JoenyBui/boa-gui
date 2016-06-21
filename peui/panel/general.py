@@ -62,12 +62,12 @@ class GeneralPanel(wx.Panel):
         self.layouts['charge'] = FloatInputLayout(self,
                                                   name='Charge Weight', type='charge',
                                                   value=105.5, unit='TNT',
-                                                  textbox=FloatSmartBox(self, signs=True, decimal=True, exponential=True),
+                                                  textbox=FloatSmartBox(self, signs=True, decimal=True, exponential=True, message='Charge Layout'),
                                                   postbox=SmartComboBox(self, style=wx.CB_READONLY),
                                                   layout=ld)
 
         self.layouts['int'] = IntInputLayout(self, name='Int', value=100, unit='str',
-                                             textbox=IntSmartBox(self, signs=True),
+                                             textbox=IntSmartBox(self, signs=True, message="Input Layout"),
                                              postbox=SmartComboBox(self, style=wx.CB_READONLY),
                                                  layout=ld)
 

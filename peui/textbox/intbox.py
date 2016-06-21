@@ -17,8 +17,20 @@ class IntSmartBox(SmartTextBox):
     """
     Integer Smart Box.
     """
-    def __init__(self, parent, key_up=None, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, key_up=key_up, *args)
+    def __init__(self, parent, signs=False, format_error=None, key_up=None, message=None, *args, **kwargs):
+        """
+        Integer Smart Box.s
+
+        :param parent:
+        :param signs:
+        :param format_error:
+        :param key_up:
+        :param message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
         self.fmt = get_number_fmt(signs=kwargs.get('signs'), decimal=False, exponential=False)
 
@@ -56,17 +68,22 @@ class IntSmartBox(SmartTextBox):
 
     def set_normal_color(self):
         """
+        Set the normal color
 
         """
         self.SetBackgroundColour(self.color_normal)
 
     def set_format_error_color(self):
         """
+        Set the format color
+
         """
         self.SetBackgroundColour(self.color_format_error)
 
     def set_range_error_color(self):
         """
+        Set the background color
+
         """
         self.SetBackgroundColour(self.color_range_error)
 
@@ -78,6 +95,22 @@ class IntInputLayout(SmartInputLayout):
     """
     def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None,
                  layout=None, textbox=None, postbox=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param value:
+        :param unit:
+        :param unit_system:
+        :param type:
+        :param max:
+        :param min:
+        :param layout:
+        :param textbox:
+        :param postbox:
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
         SmartInputLayout.__init__(self, parent, max=max, min=min, layout=layout, *args, **kwargs)
 

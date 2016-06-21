@@ -37,7 +37,6 @@ class LayoutDimensions(object):
         self.overall_width = kwargs.get('overall_width', 200)
         self.overall_height = kwargs.get('overall_height', 30)
 
-        self.columns = kwargs.get('columns', 2)
         self.widths = kwargs.get('widths', (150, 100, 100, ))
         self.height = kwargs.get('height', 24)
 
@@ -81,13 +80,15 @@ class LayoutDimensions(object):
                 self.overall_width += width
 
         else:
+            # TODO: Update percentage calculations.
             pass
 
         # Check if stretch factor and border widths are specified.
         NO_STRETCHING = 0
+        BORDER_WIDTH_NONE = 0
         for id in range(0, len(self.widths)):
             if id >= len(self.stretch_factor):
                 self.stretch_factor.append(NO_STRETCHING)
 
             if id >= len(self.border_width):
-                self.border_width.append(0)
+                self.border_width.append(BORDER_WIDTH_NONE)
