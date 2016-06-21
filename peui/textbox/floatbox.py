@@ -163,7 +163,7 @@ class FloatInputLayout(SmartInputLayout):
         else:
             self.textbox = FloatSmartBox(parent)
 
-        self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
+        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
 
         if value:
             self.textbox.Value = str(value)
@@ -171,7 +171,7 @@ class FloatInputLayout(SmartInputLayout):
         if postbox:
             # Add in Unit System.
             self.postbox = postbox
-            self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
+            # self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
 
             self.postbox.unit_system = unit_system
 

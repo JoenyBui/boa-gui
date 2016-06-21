@@ -335,6 +335,8 @@ class SmartInputLayout(wx.BoxSizer):
         else:
             self.layout = LayoutDimensions()
 
+            self.layout.calculate()
+
         # Add in the label.
         if kwargs.get('label'):
             self.label = kwargs.get('label')
@@ -346,7 +348,7 @@ class SmartInputLayout(wx.BoxSizer):
                 self.label = wx.StaticText(self.parent,
                                            label="TextBox Label:")
 
-        self.label.SetSize(self.layout.get_size(self.INDEX_LABEL))
+        # self.label.SetMinSize(self.layout.get_size(self.INDEX_LABEL))
         #
         # self.textbox = None
         #
@@ -367,6 +369,11 @@ class SmartInputLayout(wx.BoxSizer):
         self.min = min
         self.max = max
 
+        # Set minimum size.
+        size = self.GetSize()
+        size.Height = self.layout.overall_height
+        self.SetMinSize(size)
+
     @property
     def next_id(self):
         nid = self._next_id
@@ -375,6 +382,9 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def label(self):
+        if self.INDEX_LABEL is None:
+            return None
+
         return self.components[self.INDEX_LABEL]
 
     @label.setter
@@ -387,6 +397,9 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def textbox(self):
+        if self.INDEX_TEXTBOX is None:
+            return None
+
         return self.components[self.INDEX_TEXTBOX]
 
     @textbox.setter
@@ -399,6 +412,9 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def postbox(self):
+        if self.INDEX_POSTBOX is None:
+            return None
+
         return self.components[self.INDEX_POSTBOX]
 
     @postbox.setter
@@ -411,6 +427,9 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def combobox(self):
+        if self.INDEX_COMBOBOX is None:
+            return None
+
         return self.components[self.INDEX_COMBOBOX]
 
     @combobox.setter
@@ -433,30 +452,43 @@ class SmartInputLayout(wx.BoxSizer):
 
         # Move from left to right.
         self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.hsizer.SetMinSize(wx.Size(self.layout.overall_width, self.layout.height))
+
         self.hsizer.AddSpacer(self.layout.left)
 
-        for component in self.components:
-            self.hsizer.AddSpacer(self.layout.interior)
-            self.hsizer.Add(component,
-                            self.layout.make_stretchable,
-                            wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                            0)
+        for id in range(0, len(self.components)):
+            """
+                wx.BoxSizer.Add(window, proportion=0, flag=0, border=0, userData=None)
+                    Append a child to the sizer
 
-        #
-        # if self.label:
-        #     self.hsizer.Add(self.label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_label)
-        #
-        # if self.textbox:
-        #     self.hsizer.AddSpacer(self.layout.interior)
-        #     self.hsizer.Add(self.textbox, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_textbox)
-        #
-        # if self.postbox:
-        #     self.hsizer.AddSpacer(self.layout.interior)
-        #     self.hsizer.Add(self.postbox)
+                    :param window: a window, a spacer or another sizer to be added to the sizer.  Its initial size
+                        (either set explicitly by the user or calculated internally) is interpreted as the minimal and
+                        in many cases also the initial size.
+                    :param proportion: (int) the parameter is used in wx.BoxSizer to indicate if a child of a sizer can
+                        change its size in the main orientation of the wx.BoxSizer - where 0 stands for non changeable
+                        and a value of more than zero is interpreted relative to the value of other children of the
+                        same wx.BosSizer.  For example, you might have a horizontal wx.BoxSizer with three children,
+                        two of which are supposed to change their size with the sizer.  Then the two stretchable
+                        windows would get a value of 1 each to make item grow and shrink equally with the sizer's
+                        horizontal dimension.
+                    :param flag: (int): combinations of flags affecting sizer's behavior
+                    :param border: (int): determines the border width, if the flag parameter is set to include any
+                        border flag
+                    :param userData: (object) allows an extra object to be attached to the sizer item, for use in
+                        derived classes when sizing information
+
+            """
+            self.components[id].SetMinSize(self.layout.get_size(id))
+
+            self.hsizer.AddSpacer(self.layout.interior)
+            self.hsizer.Add(self.components[id],
+                            self.layout.stretch_factor[id],
+                            wx.ALL | wx.EXPAND,
+                            self.layout.border_width[id])
 
         self.hsizer.AddSpacer(self.layout.right)
 
-        self.Add(self.hsizer, self.layout.make_stretchable)
+        self.Add(self.hsizer, 1, wx.EXPAND | wx.ALL, 0)
         self.AddSpacer(self.layout.bottom)
 
     def add(self, item, proportion=0, flag=0, border=0, userData=None):

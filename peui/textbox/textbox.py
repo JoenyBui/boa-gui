@@ -37,6 +37,8 @@ class TextInputLayout(SmartInputLayout):
         else:
             self.textbox = TextSmartBox(parent)
 
+        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
+
         if value:
             self.textbox.Value = str(value)
 
