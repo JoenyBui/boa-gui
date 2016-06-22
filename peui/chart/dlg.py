@@ -1,6 +1,7 @@
 import wx
 
 from ..form.general import GeneralDialog
+from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextInputLayout, TextSmartBox
 from ..controller import ChildController
 
@@ -14,7 +15,7 @@ class FigureSetting(object):
     """
     def __init__(self, *args, **kwargs):
         """
-
+        Figure Setting Constructor
 
         :param args:
         :param kwargs:
@@ -45,7 +46,7 @@ class FigureSettingDialog(GeneralDialog):
         """
         self.setting = setting
 
-        GeneralDialog.__init__(self, parent, controller=controller, btn_flags=btn_flags, **kwargs)
+        GeneralDialog.__init__(self, parent, title="Figure Setting", controller=controller, btn_flags=btn_flags, **kwargs)
 
         self.btnsizer.AffirmativeButton.Bind(wx.EVT_BUTTON, self.button_ok_click)
 
@@ -56,22 +57,40 @@ class FigureSettingDialog(GeneralDialog):
         """
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.layouts['title'] = TextInputLayout(self, name='Title', textbox=TextSmartBox(self, value=self.setting.title))
-        self.layouts['x_title'] = TextInputLayout(self, name='X Title', textbox=TextSmartBox(self, value=self.setting.x_title))
-        self.layouts['x_subtitle'] = TextInputLayout(self, name='X SubTitle', textbox=TextSmartBox(self, value=self.setting.x_subtitle))
-        self.layouts['y_title'] = TextInputLayout(self, name='Y Title', textbox=TextSmartBox(self, value=self.setting.y_title))
-        self.layouts['y_subtitle'] = TextInputLayout(self, name='Y SubTitle', textbox=TextSmartBox(self, value=self.setting.y_subtitle))
+        layout = LayoutDimensions(top=2, bottom=2, left=4, right=4, interior=2, widths=(100, 200), height=24)
+        layout.calculate()
 
-        vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['title'], 0, wx.EXPAND | wx.ALL, 5)
-        vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['x_title'], 0, wx.EXPAND | wx.ALL, 5)
-        vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['x_subtitle'], 0, wx.EXPAND | wx.ALL, 5)
-        vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['y_title'], 0, wx.EXPAND | wx.ALL, 5)
-        vsizer.AddSpacer(10)
-        vsizer.Add(self.layouts['y_subtitle'], 0, wx.EXPAND | wx.ALL, 5)
+        self.layouts['title'] = TextInputLayout(self,
+                                                name='Title',
+                                                layout=layout,
+                                                textbox=TextSmartBox(self, value=self.setting.title))
+        self.layouts['x_title'] = TextInputLayout(self,
+                                                  name='X Title',
+                                                  layout=layout,
+                                                  textbox=TextSmartBox(self, value=self.setting.x_title))
+        self.layouts['x_subtitle'] = TextInputLayout(self,
+                                                     name='X SubTitle',
+                                                     layout=layout,
+                                                     textbox=TextSmartBox(self, value=self.setting.x_subtitle))
+        self.layouts['y_title'] = TextInputLayout(self,
+                                                  name='Y Title',
+                                                  layout=layout,
+                                                  textbox=TextSmartBox(self, value=self.setting.y_title))
+        self.layouts['y_subtitle'] = TextInputLayout(self,
+                                                     name='Y SubTitle',
+                                                     layout=layout,
+                                                     textbox=TextSmartBox(self, value=self.setting.y_subtitle))
+
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['title'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['x_title'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['x_subtitle'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['y_title'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['y_subtitle'], 1, wx.EXPAND | wx.ALL, 0)
 
         return vsizer
 
