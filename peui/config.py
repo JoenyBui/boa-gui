@@ -232,12 +232,9 @@ MENU_BAR_KEY = [
                     OrderedDict(
                         id=METHOD_TOOLBAR_STANDARD,
                         name='Standard',
-
-                    ),
-                    # OrderedDict(
-                    #     id=METHOD_TOOLBAR_MODEL,
-                    #     name='Model'
-                    # )
+                        kind=wx.ITEM_CHECK,
+                        checked=True
+                    )
                 ]
             ),
             OrderedDict(
@@ -262,15 +259,21 @@ MENU_BAR_KEY = [
                     # ),
                     OrderedDict(
                         id=METHOD_WINDOW_TREE,
-                        name='Project Tree'
+                        name='Project Tree',
+                        kind=wx.ITEM_CHECK,
+                        checked=True
                     ),
                     OrderedDict(
                         id=METHOD_WINDOW_PROP_GRID,
-                        name='Property'
+                        name='Property',
+                        kind=wx.ITEM_CHECK,
+                        checked=True
                     ),
                     OrderedDict(
                         id=METHOD_WINDOW_CONSOLE,
-                        name='Console'
+                        name='Console',
+                        kind=wx.ITEM_CHECK,
+                        checked=True
                     ),
                 ]
             ),
