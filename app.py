@@ -137,7 +137,8 @@ if __name__ == '__main__':
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
     # Add test data
-    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01))]
+    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+                    np.arange(0.0, 1.5, 0.02), np.cos(2 * np.pi * np.arange(0.0, 1.5, 0.02))]
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)

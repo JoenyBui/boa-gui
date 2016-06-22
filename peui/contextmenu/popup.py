@@ -4,8 +4,14 @@ __author__ = 'jbui'
 
 
 class PopupMenuMixin(object):
+    """
+    Popup Menu Mixin (to be used with multiple inheritance)
 
+    """
     def __init__(self):
+        """
+
+        """
         super(PopupMenuMixin, self).__init__()
 
         # Attributes.
@@ -18,6 +24,7 @@ class PopupMenuMixin(object):
     def on_context_menu(self, event):
         """
         Creates and shows the Menu.
+
         :param event:
         :return:
         """
