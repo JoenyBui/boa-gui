@@ -10,6 +10,7 @@ class PopupMenuMixin(object):
 
         # Attributes.
         self._menu = None
+        self._data = {}
 
         # Event Handlers
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
@@ -24,9 +25,30 @@ class PopupMenuMixin(object):
             self._menu.Destroy()
 
         self._menu = wx.Menu()
-        self.CreateContextMenu(self._menu)
+        self.data = {}
+
+        self.CreateContextMenu()
         self.PopupMenu(self._menu)
 
     def CreateContextMenu(self, menu):
         raise NotImplementedError
 
+    def add_menu_item(self, label, handler, object=None):
+        """
+        Add the menu item.
+
+        :param label:
+        :param handler:
+        :param object:
+        """
+        # Create new menu item.
+        item = wx.MenuItem(self._menu, wx.ID_ANY, label)
+
+        # Bind menu item.
+        self.Bind(wx.EVT_MENU, handler, item)
+
+        # Add menu item.
+        self._menu.AppendItem(item)
+
+        # Add in data.
+        self._data[item.GetId()] = object
