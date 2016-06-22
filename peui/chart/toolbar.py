@@ -33,7 +33,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
                            'Open figure setting',
                            'Open figure setting.')
         # wx.EVT_TOOL(self, self.ON_CUSTOM_FIGURE_SETTING, self._on_custom_figure_setting)
-        #
+
         self.AddSimpleTool(self.ON_CUSTOM_DPLOT,
                            wx.Bitmap(ICONS['dplot']),
                            'DPLOT',

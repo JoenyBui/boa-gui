@@ -1,6 +1,7 @@
 import wx
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
+from ..form.file import SaveXYDialog
 
 from . import ChildController
 
@@ -35,6 +36,7 @@ class Chart2dController(ChildController):
         tb = self.view.toolbar
 
         tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
+        tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
 
     def update_layout(self):
         pass
@@ -53,3 +55,18 @@ class Chart2dController(ChildController):
 
             self.update_text()
 
+    def on_click_save_xy_data(self, event):
+        """
+        On click save xy data.
+
+        :param event:
+        :return:
+        """
+        dlg = SaveXYDialog(self.view)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+
+            self.view.save_xy_data(path)
+
+        dlg.Destroy()

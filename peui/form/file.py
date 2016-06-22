@@ -123,3 +123,15 @@ class CloseProjectDialog(wx.Dialog):
 
         self.parent = parent
 
+
+class SaveXYDialog(wx.FileDialog):
+    def __init__(self, parent, *args, **kwargs):
+        wx.FileDialog.__init__(self,
+                               parent,
+                               "Save XY data as...",
+                               os.getcwd(), "", "*.csv",
+                               wx.SAVE | wx.OVERWRITE_PROMPT,
+                               *args,
+                               **kwargs)
+
+        self.parent = parent

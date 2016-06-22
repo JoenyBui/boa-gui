@@ -55,6 +55,20 @@ class Chart2d(wx.Panel):
         if not local:
             self.controller.do_layout()
 
+    def save_xy_data(self, pathname):
+        """
+        Save data file to csv x, y.
+
+        :param pathname: file path name
+        :return:
+        """
+        for line in self.axes.lines:
+            x = line.get_xdata()
+            y = line.get_ydata()
+
+            data = np.array([x, y]).transpose()
+            np.savetxt(pathname, data, delimiter=',')
+
     def plot(self, xs, ys, *args, **kwargs):
         """
         Plot x, y data.
