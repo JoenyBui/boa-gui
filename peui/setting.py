@@ -8,6 +8,7 @@ __author__ = 'jbui'
 class Setting(object):
     """
     Settings file is stored in the user local settings folder.
+
     """
     def __init__(self, **kwargs):
         self.keys = {}
@@ -120,6 +121,9 @@ class Setting(object):
         """
         with open(file_path) as data_file:
             self.keys = json.load(data_file)
+
+    def save_to_settings(self):
+        self.save(self.file)
 
     def save(self, file_path):
         """
