@@ -211,6 +211,10 @@ class FloatInputLayout(SmartInputLayout):
             conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
         elif self.type == units.UNIT_VOLUME_KEY:
             conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_DENSITY_KEY:
+            conversion_factor = units.get_density_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_TORQUE_KEY:
+            conversion_factor = units.get_torque_conversion_factor(self.postbox.Value, unit)
 
         return conversion_factor * float(self.textbox.Value)
 
@@ -236,6 +240,10 @@ class FloatInputLayout(SmartInputLayout):
             conversion_factor = units.get_pressure_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_VOLUME_KEY:
             conversion_factor = units.get_volume_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_DENSITY_KEY:
+            conversion_factor = units.get_density_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_TORQUE_KEY:
+            conversion_factor = units.get_torque_conversion_factor(original_unit, unidestination_unitt)
 
         self.textbox.Value = str(conversion_factor * float(self.textbox.Value))
 
