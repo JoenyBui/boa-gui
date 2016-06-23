@@ -1,37 +1,35 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
 import os
 import sys
 
+if getattr(sys, 'frozen', False):
+    import ctypes
+    # Override dll search path.
+    # ctypes.windll.kernel32.SetDllDirectoryW('C:/Anaconda/Library/bin')
+    # Init code to load external dll
+    ctypes.CDLL('mkl_avx2.dll')
+    ctypes.CDLL('mkl_def.dll')
+    ctypes.CDLL('mkl_vml_avx2.dll')
+    ctypes.CDLL('mkl_vml_def.dll')
+
+    # Restore dll search path.
+    ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
+
 import matplotlib
+# matplotlib.use('GTKAgg')
+
 import pandas as pd
 import numpy as np
 
 import wx
 import wx.lib.mixins.inspection as WIT
 import wx.aui
-
 import wx.lib.agw.aui as aui
 
-from pelm.manager import LicenseClientManager
+from pelm.client import LicenseClientManager, ClientFrame
 
-DEBUG = True
+DEBUG = False
 
-matplotlib.use('WXAgg')
+# matplotlib.use('WXAgg')
 
 PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAt6LRm4kBeWOVYP1Y4kaBsqqtPt38F2QUHHzSRuRcvR50ylTD
@@ -71,43 +69,39 @@ PlJhR2Gg+UlnGbXRcO9uo134SAy894BZ06oJfpcx5HvowMBgUyeSFfnWbutU4/p7
 ywIDAQAB
 -----END PUBLIC KEY-----"""
 
-if __name__ == '__main__' and __package__ is None:
+if __name__ == '__main__':
     # Relative Import Hack
     package_name = 'peui'
-    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    os.sys.path.insert(1, parent_dir)
-    mod = __import__(package_name)
-    sys.modules[package_name] = mod
-    __package__ = package_name
 
-    from .main.window import MainWindow
-    from .controller.main import MainController
-    from .model.project import Project
-    from .tree.project import ProjectTree
-    from .panel.general import GeneralPanel
-    from .panel.grid import PropGrid
-    from .chart.ch2d import Chart2d
-    from .setting import Setting
-    from .view.vtk import VtkViewer
-    from .panel.xlsx import SpreadSheet
-    from .view.terminal import Console
+    from peui.main.window import MainWindow
+    from peui.controller.main import MainController
+    from peui.model.project import Project
+    from peui.tree.project import ProjectTree
+    from peui.panel.general import GeneralPanel
+    from peui.panel.grid import PropGrid
+    from peui.chart.ch2d import Chart2d
+    from peui.setting import Setting
+    from peui.view.vtk import VtkViewer
+    from peui.panel.xlsx import SpreadSheet
+    from peui.view.terminal import Console
 
-    import config as cfg
-    from .config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
-    from .main.toolbar import CustomToolBar
+    import peui.config as cfg
+    from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
+    from peui.main.toolbar import CustomToolBar
 
-
-    #TODO: Smart Textbox
     #TODO: Undo-Redo Model
     #TODO: Cut, Copy & Paste
     #TODO: Printing Pdf & Docx
-    #TODO: Open & Close Project
-    #TODO: License Manager
     #TODO: Backup Temp File
     #TODO: Periodic Savings
     #TODO: Save Perspective View
+    #TODO: Add Settings menu item and dialog.as
+    #TODO: Add license manager menu item.
 
     setting = Setting()
+
+    def exit_application(event):
+        exit()
 
     # Initialize Application
     if DEBUG:
@@ -119,17 +113,58 @@ if __name__ == '__main__' and __package__ is None:
         lm = LicenseClientManager()
         lm.load_private_key(PRIVATE_KEY)
         lm.load_public_key(PUBLIC_KEY)
-        lm.open_encrypted_file(setting.efile)
-        lm.open_encrypted_key(setting.ekey)
-        lm.open_encrypted_signature(setting.esignature)
 
-        if lm.unencrypted_file() is False:
-            exit()
-
-        if (lm.check_username() and lm.check_system_name() and lm.check_mac_address() and lm.check_end_date()) is False:
-            exit()
+        valid_license = False
 
         app = wx.App(False)
+
+        # Run a loop to check for encryption.
+        while valid_license is False:
+            message = "Please contact jbui@protection-consultants and provide the following information. \n"
+
+            # Try to open the three combinations.  If okay than we move on the next steps.
+            if not (lm.open_encrypted_file(setting.efile) and \
+                    lm.open_encrypted_key(setting.ekey) and \
+                    lm.open_encrypted_signature(setting.esignature)):
+                message += "Files path are not valid."
+
+                cf = ClientFrame(None,
+                                 setting,
+                                 "PEC-GUI License Client",
+                                 message=message,
+                                 size=(400, 400))
+                app.MainLoop()
+
+                # Continue Loop
+                continue
+
+            if lm.unencrypted_file() is False:
+                message += "License files cannot be unencrypted.  Please make contact with the admin."
+
+                cf = ClientFrame(None,
+                                 setting,
+                                 "PEC-GUI License Client",
+                                 message=message,
+                                 size=(400, 400))
+                app.MainLoop()
+
+                # Continue Loop
+                continue
+
+            if (lm.check_username() and
+                    lm.check_system_name() and
+                    lm.check_mac_address() and
+                    lm.check_end_date()) is False:
+                message += "License file is expired.  Please make contact with the admin."
+
+                cf = ClientFrame(None,
+                                 setting,
+                                 "PEC-GUI License Client",
+                                 message=message,
+                                 size=(400, 400))
+                app.MainLoop()
+
+            valid_license = True
 
     # Check if the a file path is passed with the executable.
     project = Project()
@@ -139,7 +174,8 @@ if __name__ == '__main__' and __package__ is None:
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
     # Add test data
-    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01))]
+    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+                    np.arange(0.0, 1.5, 0.02), np.cos(2 * np.pi * np.arange(0.0, 1.5, 0.02))]
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)

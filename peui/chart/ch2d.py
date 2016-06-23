@@ -1,6 +1,7 @@
 import random
 
 import numpy as np
+import pandas as pd
 
 import wx
 
@@ -12,7 +13,7 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
 
 from ..controller.ch2d import Chart2dController
-from .toolbar import CustomToolbar
+from .toolbar import MatplotlibCustomToolbar
 
 __author__ = 'jbui'
 
@@ -23,10 +24,13 @@ class Chart2d(wx.Panel):
     """
     def __init__(self, parent, controller, local, *args, **kwargs):
         """
+        Constructor.
 
         :param parent:
         :param controller: parent controller
         :param local: local controller
+        :param args:
+        :param kwargs:
         :return:
         """
         wx.Panel.__init__(self, parent)
@@ -52,15 +56,49 @@ class Chart2d(wx.Panel):
         if not local:
             self.controller.do_layout()
 
+    def save_xy_data(self, pathname):
+        """
+        Save data file to csv x, y.
+
+        :param pathname: file path name
+        :return:
+        """
+        data = []
+
+        for line in self.axes.lines:
+            x = line.get_xdata()
+            y = line.get_ydata()
+
+            data.append(x)
+            data.append(y)
+
+        # df = pd.DataFrame(np.array(data).transpose())
+        # df.to_csv(pathname)
+        try:
+            np.savetxt(pathname, np.array(data).transpose(), delimiter=',')
+        except TypeError as e:
+            print(e)
+            wx.MessageBox('TypeError: Data is not aligned and cannot be saved as csv.')
+
     def plot(self, xs, ys, *args, **kwargs):
+        """
+        Plot x, y data.
+
+        :param xs:
+        :param ys:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         self.axes.plot(xs, ys, *args, **kwargs)
 
     def add_toolbar(self):
         """
         Add toolbar into the chart.
+
         :return:
         """
-        self.toolbar = CustomToolbar(self.canvas, self)
+        self.toolbar = MatplotlibCustomToolbar(self.canvas, self)
         self.toolbar.Realize()
 
         # By adding toolbar in sizer, we are able to put it at the bottom

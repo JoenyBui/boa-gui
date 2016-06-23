@@ -3,6 +3,7 @@ import os
 import wx
 
 from ..model.project import Project
+from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextSmartBox, TextInputLayout
 from ..textbox.pathbox import PathSmartBox, PathInputLayout
 
@@ -12,9 +13,20 @@ __author__ = 'jbui'
 class NewProjectDialog(wx.Dialog):
     """
     New Project Dialog
+
     """
-    def __init__(self, parent, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, panel=None, **kwargs):
-        wx.Dialog.__init__(self, None, title=kwargs.get('title', 'New Project'),
+    def __init__(self, parent, default_settings, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+        """
+
+        :param parent: main frame form
+        :param default_settings: default setting file used to initialize cell
+        :param style:
+        :param btn_flags:
+        :param kwargs:
+        :return:
+        """
+        wx.Dialog.__init__(self, parent,
+                           title=kwargs.get('title', 'New Project'),
                            size=(kwargs.get('width', 500), kwargs.get('height', 300)))
 
         self.parent = parent
@@ -22,90 +34,66 @@ class NewProjectDialog(wx.Dialog):
         # Attributes
         self.flags = style
 
-        if panel:
-            self.panel = panel
-        else:
-            self.panel = NewProjectPanel(self, parent.setting)
-
-        # Layout
-        btnsizer = self.CreateButtonSizer(btn_flags)
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.panel, 1, wx.EXPAND)
-        sizer.Add(btnsizer, 0, wx.EXPAND | wx.ALL, 5)
-
-        self.SetSizer(sizer)
-        self.SetInitialSize()
-
-        # self.bind()
-
-    def get_project(self):
-        """
-        Return the project object.
-        """
-        return Project(name=self.panel.tb_project.GetValue(),
-                       author=self.panel.tb_author.GetValue(),
-                       project_folder=self.panel.tb_path.GetValue())
-
-    # def bind(self):
-    #     self.Bind(wx.EVT_BUTTON, self.on_okay, self.panel.btn_okay)
-    #     self.Bind(wx.EVT_BUTTON, self.on_cancel, self.panel.btn_cancel)
-    #
-    # def on_okay(self, event):
-    #     self.Close()
-    #
-    # def on_cancel(self, event):
-    #     self.Destroy()
-
-
-class NewProjectPanel(wx.Panel):
-    """
-
-    """
-    def __init__(self, parent, default_settings, *args, **kwargs):
-        wx.Panel.__init__(self, parent, *args, **kwargs)
-
-        self.parent = parent
+        self.btnsizer = self.CreateButtonSizer(btn_flags)
 
         # Attributes
         self.tb_project = TextSmartBox(self, value=default_settings.project_name)
         self.tb_author = TextSmartBox(self, value=default_settings.author)
         self.tb_path = PathSmartBox(self, value=default_settings.path)
 
-        # self.btn_okay = wx.Button(self, wx.ID_ANY, 'OK')
-        # self.btn_cancel = wx.Button(self, wx.ID_ANY, 'Cancel')
+        # Layout
 
-        self.do_layout()
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        vsizer.Add(self.do_layout(), 0, wx.EXPAND | wx.ALL, 5)
+        vsizer.AddStretchSpacer()
+        vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
+
+        self.SetSizer(vsizer)
+        self.SetInitialSize()
+        self.CenterOnParent()
+        self.Fit()
+
+    def get_project(self):
+        """
+        Return the project object.
+
+        :return: Project Object
+        """
+        project = Project(name=self.tb_project.GetValue(),
+                          author=self.tb_author.GetValue(),
+                          project_folder=self.tb_path.GetValue())
+
+        return project
 
     def do_layout(self):
         """
         Layout the controls
+
+        :return: vertical sizer
         """
-        vsizer = wx.BoxSizer(wx.VERTICAL)
-
-        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project)
-        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author)
-        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path)
-
-        # btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        # btnSizer.Add(self.btn_okay, 0, wx.ALL | wx.LEFT, 5)
-        # btnSizer.Add(self.btn_cancel, 0, wx.ALL | wx.RIGHT, 5)
-
-        # Now finish the layout by adding the two sizers to the main vertical sizer.
-        vsizer.AddStretchSpacer()
-
         BOTH_SIDES = wx.EXPAND | wx.LEFT | wx.RIGHT
 
-        vsizer.Add(field1_sz, 0, BOTH_SIDES | wx.TOP, 20)
-        vsizer.AddSpacer(15)
-        vsizer.Add(field2_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(15)
-        vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(15)
-        # vsizer.Add(btnSizer, 0, BOTH_SIDES | wx.BOTTOM, 20)
+        layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2, widths=(125, 175, 25), stretch_factor=(0, 0, 1))
+        layout.calculate()
+
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+
+        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project, layout=layout)
+        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author, layout=layout)
+        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path, layout=layout)
+
+        # Now finish the layout by adding the two sizers to the main vertical sizer.
         # vsizer.AddStretchSpacer()
 
-        # Finally assign the main outer sizer to the panel
-        self.SetSizer(vsizer)
+        vsizer.AddSpacer(10)
+        vsizer.Add(field1_sz, 0, BOTH_SIDES, 20)
+        vsizer.AddSpacer(10)
+        vsizer.Add(field2_sz, 0, BOTH_SIDES, 20)
+        vsizer.AddSpacer(10)
+        vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
+        vsizer.AddSpacer(10)
+
+        return vsizer
 
 
 class OpenProjectDialog(wx.FileDialog):
@@ -135,3 +123,15 @@ class CloseProjectDialog(wx.Dialog):
 
         self.parent = parent
 
+
+class SaveXYDialog(wx.FileDialog):
+    def __init__(self, parent, *args, **kwargs):
+        wx.FileDialog.__init__(self,
+                               parent,
+                               "Save XY data as...",
+                               os.getcwd(), "", "*.csv",
+                               wx.SAVE | wx.OVERWRITE_PROMPT,
+                               *args,
+                               **kwargs)
+
+        self.parent = parent
