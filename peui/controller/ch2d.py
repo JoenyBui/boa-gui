@@ -1,6 +1,7 @@
 import wx
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
+from ..form.file import SaveXYDialog
 
 from . import ChildController
 
@@ -8,8 +9,18 @@ __author__ = 'jbui'
 
 
 class Chart2dController(ChildController):
+    """
+    Chart 2d controller.
 
+    """
     def __init__(self, parent, view, figure_setting=None):
+        """
+
+        :param parent:
+        :param view:
+        :param figure_setting:
+        :return:
+        """
         ChildController.__init__(self, parent, view)
 
         if figure_setting:
@@ -18,12 +29,22 @@ class Chart2dController(ChildController):
             self.figure_setting = FigureSetting()
 
     def do_layout(self):
+        """
+        Draw the chart 2d data.
+
+        :return:
+        """
+        # Grab project data.
         data = self.parent.project.data
 
-        self.view.axes.plot(data[0], data[1])
+        # Loop through the data set to have multiple plots.
+        for i in range(0, len(data), 2):
+            self.view.axes.plot(data[i], data[i+1])
 
+        # Call the binding for custom toolbar figure.
         self.bind_toolbar_figure()
 
+        # Update figure text.
         self.update_text()
 
     def update_text(self):
@@ -35,6 +56,7 @@ class Chart2dController(ChildController):
         tb = self.view.toolbar
 
         tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
+        tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
 
     def update_layout(self):
         pass
@@ -53,3 +75,18 @@ class Chart2dController(ChildController):
 
             self.update_text()
 
+    def on_click_save_xy_data(self, event):
+        """
+        On click save xy data.
+
+        :param event:
+        :return:
+        """
+        dlg = SaveXYDialog(self.view)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+
+            self.view.save_xy_data(path)
+
+        dlg.Destroy()

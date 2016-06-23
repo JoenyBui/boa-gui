@@ -58,6 +58,10 @@ class CustomMenuBar(wx.MenuBar):
 
                 sub_menu_object.AppendItem(self.menus[item['id']])
 
+                # Add Check Status if ITEM Check.
+                if item.get('kind') == wx.ITEM_CHECK:
+                    if item.get('checked'):
+                        mi.Check(True)
         else:
             sub_menu_object = None
 

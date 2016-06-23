@@ -1,6 +1,7 @@
 import random
 
 import numpy as np
+import pandas as pd
 
 import wx
 
@@ -54,6 +55,30 @@ class Chart2d(wx.Panel):
 
         if not local:
             self.controller.do_layout()
+
+    def save_xy_data(self, pathname):
+        """
+        Save data file to csv x, y.
+
+        :param pathname: file path name
+        :return:
+        """
+        data = []
+
+        for line in self.axes.lines:
+            x = line.get_xdata()
+            y = line.get_ydata()
+
+            data.append(x)
+            data.append(y)
+
+        # df = pd.DataFrame(np.array(data).transpose())
+        # df.to_csv(pathname)
+        try:
+            np.savetxt(pathname, np.array(data).transpose(), delimiter=',')
+        except TypeError as e:
+            print(e)
+            wx.MessageBox('TypeError: Data is not aligned and cannot be saved as csv.')
 
     def plot(self, xs, ys, *args, **kwargs):
         """

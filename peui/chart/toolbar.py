@@ -28,16 +28,22 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         self.pan_percentage = pan_percentage
 
         # add new toolbar buttons
+        self.AddSimpleTool(self.ON_CUSTOM_DPLOT,
+                           _load_bitmap('qt4_editor_options.png'),
+                           'Save XY',
+                           'Save XY to csv.')
+
         self.AddSimpleTool(self.ON_CUSTOM_FIGURE_SETTING,
                            _load_bitmap('hand.xpm'),
                            'Open figure setting',
                            'Open figure setting.')
         # wx.EVT_TOOL(self, self.ON_CUSTOM_FIGURE_SETTING, self._on_custom_figure_setting)
-        #
-        self.AddSimpleTool(self.ON_CUSTOM_DPLOT,
-                           wx.Bitmap(ICONS['dplot']),
-                           'DPLOT',
-                           'DPLOT')
+
+
+        # self.AddSimpleTool(self.ON_CUSTOM_DPLOT,
+        #                    wx.Bitmap(ICONS['dplot']),
+        #                    'DPLOT',
+        #                    'DPLOT')
 
         self.AddSeparator()
         self.AddStretchableSpace()

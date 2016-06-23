@@ -14,70 +14,23 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     """
 
-    def __init__(self, parent, event_on_select=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, combobox=None, event_on_select=None, layout=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, event_on_select=event_on_select, layout=layout, *args, **kwargs)
-        #
-        # self.parent = parent
-        # self.hsizer = None
-
-        # self.ID_LABEL = None
-
-        # if layout:
-        #     self.layout = layout
-        # else:
-        #     self.layout = LayoutDimensions()
-
-        label_width = self.layout.widths[0]
-        cb_width = self.layout.widths[1]
-
-        # Establish the label.
-        # if kwargs.get('label'):
-        #     self.label = kwargs.get('label')
-        # else:
-        #     if kwargs.get('name'):
-        #         self.label = wx.StaticText(self.parent,
-        #                                    label=kwargs.get('name'),
-        #                                    size=(label_width, self.layout.height))
-        #     else:
-        #         self.label = wx.StaticText(self.parent,
-        #                                    label="TextBox Label:",
-        #                                    size=(label_width, self.layout.height))
 
         # Establish the combobox.
-        self.combobox = kwargs.get('combobox', None)
-        if self.combobox:
-            self.combobox.SetSize(wx.BoxSizer(cb_width, self.layout.height))
+        if combobox:
+            self.combobox = combobox
+        else:
+            self.combobox = SmartComboBox(self)
 
         if event_on_select:
             self.combobox.Bind(wx.EVT_COMBOBOX, event_on_select)
 
-        # self.tooltip = kwargs.get('tooltip', SuperToolTip)
-        #
-        # # Call do_layout after you have populate the label, textbox, and/or postbox
-        # self.border_space = kwargs.get('border_space', 10)
-        # self.border_space_label = kwargs.get('border_space_label', self.border_space)
-        # self.border_space_textbox = kwargs.get('border_space_textbox', self.border_space)
-        # self.border_space_postbox = kwargs.get('border_space_postbox', self.border_space)
-
         self.do_layout()
-
-    # def do_layout(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     if self.label:
-    #         self.Add(self.label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_label)
-    #         # self.Add(self.label, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_label)
-    #
-    #     if self.combobox:
-    #         # self.Add(self.combobox, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, self.border_space_postbox)
-    #         self.Add(self.combobox, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, self.border_space_postbox)
-    #
-    #     self.AddStretchSpacer()
 
     def get_value(self):
         """
+        Grab the value.
 
         :return:
         """

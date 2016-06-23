@@ -138,8 +138,11 @@ class MainController(object):
     def add_pane(self, panel, key, area=None, name=None):
         """
         Add Pane to the main view.
-        :param key:
+
         :param panel:
+        :param key:
+        :param area:
+        :param name:
         :return:
         """
         self.windows[key] = panel
@@ -154,9 +157,11 @@ class MainController(object):
     def add_page(self, page, key, name, close=True):
         """
         Add page to the central view.
+
         :param page:
         :param key:
         :param name:
+        :param close:
         :return:
         """
         self.windows[key] = page
@@ -164,7 +169,6 @@ class MainController(object):
         pane = self.notebook.AddPage(page, name)
 
         if not close:
-
             ctrl, idx = self.notebook.FindTab(page)
 
             self.notebook.SetCloseButton(idx, False)
@@ -177,6 +181,7 @@ class MainController(object):
     def set_key(self, key):
         """
         Establish the menu bar items.
+
         :param key:
         :return:
         """
@@ -292,6 +297,8 @@ class MainController(object):
         pane = self.frame.mgr.GetPane(ctrl)
 
         pane.Show(not pane.IsShown())
+
+        self.frame.mgr.Update()
 
     def show_page(self, ctrl):
         ctrl, idx = self.notebook.FindTab(ctrl)

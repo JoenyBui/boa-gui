@@ -17,8 +17,20 @@ class IntSmartBox(SmartTextBox):
     """
     Integer Smart Box.
     """
-    def __init__(self, parent, key_up=None, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, key_up=key_up, *args)
+    def __init__(self, parent, signs=False, format_error=None, key_up=None, message=None, *args, **kwargs):
+        """
+        Integer Smart Box.s
+
+        :param parent:
+        :param signs:
+        :param format_error:
+        :param key_up:
+        :param message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
         self.fmt = get_number_fmt(signs=kwargs.get('signs'), decimal=False, exponential=False)
 
@@ -34,6 +46,8 @@ class IntSmartBox(SmartTextBox):
     def on_text(self, event=None):
         """
         Check Validity of the data.
+
+        :param event:
         """
         val = self.GetValue()
         values, src = parse_number(val, self.fmt)
@@ -53,35 +67,67 @@ class IntSmartBox(SmartTextBox):
         event.Skip()
 
     def set_normal_color(self):
+        """
+        Set the normal color
+
+        """
         self.SetBackgroundColour(self.color_normal)
 
     def set_format_error_color(self):
+        """
+        Set the format color
+
+        """
         self.SetBackgroundColour(self.color_format_error)
 
     def set_range_error_color(self):
+        """
+        Set the background color
+
+        """
         self.SetBackgroundColour(self.color_range_error)
 
 
 class IntInputLayout(SmartInputLayout):
     """
-    IntBox Layout.
+    Int Input Layout.
+
     """
-    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None,
+                 layout=None, textbox=None, postbox=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param value:
+        :param unit:
+        :param unit_system:
+        :param type:
+        :param max:
+        :param min:
+        :param layout:
+        :param textbox:
+        :param postbox:
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
         SmartInputLayout.__init__(self, parent, max=max, min=min, layout=layout, *args, **kwargs)
 
-        # self.label = kwargs.get('label', 'Input Label:')
-
-        if kwargs.get('textbox'):
-            self.textbox = kwargs.get('textbox')
+        if textbox:
+            self.textbox = textbox
         else:
             self.textbox = IntSmartBox(parent, **kwargs)
+
+        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
 
         if value:
             self.textbox.Value = str(value)
 
-        if kwargs.get('postbox'):
-            self.postbox = kwargs.get('postbox')
+        if postbox:
+            self.postbox = postbox
+            # self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
+
             self.postbox.unit_system = unit_system
 
             if type:
@@ -120,6 +166,13 @@ class IntInputLayout(SmartInputLayout):
         self.do_layout()
 
     def set_value(self, value, post=None, label=None):
+        """
+
+        :param value:
+        :param post:
+        :param label:
+        :return:
+        """
         if value:
             self.textbox.Value = str(value)
 
@@ -154,6 +207,10 @@ class IntInputLayout(SmartInputLayout):
         return int(conversion_factor * int(self.textbox.Value))
 
     def validate(self):
+        """
+
+        :return:
+        """
         return False
 
 
@@ -184,6 +241,9 @@ class IntRangeValidator(wx.PyValidator):
     def Clone(self, *args, **kwargs):
         """
         Require override.
+
+        :param args:
+        :param kwargs:
         """
         return IntRangeValidator(
             signs=self.signs,
@@ -194,6 +254,10 @@ class IntRangeValidator(wx.PyValidator):
     def Validate(self, win, *args, **kwargs):
         """
         Override called to validate the window's value.
+
+        :param win:
+        :param args:
+        :param kwargs:
         """
         txtCtrl = self.GetWindow()
         val = txtCtrl.GetValue()
@@ -213,6 +277,11 @@ class IntRangeValidator(wx.PyValidator):
         return isValid
 
     def OnChar(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         txtCtrl = self.GetWindow()
         key = event.GetKeyCode()
         isDigit = False
@@ -257,7 +326,17 @@ class IntRangeValidator(wx.PyValidator):
         return
 
     def TransferToWindow(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         return True
 
     def TransferFromWindow(self):
+        """
+
+        :return:
+        """
         return True

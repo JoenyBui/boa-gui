@@ -11,6 +11,12 @@ class PathSmartBox(SmartTextBox):
 
     """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        """
         SmartTextBox.__init__(self, parent, *args, **kwargs)
 
         self.Bind(wx.EVT_KEY_DOWN, self.key_down)
@@ -24,7 +30,7 @@ class PathInputLayout(SmartInputLayout):
     Path Input Layout.
 
     """
-    def __init__(self, parent, layout=None, *args, **kwargs):
+    def __init__(self, parent, textbox=None, postbox=None, layout=None, *args, **kwargs):
         """
 
         :param parent:
@@ -37,15 +43,19 @@ class PathInputLayout(SmartInputLayout):
 
         # self.label = kwargs.get('label', 'Path:')
 
-        if kwargs.get('textbox'):
-            self.textbox = kwargs.get('textbox')
+        if textbox:
+            self.textbox = textbox
         else:
             self.textbox = PathSmartBox(parent)
 
-        if kwargs.get('postbox'):
-            self.postbox = kwargs.get('postbox')
+        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
+
+        if postbox:
+            self.postbox = postbox
         else:
             self.postbox = wx.Button(parent, id=wx.ID_ANY, size=(24, 24))
+
+        # self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
 
         if self.postbox:
             self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
@@ -54,9 +64,16 @@ class PathInputLayout(SmartInputLayout):
         self.do_layout()
 
     def pick_folder_path(self, event):
+        """
+        Pick the folder path.
+
+        :param event:
+        :return:
+        """
         dlg = wx.DirDialog(self.parent)
 
-        if dlg.ShowModal():
+        if dlg.ShowModal() == wx.ID_OK:
+            # Change the path string..
             self.textbox.SetValue(dlg.GetPath())
 
         dlg.Destroy()

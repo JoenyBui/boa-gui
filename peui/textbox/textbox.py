@@ -9,8 +9,8 @@ class TextSmartBox(SmartTextBox):
     """
     Text Smart Box.
     """
-    def __init__(self, parent, key_up=None, *args, **kwargs):
-        SmartTextBox.__init__(self, parent, key_up=key_up, *args, **kwargs)
+    def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
+        SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
 
 class TextInputLayout(SmartInputLayout):
@@ -36,6 +36,8 @@ class TextInputLayout(SmartInputLayout):
             self.textbox = textbox
         else:
             self.textbox = TextSmartBox(parent)
+
+        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
 
         if value:
             self.textbox.Value = str(value)
