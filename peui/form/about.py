@@ -15,6 +15,12 @@ class AboutDialog(wx.AboutDialogInfo):
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."""
 
     def __init__(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.AboutDialogInfo.__init__(self)
 
         if kwargs.get('name'):
@@ -37,4 +43,8 @@ class AboutDialog(wx.AboutDialogInfo):
             self.AddDocWriter(kwargs.get('writer'))
 
     def show(self):
+        """
+
+        :return:
+        """
         wx.AboutBox(self)

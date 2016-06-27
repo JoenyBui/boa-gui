@@ -24,6 +24,10 @@ class PropertyGridController(BaseController):
         self.cells = dict()
 
     def do_layout(self):
+        """
+
+        :return:
+        """
         item = self.view.add_category_property('General Information')
 
         self.cells['name'] = self.view.add_string_property('File Name', 'name', self.parent.project.name, 'Project File Name.')
@@ -31,12 +35,24 @@ class PropertyGridController(BaseController):
         self.cells['project_folder'] = self.view.add_file_property('Project Path', 'project_folder', self.parent.project.project_folder, 'Project Folder')
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         self.cells['name'].m_value = self.parent.project.name
         self.cells['author'].m_value = self.parent.project.author
         self.cells['project_folder'].m_value = self.parent.project.project_folder
 
     def refresh(self):
+        """
+
+        :return:
+        """
         self.update_layout()
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass

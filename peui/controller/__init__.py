@@ -7,13 +7,23 @@ __author__ = 'jbui'
 
 
 class BaseController(object):
+    """
+
+    """
     __metaclass__ = ABCMeta
 
     def __init__(self, **kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
         self.title = kwargs.get('title', '')
 
     @abstractmethod
     def sync_data(self):
+        ""
+
         pass
 
     def register_two_way_bind(self, view_ctrl, view_message, view_function,
@@ -48,9 +58,18 @@ class BaseController(object):
 
 
 class ChildController(BaseController):
+    """
+
+    """
     __metaclass__ = ABCMeta
 
     def __init__(self, parent, view):
+        """
+
+        :param parent:
+        :param view:
+        :return:
+        """
         BaseController.__init__(self)
 
         self.parent = parent
@@ -58,14 +77,26 @@ class ChildController(BaseController):
 
     @abstractmethod
     def do_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     @abstractmethod
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     @abstractmethod
     def refresh(self):
+        """
+
+        :return:
+        """
         pass
 
 

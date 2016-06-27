@@ -25,6 +25,13 @@ class MainController(object):
     Mixins are defined right to left.
     """
     def __init__(self, project, master_key, **kwargs):
+        """
+
+        :param project:
+        :param master_key:
+        :param kwargs:
+        :return:
+        """
         self.project = project
 
         # Add controller to project
@@ -55,17 +62,33 @@ class MainController(object):
 
     @property
     def evt_new_project(self):
+        """
+
+        :return:
+        """
         return 'EVT_NEW_PROJECT'
 
     @property
     def evt_open_project(self):
+        """
+
+        :return:
+        """
         return 'EVT_OPEN_PROJECT'
 
     @property
     def evt_refresh_view(self):
+        """
+
+        :return:
+        """
         return 'EVT_REFRESH_VIEW'
 
     def subscribe_methods(self):
+        """
+
+        :return:
+        """
         pub.subscribe(self.new_project, self.evt_new_project)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
         pub.subscribe(self.refresh_open_project, self.evt_open_project)
@@ -218,6 +241,11 @@ class MainController(object):
         self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
     def on_file_history(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         fileNum = event.GetId() - wx.ID_FILE1
         path = self.filehistory.GetHistoryFile(fileNum)
         self.filehistory.AddFileToHistory(path)  # move up the list
@@ -257,15 +285,33 @@ class MainController(object):
         self.refresh()
 
     def save_project(self, path):
+        """
+
+        :param path:
+        :return:
+        """
         self.project.save(path)
 
     def open_project(self, path):
+        """
+
+        :param path:
+        :return:
+        """
         self.project.load(path)
 
     def refresh_open_project(self):
+        """
+
+        :return:
+        """
         self.refresh_clear_project()
 
     def refresh_clear_project(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):

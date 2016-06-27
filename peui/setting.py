@@ -11,6 +11,11 @@ class Setting(object):
 
     """
     def __init__(self, **kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
         self.keys = {}
 
         self.folder = kwargs.get('folder', '.peui')
@@ -40,56 +45,111 @@ class Setting(object):
 
     @property
     def author(self):
+        """
+
+        :return:
+        """
         return self.keys.get('author', getpass.getuser())
 
     @author.setter
     def author(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.keys['author'] = value
 
     @property
     def project_name(self):
+        """
+
+        :return:
+        """
         return self.keys.get('project_name', 'Project')
 
     @project_name.setter
     def project_name(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.keys['project_name'] = value
 
     @property
     def path(self):
+        """
+
+        :return:
+        """
         return self.keys.get('path', self.get_home_folder())
 
     @path.setter
     def path(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.keys['path'] = value
 
     @property
     def efile(self):
+        """
+
+        :return:
+        """
         return self.keys.get('efile', 'FILE')
 
     @efile.setter
     def efile(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.keys['efile'] = value
 
     @property
     def ekey(self):
+        """
+
+        :return:
+        """
         return self.keys.get('ekey', 'KEY')
 
     @ekey.setter
     def ekey(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.keys['ekey'] = value
 
     @property
     def esignature(self):
+        """
+
+        :return:
+        """
         return self.keys.get('esignature', 'SIGNATURE')
 
     @esignature.setter
     def esignature(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.keys['esignature'] = value
 
     @staticmethod
     def get_home_folder():
         """
         Get the home folder.
+
         :return:
         """
         temp_folder = os.path.expanduser('~')
@@ -103,6 +163,7 @@ class Setting(object):
     def get_temp_folder(self, folder):
         """
         Get temporary folder.
+
         :return:
         """
         temp_folder = self.get_home_folder()
@@ -123,6 +184,10 @@ class Setting(object):
             self.keys = json.load(data_file)
 
     def save_to_settings(self):
+        """
+
+        :return:
+        """
         self.save(self.file)
 
     def save(self, file_path):

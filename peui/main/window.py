@@ -16,6 +16,7 @@ class MainWindow(wx.Frame):
     def __init__(self, parent, controller, title='', width=800, height=600, **kwargs):
         """
         Main Window.
+
         :param parent:
         :param controller:
         :param title:
@@ -50,6 +51,7 @@ class MainWindow(wx.Frame):
     def add_pane(self, panel, arg1=None, arg2=None, target=None):
         """
         Add the pane panel.
+
         :param panel:
         :param arg1: AuiPaneInfo or an integer value (direction) wx.LEFT, wx.RIGHT, wx.BOTTOM, wx.TOP, wx.CENTER
         :param arg2: AuiPaneInfo or a Point drop position
@@ -63,6 +65,7 @@ class MainWindow(wx.Frame):
     def refresh(self):
         """
         Refresh manager.
+
         :return:
         """
         self.mgr.Update()
@@ -70,6 +73,7 @@ class MainWindow(wx.Frame):
     def on_exit(self, event):
         """
         Exit Window.
+
         :param event:
         :return:
         """
@@ -78,6 +82,7 @@ class MainWindow(wx.Frame):
     def on_close(self, event):
         """
         Close Window.
+
         :param event:
         :return:
         """

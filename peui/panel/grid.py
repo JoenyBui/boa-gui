@@ -13,6 +13,7 @@ class PropGrid(propgrid.PropertyGrid):
     def __init__(self, parent, controller, local, *args, **kwargs):
         """
         Property grid view.
+
         :param parent: main frame
         :param controller:
         :param local: pass in the local controller for this view
@@ -36,7 +37,9 @@ class PropGrid(propgrid.PropertyGrid):
     def add_category_property(self, name, enabled=True, **kwargs):
         """
         Add category property.
+
         :param name:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -46,10 +49,12 @@ class PropGrid(propgrid.PropertyGrid):
     def add_file_property(self, name, key, value, status, enabled=True, **kwargs):
         """
         Add file property.
+
         :param name:
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -71,6 +76,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -92,6 +98,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -113,6 +120,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -134,6 +142,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -156,6 +165,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -189,6 +199,9 @@ class PropGrid(propgrid.PropertyGrid):
     def add_multi_button(self, enabled=True, **kwargs):
         """
         Add multi-button.
+
+        :param enabled:
+        :param kwargs:
         :return:
         """
         buttons = propgrid.PGMultiButton(self, wx.Size(10, 10))

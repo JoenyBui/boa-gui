@@ -9,6 +9,7 @@ __author__ = 'jbui'
 
 class GeneralDialog(wx.Dialog):
     """
+    General Dialog that should be inherited.
 
     Flags
         wx.OK               Creates an OK button
@@ -19,6 +20,15 @@ class GeneralDialog(wx.Dialog):
         wx.NO_DEFAULT       Sets the No button as the default
     """
     def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+        """
+
+        :param parent:
+        :param controller:
+        :param local:
+        :param btn_flags:
+        :param kwargs:
+        :return:
+        """
         wx.Dialog.__init__(self, parent, **kwargs)
 
         self.parent = parent
@@ -41,9 +51,19 @@ class GeneralDialog(wx.Dialog):
         self.Fit()
 
     def add_layout(self, key, object):
+        """
+
+        :param key:
+        :param object:
+        :return:
+        """
         self.layouts[key] = object
 
     def do_layout(self):
+        """
+
+        :return:
+        """
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
         self.layouts['float'] = FloatInputLayout(self, label='Float',

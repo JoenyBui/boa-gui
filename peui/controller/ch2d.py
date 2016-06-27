@@ -48,26 +48,51 @@ class Chart2dController(ChildController):
         self.update_text()
 
     def update_text(self):
+        """
+
+        :return:
+        """
         self.view.axes.set_title(self.figure_setting.title)
         self.view.axes.set_ylabel(self.figure_setting.y_title)
         self.view.axes.set_xlabel(self.figure_setting.x_title)
 
     def bind_toolbar_figure(self):
+        """
+
+        :return:
+        """
         tb = self.view.toolbar
 
         tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
         tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):
+        """
+
+        :return:
+        """
         pass
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass
 
     def on_custom_figure_setting(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         dlg = FigureSettingDialog(self.view, self, setting=self.figure_setting)
 
         if dlg.ShowModal() == wx.ID_OK:

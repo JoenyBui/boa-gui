@@ -7,8 +7,18 @@ __author__ = 'jbui'
 
 
 class Console(wx.Panel):
+    """
+    Output console info.
 
+    """
     def __init__(self, parent, controller, local=None):
+        """
+
+        :param parent:
+        :param controller:
+        :param local:
+        :return:
+        """
         wx.Panel.__init__(self, parent, wx.ID_ANY)
 
         # Add a panel so it looks the correct on all platforms
@@ -36,18 +46,42 @@ class Console(wx.Panel):
 
 
 class ConsoleController(ChildController):
+    """
 
+    """
     def __init__(self, parent, view):
+        """
+
+        :param parent:
+        :param view:
+        :return:
+        """
         ChildController.__init__(self, parent, view)
 
     def do_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):
+        """
+
+        :return:
+        """
         pass
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass

@@ -83,6 +83,7 @@ class ProgressDialog(wx.Dialog):
         """
         Cancel Thread.
 
+        :param event:
         """
         self.thread.stop()
 
@@ -90,7 +91,6 @@ class ProgressDialog(wx.Dialog):
         """
 
         :param value:
-        :return:
         """
         lbl = "%d/%d" % (value, self.max_value)
         self.field2_lbl.SetLabelText(lbl)
@@ -104,9 +104,16 @@ class ProgressDialog(wx.Dialog):
         self.Destroy()
 
     def end_modal(self):
+        """
+        """
         self.EndModal(retCode=wx.ID_OK)
 
     def ShowModal(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        """
         self.thread.start()
 
         return wx.Dialog.ShowModal(self, *args, **kwargs)

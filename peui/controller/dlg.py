@@ -15,22 +15,41 @@ class DlgController(object):
     Mixins for main controller.
     """
     def __init__(self, parent):
+        """
+
+        :param parent:
+        :return:
+        """
         self.parent = parent
 
     @property
     def frame(self):
+        """
+
+        :return:
+        """
         return self.parent.frame
 
     @frame.setter
     def frame(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.parent.frame = value
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass
 
     def new_project_dialog(self, event):
         """
         New Project Dialog.
+
         :param event:
         :return:
         """
@@ -47,6 +66,7 @@ class DlgController(object):
     def open_project_dialog(self, event):
         """
         Open Project Dialog.
+
         :param event:
         :return:
         """
@@ -71,6 +91,7 @@ class DlgController(object):
     def save_project_dialog(self, event):
         """
         Save Project Dialog.
+
         :param event:
         :return:
         """
@@ -87,6 +108,7 @@ class DlgController(object):
     def save_as_project_dialog(self, event):
         """
         Save As Project Dialog.
+
         :param event:
         :return:
         """
@@ -102,6 +124,7 @@ class DlgController(object):
     def about_dialog(self, event):
         """
         About Model Dialog.
+
         :param event:
         :return:
         """

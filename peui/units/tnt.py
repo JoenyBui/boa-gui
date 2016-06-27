@@ -16,6 +16,12 @@ DEFAULT_TNT_LIST = [
 
 
 def get_tnt_conversion_factor(origin, destination):
+    """
+
+    :param origin:
+    :param destination:
+    :return:
+    """
     origin_factor = TNT_KEY.get(origin)
     destination_factor = TNT_KEY.get(destination)
 
