@@ -59,7 +59,7 @@ class DlgController(object):
             self.parent.new_project(dlg.get_project())
 
             # Broadcast new project dialog.
-            pub.sendMessage(self.parent.evt_new_project)
+            pub.sendMessage(self.parent.evt_clear_controls)
 
         dlg.Destroy()
 

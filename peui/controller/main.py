@@ -84,12 +84,17 @@ class MainController(object):
         """
         return 'EVT_REFRESH_VIEW'
 
+    @property
+    def evt_clear_controls(self):
+        return 'EVT_CLEAR_CONTROLS'
+
     def subscribe_methods(self):
         """
 
         :return:
         """
         pub.subscribe(self.new_project, self.evt_new_project)
+        pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
         pub.subscribe(self.refresh_open_project, self.evt_open_project)
 
@@ -314,6 +319,17 @@ class MainController(object):
         """
         pass
 
+    def refresh_clear_controls(self):
+        """
+        Clear controls and remove tab.
+
+        :return:
+        """
+
+        for index in range(0, self.notebook.GetPageCount()):
+            # Loop and remove all the pages inside the viewer.
+            self.notebook.DeletePage(0)
+
     def refresh(self):
         """
         Total refresh of all the components.
@@ -370,6 +386,7 @@ class MainController(object):
 
     def exit_project(self, event):
         """
+        Exit the application.
 
         :param event:
         """
