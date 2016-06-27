@@ -39,6 +39,9 @@ class DlgController(object):
         if dlg.ShowModal():
             self.parent.new_project(dlg.get_project())
 
+            # Broadcast new project dialog.
+            pub.sendMessage(self.parent.evt_new_project)
+
         dlg.Destroy()
 
     def open_project_dialog(self, event):

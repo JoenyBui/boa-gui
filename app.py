@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 "PEC-GUI License Client",
+                                 title="PEC-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -143,7 +143,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 "PEC-GUI License Client",
+                                 title="PEC-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -159,7 +159,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 "PEC-GUI License Client",
+                                 title="PEC-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
