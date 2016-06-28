@@ -100,3 +100,10 @@ class CustomToolBarController(ChildController):
         :return:
         """
         pass
+
+    def clear_control(self):
+        """
+
+        :return:
+        """
+        pass

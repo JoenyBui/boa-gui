@@ -325,6 +325,8 @@ class MainController(object):
 
         :return:
         """
+        for child in self.childs:
+            child.clear_control()
 
         for index in range(0, self.notebook.GetPageCount()):
             # Loop and remove all the pages inside the viewer.

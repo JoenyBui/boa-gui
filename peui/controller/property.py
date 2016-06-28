@@ -56,3 +56,7 @@ class PropertyGridController(BaseController):
         :return:
         """
         pass
+
+    def clear_control(self):
+        pass
+

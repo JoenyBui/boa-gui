@@ -87,6 +87,13 @@ class Chart2dController(ChildController):
         """
         pass
 
+    def clear_control(self):
+        """
+        Clear the control.
+
+        """
+        pass
+
     def on_custom_figure_setting(self, event):
         """
 
