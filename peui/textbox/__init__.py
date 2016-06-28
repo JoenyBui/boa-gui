@@ -51,7 +51,7 @@ class LayoutDimensions(object):
         # minimal sizer inferior to the other or not. The following sample shows a dialog with three buttons, the first
         # one has a stretch factor of 1 and thus gets stretched, whereas the other two buttons have a stretch factor of
         # zero and keep their initial width:
-        self.stretch_factor = kwargs.get('stretch_factor ', [])
+        self.stretch_factor = kwargs.get('stretch_factor', [])
 
         self.border_width = kwargs.get('border_width', [])
         self.flags = kwargs.get('flags', (wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, wx.ALIGN_CENTER))
