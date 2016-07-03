@@ -1,3 +1,4 @@
+from . import Unit, UNIT_MASS_KEY
 
 __author__ = 'jbui'
 
@@ -48,3 +49,18 @@ def get_mass_conversion_factor(origin, destination):
     destination_factor = MASS_KEY.get(destination)
 
     return destination_factor / origin_factor
+
+
+class MassUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_MASS_KEY
+        self.table = MASS_KEY
+
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+        self.metric_list = DEFAULT_METRIC_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_mass_conversion_factor(origin, destination)

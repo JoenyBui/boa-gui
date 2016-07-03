@@ -1,3 +1,4 @@
+from . import Unit, UNIT_PRESSURE_KEY
 
 __author__ = 'jbui'
 
@@ -55,3 +56,17 @@ def get_pressure_conversion_factor(origin, destination):
 
     return destination_factor / origin_factor
 
+
+class PressureUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_PRESSURE_KEY
+        self.table = PRESSURE_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_pressure_conversion_factor(origin, destination)

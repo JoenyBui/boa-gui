@@ -1,3 +1,4 @@
+from . import Unit, UNIT_AREA_KEY
 
 __author__ = 'jbui'
 
@@ -70,3 +71,21 @@ def get_area_conversion_factor(origin, destination):
     destination_factor = AREA_KEY.get(destination)
 
     return origin_factor / destination_factor
+
+
+class AreaUnit(Unit):
+    """
+    Area Unit
+
+    """
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_AREA_KEY
+        self.table = AREA_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL__LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_area_conversion_factor(origin, destination)

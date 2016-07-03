@@ -1,3 +1,4 @@
+from . import Unit, UNIT_INERTIA_KEY
 
 __author__ = 'jbui'
 
@@ -55,3 +56,18 @@ def get_inertia_conversion_factor(origin, destination):
     destination_factor = INERTIA_KEY.get(destination)
 
     return origin_factor / destination_factor
+
+
+class InertiaUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_INERTIA_KEY
+        self.table = INERTIA_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_inertia_conversion_factor(origin, destination)

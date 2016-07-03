@@ -1,3 +1,4 @@
+from . import Unit, UNIT_TORQUE_KEY
 
 __author__ = 'jbui'
 
@@ -19,6 +20,7 @@ DEFAULT_IMPERIAL_LIST = [
     'lb-in'
 ]
 
+# TODO: (Eyeunwana) This is not metric.  Go back and check the metric side and use that unit.
 DEFAULT_METRIC_LIST = [
     'lb-in'
 ]
@@ -36,3 +38,18 @@ def get_torque_conversion_factor(origin, destination):
     destination_factor = TORQUE_KEY.get(destination)
 
     return destination_factor / origin_factor
+
+
+class TorqueUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_TORQUE_KEY
+        self.table = TORQUE_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_torque_conversion_factor(origin, destination)

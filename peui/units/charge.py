@@ -1,3 +1,4 @@
+from . import Unit, UNIT_CHARGE_KEY
 
 __author__ = 'jbui'
 
@@ -74,3 +75,21 @@ def get_charge_conversion_factor(origin, destination):
     destination_factor = CHARGE_KEY.get(destination)
 
     return origin_factor / destination_factor
+
+
+class ChargeUnit(Unit):
+    """
+    Charge Unit
+
+    """
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_CHARGE_KEY
+        self.list = CHARGE_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_charge_conversion_factor(origin, destination)

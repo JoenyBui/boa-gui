@@ -1,3 +1,4 @@
+from . import Unit, UNIT_DENSITY_KEY
 
 __author__ = 'jbui'
 
@@ -62,3 +63,20 @@ def get_density_conversion_factor(origin, destination):
 
     return origin_factor / destination_factor
 
+
+class DensityUnit(Unit):
+    """
+    Density Unit
+
+    """
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_DENSITY_KEY
+        self.table = DENSITY_KEY
+
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+        self.metric_list = DEFAULT_METRIC_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_density_conversion_factor(origin, destination)

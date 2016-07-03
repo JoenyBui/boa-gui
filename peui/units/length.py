@@ -1,3 +1,4 @@
+from . import Unit, UNIT_LENGTH_KEY
 
 __author__ = 'jbui'
 
@@ -75,3 +76,19 @@ def get_length_conversion_factor(origin, destination):
     destination_factor = LENGTH_KEY.get(destination)
 
     return origin_factor / destination_factor
+
+
+class LengthUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_LENGTH_KEY
+        self.table = LENGTH_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_length_conversion_factor(origin, destination)
+
