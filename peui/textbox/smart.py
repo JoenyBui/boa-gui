@@ -396,6 +396,10 @@ class SmartInputLayout(wx.BoxSizer):
         size.Height = self.layout.overall_height
         self.SetMinSize(size)
 
+    def rename(self, name=None):
+        self.label = wx.StaticText(self.parent,
+                                   label=name)
+
     @property
     def next_id(self):
         nid = self._next_id

@@ -23,7 +23,11 @@ DEFAULT_MISC_LIST = [
     'lb-in/in',
     'in4/in',
     'in3/in',
-    'lb/ft'
+    'lb/ft',
+    'psi-ms2/in',
+    'psi/in',
+    'ms',
+    'in/ms'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
@@ -31,7 +35,11 @@ DEFAULT_IMPERIAL_LIST = [
     'lb-in/in',
     'in4/in',
     'in3/in',
-    'lb/ft'
+    'lb/ft',
+    'psi-ms2/in',
+    'psi/in',
+    'ms',
+    'in/ms'
 ]
 
 DEFAULT_METRIC_LIST = [
