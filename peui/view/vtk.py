@@ -8,8 +8,15 @@ __author__ = 'jbui'
 
 
 class VtkViewer(wx.Panel):
+    """
 
+    """
     def __init__(self, parent):
+        """
+
+        :param parent:
+        :return:
+        """
         wx.Panel.__init__(self, parent)
 
         # To Interact with the scene using the mouse use an instance of vtkRender.
@@ -29,6 +36,10 @@ class VtkViewer(wx.Panel):
         self.isploted = False
 
     def renderthis(self):
+        """
+
+        :return:
+        """
         # open a window and create a renderer
         self.widget.GetRenderWindow().AddRenderer(self.ren)
 

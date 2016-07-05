@@ -8,22 +8,25 @@ __author__ = 'jbui'
 
 class PropGrid(propgrid.PropertyGrid):
     """
+    Property Grid.
 
     """
-    def __init__(self, parent, controller, local, *args, **kwargs):
+    def __init__(self, parent, controller, local, size=(100, 50), *args, **kwargs):
         """
         Property grid view.
+
         :param parent: main frame
         :param controller:
         :param local: pass in the local controller for this view
+        :param size:
         :param args:
         :param kwargs:
         :return:
         """
-        if not kwargs.get('size'):
-            kwargs['size'] = (200, 150)
+        # if not kwargs.get('size'):
+        #     kwargs['size'] = (200, 150)
 
-        propgrid.PropertyGrid.__init__(self, parent, *args, **kwargs)
+        propgrid.PropertyGrid.__init__(self, parent, size=size, *args, **kwargs)
 
         if local:
             self.controller = local
@@ -36,7 +39,9 @@ class PropGrid(propgrid.PropertyGrid):
     def add_category_property(self, name, enabled=True, **kwargs):
         """
         Add category property.
+
         :param name:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -46,10 +51,12 @@ class PropGrid(propgrid.PropertyGrid):
     def add_file_property(self, name, key, value, status, enabled=True, **kwargs):
         """
         Add file property.
+
         :param name:
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -66,11 +73,13 @@ class PropGrid(propgrid.PropertyGrid):
 
     def add_int_property(self, name, key, value, status, enabled=True, **kwargs):
         """
+        Add integer property.
 
         :param name:
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -87,11 +96,13 @@ class PropGrid(propgrid.PropertyGrid):
 
     def add_string_property(self, name, key, value, status, enabled=True, **kwargs):
         """
+        Add string property.
 
         :param name:
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -108,11 +119,13 @@ class PropGrid(propgrid.PropertyGrid):
 
     def add_float_property(self, name, key, value, status, enabled=True, **kwargs):
         """
+        Add float property.
 
-        :param name:
+        :param name: title
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -129,11 +142,13 @@ class PropGrid(propgrid.PropertyGrid):
 
     def add_bool_property(self, name, key, value, status, enabled=True, **kwargs):
         """
+        Add boolean property.
 
         :param name:
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -151,11 +166,13 @@ class PropGrid(propgrid.PropertyGrid):
 
     def add_enum_property(self, name, key, value, status, enabled=True, **kwargs):
         """
+        Add enumerator property.
 
         :param name:
         :param key:
         :param value:
         :param status:
+        :param enabled:
         :param kwargs:
         :return:
         """
@@ -189,6 +206,9 @@ class PropGrid(propgrid.PropertyGrid):
     def add_multi_button(self, enabled=True, **kwargs):
         """
         Add multi-button.
+
+        :param enabled:
+        :param kwargs:
         :return:
         """
         buttons = propgrid.PGMultiButton(self, wx.Size(10, 10))
@@ -205,3 +225,11 @@ class PropGrid(propgrid.PropertyGrid):
             self.DisableProperty(key)
 
         return buttons
+
+    def delete_item(self, key):
+        """
+        Delete Item Property.
+
+        :param key:
+        """
+        self.DeleteProperty(key)

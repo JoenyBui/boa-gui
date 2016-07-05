@@ -25,6 +25,13 @@ class MainController(object):
     Mixins are defined right to left.
     """
     def __init__(self, project, master_key, **kwargs):
+        """
+
+        :param project:
+        :param master_key:
+        :param kwargs:
+        :return:
+        """
         self.project = project
 
         # Add controller to project
@@ -54,14 +61,40 @@ class MainController(object):
         self.subscribe_methods()
 
     @property
+    def evt_new_project(self):
+        """
+
+        :return:
+        """
+        return 'EVT_NEW_PROJECT'
+
+    @property
     def evt_open_project(self):
+        """
+
+        :return:
+        """
         return 'EVT_OPEN_PROJECT'
 
     @property
     def evt_refresh_view(self):
+        """
+
+        :return:
+        """
         return 'EVT_REFRESH_VIEW'
 
+    @property
+    def evt_clear_controls(self):
+        return 'EVT_CLEAR_CONTROLS'
+
     def subscribe_methods(self):
+        """
+
+        :return:
+        """
+        pub.subscribe(self.new_project, self.evt_new_project)
+        pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
         pub.subscribe(self.refresh_open_project, self.evt_open_project)
 
@@ -213,6 +246,11 @@ class MainController(object):
         self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
     def on_file_history(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         fileNum = event.GetId() - wx.ID_FILE1
         path = self.filehistory.GetHistoryFile(fileNum)
         self.filehistory.AddFileToHistory(path)  # move up the list
@@ -238,6 +276,7 @@ class MainController(object):
     def new_project(self, project):
         """
         New Project is transferred.
+
         :param project:
         :return:
         """
@@ -251,20 +290,52 @@ class MainController(object):
         self.refresh()
 
     def save_project(self, path):
+        """
+
+        :param path:
+        :return:
+        """
         self.project.save(path)
 
     def open_project(self, path):
+        """
+
+        :param path:
+        :return:
+        """
         self.project.load(path)
 
     def refresh_open_project(self):
+        """
+
+        :return:
+        """
         self.refresh_clear_project()
 
     def refresh_clear_project(self):
+        """
+
+        :return:
+        """
         pass
+
+    def refresh_clear_controls(self):
+        """
+        Clear controls and remove tab.
+
+        :return:
+        """
+        for child in self.childs:
+            child.clear_control()
+
+        for index in range(0, self.notebook.GetPageCount()):
+            # Loop and remove all the pages inside the viewer.
+            self.notebook.DeletePage(0)
 
     def refresh(self):
         """
         Total refresh of all the components.
+
         :return:
         """
         self.refresh_model()
@@ -273,6 +344,7 @@ class MainController(object):
     def refresh_view(self):
         """
         Refresh specifically the view.
+
         :return:
         """
         for child in self.childs:
@@ -284,6 +356,7 @@ class MainController(object):
     def refresh_model(self):
         """
         Refresh the model -> view.
+
         :return:
         """
         pass
@@ -291,6 +364,7 @@ class MainController(object):
     def show_pane(self, ctrl):
         """
         Switch pane view.
+
         :param ctrl:
         :return:
         """
@@ -301,6 +375,10 @@ class MainController(object):
         self.frame.mgr.Update()
 
     def show_page(self, ctrl):
+        """
+
+        :param ctrl:
+        """
         ctrl, idx = self.notebook.FindTab(ctrl)
         page = self.notebook.GetPage(idx)
         #TODO: Page is now shown.
@@ -309,6 +387,11 @@ class MainController(object):
         self.refresh_view()
 
     def exit_project(self, event):
+        """
+        Exit the application.
+
+        :param event:
+        """
         self.frame.Close(True)
         self.frame.Destroy()
         event.Skip()

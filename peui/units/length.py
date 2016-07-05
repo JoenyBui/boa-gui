@@ -1,19 +1,4 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
+from . import Unit, UNIT_LENGTH_KEY
 
 __author__ = 'jbui'
 
@@ -82,6 +67,7 @@ DEFAULT_METRIC_LIST = [
 def get_length_conversion_factor(origin, destination):
     """
     Get the length conversion factor.
+
     :param origin:
     :param destination:
     :return:
@@ -90,3 +76,19 @@ def get_length_conversion_factor(origin, destination):
     destination_factor = LENGTH_KEY.get(destination)
 
     return origin_factor / destination_factor
+
+
+class LengthUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_LENGTH_KEY
+        self.table = LENGTH_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_length_conversion_factor(origin, destination)
+

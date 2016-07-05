@@ -402,12 +402,20 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def next_id(self):
+        """
+
+        :return:
+        """
         nid = self._next_id
         self._next_id += 1
         return nid
 
     @property
     def label(self):
+        """
+
+        :return:
+        """
         if self.INDEX_LABEL is None:
             return None
 
@@ -415,6 +423,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @label.setter
     def label(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -423,6 +436,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def textbox(self):
+        """
+
+        :return:
+        """
         if self.INDEX_TEXTBOX is None:
             return None
 
@@ -430,6 +447,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @textbox.setter
     def textbox(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -438,6 +460,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def postbox(self):
+        """
+
+        :return:
+        """
         if self.INDEX_POSTBOX is None:
             return None
 
@@ -445,6 +471,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @postbox.setter
     def postbox(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -453,6 +484,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def combobox(self):
+        """
+
+        :return:
+        """
         if self.INDEX_COMBOBOX is None:
             return None
 
@@ -460,6 +495,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @combobox.setter
     def combobox(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -630,6 +670,16 @@ class SmartButton(wx.Button):
 
     """
     def __init__(self, parent, label='', evt_button=None, message=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param label:
+        :param evt_button:
+        :param message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.Button.__init__(self, parent, label=label, *args, **kwargs)
 
         if evt_button:

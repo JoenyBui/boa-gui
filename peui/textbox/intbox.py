@@ -16,6 +16,7 @@ __author__ = 'jbui'
 class IntSmartBox(SmartTextBox):
     """
     Integer Smart Box.
+
     """
     def __init__(self, parent, signs=False, format_error=None, key_up=None, message=None, *args, **kwargs):
         """

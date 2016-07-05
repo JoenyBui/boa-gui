@@ -1,19 +1,4 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
+from . import Unit, UNIT_MASS_KEY
 
 __author__ = 'jbui'
 
@@ -54,6 +39,7 @@ DEFAULT_METRIC_LIST = [
 
 def get_mass_conversion_factor(origin, destination):
     """
+    Get mass conversion factor.
 
     :param origin:
     :param destination:
@@ -63,3 +49,18 @@ def get_mass_conversion_factor(origin, destination):
     destination_factor = MASS_KEY.get(destination)
 
     return destination_factor / origin_factor
+
+
+class MassUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_MASS_KEY
+        self.table = MASS_KEY
+
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+        self.metric_list = DEFAULT_METRIC_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_mass_conversion_factor(origin, destination)

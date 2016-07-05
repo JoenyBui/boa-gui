@@ -22,6 +22,10 @@ class PathSmartBox(SmartTextBox):
         self.Bind(wx.EVT_KEY_DOWN, self.key_down)
 
     def key_down(self, event=None):
+        """
+
+        :param event:
+        """
         pass
 
 
@@ -34,6 +38,8 @@ class PathInputLayout(SmartInputLayout):
         """
 
         :param parent:
+        :param textbox:
+        :param postbox:
         :param layout:
         :param args:
         :param kwargs:

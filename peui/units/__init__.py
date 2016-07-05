@@ -1,13 +1,3 @@
-from .area import get_area_conversion_factor
-from .charge import get_charge_conversion_factor
-from .inertia import get_inertia_conversion_factor
-from .length import get_length_conversion_factor
-from .mass import get_mass_conversion_factor
-from .pressure import get_pressure_conversion_factor
-from .volume import get_volume_conversion_factor
-from .tnt import get_tnt_conversion_factor
-from .density import get_density_conversion_factor
-from .torque import get_torque_conversion_factor
 
 __author__ = 'jbui'
 
@@ -51,6 +41,18 @@ def get_base_value(type, value, unit):
     :param unit:
     :return:
     """
+    from .area import get_area_conversion_factor
+    from .charge import get_charge_conversion_factor
+    from .inertia import get_inertia_conversion_factor
+    from .length import get_length_conversion_factor
+    from .mass import get_mass_conversion_factor
+    from .pressure import get_pressure_conversion_factor
+    from .volume import get_volume_conversion_factor
+    from .tnt import get_tnt_conversion_factor
+    from .density import get_density_conversion_factor
+    from .torque import get_torque_conversion_factor
+
+
     value = float(value)
 
     if type == UNIT_AREA_KEY:
@@ -77,3 +79,20 @@ def get_base_value(type, value, unit):
         return value
     else:
         return None
+
+
+class Unit(object):
+    """
+    Unit Object
+
+    """
+    def __init__(self):
+        self.key = None
+        self.table = None
+
+        self.metric_list = None
+        self.imperial_list = None
+
+    def get_conversion_factor(self, origin, destination):
+        pass
+

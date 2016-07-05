@@ -1,3 +1,5 @@
+from . import Unit, UNIT_TNT_KEY
+
 __author__ = 'jbui'
 
 FACTOR_TNT_TON = 1
@@ -16,7 +18,27 @@ DEFAULT_TNT_LIST = [
 
 
 def get_tnt_conversion_factor(origin, destination):
+    """
+
+    :param origin:
+    :param destination:
+    :return:
+    """
     origin_factor = TNT_KEY.get(origin)
     destination_factor = TNT_KEY.get(destination)
 
     return destination_factor / origin_factor
+
+
+class TntUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_TNT_KEY
+        self.table = TNT_KEY
+
+        self.imperial_list = DEFAULT_TNT_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_tnt_conversion_factor(origin, destination)

@@ -68,6 +68,11 @@ def cast_float(string):
 
 
 def cast_length_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = LENGTH_KEY.keys()
 
     if string in possible_units:
@@ -79,6 +84,11 @@ def cast_length_unit(string):
 
 
 def cast_area_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = AREA_KEY.keys()
 
     if string in possible_units:
@@ -90,6 +100,11 @@ def cast_area_unit(string):
 
 
 def cast_charge_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = CHARGE_KEY.keys()
 
     if string in possible_units:
@@ -101,6 +116,11 @@ def cast_charge_unit(string):
 
 
 def cast_inertia_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = INERTIA_KEY.keys()
 
     if string in possible_units:
@@ -112,6 +132,11 @@ def cast_inertia_unit(string):
 
 
 def cast_mass_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = MASS_KEY.keys()
 
     if string in possible_units:
@@ -123,6 +148,11 @@ def cast_mass_unit(string):
 
 
 def cast_volume_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = VOLUME_KEY.keys()
 
     if string in possible_units:
@@ -134,6 +164,11 @@ def cast_volume_unit(string):
 
 
 def cast_pressure_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = PRESSURE_KEY.keys()
 
     if string in possible_units:
@@ -145,6 +180,11 @@ def cast_pressure_unit(string):
 
 
 def cast_density_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = DENSITY_KEY.keys()
 
     if string in possible_units:
@@ -156,6 +196,11 @@ def cast_density_unit(string):
 
 
 def cast_torque_unit(string):
+    """
+
+    :param string:
+    :return:
+    """
     possible_units = TORQUE_KEY.keys()
 
     if string in possible_units:

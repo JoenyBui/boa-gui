@@ -8,9 +8,16 @@ MB_ICON_SIZE = wx.Size(14, 14)
 class CustomMenuBar(wx.MenuBar):
     """
     Custom Menu Bar
-    """
 
+    """
     def __init__(self, parent, controller, **kwargs):
+        """
+
+        :param parent:
+        :param controller:
+        :param kwargs:
+        :return:
+        """
         wx.MenuBar.__init__(self)
         self.controller = controller
 
@@ -19,6 +26,7 @@ class CustomMenuBar(wx.MenuBar):
     def build_sub_menu(self, menu_item):
         """
         Build Sub Menu Items.
+
         :param menu_item:
         :return:
         """
@@ -70,7 +78,8 @@ class CustomMenuBar(wx.MenuBar):
     def set_menu_item(self, menus):
         """
         Set Menu Item.
-        :param menu_key:
+
+        :param menus:
         :return:
         """
         for menu in menus:

@@ -95,6 +95,11 @@ class FigureSettingDialog(GeneralDialog):
         return vsizer
 
     def button_ok_click(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         error = False
 
         #TODO: Need to bind the textbox with the data.
@@ -107,17 +112,33 @@ class FigureSettingDialog(GeneralDialog):
 
 
 class FigureSettingController(ChildController):
+    """
 
+    """
     def __init__(self, parent, view):
+        """
+
+        :param parent:
+        :param view:
+        :return:
+        """
         ChildController.__init__(self, parent, view)
 
         self.figure_setting = FigureSetting()
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         self.register_two_way_bind(
             self.view.layout['title'],
             self.figure_setting.title
         )
 
     def bind_textctrl_model(self):
+        """
+
+        :return:
+        """
         pass

@@ -21,6 +21,14 @@ class MatplotlibCustomToolbar(NavigationToolbar):
     ON_CUSTOM_DPLOT = wx.NewId()
 
     def __init__(self, canvas, chart, pan_tool=True, pan_percentage=0.5):
+        """
+
+        :param canvas:
+        :param chart:
+        :param pan_tool:
+        :param pan_percentage:
+        :return:
+        """
         NavigationToolbar.__init__(self, canvas)
 
         self.chart = chart
@@ -68,6 +76,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
     def _on_custom_pan_left(self, evt):
         """
         Pan the graph to the left.
+
         :param evt:
         :return:
         """
@@ -82,6 +91,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
     def _on_custom_pan_right(self, evt):
         """
         Pan the graph to the right.
+
         :param evt:
         :return:
         """
@@ -96,6 +106,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
     def _on_custom_pan_up(self, evt):
         """
         Pan the graph to the up.
+
         :param evt:
         :return:
         """
@@ -109,6 +120,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
     def _on_custom_pan_down(self, evt):
         """
         Pan the graph to the down.
+
         :param evt:
         :return:
         """

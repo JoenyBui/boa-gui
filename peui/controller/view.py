@@ -14,6 +14,11 @@ class ViewController(BaseController):
     Isolate the view controlling methods to this class controller.
     """
     def __init__(self, parent):
+        """
+
+        :param parent:
+        :return:
+        """
         BaseController.__init__(self)
 
         self.parent = parent
@@ -22,6 +27,10 @@ class ViewController(BaseController):
         self.show_page = parent.show_page
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass
 
     def view_tree_window(self, event=None):

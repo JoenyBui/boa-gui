@@ -97,35 +97,84 @@ class NewProjectDialog(wx.Dialog):
 
 
 class OpenProjectDialog(wx.FileDialog):
+    """
+
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.FileDialog.__init__(self, parent, "Open a file", os.getcwd(), "", "*.*", wx.OPEN, *args, **kwargs)
 
         self.parent = parent
 
 
 class SaveProjectDialog(wx.FileDialog):
+    """
+
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.FileDialog.__init__(self, parent, "Save project", os.getcwd(), "", "*.json", wx.SAVE | wx.OVERWRITE_PROMPT, *args, **kwargs)
 
         self.parent = parent
 
 
 class SaveAsProjectDialog(wx.FileDialog):
+    """
+
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.FileDialog.__init__(self, parent, "Save project as...", os.getcwd(), "", "*.json", wx.SAVE | wx.OVERWRITE_PROMPT, *args, **kwargs)
 
         self.parent = parent
 
 
 class CloseProjectDialog(wx.Dialog):
+    """
+
+    """
     def __init__(self, parent, **kwargs):
+        """
+
+        :param parent:
+        :param kwargs:
+        :return:
+        """
         wx.Dialog.__init__(self, None, title=kwargs.get('title', ''))
 
         self.parent = parent
 
 
 class SaveXYDialog(wx.FileDialog):
+    """
+
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.FileDialog.__init__(self,
                                parent,
                                "Save XY data as...",
