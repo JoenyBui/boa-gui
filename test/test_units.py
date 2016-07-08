@@ -8,17 +8,17 @@ __author__ = 'jbui'
 class TestLength():
 
     def test_feet(self):
-        assert length.get_length_conversion_factor('ft', 'in') == 1.0/12.0
-        assert length.get_length_conversion_factor('ft.', 'yd') == 3.0
-        assert length.get_length_conversion_factor('meter', 'feet') == 0.3048
+        assert round(length.get_length_conversion_factor('ft', 'in'), 4) == 12.0
+        assert round(length.get_length_conversion_factor('ft.', 'yd'), 4) == 0.3333
+        assert round(length.get_length_conversion_factor('meter', 'feet'), 4) == 3.2808
 
     def test_inches(self):
-        assert round(length.get_length_conversion_factor('inch', 'ft'), 4) == 12.0
-        assert round(length.get_length_conversion_factor('in', 'yard'), 4) == 36.0
-        assert round(length.get_length_conversion_factor('in.', 'm'), 4) == 39.3701
+        assert length.get_length_conversion_factor('inch', 'ft') == 1.0/12.0
+        assert length.get_length_conversion_factor('in', 'yard') == 1.0/36.0
+        assert length.get_length_conversion_factor('in.', 'm') == 0.0254
 
     def test_yards(self):
-        assert round(length.get_length_conversion_factor('yard', 'ft'), 2) == 0.33
+        assert round(length.get_length_conversion_factor('yard', 'ft'), 2) == 3.0
 
 
 class TestMass():

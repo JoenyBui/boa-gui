@@ -63,7 +63,9 @@ class IntSmartBox(SmartTextBox):
 
 
 class IntInputLayout(SmartInputLayout):
-
+    """
+    IntBox Layout.
+    """
     def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, *args, **kwargs):
         SmartInputLayout.__init__(self, parent, *args, **kwargs)
 
@@ -74,35 +76,43 @@ class IntInputLayout(SmartInputLayout):
         else:
             self.textbox = IntSmartBox(parent, **kwargs)
 
-        self.postbox.unit_system = unit_system
-        if type:
-            if type == units.UNIT_AREA_KEY:
-                pass
-            elif type == units.UNIT_CHARGE_KEY:
-                pass
-            elif type == units.UNIT_INERTIA_KEY:
-                pass
-            elif type == units.UNIT_LENGTH_KEY:
-                pass
-            elif type == units.UNIT_MASS_KEY:
-                pass
-            elif type == units.UNIT_PRESSURE_KEY:
-                pass
-            elif type == units.UNIT_VOLUME_KEY:
-                pass
-
         if value:
             self.textbox.Value = str(value)
 
-        if unit:
-            if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
-                if units.KEY_IMPERIAL == unit_system:
-                    self.postbox.Value = unit[0]
-                elif units.KEY_METRIC == unit_system:
-                    self.postbox.Value = unit[1]
-            else:
+        if self.postbox:
+            self.postbox.unit_system = unit_system
+            if type:
+                if type == units.UNIT_AREA_KEY:
+                    self.postbox.activate_area()
+                    self.type = type
+                elif type == units.UNIT_CHARGE_KEY:
+                    self.postbox.activate_charge()
+                    self.type = type
+                elif type == units.UNIT_INERTIA_KEY:
+                    self.postbox.activate_inertia()
+                    self.type = type
+                elif type == units.UNIT_LENGTH_KEY:
+                    self.postbox.activate_length()
+                    self.type = type
+                elif type == units.UNIT_MASS_KEY:
+                    self.postbox.activate_mass()
+                    self.type = type
+                elif type == units.UNIT_PRESSURE_KEY:
+                    self.postbox.activate_pressure()
+                    self.type = type
+                elif type == units.UNIT_VOLUME_KEY:
+                    self.postbox.activate_volume()
+                    self.type = type
 
-                self.postbox.Value = unit
+            if unit:
+                if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):
+                    if units.KEY_IMPERIAL == unit_system:
+                        self.postbox.Value = unit[0]
+                    elif units.KEY_METRIC == unit_system:
+                        self.postbox.Value = unit[1]
+
+                else:
+                    self.postbox.Value = unit
 
         self.do_layout()
 
@@ -115,6 +125,30 @@ class IntInputLayout(SmartInputLayout):
 
         if label:
             self.label.Label = str(label)
+
+    def get_value(self, unit):
+        """
+
+        :param unit:
+        :return:
+        """
+        conversion_factor = 1.0
+        if self.type == units.UNIT_AREA_KEY:
+            conversion_factor = units.get_area_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_CHARGE_KEY:
+            conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_LENGTH_KEY:
+            conversion_factor = units.get_length_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_INERTIA_KEY:
+            conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_MASS_KEY:
+            conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_PRESSURE_KEY:
+            conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
+        elif self.type == units.UNIT_VOLUME_KEY:
+            conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
+
+        return int(conversion_factor * int(self.textbox.Value))
 
     def validate(self):
         return False

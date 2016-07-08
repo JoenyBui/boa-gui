@@ -89,4 +89,4 @@ def get_length_conversion_factor(origin, destination):
     origin_factor = LENGTH_KEY.get(origin)
     destination_factor = LENGTH_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
