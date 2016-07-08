@@ -110,10 +110,10 @@ class PropGrid(propgrid.PropertyGrid):
         self.Append(item)
         self.SetPropertyHelpString(key, status)
 
-        if enabled:
-            self.EnableProperty(key)
-        else:
-            self.DisableProperty(key)
+        # if enabled:
+        #     self.EnableProperty(key)
+        # else:
+        #     self.DisableProperty(key)
 
         return item
 

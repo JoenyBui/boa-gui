@@ -9,6 +9,7 @@ from pecutil.refmt import get_number_fmt, parse_number
 from pecutil.types import isFloat
 
 from peui import units
+from peui.units import area, charge, length, density, torque, volume, inertia, mass, pressure, tnt, misc
 
 from .smart import SmartTextBox, SmartInputLayout
 
@@ -264,33 +265,36 @@ class FloatInputLayout(SmartInputLayout):
         if label:
             self.label.Label = str(label)
 
-    def get_value(self, unit):
+    def get_value(self):
         """
 
         :param unit:
         :return:
         """
         conversion_factor = 1.0
-        if self.type == units.UNIT_AREA_KEY:
-            conversion_factor = units.get_area_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_CHARGE_KEY:
-            conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_LENGTH_KEY:
-            conversion_factor = units.get_length_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_INERTIA_KEY:
-            conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_MASS_KEY:
-            conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_PRESSURE_KEY:
-            conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_VOLUME_KEY:
-            conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_DENSITY_KEY:
-            conversion_factor = units.get_density_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_TORQUE_KEY:
-            conversion_factor = units.get_torque_conversion_factor(self.postbox.Value, unit)
 
-        return conversion_factor * float(self.textbox.Value)
+        return units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
+
+        # if self.type == units.UNIT_AREA_KEY:
+        #     conversion_factor = units.get_area_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_CHARGE_KEY:
+        #     conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_LENGTH_KEY:
+        #     conversion_factor = units.get_length_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_INERTIA_KEY:
+        #     conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_MASS_KEY:
+        #     conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_PRESSURE_KEY:
+        #     conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_VOLUME_KEY:
+        #     conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_DENSITY_KEY:
+        #     conversion_factor = units.get_density_conversion_factor(self.postbox.Value, unit)
+        # elif self.type == units.UNIT_TORQUE_KEY:
+        #     conversion_factor = units.get_torque_conversion_factor(self.postbox.Value, unit)
+        #
+        # return conversion_factor * float(self.textbox.Value)
 
     def set_value_convert(self, original_unit, destination_unit):
         """
@@ -301,23 +305,23 @@ class FloatInputLayout(SmartInputLayout):
         """
         conversion_factor = 1.0
         if self.type == units.UNIT_AREA_KEY:
-            conversion_factor = units.get_area_conversion_factor(original_unit, destination_unit)
+            conversion_factor = area.get_area_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_CHARGE_KEY:
-            conversion_factor = units.get_charge_conversion_factor(original_unit, destination_unit)
+            conversion_factor = charge.get_charge_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_LENGTH_KEY:
-            conversion_factor = units.get_length_conversion_factor(original_unit, destination_unit)
+            conversion_factor = length.get_length_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_INERTIA_KEY:
-            conversion_factor = units.get_inertia_conversion_factor(original_unit, destination_unit)
+            conversion_factor = inertia.get_inertia_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_MASS_KEY:
-            conversion_factor = units.get_mass_conversion_factor(original_unit, destination_unit)
+            conversion_factor = mass.get_mass_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_PRESSURE_KEY:
-            conversion_factor = units.get_pressure_conversion_factor(original_unit, destination_unit)
+            conversion_factor = pressure.get_pressure_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_VOLUME_KEY:
-            conversion_factor = units.get_volume_conversion_factor(original_unit, destination_unit)
+            conversion_factor = volume.get_volume_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_DENSITY_KEY:
-            conversion_factor = units.get_density_conversion_factor(original_unit, destination_unit)
+            conversion_factor = density.get_density_conversion_factor(original_unit, destination_unit)
         elif self.type == units.UNIT_TORQUE_KEY:
-            conversion_factor = units.get_torque_conversion_factor(original_unit, unidestination_unitt)
+            conversion_factor = torque.get_torque_conversion_factor(original_unit, destination_unit)
 
         self.textbox.Value = str(conversion_factor * float(self.textbox.Value))
 
