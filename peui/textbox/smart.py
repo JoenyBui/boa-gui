@@ -22,6 +22,7 @@ class SmartTextBox(wx.TextCtrl):
     1.) OnChar(): Capture ony the key character that are necessary.
     2.) wx.EVT_TEXT: Validate that the input is actually a number.
     3.) Validate(): Check against the tolerance level.
+
     """
     def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
         """
