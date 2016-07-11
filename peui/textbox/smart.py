@@ -7,6 +7,7 @@ from wx.lib.agw.supertooltip import SuperToolTip
 
 from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque, misc
 
+from .label import Label
 from . import LayoutDimensions
 from ..units import KEY_IMPERIAL, KEY_METRIC
 
@@ -365,11 +366,15 @@ class SmartInputLayout(wx.BoxSizer):
             self.label = kwargs.get('label')
         else:
             if kwargs.get('name'):
-                self.label = wx.StaticText(self.parent,
-                                           label=kwargs.get('name'))
+                self.label = Label(self.parent, label=kwargs.get('name'))
+                #
+                # self.label = wx.StaticText(self.parent,
+                #                            label=kwargs.get('name'))
             else:
-                self.label = wx.StaticText(self.parent,
-                                           label="TextBox Label:")
+                self.label = Label(self.parent, label='Textbox Label:')
+                #
+                # self.label = wx.StaticText(self.parent,
+                #                            label="TextBox Label:")
 
         # self.label.SetMinSize(self.layout.get_size(self.INDEX_LABEL))
         #
