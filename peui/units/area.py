@@ -1,3 +1,9 @@
+"""
+**area**
+
+unity value = m^2
+
+"""
 from . import Unit, UNIT_AREA_KEY
 
 __author__ = 'jbui'

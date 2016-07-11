@@ -12,10 +12,14 @@ UNIT_MASS_KEY = 'mass'
 UNIT_PRESSURE_KEY = 'pressure'
 UNIT_VOLUME_KEY = 'volume'
 UNIT_TNT_KEY = 'tnt'
+UNIT_FORCE_KEY = 'force'
 UNIT_DENSITY_KEY = 'density'
 UNIT_TORQUE_KEY = 'torque'
 UNIT_MISC_KEY = 'misc'
-
+UNIT_LINEAR_DENSITY = 'linear_density'
+UNIT_LINEAR_PRESSURE = 'linear_pressure'
+UNIT_VELOCITY = 'velocity'
+UNIT_ACCELERATION = 'acceleration'
 
 BASE_UNITS = dict(
     area='m2',
@@ -28,7 +32,9 @@ BASE_UNITS = dict(
     tnt='ton',
     density='lb/ft3',
     torque='lb-in',
-    misc='lb-in/in'
+    misc='lb-in/in',
+    linear_density='plf',
+    linear_pressure='plf'
 )
 
 

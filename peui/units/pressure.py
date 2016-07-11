@@ -5,32 +5,37 @@ __author__ = 'jbui'
 # UNITY_VALUE == PA
 FACTOR_PRESSURE_PASCAL = 1.0
 FACTOR_PRESSURE_KILOPASCAL = 0.001
-FACTOR_PRESSURE_PSI = 6894.76
-FACTOR_PRESSURE_PSF = 992845.44
-FACTOR_PRESSURE_KSI = 3102.642
-FACTOR_PRESSURE_ATM = 101325
-
+FACTOR_PRESSURE_MEGAPASCAL = 1E-6
+FACTOR_PRESSURE_PSI = 0.000145038
+FACTOR_PRESSURE_PSF = 0.00174045
+FACTOR_PRESSURE_KSI = 0.000000145038
+FACTOR_PRESSURE_ATM = 9.8692e-6
+FACTOR_PRESSURE_KILOGRAM_M3 = None
 
 ID_NAME_PRESSURE_PASCAL = ("Pa", "pa", "pascal")
 ID_NAME_PRESSURE_KILOPASCAL = ("kPa", "kPA", "kilopascal")
+ID_NAME_PRESSURE_MEGAPASCAL = ("MPa", "MPA")
 ID_NAME_PRESSURE_PSI = ("psi", "PSI")
 ID_NAME_PRESSURE_PSF = ("psf", "PSF")
 ID_NAME_PRESSURE_KSI = ("ksi", "KSI")
-
+ID_NAME_PRESSURE_KILOGRAM_M3 = ("kg/m^2",)
 
 PRESSURE_KEY = {
     'psi': FACTOR_PRESSURE_PSI,
     'psf': FACTOR_PRESSURE_PSF,
     'ksi': FACTOR_PRESSURE_KSI,
     'Pa': FACTOR_PRESSURE_PASCAL,
-    'kPa': FACTOR_PRESSURE_KILOPASCAL
+    'kPa': FACTOR_PRESSURE_KILOPASCAL,
+    'MPa': FACTOR_PRESSURE_MEGAPASCAL,
+    'kg/m^2': FACTOR_PRESSURE_KILOGRAM_M3
 }
 
 DEFAULT_PRESSURE_LIST = [
     'psi',
     'psf',
     'ksi',
-    'Pa'
+    'Pa',
+    'MPa',
 ]
 
 DEFAULT_IMPERIAL_LIST = [
@@ -41,7 +46,9 @@ DEFAULT_IMPERIAL_LIST = [
 
 DEFAULT_METRIC_LIST = [
     'Pa',
-    'kPa'
+    'kPa',
+    'MPa',
+    'kg/m^2'
 ]
 
 
@@ -59,7 +66,10 @@ def get_pressure_conversion_factor(origin, destination):
 
 
 class PressureUnit(Unit):
+    """
+    **Pressure Unit**
 
+    """
     def __init__(self):
         Unit.__init__(self)
 

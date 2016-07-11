@@ -15,6 +15,17 @@ class ComboBoxInputLayout(SmartInputLayout):
     """
 
     def __init__(self, parent, combobox=None, event_on_select=None, layout=None, *args, **kwargs):
+        """
+        Combobox input layout.
+
+        :param parent:
+        :param combobox:
+        :param event_on_select:
+        :param layout:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         SmartInputLayout.__init__(self, parent, event_on_select=event_on_select, layout=layout, *args, **kwargs)
 
         # Establish the combobox.
@@ -30,7 +41,7 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def get_value(self):
         """
-        Grab the value.
+        Get the combobox value.
 
         :return:
         """
@@ -38,6 +49,7 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def set_value(self, value, label=None):
         """
+        Set the combobox value.
 
         :param value:
         :param label:
@@ -51,6 +63,7 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def set_list(self, list_values):
         """
+        Set the list.
 
         :param list_values:
         :return:
@@ -59,23 +72,26 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def set_selection(self, value):
         """
+        Set the selection value.
 
-        :param value:
+        :param value: index
         :return:
         """
         self.combobox.SetSelection(value)
 
     def append(self, label, obj):
         """
+        Append data into combobox.
 
-        :param label:
-        :param obj:
+        :param label: title
+        :param obj: object data
         :return:
         """
         self.combobox.Append(label, obj)
 
     def get_data(self):
         """
+        Get the data.
 
         :return:
         """
