@@ -9,9 +9,9 @@ from . import Unit, UNIT_TNT_KEY
 __author__ = 'jbui'
 
 FACTOR_TNT_KILOGRAM = 1
-FACTOR_TNT_TON = None
-FACTOR_TNT_KILOTON = 0.001
-FACTOR_PRESSURE_POUND = .0005
+FACTOR_TNT_TON = 907.185819
+FACTOR_TNT_KILOTON = 907185.819
+FACTOR_PRESSURE_POUND = 0.453592
 
 TNT_KEY = {
     'ton': FACTOR_TNT_TON,
@@ -47,7 +47,7 @@ def get_tnt_conversion_factor(origin, destination):
     origin_factor = TNT_KEY.get(origin)
     destination_factor = TNT_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
 
 
 class TntUnit(Unit):

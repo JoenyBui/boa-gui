@@ -10,8 +10,8 @@ __author__ = 'jbui'
 
 
 FACTOR_LINEAR_DENSITY_KN_LF = 1.0
-FACTOR_LINEAR_DENSITY_PLF = 1.0
-FACTOR_LINEAR_DENSITY_KLF = 1.0
+FACTOR_LINEAR_DENSITY_PLF = 0.00444822
+FACTOR_LINEAR_DENSITY_KLF = 0.00980663
 
 LINEAR_DENSITY_KEY = {
     'plf': FACTOR_LINEAR_DENSITY_PLF,
@@ -25,15 +25,12 @@ DEFAULT_LINEAR_DENSITY_LIST = {
 }
 
 DEFAULT_IMPERIAL_LIST = [
-    'plf',
-    'klf'
+    'plf'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'm4',
-    'mm4'
+    'klf'
 ]
-
 
 
 def get_linear_density_conversion_factor(origin, destination):

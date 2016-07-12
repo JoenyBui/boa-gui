@@ -9,9 +9,9 @@ __author__ = 'jbui'
 
 
 FACTOR_TORQUE_N_M = 1.0
-FACTOR_TORQUE_N_MM = None
-FACTOR_TORQUE_LB_IN = None
-FACTOR_TORQUE_KIP_IN = None
+FACTOR_TORQUE_N_MM = 0.001
+FACTOR_TORQUE_LB_IN = 175.126772
+FACTOR_TORQUE_KIP_IN = 175126.772
 
 ID_NAME_TORQUE_LB_IN = ("lb-in", "LB-IN")
 
@@ -52,7 +52,7 @@ def get_torque_conversion_factor(origin, destination):
     origin_factor = TORQUE_KEY.get(origin)
     destination_factor = TORQUE_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
 
 
 class TorqueUnit(Unit):

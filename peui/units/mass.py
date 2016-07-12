@@ -5,7 +5,7 @@ __author__ = 'jbui'
 # UNITY_VALUE = GRAM
 FACTOR_PRESSURE_GRAM = 1.0
 FACTOR_PRESSURE_KILOGRAM = 1000
-FACTOR_PRESSURE_POUND = 454
+FACTOR_PRESSURE_POUND = 453.592
 
 ID_NAME_MASS_GRAM = ('g', 'gram')
 ID_NAME_MASS_KILOGRAM = ('kg', 'kilogram')
@@ -48,7 +48,7 @@ def get_mass_conversion_factor(origin, destination):
     origin_factor = MASS_KEY.get(origin)
     destination_factor = MASS_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
 
 
 class MassUnit(Unit):
