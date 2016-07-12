@@ -16,5 +16,21 @@ Conversions between common units of speed
 =========== =========== =========== =========== =========== ============
 
 """
+from . import Unit, UNIT_TIME_KEY
 
 __author__ = 'jbui'
+
+FACTOR_VELOCITY_M_S = 1.0
+FACTOR_VELOCITY_KM_H = None
+FACTOR_VELOCITY_FT_S = None
+FACTOR_VELOCITY_MM_MS = None
+
+VELOCITY_KEY = {
+}
+
+class VelocityUnit(Unit):
+
+    def __init__(self):
+        Unit.__init__(self)
+
+        self.key = UNIT_TIME_KEY

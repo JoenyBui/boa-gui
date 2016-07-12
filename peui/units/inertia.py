@@ -1,3 +1,7 @@
+"""
+**Inertia**
+
+"""
 from . import Unit, UNIT_INERTIA_KEY
 
 __author__ = 'jbui'

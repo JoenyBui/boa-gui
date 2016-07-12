@@ -5,11 +5,28 @@ import wx
 from wx import GridSizer
 from wx.lib.agw.supertooltip import SuperToolTip
 
-from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque, misc
+from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque
 
 from .label import Label
 from . import LayoutDimensions
+
 from ..units import KEY_IMPERIAL, KEY_METRIC
+from ..units.acceleration import AccelerationUnit
+from ..units.area import AreaUnit
+from ..units.charge import ChargeUnit
+from ..units.density import DensityUnit
+from ..units.force import ForceUnit
+from ..units.inertia import InertiaUnit
+from ..units.length import LengthUnit
+from ..units.linear_density import LinearDensityUnit
+from ..units.linear_pressure import LinearPressureUnit
+from ..units.mass import MassUnit
+from ..units.pressure import PressureUnit
+from ..units.time import TimeUnit
+from ..units.tnt import TntUnit
+from ..units.torque import TorqueUnit
+from ..units.velocity import VelocityUnit
+from ..units.volume import VolumeUnit
 
 __author__ = 'jbui'
 
@@ -20,9 +37,10 @@ class SmartTextBox(wx.TextCtrl):
     to see if the format is correct.
 
     The validation method goes through three process:
-    1.) OnChar(): Capture ony the key character that are necessary.
-    2.) wx.EVT_TEXT: Validate that the input is actually a number.
-    3.) Validate(): Check against the tolerance level.
+
+        1. OnChar(): Capture ony the key character that are necessary.
+        2. wx.EVT_TEXT: Validate that the input is actually a number.
+        3. Validate(): Check against the tolerance level.
 
     """
     def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
@@ -49,6 +67,7 @@ class SmartTextBox(wx.TextCtrl):
     @property
     def min(self):
         """
+        Return the minimum value.
 
         :return: minimum value
         """
@@ -57,6 +76,7 @@ class SmartTextBox(wx.TextCtrl):
     @min.setter
     def min(self, value):
         """
+        Set the minimum value.
 
         :param value:
         """
@@ -65,6 +85,7 @@ class SmartTextBox(wx.TextCtrl):
     @property
     def max(self):
         """
+        Return the maximum value.
 
         :return: return max value
         """
@@ -73,6 +94,7 @@ class SmartTextBox(wx.TextCtrl):
     @max.setter
     def max(self, value):
         """
+        Set the maximum value.
 
         :param: value
         """
@@ -101,7 +123,7 @@ class SmartComboBox(wx.ComboBox):
     Smart ComboBox is used for units conversion.
 
     """
-    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, *args, **kwargs):
+    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, *args, **kwargs):
         """
 
         :param parent:
@@ -117,6 +139,7 @@ class SmartComboBox(wx.ComboBox):
 
         self.convert = None
         self.unit_system = None
+        self.unit = unit
 
         if data:
             self.AppendItems(data)
@@ -127,6 +150,12 @@ class SmartComboBox(wx.ComboBox):
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
+
+    def activate_unit(self, unit_id):
+        pass
+
+    def activate_acceleration(self, **kwargs):
+        pass
 
     def activate_area(self, **kwargs):
         """
@@ -160,6 +189,24 @@ class SmartComboBox(wx.ComboBox):
         self.SetSelection(kwargs.get('default', 0))
         self.convert = charge.get_charge_conversion_factor
 
+    def activate_density(self, **kwargs):
+        """
+
+        :param kwargs:
+        """
+        if self.unit_system == KEY_IMPERIAL:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
+        elif self.unit_system == KEY_METRIC:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
+        else:
+            self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
+
+        self.SetSelection(kwargs.get('default', 0))
+        self.convert = density.get_density_conversion_factor
+
+    def activate_force(self, **kwargs):
+        pass
+
     def activate_inertia(self, **kwargs):
         """
         Activate Inertia
@@ -191,6 +238,12 @@ class SmartComboBox(wx.ComboBox):
 
         self.SetSelection(kwargs.get('default', 0))
         self.convert = length.get_length_conversion_factor
+
+    def activate_linear_density(self, **kwargs):
+        pass
+
+    def activate_linear_pressure(self, **kwargs):
+        pass
 
     def activate_mass(self, **kwargs):
         """
@@ -225,35 +278,23 @@ class SmartComboBox(wx.ComboBox):
         self.SetSelection(kwargs.get('default', 0))
         self.convert = pressure.get_pressure_conversion_factor
 
-    def activate_volume(self, **kwargs):
+    def activate_time(self, **kwargs):
+        pass
+
+    def activate_tnt(self, **kwargs):
         """
 
         :param kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_IMPERIAL_LIST))
+            self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
         elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_METRIC_LIST))
+            self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
         else:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_VOLUME_LIST))
+            self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
 
         self.SetSelection(kwargs.get('default', 0))
-        self.convert = volume.get_volume_conversion_factor
-
-    def activate_density(self, **kwargs):
-        """
-
-        :param kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = density.get_density_conversion_factor
+        self.convert = tnt.get_tnt_conversion_factor
 
     def activate_torque(self, **kwargs):
         """
@@ -270,35 +311,23 @@ class SmartComboBox(wx.ComboBox):
         self.SetSelection(kwargs.get('default', 0))
         self.convert = torque.get_torque_conversion_factor
 
-    def activate_misc(self, **kwargs):
+    def activate_velocity(self, **kwargs):
+        pass
+
+    def activate_volume(self, **kwargs):
         """
 
         :param kwargs:
         """
         if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', misc.DEFAULT_IMPERIAL_LIST))
+            self.AppendItems(kwargs.get('list', volume.DEFAULT_IMPERIAL_LIST))
         elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', misc.DEFAULT_METRIC_LIST))
+            self.AppendItems(kwargs.get('list', volume.DEFAULT_METRIC_LIST))
         else:
-            self.AppendItems(kwargs.get('list', misc.DEFAULT_MISC_LIST))
+            self.AppendItems(kwargs.get('list', volume.DEFAULT_VOLUME_LIST))
 
         self.SetSelection(kwargs.get('default', 0))
-        self.convert = misc.get_misc_conversion_factor
-
-    def activate_tnt(self, **kwargs):
-        """
-
-        :param kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = tnt.get_tnt_conversion_factor
+        self.convert = volume.get_volume_conversion_factor
 
     def get_factor(self, destination):
         """
@@ -338,7 +367,7 @@ class SmartInputLayout(wx.BoxSizer):
         :param width:
         :param max: maximum value for the textbox
         :param min: minimum value for the textbox
-        :param overall_width:
+        :param layout:
         :param overall_height:
         :param args:
         :param kwargs:

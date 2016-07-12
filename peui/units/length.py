@@ -79,8 +79,11 @@ def get_length_conversion_factor(origin, destination):
 
 
 class LengthUnit(Unit):
+    """
+    **Length Unit**
 
-    def __init__(self):
+    """
+    def __init__(self, *args, **kwargs):
         Unit.__init__(self)
 
         self.key = UNIT_LENGTH_KEY
