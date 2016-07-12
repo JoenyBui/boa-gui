@@ -20,7 +20,10 @@ AREA_DENSITY = {
 
 
 class AreaDensityUnit(Unit):
+    """
+    **Area Density Unit**
 
+    """
     def __init__(self, *args, **kwargs):
         Unit.__init__(self, *args, **kwargs)
 

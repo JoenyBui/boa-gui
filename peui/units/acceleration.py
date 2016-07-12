@@ -13,7 +13,7 @@ Base value	        (Gal, or cm/s2)	        (ft/s2)	        (m/s2)	        (Stand
 =================== ======================= =============== =============== ==========================
 
 """
-from . import Unit, UNIT_ACCELERATION
+from . import Unit, UNIT_ACCELERATION_KEY
 
 __author__ = 'jbui'
 
@@ -60,13 +60,13 @@ def get_acceleration_conversion_factor(origin, destination):
 
 class AccelerationUnit(Unit):
     """
-    Acceleration Unit
+    **Acceleration Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
-        self.key = UNIT_ACCELERATION
+        self.key = UNIT_ACCELERATION_KEY
         self.table = ACCELERATION_KEY
 
         self.metric_list = DEFAULT_METRIC_LIST

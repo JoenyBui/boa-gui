@@ -84,7 +84,7 @@ class LengthUnit(Unit):
 
     """
     def __init__(self, *args, **kwargs):
-        Unit.__init__(self)
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_LENGTH_KEY
         self.table = LENGTH_KEY

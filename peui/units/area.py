@@ -81,11 +81,11 @@ def get_area_conversion_factor(origin, destination):
 
 class AreaUnit(Unit):
     """
-    Area Unit
+    **Area Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_AREA_KEY
         self.table = AREA_KEY

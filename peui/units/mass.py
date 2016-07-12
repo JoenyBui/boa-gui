@@ -52,9 +52,12 @@ def get_mass_conversion_factor(origin, destination):
 
 
 class MassUnit(Unit):
+    """
+    **Mass Unit**
 
-    def __init__(self):
-        Unit.__init__(self)
+    """
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_MASS_KEY
         self.table = MASS_KEY

@@ -16,7 +16,7 @@ Conversions between common units of speed
 =========== =========== =========== =========== =========== ============
 
 """
-from . import Unit, UNIT_TIME_KEY
+from . import Unit, UNIT_VELOCITY_KEY
 
 __author__ = 'jbui'
 
@@ -26,11 +26,41 @@ FACTOR_VELOCITY_FT_S = None
 FACTOR_VELOCITY_MM_MS = None
 
 VELOCITY_KEY = {
+    'm/s': FACTOR_VELOCITY_M_S,
+    'mm/ms': FACTOR_VELOCITY_MM_MS,
+    'ft/s': FACTOR_VELOCITY_FT_S,
+    'km/h': FACTOR_VELOCITY_KM_H
 }
 
+
+DEFAULT_VELOCITY_LIST = [
+    'm/s',
+    'mm/ms',
+    'ft/s',
+    'km/h'
+]
+
+DEFAULT_IMPERIAL_LIST = [
+    'ft/s',
+]
+
+DEFAULT_METRIC_LIST = [
+    'm/s',
+    'mm/ms',
+    'km/h'
+]
+
+
 class VelocityUnit(Unit):
+    """
+    **Velocity**
 
-    def __init__(self):
-        Unit.__init__(self)
+    """
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
-        self.key = UNIT_TIME_KEY
+        self.key = UNIT_VELOCITY_KEY
+        self.table = VELOCITY_KEY
+
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+        self.metric_list = DEFAULT_METRIC_LIST

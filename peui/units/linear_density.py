@@ -35,7 +35,6 @@ DEFAULT_METRIC_LIST = [
 ]
 
 
-
 def get_linear_density_conversion_factor(origin, destination):
     """
     Get the length conversion factor.
@@ -55,8 +54,8 @@ class LinearDensityUnit(Unit):
     **Linear Density Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_LINEAR_DENSITY
         self.table = LINEAR_DENSITY_KEY

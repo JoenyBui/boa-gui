@@ -57,8 +57,8 @@ class LinearPressureUnit(Unit):
     **Linear Pressure Density Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_LINEAR_PRESSURE
         self.table = LINEAR_PRESSURE_KEY

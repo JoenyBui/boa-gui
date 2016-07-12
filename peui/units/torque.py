@@ -60,8 +60,8 @@ class TorqueUnit(Unit):
     **Torque Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_TORQUE_KEY
         self.table = TORQUE_KEY

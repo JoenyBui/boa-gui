@@ -61,8 +61,8 @@ class VolumeUnit(Unit):
     **Volume Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_VOLUME_KEY
         self.table = VOLUME_KEY

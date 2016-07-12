@@ -4,7 +4,7 @@ __author__ = 'jbui'
 KEY_IMPERIAL = 'imperial'
 KEY_METRIC = 'metric'
 
-UNIT_ACCELERATION = 'acceleration'
+UNIT_ACCELERATION_KEY = 'acceleration'
 UNIT_AREA_DENSITY_KEY = 'area_density'
 UNIT_AREA_KEY = 'area'
 UNIT_CHARGE_KEY = 'charge'
@@ -19,7 +19,7 @@ UNIT_PRESSURE_KEY = 'pressure'
 UNIT_TIME_KEY = 'time'
 UNIT_TNT_KEY = 'tnt'
 UNIT_TORQUE_KEY = 'torque'
-UNIT_VELOCITY = 'velocity'
+UNIT_VELOCITY_KEY = 'velocity'
 UNIT_VOLUME_KEY = 'volume'
 
 BASE_UNITS = dict(
@@ -109,6 +109,27 @@ class Unit(object):
 
         self.default_selection = kwargs.get('default_selection', 0)
         self.unit_system = kwargs.get('unit_system', None)
+
+    def get_list(self):
+        """
+        Get list.
+
+        :return:
+        """
+        if self.unit_system == KEY_IMPERIAL:
+            return self.imperial_list
+        elif self.unit_system == KEY_METRIC:
+            return self.metric_list
+        else:
+            return self.metric_list + self.imperial_list
+
+    def get_default_selection(self):
+        """
+        Get the default selection.
+
+        :return:
+        """
+        return self.default_selection
 
     def get_conversion_factor(self, origin, destination):
         pass

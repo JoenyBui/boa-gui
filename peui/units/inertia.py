@@ -64,10 +64,11 @@ def get_inertia_conversion_factor(origin, destination):
 
 class InertiaUnit(Unit):
     """
+    **Inertia Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_INERTIA_KEY
         self.table = INERTIA_KEY

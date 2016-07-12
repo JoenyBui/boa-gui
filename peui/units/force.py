@@ -65,8 +65,8 @@ class ForceUnit(Unit):
 
     """
 
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_FORCE_KEY
         self.table = FORCE_KEY
