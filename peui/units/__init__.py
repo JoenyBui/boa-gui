@@ -4,6 +4,16 @@ __author__ = 'jbui'
 KEY_IMPERIAL = 'imperial'
 KEY_METRIC = 'metric'
 
+UNIT_SYSTEM_LIST = [
+    'Imperial',
+    'Metric'
+]
+
+UNIT_SYSTEM_INDEX = {
+    KEY_IMPERIAL: 0,
+    KEY_METRIC: 1
+}
+
 UNIT_ACCELERATION_KEY = 'acceleration'
 UNIT_AREA_DENSITY_KEY = 'area_density'
 UNIT_AREA_KEY = 'area'
