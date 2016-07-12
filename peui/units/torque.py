@@ -1,28 +1,43 @@
+"""
+
+Unit Value == N-m
+
+"""
 from . import Unit, UNIT_TORQUE_KEY
 
 __author__ = 'jbui'
 
-# UNITY_VALUE == lb-in
-FACTOR_TORQUE_LB_IN = 1.0
+
+FACTOR_TORQUE_N_M = 1.0
+FACTOR_TORQUE_N_MM = None
+FACTOR_TORQUE_LB_IN = None
+FACTOR_TORQUE_KIP_IN = None
 
 ID_NAME_TORQUE_LB_IN = ("lb-in", "LB-IN")
 
 
 TORQUE_KEY = {
-    'lb-in': FACTOR_TORQUE_LB_IN
+    'lb-in': FACTOR_TORQUE_LB_IN,
+    'kip-in': FACTOR_TORQUE_KIP_IN,
+    'N-mm': FACTOR_TORQUE_N_MM,
+    'N-m': FACTOR_TORQUE_N_M
 }
 
 DEFAULT_TORQUE_LIST = [
-    'lb-in'
+    'lb-in',
+    'kip-in',
+    'N-mm',
+    'N-m'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'lb-in'
+    'lb-in',
+    'kip-in'
 ]
 
-# TODO: (Eyeunwana) This is not metric.  Go back and check the metric side and use that unit.
 DEFAULT_METRIC_LIST = [
-    'lb-in'
+    'N-m',
+    'N-mm'
 ]
 
 
@@ -41,7 +56,10 @@ def get_torque_conversion_factor(origin, destination):
 
 
 class TorqueUnit(Unit):
+    """
+    **Torque Unit**
 
+    """
     def __init__(self):
         Unit.__init__(self)
 

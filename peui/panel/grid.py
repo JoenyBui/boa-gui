@@ -10,23 +10,114 @@ class PropGrid(propgrid.PropertyGrid):
     """
     Property Grid.
 
+        * PropertyCategory
+            pg.Append( wxpg.PropertyCategory("1 - Basic Properties") )
+
+        * StringProperty
+            pg.Append( wxpg.StringProperty("String",value="Some Text") )
+
+        * IntProperty
+            pg.Append( wxpg.IntProperty("Int",value=100) )
+
+            pg.Append( wxpg.IntProperty("IntWithSpin",value=256) )
+            pg.SetPropertyEditor("IntWithSpin","SpinCtrl")
+
+        * UIntProperty
+            pg.Append( wxpg.UIntProperty("UInt",value=100) )
+
+        * FloatProperty
+            pg.Append( wxpg.FloatProperty("Float",value=100.0) )
+
+        * BoolProperty
+            pg.Append( wxpg.BoolProperty("Bool",value=True) )
+            pg.Append( wxpg.BoolProperty("Bool_with_Checkbox",value=True) )
+            pg.SetPropertyAttribute("Bool_with_Checkbox", "UseCheckbox", True)
+
+        * EnumProperty
+            pg.Append( wxpg.EnumProperty("Enum","Enum", ['wxPython Rules', 'wxPython Rocks', 'wxPython Is The Best'], [10,11,12], 0) )
+
+        * EditEnumProperty
+            pg.Append( wxpg.EditEnumProperty("EditEnum","EditEnumProperty", ['A','B','C'], [0,1,2], "Text Not in List") )
+
+        * FlagsProperty
+
+        * LongStringProperty
+            pg.Append( wxpg.LongStringProperty("LongString", value="This is a\\nmulti-line string\\nwith\\ttabs\\nmixed\\tin."))
+
+        * FileProperty
+            pg.Append( wxpg.FileProperty("File",value="C:\\Windows\\system.ini") )
+
+        * DirProperty
+            pg.Append( wxpg.DirProperty("Dir",value="C:\\Windows") )
+
+        * ArrayStringProperty
+            pg.Append( wxpg.ArrayStringProperty("ArrayString",value=['A','B','C']) )
+
+        * FontProperty
+            pg.Append( wxpg.FontProperty("Font",value=panel.GetFont()) )
+
+        * SystemColourProperty
+            pg.Append( wxpg.SystemColourProperty("SystemColour") )
+
+        * ColourProperty
+            pg.Append( wxpg.ColourProperty("Colour", value=panel.GetBackgroundColour()) )
+
+        * CursorProperty
+
+        * ImageFileProperty
+            pg.Append( wxpg.ImageFileProperty("ImageFile") )
+
+        * MultiChoiceProperty
+            pg.Append( wxpg.MultiChoiceProperty("MultiChoice", choices=['wxWidgets','QT','GTK+']) )
+
+        * DateProperty
+            pg.Append( wxpg.DateProperty("Date",value=wx.DateTime_Now()) )
+
+            pg.SetPropertyAttribute( "Date", wxpg.PG_DATE_PICKER_STYLE, wx.DP_DROPDOWN|wx.DP_SHOWCENTURY )
+
+
+    PGCell
+        * GetData
+        * HasText
+        * SetEmptyData
+        * MergeFrom
+        * SetText
+        * SetBitmap
+        * SetFgCol
+        * SetFont
+        * SetBgCol
+        * GetText
+        * GetBitmap
+        * GetFgCol
+        * GetFont
+        * GetBgCol
+        * IsInvalid
+
     """
-    def __init__(self, parent, controller, local, size=(100, 50), *args, **kwargs):
+    def __init__(self, parent, controller, local, size=(100, 50), column=None, *args, **kwargs):
         """
         Property grid view.
 
-        :param parent: main frame
-        :param controller:
+        :param parent: parent main frame
+        :param controller: parent controller
         :param local: pass in the local controller for this view
-        :param size:
-        :param args:
-        :param kwargs:
+        :param size: set the initial size of the panel
+        :param column: set the number of column
+        :param args: arguments
+        :param kwargs: additional keywords
         :return:
         """
-        # if not kwargs.get('size'):
-        #     kwargs['size'] = (200, 150)
-
         propgrid.PropertyGrid.__init__(self, parent, size=size, *args, **kwargs)
+
+        # Add the number of column.
+        if column:
+            self.SetColumnCount(column)
+
+            # Change Selection Setting.
+            self.SetMarginColour(wx.LIGHT_GREY)
+            self.SetSelectionBackgroundColour(wx.WHITE)
+            self.SetSelectionTextColour(wx.BLACK)
+            self.SetCaptionTextColour(wx.BLACK)
 
         if local:
             self.controller = local
@@ -203,7 +294,7 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_multi_button(self, enabled=True, **kwargs):
+    def add_multi_button(self, name, key, value, enabled=True, **kwargs):
         """
         Add multi-button.
 
@@ -226,10 +317,68 @@ class PropGrid(propgrid.PropertyGrid):
 
         return buttons
 
+    def get_item(self, key):
+        """
+        Return the PGProperty item.
+
+        :param key: name of key
+        :return:
+        """
+        return self.GetPropertyByName(key)
+
+    def get_cell(self, key, column):
+        """
+        Return the cell inside the property item.
+
+        :param key: name of property key
+        :param column: column of item (0 index)
+        :return:
+        """
+        cell = self.get_item(key)
+
+        return cell.GetCell(column)
+
+    def set_text(self, key, column, value):
+        """
+        Set the cell value for the property item.
+
+        :param key: name of property key
+        :param column: column of item (0 index)
+        :param value: item name
+        :return:
+        """
+
+        cell = self.get_cell(key, column)
+
+        cell.SetText(str(value))
+
+    def get_text(self, key, column):
+        """
+        Return the cell value for the property item column.
+
+        :param key: name of property key
+        :param column: column of item (0 index)
+        """
+        cell = self.get_cell(key, column)
+
+        return cell.GetText()
+
+    def get_data(self, key, column):
+        """
+        Return the cell value for the property item column.
+
+        :param key: name of property key
+        :param column: column of item (0 index)
+        """
+        cell = self.get_cell(key, column)
+
+        return cell.GetData()
+
     def delete_item(self, key):
         """
-        Delete Item Property.
+        Delete the PGProperty Item.
 
-        :param key:
+        :param key: name of key
         """
         self.DeleteProperty(key)
+

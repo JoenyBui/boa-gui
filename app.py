@@ -190,7 +190,7 @@ if __name__ == '__main__':
 
     # Property Panel
     controller.add_pane(
-        PropGrid(frame, controller, None, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
+        PropGrid(frame, controller, None, column=4, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
         cfg.METHOD_WINDOW_PROP_GRID,
         wx.BOTTOM,
         'Property'

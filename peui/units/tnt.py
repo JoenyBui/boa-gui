@@ -1,23 +1,39 @@
+"""
+**kilogram""
+
+unit value = kilogram
+
+"""
 from . import Unit, UNIT_TNT_KEY
 
 __author__ = 'jbui'
 
-FACTOR_TNT_TON = 1
+FACTOR_TNT_KILOGRAM = 1
+FACTOR_TNT_TON = None
 FACTOR_TNT_KILOTON = 0.001
 FACTOR_PRESSURE_POUND = .0005
 
 TNT_KEY = {
     'ton': FACTOR_TNT_TON,
     'kiloton': FACTOR_TNT_KILOTON,
-    'lb': FACTOR_PRESSURE_POUND,
-    'pound': FACTOR_PRESSURE_POUND
+    'kilogram': FACTOR_TNT_KILOGRAM
 }
 
 
 DEFAULT_TNT_LIST = [
     'ton',
     'kiloton',
-    'lb'
+    'kilogram'
+]
+
+
+DEFAULT_IMPERIAL_LIST = [
+    'ton',
+    'kiloton'
+]
+
+DEFAULT_METRIC_LIST = [
+    'kilogram',
 ]
 
 
@@ -35,7 +51,10 @@ def get_tnt_conversion_factor(origin, destination):
 
 
 class TntUnit(Unit):
+    """
+    **TNT Unit**
 
+    """
     def __init__(self):
         Unit.__init__(self)
 

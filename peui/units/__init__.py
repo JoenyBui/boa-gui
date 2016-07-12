@@ -4,37 +4,42 @@ __author__ = 'jbui'
 KEY_IMPERIAL = 'imperial'
 KEY_METRIC = 'metric'
 
+UNIT_ACCELERATION = 'acceleration'
+UNIT_AREA_DENSITY_KEY = 'area_density'
 UNIT_AREA_KEY = 'area'
 UNIT_CHARGE_KEY = 'charge'
+UNIT_DENSITY_KEY = 'density'
+UNIT_FORCE_KEY = 'force'
 UNIT_INERTIA_KEY = 'inertia'
 UNIT_LENGTH_KEY = 'length'
-UNIT_MASS_KEY = 'mass'
-UNIT_PRESSURE_KEY = 'pressure'
-UNIT_VOLUME_KEY = 'volume'
-UNIT_TNT_KEY = 'tnt'
-UNIT_FORCE_KEY = 'force'
-UNIT_DENSITY_KEY = 'density'
-UNIT_TORQUE_KEY = 'torque'
-UNIT_MISC_KEY = 'misc'
 UNIT_LINEAR_DENSITY = 'linear_density'
 UNIT_LINEAR_PRESSURE = 'linear_pressure'
+UNIT_MASS_KEY = 'mass'
+UNIT_PRESSURE_KEY = 'pressure'
+UNIT_TIME_KEY = 'time'
+UNIT_TNT_KEY = 'tnt'
+UNIT_TORQUE_KEY = 'torque'
 UNIT_VELOCITY = 'velocity'
-UNIT_ACCELERATION = 'acceleration'
+UNIT_VOLUME_KEY = 'volume'
 
 BASE_UNITS = dict(
+    acceleration='m/s2',
     area='m2',
+    area_density='kg/m^2',
     charge='TNT',
+    density='lb/ft3',
+    force='N',
     inertia='m4',
     length='meter',
+    linear_density='plf',
+    linear_pressure='plf',
     mass='gram',
     pressure='Pa',
-    volume='m3',
+    time='s',
     tnt='ton',
-    density='lb/ft3',
     torque='lb-in',
-    misc='lb-in/in',
-    linear_density='plf',
-    linear_pressure='plf'
+    velocity='m/s',
+    volume='m3',
 )
 
 
@@ -58,7 +63,6 @@ def get_base_value(type, value, unit):
     from .density import get_density_conversion_factor
     from .torque import get_torque_conversion_factor
 
-
     value = float(value)
 
     if type == UNIT_AREA_KEY:
@@ -81,8 +85,6 @@ def get_base_value(type, value, unit):
         return value*get_density_conversion_factor(unit, BASE_UNITS[type])
     elif type == UNIT_TORQUE_KEY:
         return value*get_torque_conversion_factor(unit, BASE_UNITS[type])
-    elif type == UNIT_MISC_KEY:
-        return value
     else:
         return None
 
@@ -92,12 +94,21 @@ class Unit(object):
     Unit Object
 
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         self.key = None
         self.table = None
 
-        self.metric_list = None
-        self.imperial_list = None
+        self.metric_list = kwargs.get('metric_list', None)
+        self.imperial_list = kwargs.get('imperial_list', None)
+
+        self.default_selection = kwargs.get('default_selection', 0)
+        self.unit_system = kwargs.get('unit_system', None)
 
     def get_conversion_factor(self, origin, destination):
         pass

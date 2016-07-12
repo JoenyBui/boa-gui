@@ -142,17 +142,24 @@ class FloatSmartBox(SmartTextBox):
 
 class FloatInputLayout(SmartInputLayout):
     """
-    Float Textbox set.
+    Float Textbox Layout Horizontal Layout.
+
     """
     def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None, layout=None,
                  textbox=None, postbox=None, *args, **kwargs):
         """
+        Constructor.
 
-        :param parent:
-        :param value:
+        :param parent: parent panel or frame
+        :param value: textbox value
         :param unit:
         :param unit_system:
         :param type:
+        :param max: maximum value for the textbox
+        :param min: minimum value for the textbox
+        :param layout:
+        :param textbox:
+        :param postbox:
         :param args:
         :param kwargs:
         :return:
@@ -207,9 +214,6 @@ class FloatInputLayout(SmartInputLayout):
                     self.type = type
                 elif type == units.UNIT_TORQUE_KEY:
                     self.postbox.activate_torque()
-                    self.type = type
-                elif type == units.UNIT_MISC_KEY:
-                    self.postbox.activate_misc()
                     self.type = type
 
             if unit:

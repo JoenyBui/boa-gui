@@ -27,7 +27,10 @@ FORCE_KEY = {
 
 DEFAULT_FORCE_LIST = [
     'ton',
+    'kip',
     'kiloton'
+    'N',
+    'kN'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
