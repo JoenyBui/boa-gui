@@ -18,11 +18,21 @@ class Project(object):
         """
         self.keys = kwargs.get('keys', {})
 
+        # Overall setting
+        self.setting = kwargs.get('setting', None)
+
         self.controller = None
 
-        self.name = kwargs.get('name', 'NA Project')
-        self.author = kwargs.get('author', 'Anonymous')
-        self.project_folder = kwargs.get('project_folder', os.getcwd())
+        if self.setting:
+            self.name = self.setting.project_name
+            self.author = self.setting.author
+            self.project_folder = self.setting.path
+
+        else:
+            self.name = kwargs.get('name', 'NA Project')
+            self.author = kwargs.get('author', 'Anonymous')
+            self.project_folder = kwargs.get('project_folder', os.getcwd())
+
 
     def save(self, path):
         """
