@@ -290,12 +290,12 @@ class SmartComboBox(wx.ComboBox):
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
+        # else:
+        self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
 
         self.SetSelection(kwargs.get('default', 0))
         self.convert = tnt.get_tnt_conversion_factor

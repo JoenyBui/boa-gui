@@ -4,16 +4,20 @@ __author__ = 'jbui'
 
 FACTOR_TNT_TON = 1
 FACTOR_TNT_KILOTON = 0.001
+FACTOR_PRESSURE_POUND = .0005
 
 TNT_KEY = {
     'ton': FACTOR_TNT_TON,
-    'kiloton': FACTOR_TNT_KILOTON
+    'kiloton': FACTOR_TNT_KILOTON,
+    'lb': FACTOR_PRESSURE_POUND,
+    'pound': FACTOR_PRESSURE_POUND
 }
 
 
 DEFAULT_TNT_LIST = [
     'ton',
-    'kiloton'
+    'kiloton',
+    'lb'
 ]
 
 
