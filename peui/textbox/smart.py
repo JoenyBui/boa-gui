@@ -7,11 +7,12 @@ from wx.lib.agw.supertooltip import SuperToolTip
 
 from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque
 
-from .label import Label
+from .label import SmartLabel
 from . import LayoutDimensions
 
 from ..units import KEY_IMPERIAL, KEY_METRIC
 from ..units.acceleration import AccelerationUnit
+from ..units.area_density import AreaDensityUnit
 from ..units.area import AreaUnit
 from ..units.charge import ChargeUnit
 from ..units.density import DensityUnit
@@ -123,14 +124,17 @@ class SmartComboBox(wx.ComboBox):
     Smart ComboBox is used for units conversion.
 
     """
-    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, *args, **kwargs):
+    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None, *args, **kwargs):
         """
+        Constructor
 
-        :param parent:
-        :param data:
-        :param style:
-        :param value:
-        :param message:
+        :param parent: parent panel or frame
+        :param data: list of values
+        :param style: combobox style
+        :param value: display value
+        :param message: tooltip message
+        :param unit: Unit object
+        :param unit_system: 'imperial' or 'metric'
         :param args:
         :param kwargs:
         :return:
@@ -138,7 +142,7 @@ class SmartComboBox(wx.ComboBox):
         wx.ComboBox.__init__(self, parent, style=style, *args, **kwargs)
 
         self.convert = None
-        self.unit_system = None
+        self.unit_system = unit_system
         self.unit = unit
 
         if data:
@@ -151,190 +155,311 @@ class SmartComboBox(wx.ComboBox):
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
 
-    def activate_unit(self, unit_id):
-        pass
+        if unit:
+            # If unit is passed in, activate it.
+            self.activate()
 
-    def activate_acceleration(self, **kwargs):
-        pass
-
-    def activate_area(self, **kwargs):
+    def activate(self):
         """
-        Activate the area.
+        Activate Units.
+
+        :return:
+        """
+        self.Clear()
+        self.AppendItems(self.unit.get_list())
+        self.SetSelection(self.unit.get_default_selection())
+        self.convert = self.unit.get_conversion_factor
+
+    def activate_acceleration(self, *args, **kwargs):
+        """
+        Activate acceleration unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = AccelerationUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_area_density(self, *args, **kwargs):
+        self.unit = AreaDensityUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_area(self, *args, **kwargs):
+        """
+        Activate area unit.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', area.DEFAULT_IMPERIAL__LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', area.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', area.DEFAULT_AREA_LIST))
+        self.unit = AreaUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = area.get_area_conversion_factor
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', area.DEFAULT_IMPERIAL__LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', area.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', area.DEFAULT_AREA_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = area.get_area_conversion_factor
 
-    def activate_charge(self, **kwargs):
+    def activate_charge(self, *args, **kwargs):
         """
         Activate charge weight.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', charge.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', charge.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', charge.DEFAULT_CHARGE_LIST))
+        self.unit = ChargeUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = charge.get_charge_conversion_factor
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', charge.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', charge.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', charge.DEFAULT_CHARGE_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = charge.get_charge_conversion_factor
 
-    def activate_density(self, **kwargs):
+    def activate_density(self, *args, **kwargs):
         """
+        Activate density unit.
+
+        :param args:
+        :param kwargs:
+        """
+        self.unit = DensityUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = density.get_density_conversion_factor
+
+    def activate_force(self, *args, **kwargs):
+        """
+        Active force unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = ForceUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_inertia(self, *args, **kwargs):
+        """
+        Activate Inertia unit.
+
+        :param args:
+        :param kwargs:
+        """
+        self.unit = InertiaUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', inertia.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', inertia.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', inertia.DEFAULT_INERTIA_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = inertia.get_inertia_conversion_factor
+
+    def activate_length(self, *args, **kwargs):
+        """
+        Activate length unit.
+
+        :param args:
+        :param kwargs:
+        """
+        self.unit = LengthUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', length.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', length.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', length.DEFAULT_LENGTH_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = length.get_length_conversion_factor
+
+    def activate_linear_density(self, *args, **kwargs):
+        """
+        Activate linear density unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = LinearDensityUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_linear_pressure(self, *args, **kwargs):
+        """
+        Activate linear pressure unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = LinearPressureUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_mass(self, *args, **kwargs):
+        """
+        Activate mass units.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
+        self.unit = MassUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = density.get_density_conversion_factor
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', mass.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', mass.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', mass.DEFAULT_MASS_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = mass.get_mass_conversion_factor
 
-    def activate_force(self, **kwargs):
-        pass
-
-    def activate_inertia(self, **kwargs):
+    def activate_pressure(self, *args, **kwargs):
         """
-        Activate Inertia
-
-        :param: kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', inertia.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', inertia.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', inertia.DEFAULT_INERTIA_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = inertia.get_inertia_conversion_factor
-
-    def activate_length(self, **kwargs):
-        """
-        Activate length.
+        Activate pressure unit.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', length.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', length.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', length.DEFAULT_LENGTH_LIST))
+        self.unit = PressureUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = length.get_length_conversion_factor
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', pressure.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', pressure.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', pressure.DEFAULT_PRESSURE_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = pressure.get_pressure_conversion_factor
 
-    def activate_linear_density(self, **kwargs):
-        pass
-
-    def activate_linear_pressure(self, **kwargs):
-        pass
-
-    def activate_mass(self, **kwargs):
+    def activate_time(self, *args, **kwargs):
         """
-        Activate the mass units.
+        Activate time unit.
 
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = TimeUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_tnt(self, *args, **kwargs):
+        """
+        Activate tnt unit.
+
+        :param args:
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', mass.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', mass.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', mass.DEFAULT_MASS_LIST))
+        self.unit = TntUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = mass.get_mass_conversion_factor
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = tnt.get_tnt_conversion_factor
 
-    def activate_pressure(self, **kwargs):
+    def activate_torque(self, *args, **kwargs):
         """
-        Activate the pressure.
+        Activate Torque unit.
 
+        :param args:
         :param kwargs:
         """
+        self.unit = TorqueUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
 
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', pressure.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', pressure.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', pressure.DEFAULT_PRESSURE_LIST))
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', torque.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', torque.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', torque.DEFAULT_TORQUE_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = torque.get_torque_conversion_factor
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = pressure.get_pressure_conversion_factor
-
-    def activate_time(self, **kwargs):
-        pass
-
-    def activate_tnt(self, **kwargs):
+    def activate_velocity(self, *args, **kwargs):
         """
+        Activate Velocity unit.
 
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = VelocityUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_volume(self, *args, **kwargs):
+        """
+        Activate volume unit.
+
+        :param args:
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
+        self.unit = VolumeUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+        #
+        # if self.unit_system == KEY_IMPERIAL:
+        #     self.AppendItems(kwargs.get('list', volume.DEFAULT_IMPERIAL_LIST))
+        # elif self.unit_system == KEY_METRIC:
+        #     self.AppendItems(kwargs.get('list', volume.DEFAULT_METRIC_LIST))
+        # else:
+        #     self.AppendItems(kwargs.get('list', volume.DEFAULT_VOLUME_LIST))
+        #
+        # self.SetSelection(kwargs.get('default', 0))
+        # self.convert = volume.get_volume_conversion_factor
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = tnt.get_tnt_conversion_factor
-
-    def activate_torque(self, **kwargs):
+    def get_factor(self, origin, destination):
         """
-
-        :param kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', torque.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', torque.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', torque.DEFAULT_TORQUE_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = torque.get_torque_conversion_factor
-
-    def activate_velocity(self, **kwargs):
-        pass
-
-    def activate_volume(self, **kwargs):
-        """
-
-        :param kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_VOLUME_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = volume.get_volume_conversion_factor
-
-    def get_factor(self, destination):
-        """
+        Get the factor.
 
         :param destination:
         """
-        return self.convert
+        return self.convert(origin, destination)
 
 
 class SmartInputLayout(wx.BoxSizer):
@@ -395,15 +520,10 @@ class SmartInputLayout(wx.BoxSizer):
             self.label = kwargs.get('label')
         else:
             if kwargs.get('name'):
-                self.label = Label(self.parent, label=kwargs.get('name'))
-                #
-                # self.label = wx.StaticText(self.parent,
-                #                            label=kwargs.get('name'))
+                self.label = SmartLabel(self.parent, label=kwargs.get('name'))
+
             else:
-                self.label = Label(self.parent, label='Textbox Label:')
-                #
-                # self.label = wx.StaticText(self.parent,
-                #                            label="TextBox Label:")
+                self.label = SmartLabel(self.parent, label='Textbox Label:')
 
         # self.label.SetMinSize(self.layout.get_size(self.INDEX_LABEL))
         #

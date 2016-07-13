@@ -66,11 +66,11 @@ def get_density_conversion_factor(origin, destination):
 
 class DensityUnit(Unit):
     """
-    Density Unit
+    **Density Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_DENSITY_KEY
         self.table = DENSITY_KEY

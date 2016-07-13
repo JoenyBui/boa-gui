@@ -52,8 +52,8 @@ class LinearDensityUnit(Unit):
     **Linear Density Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_LINEAR_DENSITY
         self.table = LINEAR_DENSITY_KEY

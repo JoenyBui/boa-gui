@@ -68,8 +68,8 @@ class PressureUnit(Unit):
     **Pressure Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_PRESSURE_KEY
         self.table = PRESSURE_KEY

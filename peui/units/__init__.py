@@ -4,7 +4,17 @@ __author__ = 'jbui'
 KEY_IMPERIAL = 'imperial'
 KEY_METRIC = 'metric'
 
-UNIT_ACCELERATION = 'acceleration'
+UNIT_SYSTEM_LIST = [
+    'Imperial',
+    'Metric'
+]
+
+UNIT_SYSTEM_INDEX = {
+    KEY_IMPERIAL: 0,
+    KEY_METRIC: 1
+}
+
+UNIT_ACCELERATION_KEY = 'acceleration'
 UNIT_AREA_DENSITY_KEY = 'area_density'
 UNIT_AREA_KEY = 'area'
 UNIT_CHARGE_KEY = 'charge'
@@ -16,10 +26,11 @@ UNIT_LINEAR_DENSITY = 'linear_density'
 UNIT_LINEAR_PRESSURE = 'linear_pressure'
 UNIT_MASS_KEY = 'mass'
 UNIT_PRESSURE_KEY = 'pressure'
+UNIT_SPECIFIC_WEIGHT = 'specific_weight'
 UNIT_TIME_KEY = 'time'
 UNIT_TNT_KEY = 'tnt'
 UNIT_TORQUE_KEY = 'torque'
-UNIT_VELOCITY = 'velocity'
+UNIT_VELOCITY_KEY = 'velocity'
 UNIT_VOLUME_KEY = 'volume'
 
 BASE_UNITS = dict(
@@ -35,6 +46,7 @@ BASE_UNITS = dict(
     linear_pressure='plf',
     mass='gram',
     pressure='Pa',
+    specific_weight='kPa/mm',
     time='s',
     tnt='ton',
     torque='lb-in',
@@ -101,8 +113,8 @@ class Unit(object):
         :param kwargs:
         :return:
         """
-        self.key = None
-        self.table = None
+        self.key = kwargs.get('key', None)
+        self.table = kwargs.get('table', None)
 
         self.metric_list = kwargs.get('metric_list', None)
         self.imperial_list = kwargs.get('imperial_list', None)
@@ -110,6 +122,29 @@ class Unit(object):
         self.default_selection = kwargs.get('default_selection', 0)
         self.unit_system = kwargs.get('unit_system', None)
 
-    def get_conversion_factor(self, origin, destination):
-        pass
+    def get_list(self):
+        """
+        Get list.
 
+        :return:
+        """
+        if self.unit_system == KEY_IMPERIAL:
+            return self.imperial_list
+        elif self.unit_system == KEY_METRIC:
+            return self.metric_list
+        else:
+            return self.metric_list + self.imperial_list
+
+    def get_default_selection(self):
+        """
+        Get the default selection.
+
+        :return:
+        """
+        return self.default_selection
+
+    def get_conversion_factor(self, origin, destination):
+        origin_factor = self.table.get(origin)
+        destination_factor = self.table.get(destination)
+
+        return destination_factor / origin_factor

@@ -55,13 +55,14 @@ class TntUnit(Unit):
     **TNT Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_TNT_KEY
         self.table = TNT_KEY
 
-        self.imperial_list = DEFAULT_TNT_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+        self.metric_list = DEFAULT_METRIC_LIST
 
     def get_conversion_factor(self, origin, destination):
         return get_tnt_conversion_factor(origin, destination)

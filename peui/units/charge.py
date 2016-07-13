@@ -79,11 +79,11 @@ def get_charge_conversion_factor(origin, destination):
 
 class ChargeUnit(Unit):
     """
-    Charge Unit
+    **Charge Unit**
 
     """
-    def __init__(self):
-        Unit.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_CHARGE_KEY
         self.list = CHARGE_KEY
