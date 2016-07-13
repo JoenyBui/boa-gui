@@ -26,6 +26,7 @@ UNIT_LINEAR_DENSITY = 'linear_density'
 UNIT_LINEAR_PRESSURE = 'linear_pressure'
 UNIT_MASS_KEY = 'mass'
 UNIT_PRESSURE_KEY = 'pressure'
+UNIT_SPECIFIC_WEIGHT = 'specific_weight'
 UNIT_TIME_KEY = 'time'
 UNIT_TNT_KEY = 'tnt'
 UNIT_TORQUE_KEY = 'torque'
@@ -45,6 +46,7 @@ BASE_UNITS = dict(
     linear_pressure='plf',
     mass='gram',
     pressure='Pa',
+    specific_weight='kPa/mm',
     time='s',
     tnt='ton',
     torque='lb-in',
@@ -111,8 +113,8 @@ class Unit(object):
         :param kwargs:
         :return:
         """
-        self.key = None
-        self.table = None
+        self.key = kwargs.get('key', None)
+        self.table = kwargs.get('table', None)
 
         self.metric_list = kwargs.get('metric_list', None)
         self.imperial_list = kwargs.get('imperial_list', None)
@@ -142,5 +144,7 @@ class Unit(object):
         return self.default_selection
 
     def get_conversion_factor(self, origin, destination):
-        pass
+        origin_factor = self.table.get(origin)
+        destination_factor = self.table.get(destination)
 
+        return destination_factor / origin_factor

@@ -7,11 +7,12 @@ from wx.lib.agw.supertooltip import SuperToolTip
 
 from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque
 
-from .label import Label
+from .label import SmartLabel
 from . import LayoutDimensions
 
 from ..units import KEY_IMPERIAL, KEY_METRIC
 from ..units.acceleration import AccelerationUnit
+from ..units.area_density import AreaDensityUnit
 from ..units.area import AreaUnit
 from ..units.charge import ChargeUnit
 from ..units.density import DensityUnit
@@ -123,14 +124,17 @@ class SmartComboBox(wx.ComboBox):
     Smart ComboBox is used for units conversion.
 
     """
-    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, *args, **kwargs):
+    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None, *args, **kwargs):
         """
+        Constructor
 
-        :param parent:
-        :param data:
-        :param style:
-        :param value:
-        :param message:
+        :param parent: parent panel or frame
+        :param data: list of values
+        :param style: combobox style
+        :param value: display value
+        :param message: tooltip message
+        :param unit: Unit object
+        :param unit_system: 'imperial' or 'metric'
         :param args:
         :param kwargs:
         :return:
@@ -138,7 +142,7 @@ class SmartComboBox(wx.ComboBox):
         wx.ComboBox.__init__(self, parent, style=style, *args, **kwargs)
 
         self.convert = None
-        self.unit_system = None
+        self.unit_system = unit_system
         self.unit = unit
 
         if data:
@@ -151,8 +155,9 @@ class SmartComboBox(wx.ComboBox):
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
 
-    def activate_unit(self, unit_id):
-        pass
+        if unit:
+            # If unit is passed in, activate it.
+            self.activate()
 
     def activate(self):
         """
@@ -174,6 +179,11 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = AccelerationUnit(*args, **kwargs)
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_area_density(self, *args, **kwargs):
+        self.unit = AreaDensityUnit(*args, **kwargs)
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -510,10 +520,10 @@ class SmartInputLayout(wx.BoxSizer):
             self.label = kwargs.get('label')
         else:
             if kwargs.get('name'):
-                self.label = Label(self.parent, label=kwargs.get('name'))
+                self.label = SmartLabel(self.parent, label=kwargs.get('name'))
 
             else:
-                self.label = Label(self.parent, label='Textbox Label:')
+                self.label = SmartLabel(self.parent, label='Textbox Label:')
 
         # self.label.SetMinSize(self.layout.get_size(self.INDEX_LABEL))
         #

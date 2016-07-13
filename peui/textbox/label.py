@@ -6,7 +6,7 @@ import wx
 __author__ = 'jbui'
 
 
-class Label(wx.StaticText):
+class SmartLabel(wx.StaticText):
     """
     PEC-GUI Label with tooltip.
 
