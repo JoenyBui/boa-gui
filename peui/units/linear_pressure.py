@@ -3,19 +3,21 @@
 
 Force Derived Unit
 
+unity_value = kg/m
+
 """
 from . import Unit, UNIT_LINEAR_PRESSURE
 
 __author__ = 'jbui'
 
-# FACTOR_LINEAR_PRESSURE_KG_M = 1.0
-FACTOR_LINEAR_PRESSURE_KN_LF = 1.0
-FACTOR_LINEAR_PRESSURE_PLF = 1.0
-FACTOR_LINEAR_PRESSURE_KLF = 1.0
-FACTOR_LINEAR_PRESSURE_PLI = 1.0
+FACTOR_LINEAR_PRESSURE_KG_M = 1.0
+FACTOR_LINEAR_PRESSURE_KN_LF = 101.97
+FACTOR_LINEAR_PRESSURE_PLF = 1.48816394
+FACTOR_LINEAR_PRESSURE_KLF = 1488.16394
+FACTOR_LINEAR_PRESSURE_PLI = 17.858
 
 LINEAR_PRESSURE_KEY = {
-    # 'kg/m': FACTOR_LINEAR_PRESSURE_KG_M,
+    'kg/m': FACTOR_LINEAR_PRESSURE_KG_M,
     'plf': FACTOR_LINEAR_PRESSURE_PLF,
     'lb/ft': FACTOR_LINEAR_PRESSURE_PLF,
     'lb/in': FACTOR_LINEAR_PRESSURE_PLI,
@@ -38,7 +40,7 @@ DEFAULT_METRIC_LIST = [
 ]
 
 
-def get_linear_density_conversion_factor(origin, destination):
+def get_linear_pressure_conversion_factor(origin, destination):
     """
     Get the length conversion factor.
 

@@ -21,9 +21,9 @@ from . import Unit, UNIT_VELOCITY_KEY
 __author__ = 'jbui'
 
 FACTOR_VELOCITY_M_S = 1.0
-FACTOR_VELOCITY_KM_H = None
-FACTOR_VELOCITY_FT_S = None
-FACTOR_VELOCITY_MM_MS = None
+FACTOR_VELOCITY_KM_H = 0.277778
+FACTOR_VELOCITY_FT_S = 0.3048
+FACTOR_VELOCITY_MM_MS = 1.0
 
 VELOCITY_KEY = {
     'm/s': FACTOR_VELOCITY_M_S,
@@ -49,6 +49,19 @@ DEFAULT_METRIC_LIST = [
     'mm/ms',
     'km/h'
 ]
+
+
+def get_velocity_conversion_factor(origin, destination):
+    """
+
+    :param origin:
+    :param destination:
+    :return:
+    """
+    origin_factor = VELOCITY_KEY.get(origin)
+    destination_factor = VELOCITY_KEY.get(destination)
+
+    return origin_factor / destination_factor
 
 
 class VelocityUnit(Unit):

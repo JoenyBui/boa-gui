@@ -9,11 +9,11 @@ from . import Unit, UNIT_FORCE_KEY
 __author__ = 'jbui'
 
 FACTOR_FORCE_NEWTON = 1
-FACTOR_FORCE_KILONEWTON = 0.001
-FACTOR_FORCE_POUND = 0.1
-FACTOR_FORCE_TON = 1.0
-FACTOR_FORCE_KILOTON = 1.0
-FACTOR_FORCE_KIP = 1000
+FACTOR_FORCE_KILONEWTON = 1000
+FACTOR_FORCE_POUND = 4.44822163
+FACTOR_FORCE_TON = 8896.4432565
+FACTOR_FORCE_KILOTON = 8896443.2565
+FACTOR_FORCE_KIP = 4448.2216
 
 FORCE_KEY = {
     'lb': FACTOR_FORCE_POUND,
@@ -56,7 +56,7 @@ def get_force_conversion_factor(origin, destination):
     origin_factor = FORCE_KEY.get(origin)
     destination_factor = FORCE_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
 
 
 class ForceUnit(Unit):

@@ -39,6 +39,8 @@ class GeneralDialog(wx.Dialog):
         # Layout
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
+        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_OK)
+
         self.btnsizer = self.CreateButtonSizer(btn_flags)
 
         vsizer.Add(self.do_layout(), 0, wx.EXPAND, wx.ALL, 5)
@@ -49,6 +51,10 @@ class GeneralDialog(wx.Dialog):
         self.SetInitialSize()
         self.CenterOnParent()
         self.Fit()
+
+    def on_okay(self, event):
+        self.local.set_component()
+        event.Skip()
 
     def add_layout(self, key, object):
         """

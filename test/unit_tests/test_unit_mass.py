@@ -12,5 +12,5 @@ class TestMass(TestCase):
     def test_kg(self):
         self.assertEqual(round(mass.get_mass_conversion_factor('kg', 'g'), 5), 1000)
 
-    def test_lbm(self):
-        self.assertEqual(round(mass.get_mass_conversion_factor('lbm', 'g'), 3), 453.592)
+    def test_lb(self):
+        self.assertEqual(round(mass.get_mass_conversion_factor('lb', 'g'), 3), 453.592)
