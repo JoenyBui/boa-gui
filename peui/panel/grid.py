@@ -1,3 +1,5 @@
+import sys
+
 import wx
 from wx import propgrid
 
@@ -94,7 +96,7 @@ class PropGrid(propgrid.PropertyGrid):
         * IsInvalid
 
     """
-    def __init__(self, parent, controller, local, size=(100, 50), column=None, *args, **kwargs):
+    def __init__(self, parent, controller, local, size=(100, 50), column=None, editable=None, *args, **kwargs):
         """
         Property grid view.
 
@@ -103,6 +105,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param local: pass in the local controller for this view
         :param size: set the initial size of the panel
         :param column: set the number of column
+        :param editable: an array of integer index
         :param args: arguments
         :param kwargs: additional keywords
         :return:
@@ -119,6 +122,12 @@ class PropGrid(propgrid.PropertyGrid):
             self.SetSelectionTextColour(wx.BLACK)
             self.SetCaptionTextColour(wx.BLACK)
 
+        if editable:
+            for index in editable:
+                self.MakeColumnEditable(index)
+
+        self.register()
+
         if local:
             self.controller = local
         else:
@@ -127,27 +136,43 @@ class PropGrid(propgrid.PropertyGrid):
         if not local:
             self.controller.do_layout()
 
-    def add_category_property(self, name, enabled=True, **kwargs):
+    def register(self):
+        """
+        Register other stuff.
+
+        :return:
+        """
+        # NOTE: Editor must be registered *before* adding a property that uses it.
+        if not getattr(sys, '_PropGridEditorsRegistered', False):
+            self.RegisterEditor(MultiButtonEditor)
+
+            # ensure we only do it once
+            sys._PropGridEditorsRegistered = True
+
+    def add_category_property(self, name, status=None, enabled=True, *args, **kwargs):
         """
         Add category property.
 
         :param name:
+        :param status: status bar string
         :param enabled:
+        :param args:
         :param kwargs:
         :return:
         """
 
         return self.Append(propgrid.PropertyCategory(name))
 
-    def add_file_property(self, name, key, value, status, enabled=True, **kwargs):
+    def add_file_property(self, name, key, value, status=None, enabled=True, *args, **kwargs):
         """
         Add file property.
 
         :param name:
         :param key:
         :param value:
-        :param status:
+        :param status: status bar string
         :param enabled:
+        :param args:
         :param kwargs:
         :return:
         """
@@ -155,6 +180,9 @@ class PropGrid(propgrid.PropertyGrid):
         self.Append(item)
         self.SetPropertyHelpString(key, status)
 
+        if status:
+            self.SetPropertyHelpString(key, status)
+
         if enabled:
             self.EnableProperty(key)
         else:
@@ -162,21 +190,24 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_int_property(self, name, key, value, status, enabled=True, **kwargs):
+    def add_int_property(self, name, key, value, status=None, enabled=True, *args, **kwargs):
         """
         Add integer property.
 
         :param name:
         :param key:
         :param value:
-        :param status:
+        :param status: status bar string
         :param enabled:
+        :param args:
         :param kwargs:
         :return:
         """
         item = propgrid.IntProperty(name, key, value=value)
         self.Append(item)
-        self.SetPropertyHelpString(key, status)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
 
         if enabled:
             self.EnableProperty(key)
@@ -185,21 +216,36 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_string_property(self, name, key, value, status, enabled=True, **kwargs):
+    def add_string_property(self, name, key, value="", status=None, enabled=True, *args, **kwargs):
         """
         Add string property.
 
-        :param name:
-        :param key:
+        :param name: label
+        :param key: item key
         :param value:
-        :param status:
-        :param enabled:
+        :param status: status bar string
+        :param enabled: boolean value
+        :param args:
         :param kwargs:
         :return:
         """
-        item = propgrid.StringProperty(name, key, value=value)
+        if isinstance(value, list):
+            item = propgrid.StringProperty(name, key)
+        else:
+            item = propgrid.StringProperty(name, key, value=value)
+
         self.Append(item)
-        self.SetPropertyHelpString(key, status)
+
+        if isinstance(value, list):
+            # Loop through the values and update.
+            for index, cell in enumerate(value):
+                if index == 0:
+                    item.SetValue(cell)
+                else:
+                    self.set_text(key, index+1, cell)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
 
         if enabled:
             self.EnableProperty(key)
@@ -208,21 +254,24 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_float_property(self, name, key, value, status, enabled=True, **kwargs):
+    def add_float_property(self, name, key, value, status=None, enabled=True, *args, **kwargs):
         """
         Add float property.
 
         :param name: title
         :param key:
         :param value:
-        :param status:
+        :param status: status bar string
         :param enabled:
+        :param args:
         :param kwargs:
         :return:
         """
         item = propgrid.FloatProperty(name, key, value=value)
         self.Append(item)
-        self.SetPropertyHelpString(key, status)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
 
         if enabled:
             self.EnableProperty(key)
@@ -231,14 +280,14 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_bool_property(self, name, key, value, status, enabled=True, **kwargs):
+    def add_bool_property(self, name, key, value, status=None, enabled=True, **kwargs):
         """
         Add boolean property.
 
         :param name:
         :param key:
         :param value:
-        :param status:
+        :param status: status bar string
         :param enabled:
         :param kwargs:
         :return:
@@ -246,7 +295,9 @@ class PropGrid(propgrid.PropertyGrid):
         item = propgrid.BoolProperty(name, key, value=value)
         self.Append(item)
         self.SetPropertyAttribute(key, "UseCheckbox", True)
-        self.SetPropertyHelpString(key, status)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
 
         if enabled:
             self.EnableProperty(key)
@@ -255,14 +306,14 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_enum_property(self, name, key, value, status, enabled=True, **kwargs):
+    def add_enum_property(self, name, key, value, status=None, enabled=True, **kwargs):
         """
         Add enumerator property.
 
         :param name:
         :param key:
         :param value:
-        :param status:
+        :param status: status bar string
         :param enabled:
         :param kwargs:
         :return:
@@ -285,7 +336,9 @@ class PropGrid(propgrid.PropertyGrid):
             item = propgrid.EnumProperty(name, key, arr_label, arr_values)
 
         self.Append(item)
-        self.SetPropertyHelpString(key, status)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
 
         if enabled:
             self.EnableProperty(key)
@@ -294,10 +347,41 @@ class PropGrid(propgrid.PropertyGrid):
 
         return item
 
-    def add_multi_button(self, name, key, value, enabled=True, **kwargs):
+    def add_array_string_property(self, name, key, value, status=None, enabled=True, *args, **kwargs):
+        """
+        Add array string property.
+
+        :param name:
+        :param key:
+        :param value:
+        :param status: status bar string
+        :param enabled:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        item = wx.propgrid.ArrayStringProperty(name, key, value=value)
+
+        self.Append(item)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
+        return item
+
+    def add_multi_button(self, name, key, value, status=None, enabled=True, **kwargs):
         """
         Add multi-button.
 
+        :param name:
+        :param key:
+        :param value:
+        :param status: status bar string
         :param enabled:
         :param kwargs:
         :return:
@@ -306,9 +390,14 @@ class PropGrid(propgrid.PropertyGrid):
         buttons.Add('...')
         buttons.Add('A')
 
+        # Finally, move button-subwindow to correct position and make sure
+        # returned wxPGWindowList contains our custom button list.
         buttons.Finalize(self, wx.Point(1, 1))
 
         self.Append(buttons)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
 
         if enabled:
             self.EnableProperty(key)
@@ -317,34 +406,68 @@ class PropGrid(propgrid.PropertyGrid):
 
         return buttons
 
-    def get_item(self, key):
+    def add_multi_choice(self, name, key, value, status=None, enabled=True, **kwargs):
+        """
+        Add multi-choice values.
+
+        :param name:
+        :param key:
+        :param value:
+        :param status:
+        :param enabled:
+        :param kwargs:
+        :return:
+        """
+        item = propgrid.MultiChoiceProperty(name,
+                                            key,
+                                            choices=value)
+
+        self.Append(item)
+
+        if status:
+            self.SetPropertyHelpString(key, status)
+
+        if enabled:
+            self.EnableProperty(key)
+        else:
+            self.DisableProperty(key)
+
+        return item
+
+    def get_item(self, key, *args, **kwargs):
         """
         Return the PGProperty item.
 
         :param key: name of key
+        :param args:
+        :param kwargs:
         :return:
         """
         return self.GetPropertyByName(key)
 
-    def get_cell(self, key, column):
+    def get_cell(self, key, column, *args, **kwargs):
         """
         Return the cell inside the property item.
 
         :param key: name of property key
         :param column: column of item (0 index)
+        :param args:
+        :param kwargs:
         :return:
         """
         cell = self.get_item(key)
 
         return cell.GetCell(column)
 
-    def set_text(self, key, column, value):
+    def set_text(self, key, column, value, *args, **kwargs):
         """
         Set the cell value for the property item.
 
         :param key: name of property key
         :param column: column of item (0 index)
         :param value: item name
+        :param args:
+        :param kwargs:
         :return:
         """
 
@@ -352,33 +475,129 @@ class PropGrid(propgrid.PropertyGrid):
 
         cell.SetText(str(value))
 
-    def get_text(self, key, column):
+        if kwargs.get('fgcol'):
+            cell.SetFgCol(kwargs.get('fgcol'))
+
+        if kwargs.get('bgcol'):
+            cell.SetBgCol(kwargs.get('bgcol'))
+
+        if kwargs.get('bitmap'):
+            cell.SetBitmap(kwargs.get('bitmap'))
+
+        if kwargs.get('font'):
+            cell.SetFont(kwargs.get('font'))
+
+    def get_text(self, key, column, *args, **kwargs):
         """
         Return the cell value for the property item column.
 
         :param key: name of property key
         :param column: column of item (0 index)
+        :param args:
+        :param kwargs:
         """
         cell = self.get_cell(key, column)
 
         return cell.GetText()
 
-    def get_data(self, key, column):
+    def get_data(self, key, column, *args, **kwargs):
         """
         Return the cell value for the property item column.
 
         :param key: name of property key
         :param column: column of item (0 index)
+        :param args:
+        :param kwargs:
         """
         cell = self.get_cell(key, column)
 
         return cell.GetData()
 
-    def delete_item(self, key):
+    def delete_item(self, key, *args, **kwargs):
         """
         Delete the PGProperty Item.
 
         :param key: name of key
+        :param args:
+        :param kwargs:
         """
         self.DeleteProperty(key)
 
+
+class MultiButtonEditor(propgrid.PyTextCtrlEditor):
+    """
+    MultiButton Editor.
+
+    """
+    def __init__(self):
+        """
+
+        :return:
+        """
+        propgrid.PyTextCtrlEditor.__init__(self)
+
+    def CreateControls(self, propGrid, property, pos, sz):
+        """
+
+        :param propGrid:
+        :param property:
+        :param pos:
+        :param sz:
+        :return:
+        """
+        # Create and populate buttons-subwindow
+        buttons = propgrid.PGMultiButton(propGrid, sz)
+
+        # Add two regular buttons
+        buttons.AddButton("...")
+        buttons.AddButton("A")
+        # Add a bitmap button
+        buttons.AddBitmapButton(wx.ArtProvider.GetBitmap(wx.ART_FOLDER))
+
+        # Create the 'primary' editor control (textctrl in this case)
+        wnd = self.CallSuperMethod("CreateControls",
+                                   propGrid,
+                                   property,
+                                   pos,
+                                   buttons.GetPrimarySize())
+
+        # Finally, move buttons-subwindow to correct position and make sure
+        # returned wxPGWindowList contains our custom button list.
+        buttons.Finalize(propGrid, pos)
+
+        # We must maintain a reference to any editor objects we created
+        # ourselves. Otherwise they might be freed prematurely. Also,
+        # we need it in OnEvent() below, because in Python we cannot "cast"
+        # result of wxPropertyGrid.GetEditorControlSecondary() into
+        # PGMultiButton instance.
+        self.buttons = buttons
+
+        return (wnd, buttons)
+
+    def OnEvent(self, propGrid, prop, ctrl, event):
+        """
+
+        :param propGrid:
+        :param prop:
+        :param ctrl:
+        :param event:
+        :return:
+        """
+        if event.GetEventType() == wx.wxEVT_COMMAND_BUTTON_CLICKED:
+            buttons = self.buttons
+            evtId = event.GetId()
+
+            if evtId == buttons.GetButtonId(0):
+                # Do something when the first button is pressed
+                wx.LogDebug("First button pressed")
+                return False  # Return false since value did not change
+            if evtId == buttons.GetButtonId(1):
+                # Do something when the second button is pressed
+                wx.MessageBox("Second button pressed")
+                return False  # Return false since value did not change
+            if evtId == buttons.GetButtonId(2):
+                # Do something when the third button is pressed
+                wx.MessageBox("Third button pressed")
+                return False  # Return false since value did not change
+
+        return self.CallSuperMethod("OnEvent", propGrid, prop, ctrl, event)
