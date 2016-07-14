@@ -1,12 +1,20 @@
+from .acceleration import AccelerationUnit
 from .area import AreaUnit
+from .area_density import AreaDensityUnit
 from .charge import ChargeUnit
 from .density import DensityUnit
+from .force import ForceUnit
 from .inertia import InertiaUnit
 from .length import LengthUnit
+from .linear_pressure import LinearPressureUnit
+from .linear_density import LinearDensityUnit
 from .mass import MassUnit
 from .pressure import PressureUnit
+from .specific_weight import SpecificWeightUnit
+from .time import TimeUnit
 from .tnt import TntUnit
 from .torque import TorqueUnit
+from .velocity import VelocityUnit
 from .volume import VolumeUnit
 
 
@@ -32,15 +40,23 @@ class UnitMap(object):
         Add default unit values.
 
         """
+        self.units.append(AccelerationUnit())
         self.units.append(AreaUnit())
+        self.units.append(AreaDensityUnit())
         self.units.append(ChargeUnit())
         self.units.append(DensityUnit())
+        self.units.append(ForceUnit())
         self.units.append(InertiaUnit())
         self.units.append(LengthUnit())
+        self.units.append(LinearPressureUnit())
+        self.units.append(LinearDensityUnit())
         self.units.append(MassUnit())
         self.units.append(PressureUnit())
+        self.units.append(SpecificWeightUnit())
+        self.units.append(TimeUnit())
         self.units.append(TntUnit())
         self.units.append(TorqueUnit())
+        self.units.append(VelocityUnit())
         self.units.append(VolumeUnit())
 
     def get_value(self, name, unit=None):

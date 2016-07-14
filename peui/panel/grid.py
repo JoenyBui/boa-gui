@@ -473,7 +473,11 @@ class PropGrid(propgrid.PropertyGrid):
 
         cell = self.get_cell(key, column)
 
-        cell.SetText(str(value))
+        if column == 1:
+            item = self.get_item(key)
+            item.SetValue(str(value))
+        else:
+            cell.SetText(str(value))
 
         if kwargs.get('fgcol'):
             cell.SetFgCol(kwargs.get('fgcol'))

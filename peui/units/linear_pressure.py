@@ -68,5 +68,5 @@ class LinearPressureUnit(Unit):
         self.imperial_list = DEFAULT_IMPERIAL_LIST
         self.metric_list = DEFAULT_METRIC_LIST
 
-    def get_conversion_factor(self, origin, destination):
-        return get_linear_density_conversion_factor(origin, destination)
+    # def get_conversion_factor(self, origin, destination):
+    #     return get_linear_pressure_conversion_factor(origin, destination)
