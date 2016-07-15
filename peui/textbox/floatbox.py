@@ -333,7 +333,7 @@ class FloatInputLayout(SmartInputLayout):
         elif self.type == units.UNIT_TORQUE_KEY:
             conversion_factor = torque.get_torque_conversion_factor(original_unit, destination_unit)
 
-        self.textbox.Value = str(conversion_factor * float(self.textbox.Value))
+        return conversion_factor * float(self.textbox.Value)
 
     def validate(self):
         """
