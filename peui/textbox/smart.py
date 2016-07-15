@@ -44,12 +44,16 @@ class SmartTextBox(wx.TextCtrl):
         3. Validate(): Check against the tolerance level.
 
     """
-    def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
+    def __init__(self, parent, key_up=None, message=None, enabled_message='',
+                 disabled_messages=None, disabled_index=None, *args, **kwargs):
         """
 
         :param parent:
         :param key_up: bind key up handler
         :param message: add in tooltip message
+        :param enabled_message: message once the box is enabled
+        :param disabled_messages: list of array messages
+        :param disabled_index: index of the which messages to display
         :param args:
         :param kwargs:
         """
@@ -64,6 +68,15 @@ class SmartTextBox(wx.TextCtrl):
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
+
+        self.enabled_message = enabled_message
+        self.disabled_messages = disabled_messages
+
+        if disabled_index is None and self.disabled_messages:
+            self.disabled_index = 0
+        else:
+            self.disabled_index = disabled_index
+
 
     @property
     def min(self):
@@ -117,6 +130,30 @@ class SmartTextBox(wx.TextCtrl):
             val = val[:pos] + digit + val[pos:]
 
         return val
+
+    def Enable(self, *args, **kwargs):
+        """
+        On enable, clean data if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.TextCtrl.Enable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            self.Value = self.enabled_message
+
+    def Disable(self, *args, **kwargs):
+        """
+        On disable, add message if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.TextCtrl.Disable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            self.Value = self.disabled_messages[self.disabled_index]
 
 
 class SmartComboBox(wx.ComboBox):
@@ -722,7 +759,25 @@ class SmartInputLayout(wx.BoxSizer):
         """
         self.Fit(window)
 
+    def enable(self):
+        """
+        Must inherit enable input layout.
+
+        """
+        pass
+
+    def disable(self):
+        """
+        Must inherit disable input layout.
+
+        """
+        pass
+
     def validate(self):
+        """
+        Must inherit validate().
+
+        """
         pass
 
 
@@ -733,6 +788,7 @@ class SmartButton(wx.Button):
     """
     def __init__(self, parent, label='', evt_button=None, message=None, *args, **kwargs):
         """
+        Constructor.
 
         :param parent:
         :param label:
@@ -750,3 +806,26 @@ class SmartButton(wx.Button):
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
+
+
+class SmartCheckBox(wx.CheckBox):
+    """
+    **Smarter CheckBox**
+
+    """
+    def __init__(self, parent, id=-1, label='', evt_click=None, *args, **kwargs):
+        """
+        Constructor.
+
+        :param parent:
+        :param id:
+        :param label:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        wx.CheckBox.__init__(self, parent, id=id, label=label, *args, **kwargs)
+
+        if evt_click:
+            self.Bind(wx.EVT_CHECKBOX, evt_click)
+

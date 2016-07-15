@@ -39,9 +39,13 @@ class FloatSmartBox(SmartTextBox):
         """
         SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
-        self.signs = kwargs.get('signs', False)
-        self.decimal = kwargs.get('decimal', True)
-        self.exponential = kwargs.get('exponential', False)
+        # self.signs = kwargs.get('signs', False)
+        # self.decimal = kwargs.get('decimal', True)
+        # self.exponential = kwargs.get('exponential', False)
+
+        self.signs = signs
+        self.decimal = decimal
+        self.exponential = exponential
 
         self.fmt = get_number_fmt(signs=self.signs, decimal=self.decimal, exponential=self.exponential)
 
@@ -58,7 +62,7 @@ class FloatSmartBox(SmartTextBox):
         self.color_format_error = kwargs.get('format_error', (228, 115, 115))
         self.color_range_error = kwargs.get('range_error', (244, 67, 54))
 
-        self._validator = FloatRangeValidator(**kwargs)
+        self._validator = FloatRangeValidator(signs=signs, decimal=decimal, exponential=exponential)
         self.SetValidator(self._validator)
 
     def on_text(self, event=None):
@@ -253,10 +257,10 @@ class FloatInputLayout(SmartInputLayout):
         :return:
         """
         if self.textbox:
-            self.textbox.Enable(False)
+            self.textbox.Disable()
 
         if self.postbox:
-            self.postbox.Enable(False)
+            self.postbox.Disable()
 
     def set_value(self, value, post=None, label=None):
         """
@@ -277,34 +281,11 @@ class FloatInputLayout(SmartInputLayout):
 
     def get_value(self):
         """
+        Get the value.
 
-        :param unit:
         :return:
         """
-        conversion_factor = 1.0
-
         return units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
-
-        # if self.type == units.UNIT_AREA_KEY:
-        #     conversion_factor = units.get_area_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_CHARGE_KEY:
-        #     conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_LENGTH_KEY:
-        #     conversion_factor = units.get_length_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_INERTIA_KEY:
-        #     conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_MASS_KEY:
-        #     conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_PRESSURE_KEY:
-        #     conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_VOLUME_KEY:
-        #     conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_DENSITY_KEY:
-        #     conversion_factor = units.get_density_conversion_factor(self.postbox.Value, unit)
-        # elif self.type == units.UNIT_TORQUE_KEY:
-        #     conversion_factor = units.get_torque_conversion_factor(self.postbox.Value, unit)
-        #
-        # return conversion_factor * float(self.textbox.Value)
 
     def set_value_convert(self, original_unit, destination_unit):
         """
@@ -379,17 +360,20 @@ class FloatRangeValidator(wx.PyValidator):
     Float Range Validator
 
     """
-    def __init__(self, **kwargs):
+    def __init__(self, signs=False, decimal=True, exponential=False, min=None, max=None, *args, **kwargs):
         """
 
         :param kwargs:
         :return:
         """
-        wx.PyValidator.__init__(self)
+        wx.PyValidator.__init__(self, *args, **kwargs)
 
-        self.signs = kwargs.get('signs', False)
-        self.decimal = kwargs.get('decimal', True)
-        self.exponential = kwargs.get('exponential', False)
+        # self.signs = kwargs.get('signs', False)
+        # self.decimal = kwargs.get('decimal', True)
+        # self.exponential = kwargs.get('exponential', False)
+        self.signs = signs
+        self.decimal = decimal
+        self.exponential = exponential
 
         self.fmt = get_number_fmt(signs=self.signs, decimal=self.decimal, exponential=self.exponential)
 
@@ -402,8 +386,17 @@ class FloatRangeValidator(wx.PyValidator):
             self.allow_keys.append(ord('e'))
             self.allow_keys.append(ord('E'))
 
-        self._min = kwargs.get('min', -1*sys.maxint)
-        self._max = kwargs.get('max', sys.maxint)
+        if min:
+            # self._min = kwargs.get('min', -1*sys.maxint)
+            self._min = min
+        else:
+            self._min = -1*sys.maxint
+
+        if max:
+            # self._max = kwargs.get('max', sys.maxint)
+            self._max = max
+        else:
+            self._max = sys.maxint
 
         # Event Management
         self.Bind(wx.EVT_CHAR, self.OnChar)
