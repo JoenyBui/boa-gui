@@ -220,7 +220,7 @@ class IntRangeValidator(wx.PyValidator):
     Int Range Validator
     """
     def __init__(self, signs=False, *args, **kwargs):
-        wx.PyValidator.__init__(self)
+        wx.PyValidator.__init__(self, *args, **kwargs)
 
         self.signs = kwargs.get('signs', False)
         # self.decimal = kwargs.get('decimal', False)
