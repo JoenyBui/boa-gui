@@ -175,10 +175,13 @@ class SaveXYDialog(wx.FileDialog):
         :param kwargs:
         :return:
         """
+        wilcard = "Comma Separated Value (*.csv)|*.csv| " \
+                  "DPlot (*.grf)|*.grf"
+
         wx.FileDialog.__init__(self,
                                parent,
-                               "Save XY data as...",
-                               os.getcwd(), "", "*.csv",
+                               "Save data as...",
+                               os.getcwd(), "", wilcard,
                                wx.SAVE | wx.OVERWRITE_PROMPT,
                                *args,
                                **kwargs)
