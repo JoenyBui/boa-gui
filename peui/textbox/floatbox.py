@@ -285,7 +285,13 @@ class FloatInputLayout(SmartInputLayout):
 
         :return:
         """
-        return units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
+        if self.postbox:
+            return units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
+        else:
+            if self.textbox.Value == '':
+                return None
+            else:
+                return float(self.textbox.Value)
 
     def set_value_convert(self, original_unit, destination_unit):
         """
