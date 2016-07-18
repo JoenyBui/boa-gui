@@ -316,6 +316,34 @@ class FloatInputLayout(SmartInputLayout):
 
         self.textbox.Value = str(conversion_factor * float(self.textbox.Value))
 
+    def value_convert(self, original_unit, destination_unit):
+        """
+        :param original_unit:
+        :param destination_unit:
+        :return:
+        """
+        conversion_factor = 1.0
+        if self.type == units.UNIT_AREA_KEY:
+            conversion_factor = area.get_area_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_CHARGE_KEY:
+            conversion_factor = charge.get_charge_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_LENGTH_KEY:
+            conversion_factor = length.get_length_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_INERTIA_KEY:
+            conversion_factor = inertia.get_inertia_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_MASS_KEY:
+            conversion_factor = mass.get_mass_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_PRESSURE_KEY:
+            conversion_factor = pressure.get_pressure_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_VOLUME_KEY:
+            conversion_factor = volume.get_volume_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_DENSITY_KEY:
+            conversion_factor = density.get_density_conversion_factor(original_unit, destination_unit)
+        elif self.type == units.UNIT_TORQUE_KEY:
+            conversion_factor = torque.get_torque_conversion_factor(original_unit, destination_unit)
+
+        return conversion_factor * float(self.textbox.Value)
+
     def validate(self):
         """
 
