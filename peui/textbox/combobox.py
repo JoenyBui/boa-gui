@@ -96,3 +96,21 @@ class ComboBoxInputLayout(SmartInputLayout):
         :return:
         """
         return self.combobox.GetClientData(self.combobox.GetSelection())
+
+    def enable(self):
+        """
+        Enable textbox and/or postbox.
+
+        :return:
+        """
+        if self.combobox:
+            self.combobox.Enable(True)
+
+    def disable(self):
+        """
+        Disable textbox and/or postbox.
+
+        :return:
+        """
+        if self.combobox:
+            self.combobox.Disable()
