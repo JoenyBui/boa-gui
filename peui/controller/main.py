@@ -126,6 +126,7 @@ class MainController(object):
 
         self.master_key[METHOD_TOOLBAR_STANDARD]['method'] = self.view_ctrl.view_toolbar_standard
 
+        self.master_key[METHOD_DEFAULT_SETTING]['method'] = self.dlg_ctrl.setting_dialog
         self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
 
     def evt_undo(self, event=None):

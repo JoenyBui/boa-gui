@@ -6,6 +6,7 @@ from wx.lib.pubsub import pub
 from ..model.project import Project
 from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
 from ..form.about import AboutDialog
+from ..form.setting import BaseSettingDialog
 
 __author__ = 'jbui'
 
@@ -46,7 +47,7 @@ class DlgController(object):
         """
         pass
 
-    def new_project_dialog(self, event):
+    def new_project_dialog(self, event=None):
         """
         New Project Dialog.
 
@@ -63,7 +64,7 @@ class DlgController(object):
 
         dlg.Destroy()
 
-    def open_project_dialog(self, event):
+    def open_project_dialog(self, event=None):
         """
         Open Project Dialog.
 
@@ -88,7 +89,7 @@ class DlgController(object):
 
         dlg.Destroy()
 
-    def save_project_dialog(self, event):
+    def save_project_dialog(self, event=None):
         """
         Save Project Dialog.
 
@@ -105,7 +106,7 @@ class DlgController(object):
 
         dlg.Destroy()
 
-    def save_as_project_dialog(self, event):
+    def save_as_project_dialog(self, event=None):
         """
         Save As Project Dialog.
 
@@ -121,7 +122,22 @@ class DlgController(object):
 
         dlg.Destroy()
 
-    def about_dialog(self, event):
+    def setting_dialog(self, event=None):
+        """
+        Show Setting Dialog.
+
+        :param event: NA
+        :return:
+        """
+        dlg = BaseSettingDialog(self.frame, self.parent)
+
+        if dlg.ShowModal() == wx.ID_OK:
+
+            pass
+
+        dlg.Destroy()
+
+    def about_dialog(self, event=None):
         """
         About Model Dialog.
 

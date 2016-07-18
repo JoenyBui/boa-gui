@@ -51,6 +51,7 @@ METHOD_WINDOW_GENERAL = wx.NewId()
 METHOD_WINDOW_CHART = wx.NewId()
 METHOD_WINDOW_XLSX = wx.NewId()
 
+METHOD_DEFAULT_SETTING = wx.NewId()
 METHOD_HELP = wx.ID_HELP
 METHOD_ABOUT = wx.ID_ABOUT
 
@@ -79,6 +80,7 @@ MASTER_KEY = {
     METHOD_WINDOW_XLSX:         dict(name='Window XLSX'),
 
     METHOD_HELP:                dict(name='&Help'),
+    METHOD_DEFAULT_SETTING:     dict(name='Setting'),
     METHOD_ABOUT:               dict(name='&About')
 }
 
@@ -283,6 +285,10 @@ MENU_BAR_KEY = [
         name='Help',
         id=METHOD_HELP,
         keys=[
+            OrderedDict(
+                id=METHOD_DEFAULT_SETTING,
+                name='Setting',
+            ),
             OrderedDict(
                 id=METHOD_ABOUT,
                 name='About',

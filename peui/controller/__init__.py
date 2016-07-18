@@ -63,11 +63,13 @@ class ChildController(BaseController):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, parent, view):
+    def __init__(self, parent, view, *args, **kwargs):
         """
 
         :param parent:
         :param view:
+        :param args:
+        :param kwargs:
         :return:
         """
         BaseController.__init__(self)
