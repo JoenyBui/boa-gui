@@ -262,15 +262,15 @@ class FloatInputLayout(SmartInputLayout):
         if self.postbox:
             self.postbox.Disable()
 
-    def set_value(self, value, post=None, label=None):
+    def set_value(self, value=None, post=None, label=None):
         """
-        Set the value.
+        Set the components value.
 
-        :param value:
-        :param post:
-        :param label:
+        :param value: textbox.Value
+        :param post: postbox.Value
+        :param label: label.Label
         """
-        if value != None:
+        if value is not None:
             self.textbox.Value = str(value)
 
         if post and self.postbox:
@@ -279,12 +279,16 @@ class FloatInputLayout(SmartInputLayout):
         if label:
             self.label.Label = str(label)
 
-    def get_value(self):
+    def get_value(self, destination_unit=None):
         """
-        Get the value.
+        Return the value.
 
+        :param destination_unit: convert value to this unit
         :return:
         """
+
+        #TODO: Needs conversion if destination unit is specified.
+
         if self.postbox:
             return units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
         else:
@@ -295,6 +299,7 @@ class FloatInputLayout(SmartInputLayout):
 
     def set_value_convert(self, original_unit, destination_unit):
         """
+        Modified the textbox value given the set of conversion.
 
         :param original_unit:
         :param destination_unit:
@@ -324,8 +329,10 @@ class FloatInputLayout(SmartInputLayout):
 
     def value_convert(self, original_unit, destination_unit):
         """
-        :param original_unit:
-        :param destination_unit:
+        Return the converted value.
+
+        :param original_unit: original unit value
+        :param destination_unit: destination unit value
         :return:
         """
         conversion_factor = 1.0
