@@ -6,3 +6,6 @@ peui.contextmenu
 
 .. toctree::
    :maxdepth: 2
+
+   menuitem.rst
+   popup.rst

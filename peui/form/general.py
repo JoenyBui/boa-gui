@@ -53,7 +53,13 @@ class GeneralDialog(wx.Dialog):
         self.Fit()
 
     def on_okay(self, event):
-        self.local.set_component()
+        """
+        Child dialog should inherit on_okay event.
+
+        :param: event
+        """
+        #TODO: Need to remove the set_component.  Too Specific.
+        # self.local.set_component()
         event.Skip()
 
     def add_layout(self, key, object):
