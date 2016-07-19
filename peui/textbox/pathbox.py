@@ -34,7 +34,7 @@ class PathInputLayout(SmartInputLayout):
     Path Input Layout.
 
     """
-    def __init__(self, parent, textbox=None, postbox=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, textbox=None, postbox=None, layout=None, is_file=False, *args, **kwargs):
         """
 
         :param parent:
@@ -64,19 +64,36 @@ class PathInputLayout(SmartInputLayout):
         # self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
 
         if self.postbox:
-            self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
-            self.postbox.SetToolTip(wx.ToolTip("Choose Path"))
+            if is_file:
+                self.postbox.Bind(wx.EVT_BUTTON, self.pick_file_path)
+                self.postbox.SetToolTip(wx.ToolTip("Choose File"))
+            else:
+                self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
+                self.postbox.SetToolTip(wx.ToolTip("Choose Path"))
 
         self.do_layout()
 
     def pick_folder_path(self, event):
         """
-        Pick the folder path.
+        Pick the folder path using a Directory Dialog.
 
         :param event:
         :return:
         """
+        #TODO: defaultPath='' needs to be set based off of textbox value.  Make sure to add exception handling for wrong path.
+
         dlg = wx.DirDialog(self.parent)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            # Change the path string..
+            self.textbox.SetValue(dlg.GetPath())
+
+        dlg.Destroy()
+
+    def pick_file_path(self, event):
+        #TODO: defaultFile='' needs to be set based off of textbox value.  Make sure to add exception handling for wrong path.
+
+        dlg = wx.FileDialog(self.parent)
 
         if dlg.ShowModal() == wx.ID_OK:
             # Change the path string..
