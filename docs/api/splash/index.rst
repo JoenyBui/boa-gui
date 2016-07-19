@@ -6,3 +6,5 @@ peui.splash
 
 .. toctree::
    :maxdepth: 2
+
+   screen.rst

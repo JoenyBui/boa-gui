@@ -4,7 +4,7 @@ API Manual
 ==========
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
    app.rst
    config.rst

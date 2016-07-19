@@ -6,3 +6,5 @@ peui.decorate
 
 .. toctree::
    :maxdepth: 2
+
+   wait.rst

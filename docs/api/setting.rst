@@ -4,6 +4,5 @@
 peui.setting
 ************
 
-
 .. automodule:: peui.setting
     :members:
