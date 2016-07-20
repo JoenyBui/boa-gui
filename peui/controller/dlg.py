@@ -130,6 +130,7 @@ class DlgController(object):
         :return:
         """
         dlg = BaseSettingDialog(self.frame, self.parent)
+        dlg.SetSize((500, 350))
 
         if dlg.ShowModal() == wx.ID_OK:
 

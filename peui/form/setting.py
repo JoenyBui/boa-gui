@@ -45,8 +45,8 @@ class BaseSettingDialog(wx.Dialog):
         self.btnsizer = self.CreateButtonSizer(btn_flags)
 
         vsizer = wx.BoxSizer(wx.VERTICAL)
-        vsizer.Add(self.local.do_layout(), 0, wx.EXPAND | wx.ALL, 5)
-        vsizer.AddStretchSpacer()
+        vsizer.Add(self.local.do_layout(), 1, wx.EXPAND | wx.ALL, 5)
+        # vsizer.AddStretchSpacer()
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
         self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_SAVE)
@@ -94,6 +94,10 @@ class ControllerBaseDialog(ChildController):
         self.view = view
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass
 
     def settings_layout(self, parent_pnl):
@@ -106,11 +110,11 @@ class ControllerBaseDialog(ChildController):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        tb_layout = LayoutDimensions(top=2, bottom=2, right=4, left=4, widths=(150, 195, 75), interior=5,
-                                     stretch_factor=(1, 0, 0))
+        tb_layout = LayoutDimensions(top=2, bottom=2, right=4, left=4, widths=(150, 195, 30), interior=5,
+                                     stretch_factor=(0, 1, 0))
         tb_layout.calculate()
         cb_layout = LayoutDimensions(top=2, bottom=2, right=4, left=4, widths=(150, 275), interior=5,
-                                     stretch_factor=(1, 0))
+                                     stretch_factor=(0, 1))
         cb_layout.calculate()
 
         # Author
@@ -159,7 +163,7 @@ class ControllerBaseDialog(ChildController):
 
         self.view.layouts['settings'] = self.settings_layout(self.view.nb)
 
-        self.view.nb.AddPage(self.view.layouts['settings'], 'Settings')
+        self.view.nb.AddPage(self.view.layouts['settings'], 'General')
 
         sizer.Add(self.view.nb, 1, wx.ALL | wx.EXPAND, 0)
 
