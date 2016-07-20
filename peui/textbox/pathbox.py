@@ -80,13 +80,12 @@ class PathInputLayout(SmartInputLayout):
         :param event:
         :return:
         """
-        #TODO: defaultPath='' needs to be set based off of textbox value. Make sure to add exception handling for wrong path.
         path = self.textbox.Value
 
         if os.path.isdir(path):
             dlg = wx.DirDialog(self.parent, defaultPath=path)
         else:
-            dlg = wx.DirDialog(self.parent, defaultPath='')
+            dlg = wx.DirDialog(self.parent)
 
         if dlg.ShowModal() == wx.ID_OK:
             # Change the path string..
@@ -100,13 +99,12 @@ class PathInputLayout(SmartInputLayout):
         :param event:
         :return:
         """
-        #TODO: defaultFile='' needs to be set based off of textbox value. Make sure to add exception handling for wrong path.
         path = self.textbox.Value
 
         if os.path.isfile(path):
             dlg = wx.FileDialog(self.parent, defaultFile=path)
         else:
-            dlg = wx.FileDialog(self.parent, defaultDir="C:\Users")
+            dlg = wx.FileDialog(self.parent)
 
         if dlg.ShowModal() == wx.ID_OK:
             # Change the path string..
