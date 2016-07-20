@@ -16,9 +16,20 @@ class BaseSettingDialog(wx.Dialog):
     Base Setting Dialog form that should be inherited.
 
     """
-    def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+    def __init__(self, parent, controller=None, local=None, btn_flags=wx.SAVE | wx.CANCEL, title='Setting Dialog', **kwargs):
+        """
+        Constructor
 
-        wx.Dialog.__init__(self, parent, **kwargs)
+        :param parent:
+        :param controller:
+        :param local:
+        :param btn_flags:
+        :param title:
+        :param kwargs:
+        :return:
+        """
+
+        wx.Dialog.__init__(self, parent, title=title, **kwargs)
 
         self.parent = parent
         self.controller = controller
@@ -38,7 +49,7 @@ class BaseSettingDialog(wx.Dialog):
         vsizer.AddStretchSpacer()
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
-        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_OK)
+        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_SAVE)
         self.SetSizer(vsizer)
         self.SetInitialSize()
         self.CenterOnParent()
@@ -112,13 +123,13 @@ class ControllerBaseDialog(ChildController):
         self.view.layouts['path'] = PathInputLayout(pnl, name='Path:', layout=tb_layout)
 
         # E-Signature
-        self.view.layouts['esignature'] = PathInputLayout(pnl, name='E-Signature:', layout=tb_layout)
+        self.view.layouts['esignature'] = PathInputLayout(pnl, name='E-Signature:', layout=tb_layout, is_file=True)
 
         # E-Key
-        self.view.layouts['ekey'] = PathInputLayout(pnl, name='E-Key:', layout=tb_layout)
+        self.view.layouts['ekey'] = PathInputLayout(pnl, name='E-Key:', layout=tb_layout, is_file=True)
 
         # E-File
-        self.view.layouts['efile'] = PathInputLayout(pnl, name='E-File:', layout=tb_layout)
+        self.view.layouts['efile'] = PathInputLayout(pnl, name='E-File:', layout=tb_layout, is_file=True)
 
         sizer.AddSpacer(5)
         sizer.Add(self.view.layouts['author'], 0, wx.ALL | wx.EXPAND, 0)
@@ -139,7 +150,14 @@ class ControllerBaseDialog(ChildController):
 
         return pnl
 
+    def check(self, event=None):
+        return 5
+
     def do_layout(self):
+        """
+
+        :return:
+        """
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.view.layouts['settings'] = self.settings_layout(self.view.nb)
@@ -148,11 +166,15 @@ class ControllerBaseDialog(ChildController):
 
         sizer.Add(self.view.nb, 1, wx.ALL | wx.EXPAND, 0)
 
-        sizer.SetMinSize(wx.Size(600, 400))
+        # sizer.SetMinSize(wx.Size(600, 400))
 
         return sizer
 
     def load_component(self):
+        """
+
+        :return:
+        """
         self.view.layouts['author'].textbox.Value = str(self.view.controller.setting.author)
         self.view.layouts['project_name'].textbox.Value = str(self.view.controller.setting.project_name)
         self.view.layouts['path'].textbox.Value = str(self.view.controller.setting.path)
@@ -161,6 +183,10 @@ class ControllerBaseDialog(ChildController):
         self.view.layouts['efile'].textbox.Value = str(self.view.controller.setting.efile)
 
     def set_component(self):
+        """
+
+        :return:
+        """
         self.view.controller.setting.author = self.view.layouts['author'].textbox.Value
         self.view.controller.setting.project_name = self.view.layouts['project_name'].textbox.Value
         self.view.controller.setting.path = self.view.layouts['path'].textbox.Value
@@ -169,8 +195,16 @@ class ControllerBaseDialog(ChildController):
         self.view.controller.setting.efile = self.view.layouts['efile'].textbox.Value
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):
+        """
+
+        :return:
+        """
         pass
 
