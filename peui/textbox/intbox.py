@@ -186,30 +186,26 @@ class IntInputLayout(SmartInputLayout):
 
     def get_value(self, destination_unit=None):
         """
-        Return the value
+        Return the value given destination unit.
 
         :param destination_unit: convert value to this unit
-        :return:
+        :return: integer
         """
-        #TODO: Needs complete refactored similar to floatbox.py
 
-        conversion_factor = 1.0
-        if self.type == units.UNIT_AREA_KEY:
-            conversion_factor = units.get_area_conversion_factor(self.postbox.Value, destination_unit)
-        elif self.type == units.UNIT_CHARGE_KEY:
-            conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, destination_unit)
-        elif self.type == units.UNIT_LENGTH_KEY:
-            conversion_factor = units.get_length_conversion_factor(self.postbox.Value, destination_unit)
-        elif self.type == units.UNIT_INERTIA_KEY:
-            conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, destination_unit)
-        elif self.type == units.UNIT_MASS_KEY:
-            conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, destination_unit)
-        elif self.type == units.UNIT_PRESSURE_KEY:
-            conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, destination_unit)
-        elif self.type == units.UNIT_VOLUME_KEY:
-            conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, destination_unit)
+        if self.postbox:
+            original_unit = self.postbox.Value
+            value = self.textbox.Value
+            unit = self.postbox.unit
 
-        return int(conversion_factor * int(self.textbox.Value))
+            if value == '' or unit is None:
+                return None
+            else:
+                return int(int(value) * unit.get_conversion_factor(original_unit, destination_unit))
+        else:
+            if self.textbox.Value == '':
+                return None
+            else:
+                return int(self.textbox.Value)
 
     def validate(self):
         """

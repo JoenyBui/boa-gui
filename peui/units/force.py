@@ -17,6 +17,7 @@ FACTOR_FORCE_KIP = 4448.2216
 
 FORCE_KEY = {
     'lb': FACTOR_FORCE_POUND,
+    'lbs': FACTOR_FORCE_POUND,
     'kip': FACTOR_FORCE_KIP,
     'ton': FACTOR_FORCE_TON,
     'kiloton': FACTOR_FORCE_KILOTON,
@@ -34,7 +35,7 @@ DEFAULT_FORCE_LIST = [
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'lb',
+    'lbs',
     'ton',
     'kiloton'
 ]

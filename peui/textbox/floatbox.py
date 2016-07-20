@@ -9,7 +9,7 @@ from pecutil.refmt import get_number_fmt, parse_number
 from pecutil.types import isFloat
 
 from peui import units
-from peui.units import area, charge, length, density, torque, volume, inertia, mass, pressure, tnt, misc
+from peui.units import area, charge, length, density, torque, volume, inertia, mass, pressure, tnt
 
 from .smart import SmartTextBox, SmartInputLayout
 
@@ -281,16 +281,21 @@ class FloatInputLayout(SmartInputLayout):
 
     def get_value(self, destination_unit=None):
         """
-        Return the value.
+        Return the value given destination unit.
 
         :param destination_unit: convert value to this unit
-        :return:
+        :return: float
         """
 
-        #TODO: Needs conversion if destination unit is specified.
-
         if self.postbox:
-            return units.get_base_value(self.type, self.textbox.Value, self.postbox.Value)
+            original_unit = self.postbox.Value
+            value = self.textbox.Value
+            unit = self.postbox.unit
+
+            if value == '' or unit is None:
+                return None
+            else:
+                return float(value) * unit.get_conversion_factor(original_unit, destination_unit)
         else:
             if self.textbox.Value == '':
                 return None
