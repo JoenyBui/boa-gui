@@ -16,7 +16,7 @@ class BaseSettingDialog(wx.Dialog):
     Base Setting Dialog form that should be inherited.
 
     """
-    def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL, title='Setting Dialog', **kwargs):
+    def __init__(self, parent, controller=None, local=None, btn_flags=wx.SAVE | wx.CANCEL, title='Setting Dialog', **kwargs):
         """
         Constructor
 
@@ -49,7 +49,7 @@ class BaseSettingDialog(wx.Dialog):
         # vsizer.AddStretchSpacer()
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
-        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_OK)
+        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_SAVE)
         self.SetSizer(vsizer)
         self.SetInitialSize()
         self.CenterOnParent()
