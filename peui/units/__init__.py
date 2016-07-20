@@ -75,7 +75,10 @@ def get_base_value(type, value, unit):
     from .density import get_density_conversion_factor
     from .torque import get_torque_conversion_factor
 
-    value = float(value)
+    if value == '':
+        return None
+    else:
+        value = float(value)
 
     if type == UNIT_AREA_KEY:
         return value*get_area_conversion_factor(unit, BASE_UNITS[type])

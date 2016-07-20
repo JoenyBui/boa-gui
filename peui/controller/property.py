@@ -31,10 +31,10 @@ class PropertyGridController(BaseController):
 
         :return:
         """
-        self.view.Append(propgrid.LongStringProperty("MultipleButtons"))
-        self.view.SetPropertyEditor("MultipleButtons", "MultiButtonEditor")
-
-        item = self.view.add_multi_choice('MultiChoice', 'mc', ['wxWidget', 'QT', 'GTK'])
+        # self.view.Append(propgrid.LongStringProperty("MultipleButtons"))
+        # self.view.SetPropertyEditor("MultipleButtons", "MultiButtonEditor")
+        #
+        # item = self.view.add_multi_choice('MultiChoice', 'mc', ['wxWidget', 'QT', 'GTK'])
 
         item = self.view.add_category_property('General Information')
 

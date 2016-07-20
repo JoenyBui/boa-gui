@@ -6,3 +6,6 @@ peui.model
 
 .. toctree::
    :maxdepth: 2
+
+   project.rst
+   unit.rst
