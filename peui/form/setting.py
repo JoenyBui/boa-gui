@@ -150,9 +150,6 @@ class ControllerBaseDialog(ChildController):
 
         return pnl
 
-    def check(self, event=None):
-        return 5
-
     def do_layout(self):
         """
 
