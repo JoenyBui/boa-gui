@@ -34,7 +34,7 @@ class PathInputLayout(SmartInputLayout):
     Path Input Layout.
 
     """
-    def __init__(self, parent, textbox=None, postbox=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, textbox=None, postbox=None, layout=None, is_file=False, *args, **kwargs):
         """
 
         :param parent:
@@ -75,7 +75,7 @@ class PathInputLayout(SmartInputLayout):
 
     def pick_folder_path(self, event):
         """
-        Pick the folder path.
+        Pick the folder path using a Directory Dialog.
 
         :param event:
         :return:
