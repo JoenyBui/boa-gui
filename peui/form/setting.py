@@ -16,7 +16,7 @@ class BaseSettingDialog(wx.Dialog):
     Base Setting Dialog form that should be inherited.
 
     """
-    def __init__(self, parent, controller=None, local=None, btn_flags=wx.SAVE | wx.CANCEL, title='Setting Dialog', **kwargs):
+    def __init__(self, parent, controller=None, local=None, btn_flags=wx.OK | wx.CANCEL, title='Setting Dialog', **kwargs):
         """
         Constructor
 
@@ -44,12 +44,15 @@ class BaseSettingDialog(wx.Dialog):
 
         self.btnsizer = self.CreateButtonSizer(btn_flags)
 
+        ok_button = wx.FindWindowById(wx.ID_OK, self)
+        ok_button.Label = 'Save Setting'
+
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.Add(self.local.do_layout(), 1, wx.EXPAND | wx.ALL, 5)
         # vsizer.AddStretchSpacer()
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
-        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_SAVE)
+        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_OK)
         self.SetSizer(vsizer)
         self.SetInitialSize()
         self.CenterOnParent()
@@ -188,12 +191,12 @@ class ControllerBaseDialog(ChildController):
 
         :return:
         """
-        self.view.controller.setting.author = self.view.layouts['author'].textbox.Value
-        self.view.controller.setting.project_name = self.view.layouts['project_name'].textbox.Value
-        self.view.controller.setting.path = self.view.layouts['path'].textbox.Value
-        self.view.controller.setting.esignature = self.view.layouts['esignature'].textbox.Value
-        self.view.controller.setting.ekey = self.view.layouts['ekey'].textbox.Value
-        self.view.controller.setting.efile = self.view.layouts['efile'].textbox.Value
+        self.parent.setting.author = self.view.layouts['author'].textbox.Value
+        self.parent.setting.project_name = self.view.layouts['project_name'].textbox.Value
+        self.parent.setting.path = self.view.layouts['path'].textbox.Value
+        self.parent.setting.esignature = self.view.layouts['esignature'].textbox.Value
+        self.parent.setting.ekey = self.view.layouts['ekey'].textbox.Value
+        self.parent.setting.efile = self.view.layouts['efile'].textbox.Value
 
     def update_layout(self):
         """

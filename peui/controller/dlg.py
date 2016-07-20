@@ -133,8 +133,8 @@ class DlgController(object):
         dlg.SetSize((500, 350))
 
         if dlg.ShowModal() == wx.ID_OK:
-
-            pass
+            # Save to file.
+            self.parent.setting.save_to_settings()
 
         dlg.Destroy()
 
