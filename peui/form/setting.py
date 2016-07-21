@@ -179,12 +179,12 @@ class ControllerBaseDialog(ChildController):
 
         :return:
         """
-        self.view.layouts['author'].textbox.Value = str(self.view.controller.setting.author)
-        self.view.layouts['project_name'].textbox.Value = str(self.view.controller.setting.project_name)
-        self.view.layouts['path'].textbox.Value = str(self.view.controller.setting.path)
-        self.view.layouts['esignature'].textbox.Value = str(self.view.controller.setting.esignature)
-        self.view.layouts['ekey'].textbox.Value = str(self.view.controller.setting.ekey)
-        self.view.layouts['efile'].textbox.Value = str(self.view.controller.setting.efile)
+        self.view.layouts['author'].textbox.Value = str(self.parent.setting.author)
+        self.view.layouts['project_name'].textbox.Value = str(self.parent.setting.project_name)
+        self.view.layouts['path'].textbox.Value = str(self.parent.setting.path)
+        self.view.layouts['esignature'].textbox.Value = str(self.parent.setting.esignature)
+        self.view.layouts['ekey'].textbox.Value = str(self.parent.setting.ekey)
+        self.view.layouts['efile'].textbox.Value = str(self.parent.setting.efile)
 
     def set_component(self):
         """
