@@ -1,10 +1,16 @@
 import wx
 
+from ..form import DpiAwareness
+
 __author__ = 'jbui'
 
 
-class LayoutDimensions(object):
+class LayoutDimensions(DpiAwareness):
     """
+    Styling for layout textbox
+
+    ** note: do not apply DPI scaling, done within class
+
 
     /---------------- OVERALL WIDTH ----------------------/
     |                                                     |
@@ -24,21 +30,24 @@ class LayoutDimensions(object):
     """
     def __init__(self, **kwargs):
         """
+        Constructor
 
         :param kwargs:
         :return:
         """
-        self.top = kwargs.get('top', 1)
-        self.bottom = kwargs.get('bottom', 1)
-        self.left = kwargs.get('left', 1)
-        self.right = kwargs.get('right', 1)
-        self.interior = kwargs.get('interior', 1)
+        DpiAwareness.__init__(self)
 
-        self.overall_width = kwargs.get('overall_width', 200)
-        self.overall_height = kwargs.get('overall_height', 30)
+        self.top = self.scale(kwargs.get('top', 1))
+        self.bottom = self.scale(kwargs.get('bottom', 1))
+        self.left = self.scale(kwargs.get('left', 1))
+        self.right = self.scale(kwargs.get('right', 1))
+        self.interior = self.scale(kwargs.get('interior', 1))
 
-        self.widths = kwargs.get('widths', (150, 100, 100, ))
-        self.height = kwargs.get('height', 24)
+        self.overall_width = self.scale(kwargs.get('overall_width', 200))
+        self.overall_height = self.scale(kwargs.get('overall_height', 30))
+
+        self.widths = self.scale(kwargs.get('widths', (150, 100, 100, )))
+        self.height = self.scale(kwargs.get('height', 24))
 
         self.absolute = kwargs.get('absolute', True)
 

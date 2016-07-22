@@ -6,11 +6,12 @@ from ..model.project import Project
 from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextSmartBox, TextInputLayout
 from ..textbox.pathbox import PathSmartBox, PathInputLayout
+from . import DpiAwareness
 
 __author__ = 'jbui'
 
 
-class NewProjectDialog(wx.Dialog):
+class NewProjectDialog(wx.Dialog, DpiAwareness):
     """
     New Project Dialog
 
@@ -25,9 +26,15 @@ class NewProjectDialog(wx.Dialog):
         :param kwargs:
         :return:
         """
+        DpiAwareness.__init__(self)
+
+        width = self.scale(kwargs.get('width', 500))
+        height = self.scale(kwargs.get('height', 300))
+
         wx.Dialog.__init__(self, parent,
                            title=kwargs.get('title', 'New Project'),
-                           size=(kwargs.get('width', 500), kwargs.get('height', 300)))
+                           style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                           size=(self.scale(width), self.scale(height)))
 
         self.parent = parent
 
@@ -73,7 +80,9 @@ class NewProjectDialog(wx.Dialog):
         """
         BOTH_SIDES = wx.EXPAND | wx.LEFT | wx.RIGHT
 
-        layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2, widths=(125, 175, 25), stretch_factor=(0, 0, 1))
+        layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2,
+                                  widths=(125, 175, 25),
+                                  stretch_factor=(0, 1, 0))
         layout.calculate()
 
         vsizer = wx.BoxSizer(wx.VERTICAL)
@@ -85,13 +94,13 @@ class NewProjectDialog(wx.Dialog):
         # Now finish the layout by adding the two sizers to the main vertical sizer.
         # vsizer.AddStretchSpacer()
 
-        vsizer.AddSpacer(10)
-        vsizer.Add(field1_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(10)
-        vsizer.Add(field2_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(10)
-        vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(10)
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field1_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field2_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field3_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
 
         return vsizer
 

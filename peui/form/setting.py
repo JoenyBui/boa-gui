@@ -7,11 +7,12 @@ from peui.textbox.smart import SmartComboBox
 from peui.textbox.textbox import TextInputLayout
 
 from ..controller import ChildController
+from . import DpiAwareness
 
 __author__ = 'jbui'
 
 
-class BaseSettingDialog(wx.Dialog):
+class BaseSettingDialog(wx.Dialog, DpiAwareness):
     """
     Base Setting Dialog form that should be inherited.
 
@@ -28,7 +29,7 @@ class BaseSettingDialog(wx.Dialog):
         :param kwargs:
         :return:
         """
-
+        DpiAwareness.__init__(self)
         wx.Dialog.__init__(self, parent, title=title, **kwargs)
 
         self.parent = parent
@@ -54,11 +55,14 @@ class BaseSettingDialog(wx.Dialog):
 
         self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_OK)
         self.SetSizer(vsizer)
-        self.SetInitialSize()
+        # self.SetInitialSize()
         self.CenterOnParent()
-        self.Fit()
 
         self.local.load_component()
+
+        # Scale Size
+        size = self.GetSize()
+        self.SetSize(wx.Size(self.scale(size[0]), self.scale(size[1])))
 
     def on_okay(self, event):
         """

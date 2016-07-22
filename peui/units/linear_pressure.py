@@ -36,7 +36,8 @@ DEFAULT_IMPERIAL_LIST = [
 ]
 
 DEFAULT_METRIC_LIST = [
-    'kg/m'
+    'kg/m',
+    'N/mm'
 ]
 
 

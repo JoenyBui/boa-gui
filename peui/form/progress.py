@@ -1,4 +1,3 @@
-
 import uuid
 
 import wx
@@ -7,11 +6,14 @@ from wx.lib.pubsub import pub
 
 from threading import Thread
 
+from ..form import DpiAwareness
+
 __author__ = 'jbui'
 
 
-class ProgressDialog(wx.Dialog):
+class ProgressDialog(wx.Dialog, DpiAwareness):
     """
+    Progress Dialog
 
     """
     def __init__(self, thread, *args, **kwargs):
@@ -22,6 +24,7 @@ class ProgressDialog(wx.Dialog):
         :param kwargs:
         :return:
         """
+        DpiAwareness.__init__(self)
         wx.Dialog.__init__(self, None, **kwargs)
 
         self.count = 0
@@ -41,6 +44,10 @@ class ProgressDialog(wx.Dialog):
 
         self.thread = thread
 
+        # Modify size
+        size = self.GetSize()
+        self.SetSize(wx.Size(self.scale(size[0]), self.scale(size[1])))
+
     def do_layout(self):
         """
 
@@ -53,14 +60,13 @@ class ProgressDialog(wx.Dialog):
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
         vsizer.AddStretchSpacer()
-        vsizer.Add(self.get_horizontal_size(self.field1_lbl), 0, BOTH_SIDES, 1)
-        vsizer.AddSpacer(3)
-        vsizer.Add(self.get_horizontal_size(self.field2_lbl), 0, BOTH_SIDES, 1)
-        vsizer.AddSpacer(3)
-        vsizer.Add(self.get_horizontal_size(self.progress), 0, BOTH_SIDES, 1)
-        vsizer.AddSpacer(6)
-        vsizer.Add(self.get_horizontal_size(btn), 0, BOTH_SIDES, 1)
+        vsizer.Add(self.get_horizontal_size(self.field1_lbl), 0, BOTH_SIDES, self.scale(1))
+        vsizer.AddSpacer(self.scale(3))
+        vsizer.Add(self.get_horizontal_size(self.field2_lbl), 0, BOTH_SIDES, self.scale(1))
+        vsizer.AddSpacer(self.scale(3))
+        vsizer.Add(self.get_horizontal_size(self.progress), 0, BOTH_SIDES, self.scale(1))
         vsizer.AddStretchSpacer()
+        vsizer.Add(self.get_horizontal_size(btn), 0, BOTH_SIDES, self.scale(1))
 
         self.SetSizer(vsizer)
 

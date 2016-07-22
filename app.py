@@ -95,7 +95,6 @@ if __name__ == '__main__':
     #TODO: Backup Temp File
     #TODO: Periodic Savings
     #TODO: Save Perspective View
-    #TODO: Add Settings menu item and dialog.as
     #TODO: Add license manager menu item.
 
     setting = Setting()

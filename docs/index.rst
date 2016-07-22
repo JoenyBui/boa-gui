@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    api/index.rst
+   release_notes.rst
 
 .. todo::
 

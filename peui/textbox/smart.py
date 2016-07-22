@@ -77,7 +77,6 @@ class SmartTextBox(wx.TextCtrl):
         else:
             self.disabled_index = disabled_index
 
-
     @property
     def min(self):
         """
@@ -469,23 +468,7 @@ class SmartInputLayout(wx.BoxSizer):
             else:
                 self.label = SmartLabel(self.parent, label='Textbox Label:')
 
-        # self.label.SetMinSize(self.layout.get_size(self.INDEX_LABEL))
-        #
-        # self.textbox = None
-        #
-        # self.postbox = kwargs.get('postbox', None)
-
         self.tooltip = kwargs.get('tooltip', SuperToolTip("HELP"))
-        # self.tooltip.SetIcon(wx.ICON_WARNING)
-        # self.tooltip.SetTarget(self.textbox)
-
-        # Additional placeholder that is significant (unit box, path button, etc.)
-
-        # Call do_layout after you have populate the label, textbox, and/or postbox
-        # self.border_space = kwargs.get('border_space', 5)
-        # self.border_space_label = kwargs.get('border_space_label', self.border_space)
-        # self.border_space_textbox = kwargs.get('border_space_textbox', self.border_space)
-        # self.border_space_postbox = kwargs.get('border_space_postbox', self.border_space)
 
         self.min = min
         self.max = max
