@@ -13,19 +13,20 @@ class MainWindow(wx.Frame):
     """
     Main Window
     """
-    def __init__(self, parent, controller, title='', width=800, height=600, **kwargs):
+    def __init__(self, parent, controller, title='', width=800, height=600, style=wx.DEFAULT_FRAME_STYLE, **kwargs):
         """
         Main Window.
 
-        :param parent:
-        :param controller:
+        :param parent: parent wx.Frame
+        :param controller: local controller
         :param title:
         :param width:
         :param height:
+        :param style:
         :param kwargs:
         :return:
         """
-        wx.Frame.__init__(self, parent, title=title, size=(width, height))
+        wx.Frame.__init__(self, parent, title=title, size=(width, height), style=style)
 
         self.parent = parent
 

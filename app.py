@@ -168,7 +168,8 @@ if __name__ == '__main__':
     # Check if the a file path is passed with the executable.
     project = Project()
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
-    frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
+    frame = MainWindow(parent=None, controller=controller, title='Sample Editor',
+                       style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
     controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 

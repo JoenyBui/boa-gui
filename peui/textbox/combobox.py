@@ -18,7 +18,7 @@ class ComboBoxInputLayout(SmartInputLayout):
         """
         Combobox input layout.
 
-        :param parent:
+        :param parent: main form
         :param combobox:
         :param event_on_select:
         :param layout:

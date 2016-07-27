@@ -113,8 +113,12 @@ class SmartTextBox(wx.TextCtrl):
         """
         self.keys['max'] = value
 
+    def set_value(self, value):
+        self.Value = str(value)
+
     def get_value(self, key):
         """
+        Get the value
 
         :param key:
         :return:
