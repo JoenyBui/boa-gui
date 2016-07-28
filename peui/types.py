@@ -41,7 +41,7 @@ def is_int(string):
     :return:
     """
     try:
-        float(string)
+        int(string)
 
         return True
     except ValueError:
@@ -54,7 +54,7 @@ def cast_int(string):
     :param string:
     :return:
     """
-    if is_float(string):
+    if is_int(string):
         return int(string)
     else:
         # TODO: Write out to log file

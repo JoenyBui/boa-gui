@@ -199,6 +199,39 @@ class SmartComboBox(wx.ComboBox):
             # If unit is passed in, activate it.
             self.activate()
 
+    def append(self, label, obj):
+        """
+        Append data into combobox.
+
+        :param label: title
+        :param obj: object data
+        :return:
+        """
+        self.Append(label, obj)
+
+    def set_selection_by_data(self, value):
+        """
+        Set the selection given the data input.
+
+        :param value:
+        :return:
+        """
+        for index, text in enumerate(self.Strings):
+            if self.HasClientData():
+                if self.GetClientData(index) == value:
+                    self.SetSelection(index)
+
+                    # Leave loop
+                    return
+
+    def get_data(self):
+        """
+        Get the data.
+
+        :return:
+        """
+        return self.GetClientData(self.GetSelection())
+
     def activate(self):
         """
         Activate Units.
