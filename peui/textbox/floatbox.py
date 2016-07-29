@@ -149,7 +149,7 @@ class FloatInputLayout(SmartInputLayout):
     Float Textbox Layout Horizontal Layout.
 
     """
-    def __init__(self, parent, value=None, unit=None, unit_system=None, type=None, max=None, min=None, layout=None,
+    def __init__(self, parent, value=None, unit=None, unit_list=None, unit_system=None, type=None, max=None, min=None, layout=None,
                  textbox=None, postbox=None, *args, **kwargs):
         """
         Constructor.
@@ -192,39 +192,39 @@ class FloatInputLayout(SmartInputLayout):
                 self.type = type
 
                 if type == units.UNIT_ACCELERATION_KEY:
-                    self.postbox.activate_acceleration()
+                    self.postbox.activate_acceleration(unit_list=unit_list)
                 elif type == units.UNIT_AREA_DENSITY_KEY:
-                    self.postbox.activate_area_density()
+                    self.postbox.activate_area_density(unit_list=unit_list)
                 elif type == units.UNIT_AREA_KEY:
-                    self.postbox.activate_area()
+                    self.postbox.activate_area(unit_list=unit_list)
                 elif type == units.UNIT_CHARGE_KEY:
-                    self.postbox.activate_charge()
+                    self.postbox.activate_charge(unit_list=unit_list)
                 elif type == units.UNIT_DENSITY_KEY:
-                    self.postbox.activate_density()
+                    self.postbox.activate_density(unit_list=unit_list)
                 elif type == units.UNIT_FORCE_KEY:
-                    self.postbox.activate_force()
+                    self.postbox.activate_force(unit_list=unit_list)
                 elif type == units.UNIT_INERTIA_KEY:
-                    self.postbox.activate_inertia()
+                    self.postbox.activate_inertia(unit_list=unit_list)
                 elif type == units.UNIT_LENGTH_KEY:
-                    self.postbox.activate_length()
+                    self.postbox.activate_length(unit_list=unit_list)
                 elif type == units.UNIT_LINEAR_DENSITY:
-                    self.postbox.activate_linear_density()
+                    self.postbox.activate_linear_density(unit_list=unit_list)
                 elif type == units.UNIT_LINEAR_PRESSURE:
-                    self.postbox.activate_linear_pressure()
+                    self.postbox.activate_linear_pressure(unit_list=unit_list)
                 elif type == units.UNIT_MASS_KEY:
-                    self.postbox.activate_mass()
+                    self.postbox.activate_mass(unit_list=unit_list)
                 elif type == units.UNIT_PRESSURE_KEY:
-                    self.postbox.activate_pressure()
+                    self.postbox.activate_pressure(unit_list=unit_list)
                 elif type == units.UNIT_TIME_KEY:
-                    self.postbox.activate_time()
+                    self.postbox.activate_time(unit_list=unit_list)
                 elif type == units.UNIT_TNT_KEY:
-                    self.postbox.activate_tnt()
+                    self.postbox.activate_tnt(unit_list=unit_list)
                 elif type == units.UNIT_TORQUE_KEY:
-                    self.postbox.activate_torque()
+                    self.postbox.activate_torque(unit_list=unit_list)
                 elif type == units.UNIT_VELOCITY_KEY:
-                    self.postbox.activate_velocity()
+                    self.postbox.activate_velocity(unit_list=unit_list)
                 elif type == units.UNIT_VOLUME_KEY:
-                    self.postbox.activate_volume()
+                    self.postbox.activate_volume(unit_list=unit_list)
 
             if unit:
                 if isinstance(unit, types.TupleType) or isinstance(unit, types.ListType):

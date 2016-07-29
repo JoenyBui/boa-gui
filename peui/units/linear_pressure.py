@@ -31,7 +31,7 @@ DEFAULT_LINEAR_PRESSURE_LIST = {
 
 DEFAULT_IMPERIAL_LIST = [
     'plf',
-    'lb/in'
+    'lb/in',
     'klf'
 ]
 

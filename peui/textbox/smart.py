@@ -199,6 +199,29 @@ class SmartComboBox(wx.ComboBox):
             # If unit is passed in, activate it.
             self.activate()
 
+        self.current_dropbox_selection = None
+
+        self.Bind(wx.EVT_COMBOBOX_DROPDOWN, self.on_dropdown_open, self)
+
+    def on_dropdown_open(self, event=None):
+        """
+        Event handler to store the current selection
+
+        :param:
+        """
+        self.current_dropbox_selection = self.GetCurrentSelection()
+
+    def is_selection_change(self):
+        """
+        Check if the dropbox selection different from the previous selection before the dropbox is open.
+
+        :return: boolean
+        """
+        if self.current_dropbox_selection is self.GetSelection():
+            return False
+        else:
+            return True
+
     def append(self, label, obj):
         """
         Append data into combobox.
@@ -252,6 +275,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = AccelerationUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -264,6 +294,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = AreaDensityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -274,6 +311,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = AreaUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -284,6 +328,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = ChargeUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -295,6 +346,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = DensityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -307,6 +365,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = ForceUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -318,6 +383,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = InertiaUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -329,6 +401,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = LengthUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -341,6 +420,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = LinearDensityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -353,6 +439,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = LinearPressureUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -363,6 +456,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = MassUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -373,6 +473,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = PressureUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -385,6 +492,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = TimeUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -396,6 +510,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = TntUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -407,6 +528,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = TorqueUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -419,6 +547,13 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = VelocityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -430,6 +565,13 @@ class SmartComboBox(wx.ComboBox):
         :param kwargs:
         """
         self.unit = VolumeUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
         self.unit.unit_system = self.unit_system
         self.activate()
 
@@ -437,7 +579,8 @@ class SmartComboBox(wx.ComboBox):
         """
         Get the factor.
 
-        :param destination:
+        :param origin: origin unit
+        :param destination: destination unit
         """
         return self.convert(origin, destination)
 

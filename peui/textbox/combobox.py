@@ -14,7 +14,7 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     """
 
-    def __init__(self, parent, combobox=None, event_on_select=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, combobox=None, event_on_select=None, event_text_change=None, layout=None, *args, **kwargs):
         """
         Combobox input layout.
 
@@ -36,6 +36,9 @@ class ComboBoxInputLayout(SmartInputLayout):
 
         if event_on_select:
             self.combobox.Bind(wx.EVT_COMBOBOX, event_on_select)
+
+        if event_text_change:
+            self.combobox.Bind(wx.EVT_TEXT, event_text_change)
 
         self.do_layout()
 
