@@ -30,8 +30,9 @@ DEFAULT_LINEAR_PRESSURE_LIST = {
 }
 
 DEFAULT_IMPERIAL_LIST = [
-    'lb/ft',
-    'lb/in'
+    'plf',
+    'lb/in',
+    'klf'
 ]
 
 DEFAULT_METRIC_LIST = [
