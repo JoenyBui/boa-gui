@@ -79,6 +79,15 @@ class ComboBoxInputLayout(SmartInputLayout):
         """
         self.combobox.SetSelection(value)
 
+    def set_selection_by_data(self, value):
+        """
+        Set the selection given the data input.
+
+        :param value:
+        :return:
+        """
+        self.combobox.set_selection_by_data(value)
+
     def append(self, label, obj):
         """
         Append data into combobox.
