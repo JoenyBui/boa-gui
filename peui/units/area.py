@@ -55,14 +55,12 @@ DEFAULT_AREA_LIST = [
 
 DEFAULT_IMPERIAL__LIST = [
     'in2',
-    'ft2',
-    'yd2'
+    'ft2'
 ]
 
 DEFAULT_METRIC_LIST = [
     'cm2',
-    'm2',
-    'km2'
+    'm2'
 ]
 
 
