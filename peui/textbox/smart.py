@@ -144,7 +144,8 @@ class SmartTextBox(wx.TextCtrl):
         wx.TextCtrl.Enable(self, *args, **kwargs)
 
         if self.disabled_messages:
-            self.Value = self.enabled_message
+            if self.Value in self.disabled_messages:
+                self.Value = self.enabled_message
 
     def Disable(self, *args, **kwargs):
         """
