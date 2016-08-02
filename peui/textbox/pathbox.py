@@ -141,4 +141,3 @@ class PathInputLayout(SmartInputLayout):
 
     def get_value(self):
         return self.postbox.Value
-git
