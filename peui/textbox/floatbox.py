@@ -10,6 +10,7 @@ from pecutil.types import isFloat
 
 from peui import units
 from peui.units import area, charge, length, density, torque, volume, inertia, mass, pressure, tnt
+from pecutil.types import isFloat
 
 from .smart import SmartTextBox, SmartInputLayout
 
@@ -143,6 +144,17 @@ class FloatSmartBox(SmartTextBox):
         self.SetBackgroundColour(self.color_range_error)
         self.Refresh()
 
+    def get_value(self, key=None):
+        val = SmartTextBox.get_value(self, key=key)
+
+        if key is None:
+            if isFloat(val):
+                return float(val)
+            else:
+                return None
+
+        return val
+
 
 class FloatInputLayout(SmartInputLayout):
     """
@@ -193,6 +205,8 @@ class FloatInputLayout(SmartInputLayout):
 
                 if type == units.UNIT_ACCELERATION_KEY:
                     self.postbox.activate_acceleration(unit_list=unit_list)
+                elif type == units.UNIT_ANGLE_KEY:
+                    self.postbox.activate_angle(unit_list=unit_list)
                 elif type == units.UNIT_AREA_DENSITY_KEY:
                     self.postbox.activate_area_density(unit_list=unit_list)
                 elif type == units.UNIT_AREA_KEY:

@@ -12,6 +12,7 @@ from . import LayoutDimensions
 
 from ..units import KEY_IMPERIAL, KEY_METRIC
 from ..units.acceleration import AccelerationUnit
+from ..units.angle import AngleUnit
 from ..units.area_density import AreaDensityUnit
 from ..units.area import AreaUnit
 from ..units.charge import ChargeUnit
@@ -114,9 +115,15 @@ class SmartTextBox(wx.TextCtrl):
         self.keys['max'] = value
 
     def set_value(self, value):
+        """
+        Set the textbox value
+
+        :param value: text
+        :return:
+        """
         self.Value = str(value)
 
-    def get_value(self, key):
+    def get_value(self, key=None):
         """
         Get the value
 
@@ -124,13 +131,16 @@ class SmartTextBox(wx.TextCtrl):
         :return:
         """
         val = self.GetValue()
-        digit = chr(key)
 
-        pos = self.GetInsertionPoint()
-        if pos == len(val):
-            val += digit
-        else:
-            val = val[:pos] + digit + val[pos:]
+        if key is not None:
+            # When key is strike we capture.
+            digit = chr(key)
+
+            pos = self.GetInsertionPoint()
+            if pos == len(val):
+                val += digit
+            else:
+                val = val[:pos] + digit + val[pos:]
 
         return val
 
@@ -256,6 +266,23 @@ class SmartComboBox(wx.ComboBox):
         """
         return self.GetClientData(self.GetSelection())
 
+    def set_value(self, value):
+        """
+        Set the value
+
+        :param value: string
+        :return:
+        """
+        self.Value = str(value)
+
+    def get_value(self):
+        """
+        Get the combobox value
+
+        :return:
+        """
+        return self.Value
+
     def activate(self):
         """
         Activate Units.
@@ -276,6 +303,25 @@ class SmartComboBox(wx.ComboBox):
         :return:
         """
         self.unit = AccelerationUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_angle(self, *args, **kwargs):
+        """
+        Activate angle unit
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = AngleUnit(*args, **kwargs)
 
         if kwargs.get('unit_list'):
             unit_list = kwargs.get('unit_list')

@@ -15,6 +15,7 @@ UNIT_SYSTEM_INDEX = {
 }
 
 UNIT_ACCELERATION_KEY = 'acceleration'
+UNIT_ANGLE_KEY = 'angle'
 UNIT_AREA_DENSITY_KEY = 'area_density'
 UNIT_AREA_KEY = 'area'
 UNIT_CHARGE_KEY = 'charge'
@@ -35,6 +36,7 @@ UNIT_VOLUME_KEY = 'volume'
 
 BASE_UNITS = dict(
     acceleration='m/s2',
+    angle='degrees',
     area='m2',
     area_density='kg/m^2',
     charge='TNT',
