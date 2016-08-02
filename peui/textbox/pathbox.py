@@ -34,7 +34,7 @@ class PathInputLayout(SmartInputLayout):
     Path Input Layout.
 
     """
-    def __init__(self, parent, textbox=None, postbox=None, layout=None, is_file=False, *args, **kwargs):
+    def __init__(self, parent, textbox=None, postbox=None, max=None, min=None, layout=None, is_file=False, *args, **kwargs):
         """
 
         :param parent:
@@ -45,7 +45,7 @@ class PathInputLayout(SmartInputLayout):
         :param kwargs:
         :return:
         """
-        SmartInputLayout.__init__(self, parent, layout=layout, *args, **kwargs)
+        SmartInputLayout.__init__(self, parent, max=max, min=min, layout=layout, *args, **kwargs)
 
         # self.label = kwargs.get('label', 'Path:')
 
@@ -111,3 +111,27 @@ class PathInputLayout(SmartInputLayout):
             self.textbox.SetValue(dlg.GetPath())
 
         dlg.Destroy()
+
+    def enable(self):
+        """
+        Enable textbox and/or postbox.
+
+        :return:
+        """
+        if self.textbox:
+            self.textbox.Enable(True)
+
+        if self.postbox:
+            self.postbox.Enable(True)
+
+    def disable(self):
+        """
+        Disable textbox and/or postbox.
+
+        :return:
+        """
+        if self.textbox:
+            self.textbox.Disable()
+
+        if self.postbox:
+            self.postbox.Disable()

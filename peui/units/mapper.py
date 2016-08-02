@@ -82,7 +82,10 @@ class UnitMap(object):
         else:
             for obj in self.units:
                 if obj.key == utype:
-                    return value * obj.get_conversion_factor(keys[base_unit], unit)
+                    if value is None or keys[base_unit] is None:
+                        return None
+                    else:
+                        return value * obj.get_conversion_factor(keys[base_unit], unit)
 
     def set_value(self, name, value, unit):
         """
