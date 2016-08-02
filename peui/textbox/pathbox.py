@@ -135,3 +135,10 @@ class PathInputLayout(SmartInputLayout):
 
         if self.postbox:
             self.postbox.Disable()
+
+    def set_value(self, value):
+        self.postbox.Value = value
+
+    def get_value(self):
+        return self.postbox.Value
+git

@@ -96,7 +96,8 @@ class PropGrid(propgrid.PropertyGrid):
         * IsInvalid
 
     """
-    def __init__(self, parent, controller, local, size=(100, 50), column=None, editable=None, *args, **kwargs):
+    def __init__(self, parent, controller, local, size=(100, 50), column=None, editable=None,
+                 style=propgrid.PG_SPLITTER_AUTO_CENTER, *args, **kwargs):
         """
         Property grid view.
 
@@ -110,7 +111,7 @@ class PropGrid(propgrid.PropertyGrid):
         :param kwargs: additional keywords
         :return:
         """
-        propgrid.PropertyGrid.__init__(self, parent, size=size, *args, **kwargs)
+        propgrid.PropertyGrid.__init__(self, parent, size=size, style=style, *args, **kwargs)
 
         # Add the number of column.
         if column:
