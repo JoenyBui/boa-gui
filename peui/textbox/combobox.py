@@ -4,6 +4,7 @@ from wx.lib.agw.supertooltip import SuperToolTip
 
 from . import LayoutDimensions
 from .smart import SmartComboBox, SmartInputLayout
+from ..types import is_int
 
 __author__ = 'jbui'
 
@@ -80,7 +81,9 @@ class ComboBoxInputLayout(SmartInputLayout):
         :param value: index
         :return:
         """
-        self.combobox.SetSelection(value)
+        if value is not None:
+            if is_int(value):
+                self.combobox.SetSelection(value)
 
     def set_selection_by_data(self, value):
         """

@@ -121,7 +121,10 @@ class SmartTextBox(wx.TextCtrl):
         :param value: text
         :return:
         """
-        self.Value = str(value)
+        if value is not None:
+            self.Value = str(value)
+        else:
+            self.Value = ""
 
     def get_value(self, key=None):
         """
@@ -175,7 +178,8 @@ class SmartComboBox(wx.ComboBox):
     Smart ComboBox is used for units conversion.
 
     """
-    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None, *args, **kwargs):
+    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None,
+                 enabled_message='', disabled_messages=None, disabled_index=None, *args, **kwargs):
         """
         Constructor
 
@@ -206,6 +210,15 @@ class SmartComboBox(wx.ComboBox):
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
 
+        self.previous_index = 0
+        self.enabled_message = enabled_message
+        self.disabled_messages = disabled_messages
+
+        if disabled_index is None and self.disabled_messages:
+            self.disabled_index = 0
+        else:
+            self.disabled_index = disabled_index
+
         if unit:
             # If unit is passed in, activate it.
             self.activate()
@@ -213,6 +226,37 @@ class SmartComboBox(wx.ComboBox):
         self.current_dropbox_selection = None
 
         self.Bind(wx.EVT_COMBOBOX_DROPDOWN, self.on_dropdown_open, self)
+
+    def Enable(self, *args, **kwargs):
+        """
+        On enable, clean data if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.ComboBox.Enable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            if self.Value in self.disabled_messages:
+                for index, label in enumerate(self.Strings):
+                    if label in self.disabled_messages:
+                        self.Delete(index)
+
+                self.SetSelection(self.previous_index)
+
+    def Disable(self, *args, **kwargs):
+        """
+        On disable, add message if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.ComboBox.Disable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            self.previous_index = self.GetCurrentSelection()
+            self.Append(self.disabled_messages[self.disabled_index])
+            self.SetSelection(self.GetCount() - 1)
 
     def on_dropdown_open(self, event=None):
         """

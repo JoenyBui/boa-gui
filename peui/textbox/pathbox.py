@@ -137,7 +137,15 @@ class PathInputLayout(SmartInputLayout):
             self.postbox.Disable()
 
     def set_value(self, value):
-        self.postbox.Value = value
+        """
+        Set the file path
+
+        """
+        self.textbox.set_value(value)
 
     def get_value(self):
-        return self.postbox.Value
+        """
+        Return the file path
+
+        """
+        return self.textbox.get_value()
