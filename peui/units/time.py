@@ -25,18 +25,18 @@ TIME_KEY = {
 }
 
 DEFAULT_TIME_LIST = [
-    's',
-    'ms'
+    'sec',
+    'msec'
 ]
 
 DEFAULT_IMPERIAL__LIST = [
-    's',
-    'ms'
+    'sec',
+    'msec'
 ]
 
 DEFAULT_METRIC_LIST = [
-    's',
-    'ms'
+    'sec',
+    'msec'
 ]
 
 

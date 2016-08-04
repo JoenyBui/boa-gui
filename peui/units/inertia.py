@@ -38,13 +38,13 @@ DEFAULT_INERTIA_LIST = [
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'ft4',
-    'in4'
+    'ft^4',
+    'in^4'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'm4',
-    'mm4'
+    'm^4',
+    'mm^4'
 ]
 
 

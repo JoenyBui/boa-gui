@@ -1,6 +1,6 @@
 from .units.acceleration import ACCELERATION_KEY
 from .units.area import AREA_KEY
-from .units.area_density import AREA_DENSITY
+from .units.area_density import AREA_DENSITY_KEY
 from .units.charge import CHARGE_KEY
 from .units.density import DENSITY_KEY
 from .units.force import FORCE_KEY
@@ -100,7 +100,7 @@ def cast_area_unit(string):
 
 
 def cast_area_density_unit(string):
-    if string in AREA_DENSITY.keys():
+    if string in AREA_DENSITY_KEY.keys():
         return string
     else:
         return None

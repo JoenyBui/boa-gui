@@ -33,20 +33,20 @@ DENSITY_KEY = {
 }
 
 DEFAULT_DENSITY_LIST = [
-    'g/cm3',
-    'kg/m3',
-    'lb/ft3',
-    'lb/in3'
+    'g/cm^3',
+    'kg/m^3',
+    'lb/ft^3',
+    'lb/in^3'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'lb/ft3',
-    'lb/in3'
+    'lb/ft^3',
+    'lb/in^3'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'g/cm3',
-    'kg/m3'
+    'g/cm^3',
+    'kg/m^3'
 ]
 
 

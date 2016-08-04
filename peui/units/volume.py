@@ -32,13 +32,13 @@ DEFAULT_VOLUME_LIST = [
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'ft3',
-    'in3'
+    'ft^3',
+    'in^3'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'm3',
-    'mm3'
+    'm^3',
+    'mm^3'
 ]
 
 

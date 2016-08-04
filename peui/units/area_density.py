@@ -20,11 +20,7 @@ FACTOR_AREA_DENSITY_PSI_MS2_IN = 8.4368e-3
 
 AREA_DENSITY_KEY = {
     'kg/m2': FACTOR_AREA_DENSITY_KILOGRAM_M2,
-    'psi-ms^2/in': FACTOR_AREA_DENSITY_PSI_MS2_IN
-}
-
-AREA_DENSITY = {
-    'kg/m2': FACTOR_AREA_DENSITY_KILOGRAM_M2,
+    'kg/m^2': FACTOR_AREA_DENSITY_KILOGRAM_M2,
     'psi-ms^2/in': FACTOR_AREA_DENSITY_PSI_MS2_IN
 }
 
@@ -38,7 +34,7 @@ DEFAULT_IMPERIAL__LIST = [
 ]
 
 DEFAULT_METRIC_LIST = [
-    'kg/m2',
+    'kg/m^2',
 ]
 
 
@@ -70,7 +66,7 @@ class AreaDensityUnit(Unit):
         Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_AREA_DENSITY_KEY
-        self.table = AREA_DENSITY
+        self.table = AREA_DENSITY_KEY
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL__LIST

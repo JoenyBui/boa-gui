@@ -24,14 +24,20 @@ FACTOR_VELOCITY_M_S = 1.0
 FACTOR_VELOCITY_KM_H = 0.277778
 FACTOR_VELOCITY_FT_S = 0.3048
 FACTOR_VELOCITY_MM_MS = 1.0
+FACTOR_VELOCITY_MM_SEC = 1.0
 FACTOR_VELOCITY_IN_MS = 1.0
+FACTOR_VELOCITY_IN_SEC = 1.0
 
 VELOCITY_KEY = {
     'm/s': FACTOR_VELOCITY_M_S,
+    'm/sec': FACTOR_VELOCITY_M_S,
     'mm/ms': FACTOR_VELOCITY_MM_MS,
+    'mm/sec': FACTOR_VELOCITY_MM_SEC,
     'ft/s': FACTOR_VELOCITY_FT_S,
+    'ft/sec': FACTOR_VELOCITY_FT_S,
     'km/h': FACTOR_VELOCITY_KM_H,
-    'in/ms': FACTOR_VELOCITY_IN_MS
+    'in/ms': FACTOR_VELOCITY_IN_MS,
+    'in/sec': FACTOR_VELOCITY_IN_SEC
 }
 
 
@@ -43,14 +49,13 @@ DEFAULT_VELOCITY_LIST = [
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'ft/s',
-    'in/ms'
+    'ft/sec',
+    'in/sec'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'm/s',
-    'mm/ms',
-    'km/h'
+    'm/sec',
+    'mm/sec',
 ]
 
 

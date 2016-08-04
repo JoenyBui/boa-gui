@@ -30,9 +30,11 @@ AREA_KEY = {
     'ft2': FACTOR_AREA_SQUARE_FEET,
     'feet2': FACTOR_AREA_SQUARE_FEET,
     'ft.2': FACTOR_AREA_SQUARE_FEET,
+    'ft^2': FACTOR_AREA_SQUARE_FEET,
     'in2': FACTOR_AREA_SQUARE_INCH,
     'inch2': FACTOR_AREA_SQUARE_INCH,
     'in.2': FACTOR_AREA_SQUARE_INCH,
+    'in^2': FACTOR_AREA_SQUARE_INCH,
     'yd2': FACTOR_AREA_SQUARE_YARD,
     'yard2': FACTOR_AREA_SQUARE_YARD,
     'cm2': FACTOR_AREA_SQUARE_CENTIMETER,
@@ -54,13 +56,13 @@ DEFAULT_AREA_LIST = [
 ]
 
 DEFAULT_IMPERIAL__LIST = [
-    'in2',
-    'ft2'
+    'in^2',
+    'ft^2'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'cm2',
-    'm2'
+    'cm^2',
+    'm^2'
 ]
 
 
