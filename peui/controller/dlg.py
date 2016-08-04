@@ -122,6 +122,23 @@ class DlgController(object):
 
         dlg.Destroy()
 
+    def output_project_word_doc(self, event=None):
+        """
+        Output Project as Microsoft Word Document
+
+        :param event:
+        :return:
+        """
+        dlg = SaveAsProjectDialog(self.frame, title='Output to Word Docx', ext='*.docx')
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+
+            self.parent.output_project(path)
+
+        dlg.Destroy()
+
+
     def setting_dialog(self, event=None):
         """
         Show Setting Dialog.

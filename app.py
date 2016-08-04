@@ -89,6 +89,9 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
+    import docx
+    import docxtpl
+
     #TODO: Undo-Redo Model
     #TODO: Cut, Copy & Paste
     #TODO: Printing Pdf & Docx

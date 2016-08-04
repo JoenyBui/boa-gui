@@ -109,6 +109,7 @@ class MainController(object):
         self.master_key[METHOD_OPEN_PROJECT]['method'] = self.dlg_ctrl.open_project_dialog
         self.master_key[METHOD_SAVE_PROJECT]['method'] = self.dlg_ctrl.save_project_dialog
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.dlg_ctrl.save_as_project_dialog
+        self.master_key[METHOD_OUTPUT_PROJECT]['method'] = self.dlg_ctrl.output_project_word_doc
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
 
         self.master_key[METHOD_UNDO]['method'] = self.evt_undo
@@ -297,6 +298,13 @@ class MainController(object):
         :return:
         """
         self.project.save(path)
+
+    def output_project(self, file_path):
+        from ..docs import PecDocument
+
+        doc = PecDocument(None)
+        doc.context = dict(company_name='World Company')
+        doc.save(file_path)
 
     def open_project(self, path):
         """

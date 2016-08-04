@@ -29,6 +29,7 @@ METHOD_SAVE_AS_PROJECT = wx.ID_SAVEAS
 METHOD_CLOSE_ALL = wx.ID_CLOSE_ALL
 METHOD_EXIT_PROJECT = wx.ID_EXIT
 METHOD_FILE = wx.ID_FILE
+METHOD_OUTPUT_PROJECT = wx.NewId()
 
 METHOD_EDIT = wx.ID_EDIT
 METHOD_UNDO = wx.ID_UNDO
@@ -60,6 +61,7 @@ MASTER_KEY = {
     METHOD_OPEN_PROJECT:        dict(name='Open Project'),
     METHOD_SAVE_PROJECT:        dict(name='Save Project'),
     METHOD_SAVE_AS_PROJECT:     dict(name='Save Project As'),
+    METHOD_OUTPUT_PROJECT:      dict(name='Output Project'),
     METHOD_CLOSE_ALL:           dict(name='Close All Projects'),
     METHOD_EXIT_PROJECT:        dict(name='Exit'),
 
@@ -176,6 +178,14 @@ MENU_BAR_KEY = [
                 id=METHOD_SAVE_AS_PROJECT,
                 name='Save As Project',
                 bitmap=wx.ART_FILE_SAVE_AS
+            ),
+            OrderedDict(
+                id=METHOD_SEPARATOR,
+                name='Separator'
+            ),
+            OrderedDict(
+                id=METHOD_OUTPUT_PROJECT,
+                name='Output Project as Word',
             ),
             OrderedDict(
                 id=METHOD_SEPARATOR,
