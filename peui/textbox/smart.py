@@ -46,7 +46,7 @@ class SmartTextBox(wx.TextCtrl):
 
     """
     def __init__(self, parent, key_up=None, message=None, enabled_message='',
-                 disabled_messages=None, disabled_index=None, *args, **kwargs):
+                 disabled_messages=None, disabled_index=None, value=None, *args, **kwargs):
         """
 
         :param parent:
@@ -59,6 +59,9 @@ class SmartTextBox(wx.TextCtrl):
         :param kwargs:
         """
         wx.TextCtrl.__init__(self, parent, *args, **kwargs)
+
+        if value is not None:
+            self.Value = str(value)
 
         self.keys = kwargs.get('keys', {})
         self.parent = parent
@@ -1083,3 +1086,10 @@ class SmartCheckBox(wx.CheckBox):
         if evt_click:
             self.Bind(wx.EVT_CHECKBOX, evt_click)
 
+    def get_value(self):
+        """
+        Return the true/false
+
+        :return:
+        """
+        return self.Value

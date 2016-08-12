@@ -1,6 +1,19 @@
 import os
 import sys
 
+import matplotlib
+import pandas as pd
+import numpy as np
+
+from scipy.special import gamma
+
+import wx
+import wx.lib.mixins.inspection as WIT
+import wx.aui
+import wx.lib.agw.aui as aui
+
+from pelm.client import LicenseClientManager, ClientFrame
+
 if getattr(sys, 'frozen', False):
     import ctypes
     # Override dll search path.
@@ -13,19 +26,6 @@ if getattr(sys, 'frozen', False):
 
     # Restore dll search path.
     ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
-
-import matplotlib
-# matplotlib.use('GTKAgg')
-
-import pandas as pd
-import numpy as np
-
-import wx
-import wx.lib.mixins.inspection as WIT
-import wx.aui
-import wx.lib.agw.aui as aui
-
-from pelm.client import LicenseClientManager, ClientFrame
 
 DEBUG = True
 

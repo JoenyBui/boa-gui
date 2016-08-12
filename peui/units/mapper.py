@@ -1,4 +1,5 @@
 from .acceleration import AccelerationUnit
+from .angle import AngleUnit
 from .area import AreaUnit
 from .area_density import AreaDensityUnit
 from .charge import ChargeUnit
@@ -41,6 +42,7 @@ class UnitMap(object):
 
         """
         self.units.append(AccelerationUnit())
+        self.units.append(AngleUnit())
         self.units.append(AreaUnit())
         self.units.append(AreaDensityUnit())
         self.units.append(ChargeUnit())
@@ -86,6 +88,22 @@ class UnitMap(object):
                         return None
                     else:
                         return value * obj.get_conversion_factor(keys[base_unit], unit)
+
+    def get_conversion_factor(self, utype, origin, destination):
+        """
+        Get conversion factor for the unit type
+
+        :param utype: unit key name
+        :param origin: original unit
+        :param destination: destination unit
+        :return:
+        """
+
+        for obj in self.units:
+            if obj.key == utype:
+                return obj.get_conversion_factor(origin, destination)
+
+        return None
 
     def set_value(self, name, value, unit):
         """

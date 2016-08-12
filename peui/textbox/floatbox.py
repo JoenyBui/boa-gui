@@ -252,17 +252,17 @@ class FloatInputLayout(SmartInputLayout):
 
         self.do_layout()
 
-    def enable(self):
+    def enable(self, enable=True):
         """
         Enable textbox and/or postbox.
 
         :return:
         """
         if self.textbox:
-            self.textbox.Enable(True)
+            self.textbox.Enable(enable=enable)
 
         if self.postbox:
-            self.postbox.Enable(True)
+            self.postbox.Enable(enable=enable)
 
     def disable(self):
         """
