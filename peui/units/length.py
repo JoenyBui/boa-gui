@@ -46,7 +46,10 @@ DEFAULT_LENGTH_LIST = [
     'in',
     'ft',
     'yd',
-    'm'
+    'm',
+    'km',
+    'cm',
+    'mm'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
@@ -56,7 +59,6 @@ DEFAULT_IMPERIAL_LIST = [
 
 DEFAULT_METRIC_LIST = [
     'm',
-    'km',
     'cm',
     'mm'
 ]
