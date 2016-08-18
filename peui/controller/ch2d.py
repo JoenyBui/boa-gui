@@ -1,7 +1,11 @@
+import os
 import wx
+
+import numpy as np
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
 from ..form.file import SaveXYDialog
+from ..chart.dplot import Dplot, DplotCurve
 
 from . import ChildController
 
@@ -119,6 +123,96 @@ class Chart2dController(ChildController):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
 
-            self.view.save_xy_data(path)
+            filename = dlg.GetFilename()
+
+            file, ext = os.path.splitext(filename)
+
+            if ext == '.csv':
+                self.save_xy_data(path)
+            elif ext == '.grf':
+                self.save_dplot_data(path)
 
         dlg.Destroy()
+
+    def get_data_block(self):
+        """
+        Get data in numpy matrix block.
+
+        :return:
+        """
+        data = []
+
+        for line in self.view.axes.lines:
+            x = line.get_xdata()
+            y = line.get_ydata()
+
+            data.append(x)
+            data.append(y)
+
+        return np.array(data)
+
+    def get_data_list(self):
+        """
+        Get the data in list of tuple.
+
+        :return:
+        """
+        data = []
+
+        for line in self.view.axes.lines:
+            data.append((line.get_xdata(), line.get_ydata()))
+
+        return data
+
+    def save_xy_data(self, pathname):
+        """
+        Save data file to csv x, y.
+
+        :param pathname: file path name
+        :return:
+        """
+        data = self.get_data_block()
+
+        # df = pd.DataFrame(np.array(data).transpose())
+        # df.to_csv(pathname)
+        try:
+            np.savetxt(pathname, data.transpose(), delimiter=',')
+        except TypeError as e:
+            print(e)
+
+            wx.MessageBox('TypeError: Data is not aligned and cannot be saved as csv.')
+
+    def save_dplot_data(self, pathname):
+        """
+        Save dplot data
+
+        :param pathname:
+        :return:
+        """
+
+        try:
+            dp = Dplot()
+
+            data = self.get_data_list()
+
+            # Title
+            dp.title_1 = self.view.axes.get_title()
+
+            # X-Title
+            dp.x_axis = self.view.axes.get_xaxis().get_label().get_text()
+
+            # Y-Title
+            dp.y_axis = self.view.axes.get_yaxis().get_label().get_text()
+
+            for x, y in data:
+                dp.add_curve(
+                    DplotCurve(
+                        list(x), list(y)
+                    )
+                )
+
+            dp.write_dplot(pathname)
+
+        except IOError as e:
+
+            print(str(e))

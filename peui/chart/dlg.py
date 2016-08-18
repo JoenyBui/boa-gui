@@ -31,8 +31,8 @@ class FigureSetting(object):
 class FigureSettingDialog(GeneralDialog):
     """
     Modify figure setting.
-    """
 
+    """
     def __init__(self, parent, controller=None, setting=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
         """
         Figure setting dialog.
