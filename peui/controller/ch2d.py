@@ -41,9 +41,15 @@ class Chart2dController(ChildController):
         # Grab project data.
         data = self.parent.project.data
 
+        legend = []
         # Loop through the data set to have multiple plots.
         for i in range(0, len(data), 2):
             self.view.axes.plot(data[i], data[i+1])
+
+            legend.append('Curve %d' % i)
+
+        # Add legend
+        self.view.axes.legend(legend)
 
         # Call the binding for custom toolbar figure.
         self.bind_toolbar_figure()
@@ -199,10 +205,24 @@ class Chart2dController(ChildController):
             dp.title_1 = self.view.axes.get_title()
 
             # X-Title
-            dp.x_axis = self.view.axes.get_xaxis().get_label().get_text()
+            x_axis = self.view.axes.get_xaxis()
+            dp.x_axis = x_axis.get_label().get_text()
 
             # Y-Title
-            dp.y_axis = self.view.axes.get_yaxis().get_label().get_text()
+            y_axis = self.view.axes.get_yaxis()
+            dp.y_axis = y_axis.get_label().get_text()
+
+            xscale = x_axis.get_scale()
+            yscale = y_axis.get_scale()
+
+            if xscale == 'linear' and yscale == 'linear':
+                dp.scale_mode = dp.scaling_list['A'][1]
+            elif xscale == 'linear' and yscale == 'log':
+                dp.scale_mode = dp.scaling_list['D'][1]
+            elif xscale == 'log' and yscale == 'linear':
+                dp.scale_mode = dp.scaling_list['B'][1]
+            elif xscale == 'log' and yscale == 'log':
+                dp.scale_mode = dp.scaling_list['E'][1]
 
             for x, y in data:
                 dp.add_curve(
@@ -210,6 +230,16 @@ class Chart2dController(ChildController):
                         list(x), list(y)
                     )
                 )
+
+            # Draw Legend
+            legend = self.view.axes.get_legend()
+
+            if legend:
+                texts = legend.get_texts()
+                for index in range(0, len(texts)):
+                    text = texts[index]
+
+                    dp.data[index].legend_title = text.get_text()
 
             dp.write_dplot(pathname)
 

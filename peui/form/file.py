@@ -191,8 +191,7 @@ class SaveXYDialog(wx.FileDialog):
         :param kwargs:
         :return:
         """
-        wilcard = "Comma Separated Value (*.csv)|*.csv| " \
-                  "DPlot (*.grf)|*.grf"
+        wilcard = "DPlot (*.grf)|*.grf| Comma Separated Value (*.csv)|*.csv"
 
         wx.FileDialog.__init__(self,
                                parent,

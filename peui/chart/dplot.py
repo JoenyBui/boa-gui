@@ -56,6 +56,24 @@ class Dplot(object):
             6: 'Alternate-3-Dash'
         }
 
+        self.scale_mode = 1
+
+        self.scaling_list = dict(
+            A=('Linear X - Linear Y', 1),
+            B=('Linear X - Logarithmic Y', 2),
+            C=('Linear X - Probability Y', 1),
+            D=('Logarithmic X - Linear Y', 3),
+            E=('Logarithmic X - Logarithmic Y', 4),
+            F=('Logarithmic X - Probability Y', 1),
+            G=('Probability X - Linear Y', 11),
+            H=('Probability X - Logarithmic Y', 12),
+            I=('Probability X - Probability Y',),
+            J=('Tripartite Grid', 5),
+            K=('Grain Size Distribution',),
+            L=('Polar Coordinates', 8),
+            M=('Bar Chart', 9)
+        )
+
         self.symbol_type_list = dict(A=(0, 256),
                                      B=(1, 257),
                                      C=(2, 258),
@@ -115,7 +133,7 @@ class Dplot(object):
             write(self.title_2)
             write(self.x_axis)
             write(self.y_axis)
-            write('1')
+            write(' %d' % self.scale_mode)
             write('%f, %f' % (self.legend_coordinate[0], self.legend_coordinate[1]))
 
             # Grid
