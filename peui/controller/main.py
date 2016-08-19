@@ -43,9 +43,12 @@ class MainController(object):
         self.windows = {}
         self.notebook = None
 
+        # Save File Path
+        self.file_path = None
+
         # File History
         self.filehistory = wx.FileHistory(8)
-        self.config = wx.Config("peui", style=wx.CONFIG_USE_LOCAL_FILE)
+        self.config = wx.Config(kwargs.get("config", "peui"), style=wx.CONFIG_USE_LOCAL_FILE)
         self.filehistory.Load(self.config)
 
         # Extend Controllers
@@ -249,16 +252,19 @@ class MainController(object):
 
     def on_file_history(self, event):
         """
+        On File History click
 
         :param event:
         :return:
         """
         fileNum = event.GetId() - wx.ID_FILE1
-        path = self.filehistory.GetHistoryFile(fileNum)
-        self.filehistory.AddFileToHistory(path)  # move up the list
+        self.file_path = self.filehistory.GetHistoryFile(fileNum)
 
-        # do whatever you want with the file path...
-        self.open_project(path)
+        # Move up the list
+        self.filehistory.AddFileToHistory(self.file_path)
+
+        # Do whatever you want with the file path...
+        self.open_project(self.file_path)
 
         pub.sendMessage(self.evt_open_project)
 
@@ -282,9 +288,6 @@ class MainController(object):
         :param project:
         :return:
         """
-        #TODO: Need to see if there is an existing project that is not save.
-        if self.project:
-            pass
 
         self.project = project
         self.project.controller = self
@@ -293,6 +296,7 @@ class MainController(object):
 
     def save_project(self, path):
         """
+        Save Project to file path.
 
         :param path:
         :return:
@@ -300,6 +304,12 @@ class MainController(object):
         self.project.save(path)
 
     def output_project(self, file_path):
+        """
+        Output PEC Document
+
+        :param file_path:
+        :return:
+        """
         from ..docs import PecDocument
 
         doc = PecDocument(None)
@@ -308,6 +318,7 @@ class MainController(object):
 
     def open_project(self, path):
         """
+        Open project model
 
         :param path:
         :return:
@@ -316,6 +327,7 @@ class MainController(object):
 
     def refresh_open_project(self):
         """
+        Refresh open project
 
         :return:
         """
@@ -323,6 +335,7 @@ class MainController(object):
 
     def refresh_clear_project(self):
         """
+        Refresh clear project
 
         :return:
         """
@@ -386,6 +399,7 @@ class MainController(object):
 
     def show_page(self, ctrl):
         """
+        Show page
 
         :param ctrl:
         """

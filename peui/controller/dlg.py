@@ -14,6 +14,7 @@ __author__ = 'jbui'
 class DlgController(object):
     """
     Mixins for main controller.
+
     """
     def __init__(self, parent):
         """
@@ -54,10 +55,16 @@ class DlgController(object):
         :param event:
         :return:
         """
+        if self.parent.project:
+            pass
+
         dlg = NewProjectDialog(self.frame, self.parent.setting)
 
         if dlg.ShowModal():
             self.parent.new_project(dlg.get_project())
+
+            # Reset file path
+            self.parent.file_path = None
 
             # Broadcast new project dialog.
             pub.sendMessage(self.parent.evt_clear_controls)
@@ -74,18 +81,17 @@ class DlgController(object):
         dlg = OpenProjectDialog(self.frame)
 
         if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            mypath = os.path.basename(path)
+            # Save the default file path
+            self.parent.file_path = dlg.GetPath()
 
             # Add to file history.
-            self.parent.filehistory.AddFileToHistory(path)
+            self.parent.filehistory.AddFileToHistory(self.parent.file_path)
             self.parent.filehistory.Save(self.parent.config)
             self.parent.config.Flush()
 
-            self.parent.open_project(path)
+            self.parent.open_project(self.parent.file_path)
 
             pub.sendMessage(self.parent.evt_open_project)
-
 
         dlg.Destroy()
 
@@ -96,15 +102,10 @@ class DlgController(object):
         :param event:
         :return:
         """
-        #TODO: Check if there if the file already exists.
-        dlg = SaveProjectDialog(self.frame)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-
-            self.parent.save_project(path)
-
-        dlg.Destroy()
+        if self.parent.file_path:
+            self.parent.save_project(self.parent.file_path)
+        else:
+            self.save_as_project_dialog(event=event)
 
     def save_as_project_dialog(self, event=None):
         """
@@ -116,9 +117,11 @@ class DlgController(object):
         dlg = SaveAsProjectDialog(self.frame)
 
         if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
+            # Override the save file project
+            self.parent.file_path = dlg.GetPath()
 
-            self.parent.save_project(path)
+            # Override the save file
+            self.parent.save_project(self.parent.file_path)
 
         dlg.Destroy()
 
@@ -137,7 +140,6 @@ class DlgController(object):
             self.parent.output_project(path)
 
         dlg.Destroy()
-
 
     def setting_dialog(self, event=None):
         """

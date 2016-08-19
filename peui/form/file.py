@@ -181,6 +181,7 @@ class CloseProjectDialog(wx.Dialog):
 
 class SaveXYDialog(wx.FileDialog):
     """
+    Save XY data and dplot chart
 
     """
     def __init__(self, parent, *args, **kwargs):

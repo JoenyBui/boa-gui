@@ -166,6 +166,11 @@ MENU_BAR_KEY = [
                 bitmap=wx.ART_FILE_OPEN
             ),
             OrderedDict(
+                id=METHOD_OPEN_RECENT,
+                name='&Open Recent',
+                history=True
+            ),
+            OrderedDict(
                 id=METHOD_SEPARATOR,
                 name='Separator'
             ),
