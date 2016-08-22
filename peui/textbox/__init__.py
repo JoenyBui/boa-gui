@@ -1,4 +1,5 @@
 import wx
+from wx.lib.agw.supertooltip import SuperToolTip
 
 from ..form import DpiAwareness
 
@@ -101,3 +102,31 @@ class LayoutDimensions(DpiAwareness):
 
             if id >= len(self.border_width):
                 self.border_width.append(BORDER_WIDTH_NONE)
+
+
+class SmartToolTip(SuperToolTip):
+    """
+    Smarter Tooltip
+
+    """
+    def __init__(self, message, target,
+                 bodyImage=wx.NullBitmap, header=" ", headerBmp=wx.NullBitmap,
+                 footer="", footerBmp=wx.NullBitmap):
+
+        SuperToolTip.__init__(self, message=message, bodyImage=bodyImage, header=header, headerBmp=headerBmp,
+                              footer=footer, footerBmp=footerBmp)
+
+        if target:
+            self.SetTarget(target)
+
+        self.SetDrawHeaderLine(True)
+        self.ApplyStyle("Office 2007 Blue")
+        self.SetDropShadow(True)
+
+        self.Show(True)
+
+    def enable(self):
+        self.Show(True)
+
+    def disable(self):
+        self.Show(False)

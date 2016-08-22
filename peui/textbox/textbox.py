@@ -52,3 +52,19 @@ class TextInputLayout(SmartInputLayout):
 
         self.do_layout()
 
+    def set_value(self, value):
+        """
+        Set the value
+
+        :param value:
+        :return:
+        """
+        self.textbox.set_value(value)
+
+    def get_value(self):
+        """
+        Get the value
+
+        :return:
+        """
+        return self.textbox.get_value()

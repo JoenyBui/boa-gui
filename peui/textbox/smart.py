@@ -8,7 +8,7 @@ from wx.lib.agw.supertooltip import SuperToolTip
 from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque
 
 from .label import SmartLabel
-from . import LayoutDimensions
+from . import LayoutDimensions, SmartToolTip
 
 from ..units import KEY_IMPERIAL, KEY_METRIC
 from ..units.acceleration import AccelerationUnit
@@ -49,12 +49,13 @@ class SmartTextBox(wx.TextCtrl):
                  disabled_messages=None, disabled_index=None, value=None, *args, **kwargs):
         """
 
-        :param parent:
+        :param parent: parent ui
         :param key_up: bind key up handler
         :param message: add in tooltip message
         :param enabled_message: message once the box is enabled
         :param disabled_messages: list of array messages
         :param disabled_index: index of the which messages to display
+        :param value: initial value for smart box
         :param args:
         :param kwargs:
         """
@@ -69,6 +70,7 @@ class SmartTextBox(wx.TextCtrl):
         if key_up:
             self.Bind(wx.EVT_KEY_UP, key_up, self)
 
+        self.tooltip = None
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
@@ -209,6 +211,7 @@ class SmartComboBox(wx.ComboBox):
         if value:
             self.Value = value
 
+        self.tooltip = None
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
@@ -742,8 +745,6 @@ class SmartInputLayout(wx.BoxSizer):
             else:
                 self.label = SmartLabel(self.parent, label='Textbox Label:')
 
-        self.tooltip = kwargs.get('tooltip', SuperToolTip("HELP"))
-
         self.min = min
         self.max = max
 
@@ -1060,6 +1061,7 @@ class SmartButton(wx.Button):
         if evt_button:
             self.Bind(wx.EVT_BUTTON, evt_button)
 
+        self.tooltip = None
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
@@ -1070,7 +1072,7 @@ class SmartCheckBox(wx.CheckBox):
     **Smarter CheckBox**
 
     """
-    def __init__(self, parent, id=-1, label='', evt_click=None, *args, **kwargs):
+    def __init__(self, parent, id=-1, label='', evt_click=None, message=None, *args, **kwargs):
         """
         Constructor.
 
@@ -1082,6 +1084,11 @@ class SmartCheckBox(wx.CheckBox):
         :return:
         """
         wx.CheckBox.__init__(self, parent, id=id, label=label, *args, **kwargs)
+
+        self.tooltip = None
+        if message:
+            self.tooltip = wx.ToolTip(message)
+            self.SetToolTip(self.tooltip)
 
         if evt_click:
             self.Bind(wx.EVT_CHECKBOX, evt_click)

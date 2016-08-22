@@ -17,6 +17,7 @@ TNT_KEY = {
     'ton': FACTOR_TNT_TON,
     'kiloton': FACTOR_TNT_KILOTON,
     'kilogram': FACTOR_TNT_KILOGRAM,
+    'kg': FACTOR_TNT_KILOGRAM,
     'lb': FACTOR_PRESSURE_POUND,
     'lbs': FACTOR_PRESSURE_POUND
 }
@@ -36,7 +37,7 @@ DEFAULT_IMPERIAL_LIST = [
 ]
 
 DEFAULT_METRIC_LIST = [
-    'kilogram',
+    'kg',
 ]
 
 

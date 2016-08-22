@@ -225,7 +225,8 @@ class DplotCurve(object):
 
         # Write plot
         for x, y in zip(self.x, self.y):
-            write('%f, %f' % (x, y))
+            # write('%f, %f' % (x, y))
+            write(str(x) + ', ' + str(y))
 
         # Line Type and Symbol Type
         write(' %d %d' % (self.line_type, self.symbol_type))

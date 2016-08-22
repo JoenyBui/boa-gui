@@ -35,6 +35,7 @@ class Setting(object):
         keys = dict(
             author=self.author,
             project_name=self.project_name,
+            company=self.company,
             path=self.get_home_folder(),
             esignature=self.esignature,
             ekey=self.ekey,
@@ -61,8 +62,25 @@ class Setting(object):
         self.keys['author'] = value
 
     @property
+    def company(self):
+        """
+        Get the company
+
+        """
+        return self.keys.get('company', '')
+
+    @company.setter
+    def company(self, value):
+        """
+        Set the company
+
+        """
+        self.keys['company'] = value
+
+    @property
     def project_name(self):
         """
+        Get the project name
 
         :return:
         """
@@ -71,6 +89,7 @@ class Setting(object):
     @project_name.setter
     def project_name(self, value):
         """
+        Set the project name
 
         :param value:
         :return:

@@ -12,6 +12,7 @@ from peui import units
 from peui.units import area, charge, length, density, torque, volume, inertia, mass, pressure, tnt
 from pecutil.types import isFloat
 
+from . import SmartToolTip
 from .smart import SmartTextBox, SmartInputLayout
 
 __author__ = 'jbui'
@@ -145,6 +146,12 @@ class FloatSmartBox(SmartTextBox):
         self.Refresh()
 
     def get_value(self, key=None):
+        """
+        Grab the value from the textbox
+
+        :param key:
+        :return:
+        """
         val = SmartTextBox.get_value(self, key=key)
 
         if key is None:
@@ -187,8 +194,6 @@ class FloatInputLayout(SmartInputLayout):
             self.textbox = textbox
         else:
             self.textbox = FloatSmartBox(parent)
-
-        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
 
         if value:
             self.textbox.Value = str(value)
@@ -378,6 +383,7 @@ class FloatInputLayout(SmartInputLayout):
 
     def validate(self):
         """
+        Validate float box
 
         :return:
         """
@@ -389,14 +395,8 @@ class FloatInputLayout(SmartInputLayout):
             if base_value < base_min:
                 self.textbox.set_range_error_color()
 
-                self.tooltip.SetTarget(self.textbox)
-                self.tooltip.SetHeader("Error")
-
-                self.tooltip.SetDrawHeaderLine(True)
-
-                self.tooltip.ApplyStyle("Office 2007 Blue")
-
-                self.tooltip.SetDropShadow(True)
+                # error_tooltip = wx.ToolTip("Value is not below minimum.")
+                # self.textbox.SetToolTip(error_tooltip)
 
                 return False
 
@@ -406,11 +406,15 @@ class FloatInputLayout(SmartInputLayout):
             if base_value > base_max:
                 self.textbox.set_range_error_color()
 
-                self.tooltip.SetTarget(self.textbox)
+                # error_tooltip = wx.ToolTip("Value is above maximum.")
+                # self.textbox.SetToolTip(error_tooltip)
 
                 return False
 
         self.textbox.set_normal_color()
+
+        # if self.textbox.tooltip:
+        #     self.textbox.SetToolTip(self.textbox.tooltip)
 
         return True
 

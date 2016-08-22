@@ -130,6 +130,9 @@ class ControllerBaseDialog(ChildController):
         # Project Name
         self.view.layouts['project_name'] = TextInputLayout(pnl, name='Project Name:', layout=cb_layout)
 
+        # Company
+        self.view.layouts['company'] = TextInputLayout(pnl, name='Company:', layout=cb_layout)
+
         # Path
         self.view.layouts['path'] = PathInputLayout(pnl, name='Path:', layout=tb_layout)
 
@@ -146,6 +149,8 @@ class ControllerBaseDialog(ChildController):
         sizer.Add(self.view.layouts['author'], 0, wx.ALL | wx.EXPAND, 0)
         sizer.AddSpacer(5)
         sizer.Add(self.view.layouts['project_name'], 0, wx.ALL | wx.EXPAND, 0)
+        sizer.AddSpacer(5)
+        sizer.Add(self.view.layouts['company'], 0, wx.ALL | wx.EXPAND, 0)
         sizer.AddSpacer(5)
         sizer.Add(self.view.layouts['path'], 0, wx.ALL | wx.EXPAND, 0)
         sizer.AddSpacer(5)
@@ -180,27 +185,31 @@ class ControllerBaseDialog(ChildController):
 
     def load_component(self):
         """
+        Load component
 
         :return:
         """
-        self.view.layouts['author'].textbox.Value = str(self.parent.setting.author)
-        self.view.layouts['project_name'].textbox.Value = str(self.parent.setting.project_name)
-        self.view.layouts['path'].textbox.Value = str(self.parent.setting.path)
-        self.view.layouts['esignature'].textbox.Value = str(self.parent.setting.esignature)
-        self.view.layouts['ekey'].textbox.Value = str(self.parent.setting.ekey)
-        self.view.layouts['efile'].textbox.Value = str(self.parent.setting.efile)
+        self.view.layouts['author'].set_value(self.parent.setting.author)
+        self.view.layouts['project_name'].set_value(self.parent.setting.project_name)
+        self.view.layouts['company'].set_value(self.parent.setting.company)
+        self.view.layouts['path'].set_value(self.parent.setting.path)
+        self.view.layouts['esignature'].set_value(self.parent.setting.esignature)
+        self.view.layouts['ekey'].set_value(self.parent.setting.ekey)
+        self.view.layouts['efile'].set_value(self.parent.setting.efile)
 
     def set_component(self):
         """
+        Set component
 
         :return:
         """
-        self.parent.setting.author = self.view.layouts['author'].textbox.Value
-        self.parent.setting.project_name = self.view.layouts['project_name'].textbox.Value
-        self.parent.setting.path = self.view.layouts['path'].textbox.Value
-        self.parent.setting.esignature = self.view.layouts['esignature'].textbox.Value
-        self.parent.setting.ekey = self.view.layouts['ekey'].textbox.Value
-        self.parent.setting.efile = self.view.layouts['efile'].textbox.Value
+        self.parent.setting.author = self.view.layouts['author'].get_value()
+        self.parent.setting.project_name = self.view.layouts['project_name'].get_value()
+        self.parent.setting.company = self.view.layouts['company'].get_value()
+        self.parent.setting.path = self.view.layouts['path'].get_value()
+        self.parent.setting.esignature = self.view.layouts['esignature'].get_value()
+        self.parent.setting.ekey = self.view.layouts['ekey'].get_value()
+        self.parent.setting.efile = self.view.layouts['efile'].get_value()
 
     def update_layout(self):
         """
