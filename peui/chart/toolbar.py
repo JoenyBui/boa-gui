@@ -3,11 +3,14 @@ import wx
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as NavigationToolbar
 from matplotlib.backends.backend_wx import _load_bitmap
 
+from ..config import ICONS
+
 __author__ = 'jbui'
 
 
-class CustomToolbar(NavigationToolbar):
+class MatplotlibCustomToolbar(NavigationToolbar):
     """
+    Matplotlib Custom Toolbar
 
     """
     ON_CUSTOM_LEFT = wx.NewId()
@@ -15,8 +18,17 @@ class CustomToolbar(NavigationToolbar):
     ON_CUSTOM_UP = wx.NewId()
     ON_CUSTOM_DOWN = wx.NewId()
     ON_CUSTOM_FIGURE_SETTING = wx.NewId()
+    ON_CUSTOM_DPLOT = wx.NewId()
 
     def __init__(self, canvas, chart, pan_tool=True, pan_percentage=0.5):
+        """
+
+        :param canvas:
+        :param chart:
+        :param pan_tool:
+        :param pan_percentage:
+        :return:
+        """
         NavigationToolbar.__init__(self, canvas)
 
         self.chart = chart
@@ -24,9 +36,22 @@ class CustomToolbar(NavigationToolbar):
         self.pan_percentage = pan_percentage
 
         # add new toolbar buttons
-        self.AddSimpleTool(self.ON_CUSTOM_FIGURE_SETTING, _load_bitmap('hand.xpm'),
-                           'Open figure setting', 'Open figure setting.')
+        self.AddSimpleTool(self.ON_CUSTOM_DPLOT,
+                           _load_bitmap('qt4_editor_options.png'),
+                           'Save XY',
+                           'Save XY to csv.')
+
+        self.AddSimpleTool(self.ON_CUSTOM_FIGURE_SETTING,
+                           _load_bitmap('hand.xpm'),
+                           'Open figure setting',
+                           'Open figure setting.')
         # wx.EVT_TOOL(self, self.ON_CUSTOM_FIGURE_SETTING, self._on_custom_figure_setting)
+
+
+        # self.AddSimpleTool(self.ON_CUSTOM_DPLOT,
+        #                    wx.Bitmap(ICONS['dplot']),
+        #                    'DPLOT',
+        #                    'DPLOT')
 
         self.AddSeparator()
         self.AddStretchableSpace()
@@ -51,6 +76,7 @@ class CustomToolbar(NavigationToolbar):
     def _on_custom_pan_left(self, evt):
         """
         Pan the graph to the left.
+
         :param evt:
         :return:
         """
@@ -65,6 +91,7 @@ class CustomToolbar(NavigationToolbar):
     def _on_custom_pan_right(self, evt):
         """
         Pan the graph to the right.
+
         :param evt:
         :return:
         """
@@ -79,6 +106,7 @@ class CustomToolbar(NavigationToolbar):
     def _on_custom_pan_up(self, evt):
         """
         Pan the graph to the up.
+
         :param evt:
         :return:
         """
@@ -92,6 +120,7 @@ class CustomToolbar(NavigationToolbar):
     def _on_custom_pan_down(self, evt):
         """
         Pan the graph to the down.
+
         :param evt:
         :return:
         """

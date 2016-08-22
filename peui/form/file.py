@@ -3,15 +3,18 @@ import os
 import wx
 
 from ..model.project import Project
+from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextSmartBox, TextInputLayout
 from ..textbox.pathbox import PathSmartBox, PathInputLayout
+from . import DpiAwareness
 
 __author__ = 'jbui'
 
 
-class NewProjectDialog(wx.Dialog):
+class NewProjectDialog(wx.Dialog, DpiAwareness):
     """
     New Project Dialog
+
     """
     def __init__(self, parent, default_settings, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, **kwargs):
         """
@@ -23,9 +26,15 @@ class NewProjectDialog(wx.Dialog):
         :param kwargs:
         :return:
         """
+        DpiAwareness.__init__(self)
+
+        width = self.scale(kwargs.get('width', 500))
+        height = self.scale(kwargs.get('height', 300))
+
         wx.Dialog.__init__(self, parent,
                            title=kwargs.get('title', 'New Project'),
-                           size=(kwargs.get('width', 500), kwargs.get('height', 300)))
+                           style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                           size=(self.scale(width), self.scale(height)))
 
         self.parent = parent
 
@@ -43,7 +52,7 @@ class NewProjectDialog(wx.Dialog):
 
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.Add(self.do_layout(), 0, wx.EXPAND | wx.ALL, 5)
-        vsizer.AddSpacer(10)
+        vsizer.AddStretchSpacer()
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
         self.SetSizer(vsizer)
@@ -71,49 +80,126 @@ class NewProjectDialog(wx.Dialog):
         """
         BOTH_SIDES = wx.EXPAND | wx.LEFT | wx.RIGHT
 
+        layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2,
+                                  widths=(125, 175, 25),
+                                  stretch_factor=(0, 1, 0))
+        layout.calculate()
+
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project)
-        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author)
-        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path)
+        field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project, layout=layout)
+        field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author, layout=layout)
+        field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path, layout=layout)
 
         # Now finish the layout by adding the two sizers to the main vertical sizer.
-        vsizer.AddStretchSpacer()
+        # vsizer.AddStretchSpacer()
 
-        vsizer.Add(field1_sz, 0, BOTH_SIDES | wx.TOP, 20)
-        vsizer.AddSpacer(15)
-        vsizer.Add(field2_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(15)
-        vsizer.Add(field3_sz, 0, BOTH_SIDES, 20)
-        vsizer.AddSpacer(15)
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field1_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field2_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field3_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
 
         return vsizer
 
 
 class OpenProjectDialog(wx.FileDialog):
+    """
+
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.FileDialog.__init__(self, parent, "Open a file", os.getcwd(), "", "*.*", wx.OPEN, *args, **kwargs)
 
         self.parent = parent
 
 
 class SaveProjectDialog(wx.FileDialog):
+    """
+
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.FileDialog.__init__(self, parent, "Save project", os.getcwd(), "", "*.json", wx.SAVE | wx.OVERWRITE_PROMPT, *args, **kwargs)
 
         self.parent = parent
 
 
 class SaveAsProjectDialog(wx.FileDialog):
-    def __init__(self, parent, *args, **kwargs):
-        wx.FileDialog.__init__(self, parent, "Save project as...", os.getcwd(), "", "*.json", wx.SAVE | wx.OVERWRITE_PROMPT, *args, **kwargs)
+    """
+
+    """
+    def __init__(self, parent, title='Save project as...', ext='*.json', *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        wx.FileDialog.__init__(self, parent,
+                               title,
+                               os.getcwd(),
+                               "",
+                               ext,
+                               wx.SAVE | wx.OVERWRITE_PROMPT,
+                               *args,
+                               **kwargs)
 
         self.parent = parent
 
 
 class CloseProjectDialog(wx.Dialog):
+    """
+
+    """
     def __init__(self, parent, **kwargs):
+        """
+
+        :param parent:
+        :param kwargs:
+        :return:
+        """
         wx.Dialog.__init__(self, None, title=kwargs.get('title', ''))
 
         self.parent = parent
 
+
+class SaveXYDialog(wx.FileDialog):
+    """
+    Save XY data and dplot chart
+
+    """
+    def __init__(self, parent, *args, **kwargs):
+        """
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        wilcard = "DPlot (*.grf)|*.grf| Comma Separated Value (*.csv)|*.csv"
+
+        wx.FileDialog.__init__(self,
+                               parent,
+                               "Save data as...",
+                               os.getcwd(), "", wilcard,
+                               wx.SAVE | wx.OVERWRITE_PROMPT,
+                               *args,
+                               **kwargs)
+
+        self.parent = parent

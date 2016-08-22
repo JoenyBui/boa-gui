@@ -9,11 +9,24 @@ __author__ = 'jbui'
 class ProjectTree(ct.CustomTreeCtrl):
     """
     Project Tree Structure
+
     """
 
     def __init__(self, parent, controller, project=None, **kwargs):
+        """
+
+        :param parent:
+        :param controller:
+        :param project:
+        :param kwargs:
+        :return:
+        """
         id = kwargs.get('id', -1)
-        ct.CustomTreeCtrl.__init__(self, parent, size=kwargs.get('size', wx.Size(200, 150)), id=id, agwStyle=wx.TR_DEFAULT_STYLE)
+        ct.CustomTreeCtrl.__init__(self,
+                                   parent,
+                                   size=kwargs.get('size', wx.Size(200, 150)),
+                                   id=id,
+                                   agwStyle=wx.TR_DEFAULT_STYLE)
 
         self.controller = TreeController(controller, self)
 
@@ -28,7 +41,11 @@ class ProjectTree(ct.CustomTreeCtrl):
         self.controller.do_layout()
 
     def add_root(self, directory):
+        """
 
+        :param directory:
+        :return:
+        """
         for key, item in directory.items():
             if isinstance(item, dict):
                 root = self.AddRoot(key)
@@ -39,6 +56,12 @@ class ProjectTree(ct.CustomTreeCtrl):
                 self.add_item(item, root)
 
     def add_item(self, items, parent):
+        """
+
+        :param items:
+        :param parent:
+        :return:
+        """
         for key, item in items.items():
             if key == '.git':
                 continue

@@ -1,38 +1,31 @@
 import os
 import sys
 
-# Added for build
-# import tkinter
-# # import Tkinter
-# import FileDialog
 import matplotlib
 import pandas as pd
 import numpy as np
 
+from scipy.special import gamma
+
 import wx
 import wx.lib.mixins.inspection as WIT
 import wx.aui
-
 import wx.lib.agw.aui as aui
 
-__author__ = 'jbui'
-
-import ctypes
-import os
-import sys
+from pelm.client import LicenseClientManager, ClientFrame
 
 if getattr(sys, 'frozen', False):
-  # Override dll search path.
-  # ctypes.windll.kernel32.SetDllDirectoryW('C:/Anaconda/Library/bin')
-  # Init code to load external dll
-  ctypes.CDLL('mkl_avx2.dll')
-  ctypes.CDLL('mkl_def.dll')
-  ctypes.CDLL('mkl_vml_avx2.dll')
-  ctypes.CDLL('mkl_vml_def.dll')
+    import ctypes
+    # Override dll search path.
+    # ctypes.windll.kernel32.SetDllDirectoryW('C:/Anaconda/Library/bin')
+    # Init code to load external dll
+    ctypes.CDLL('mkl_avx2.dll')
+    ctypes.CDLL('mkl_def.dll')
+    ctypes.CDLL('mkl_vml_avx2.dll')
+    ctypes.CDLL('mkl_vml_def.dll')
 
-  # Restore dll search path.
-  ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
-
+    # Restore dll search path.
+    ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
 
 DEBUG = True
 
@@ -76,8 +69,10 @@ PlJhR2Gg+UlnGbXRcO9uo134SAy894BZ06oJfpcx5HvowMBgUyeSFfnWbutU4/p7
 ywIDAQAB
 -----END PUBLIC KEY-----"""
 
-
 if __name__ == '__main__':
+    # Relative Import Hack
+    package_name = 'peui'
+
     from peui.main.window import MainWindow
     from peui.controller.main import MainController
     from peui.model.project import Project
@@ -94,41 +89,96 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
+    import docx
+    import docxtpl
+
+    #TODO: Undo-Redo Model
+    #TODO: Cut, Copy & Paste
+    #TODO: Printing Pdf & Docx
+    #TODO: Backup Temp File
+    #TODO: Periodic Savings
+    #TODO: Save Perspective View
+    #TODO: Add license manager menu item.
+
     setting = Setting()
 
-    # # Initialize Application
-    # if DEBUG:
-    #     # Use Ctrl-Alt-I to open the Widget Inspection Tool
-    #     # http://wiki.wxpython.org/Widget%20Inspection%20Tool
-    #     app = WIT.InspectableApp()
-    #
-    # else:
-    #     lm = LicenseClientManager()
-    #     lm.load_private_key(PRIVATE_KEY)
-    #     lm.load_public_key(PUBLIC_KEY)
-    #     lm.open_encrypted_file(setting.efile)
-    #     lm.open_encrypted_key(setting.ekey)
-    #     lm.open_encrypted_signature(setting.esignature)
-    #
-    #     if lm.unencrypted_file() is False:
-    #         exit()
-    #
-    #     if (lm.check_username() and lm.check_system_name() and lm.check_mac_address() and lm.check_end_date()) is False:
-    #         exit()
-    #
-    #     app = wx.App(False)
+    def exit_application(event):
+        exit()
 
-    app = wx.App(False)
+    # Initialize Application
+    if DEBUG:
+        # Use Ctrl-Alt-I to open the Widget Inspection Tool
+        # http://wiki.wxpython.org/Widget%20Inspection%20Tool
+        app = WIT.InspectableApp()
+
+    else:
+        lm = LicenseClientManager()
+        lm.load_private_key(PRIVATE_KEY)
+        lm.load_public_key(PUBLIC_KEY)
+
+        valid_license = False
+
+        app = wx.App(False)
+
+        # Run a loop to check for encryption.
+        while valid_license is False:
+            message = "Please contact jbui@protection-consultants and provide the following information. \n"
+
+            # Try to open the three combinations.  If okay than we move on the next steps.
+            if not (lm.open_encrypted_file(setting.efile) and \
+                    lm.open_encrypted_key(setting.ekey) and \
+                    lm.open_encrypted_signature(setting.esignature)):
+                message += "Files path are not valid."
+
+                cf = ClientFrame(None,
+                                 setting,
+                                 title="PEC-GUI License Client",
+                                 message=message,
+                                 size=(400, 400))
+                app.MainLoop()
+
+                # Continue Loop
+                continue
+
+            if lm.unencrypted_file() is False:
+                message += "License files cannot be unencrypted.  Please make contact with the admin."
+
+                cf = ClientFrame(None,
+                                 setting,
+                                 title="PEC-GUI License Client",
+                                 message=message,
+                                 size=(400, 400))
+                app.MainLoop()
+
+                # Continue Loop
+                continue
+
+            if (lm.check_username() and
+                    lm.check_system_name() and
+                    lm.check_mac_address() and
+                    lm.check_end_date()) is False:
+                message += "License file is expired.  Please make contact with the admin."
+
+                cf = ClientFrame(None,
+                                 setting,
+                                 title="PEC-GUI License Client",
+                                 message=message,
+                                 size=(400, 400))
+                app.MainLoop()
+
+            valid_license = True
 
     # Check if the a file path is passed with the executable.
     project = Project()
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
-    frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
+    frame = MainWindow(parent=None, controller=controller, title='Sample Editor',
+                       style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
     controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
     # Add test data
-    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01))]
+    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+                    np.arange(0.0, 1.5, 0.02), np.cos(2 * np.pi * np.arange(0.0, 1.5, 0.02))]
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)
@@ -143,7 +193,7 @@ if __name__ == '__main__':
 
     # Property Panel
     controller.add_pane(
-        PropGrid(frame, controller, None, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
+        PropGrid(frame, controller, None, column=4, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
         cfg.METHOD_WINDOW_PROP_GRID,
         wx.BOTTOM,
         'Property'
@@ -189,4 +239,3 @@ if __name__ == '__main__':
     controller.refresh()
 
     app.MainLoop()
-

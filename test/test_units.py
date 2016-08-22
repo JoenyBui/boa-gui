@@ -21,13 +21,7 @@ class TestLength():
         assert round(length.get_length_conversion_factor('yard', 'ft'), 2) == 3.0
 
 
-class TestMass():
 
-    def test_kg(self):
-        assert round(mass.get_mass_conversion_factor('kg', 'g'), 5) == 1000
-
-    def test_lbm(self):
-        assert round(mass.get_mass_conversion_factor('lbm', 'g'), 3) == 453.592
 
 
 class TestPressure():

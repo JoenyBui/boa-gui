@@ -1,27 +1,12 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
+from . import Unit, UNIT_VOLUME_KEY
 
 __author__ = 'jbui'
 
 # UNITY_VALUE == 'm^3'
 FACTOR_VOLUME_CUBIC_METER = 1.0
-FACTOR_VOLUME_CUBIC_MM = 1E-6
-FACTOR_VOLUME_CUBIC_FT = 0.0283168
-FACTOR_VOLUME_CUBIC_IN = 1.6387e-5
+FACTOR_VOLUME_CUBIC_MM = 0.001**3
+FACTOR_VOLUME_CUBIC_FT = 0.3048**3
+FACTOR_VOLUME_CUBIC_IN = 0.0254**3
 
 ID_NAME_VOLUME_M3 = ("m^3", "m3", "M3")
 ID_NAME_VOLUME_MM3 = ("mm^3", "mm3", "MM3")
@@ -47,19 +32,20 @@ DEFAULT_VOLUME_LIST = [
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'ft3',
-    'in3'
+    'ft^3',
+    'in^3'
 ]
 
 DEFAULT_METRIC_LIST = [
-    'm3',
-    'mm3'
+    'm^3',
+    'mm^3'
 ]
 
 
 def get_volume_conversion_factor(origin, destination):
     """
     Get the volume conversion factor.
+
     :param origin:
     :param destination:
     :return:
@@ -69,3 +55,20 @@ def get_volume_conversion_factor(origin, destination):
 
     return origin_factor / destination_factor
 
+
+class VolumeUnit(Unit):
+    """
+    **Volume Unit**
+
+    """
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
+
+        self.key = UNIT_VOLUME_KEY
+        self.table = VOLUME_KEY
+
+        self.metric_list = DEFAULT_METRIC_LIST
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_volume_conversion_factor(origin, destination)

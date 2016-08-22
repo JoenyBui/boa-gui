@@ -4,7 +4,15 @@ import wx.lib.agw.advancedsplash as AS
 
 
 class SplashScreen(AS.AdvancedSplash):
+    """
+
+    """
     def __init__(self, imagePath='PEC.png'):
+        """
+
+        :param imagePath:
+        :return:
+        """
         frame = wx.Frame(None, -1, "AdvancedSplash Test")
 
         bitmap = wx.Bitmap(imagePath, wx.BITMAP_TYPE_PNG)
@@ -28,11 +36,16 @@ class SplashScreen(AS.AdvancedSplash):
     def set_progress(self, percent):
         """
         Set the indicator gauges progress.
+
         :param percent:
         :return:
         """
         self.gauge.SetValue(percent)
 
     def get_progress(self):
+        """
+
+        :return:
+        """
         return self.gauge.GetValue()
 
