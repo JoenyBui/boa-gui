@@ -10,6 +10,14 @@ class TextSmartBox(SmartTextBox):
     Text Smart Box.
     """
     def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
+        """
+
+        :param parent:
+        :param key_up:
+        :param message:
+        :param args:
+        :param kwargs:
+        """
         SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
 
@@ -44,3 +52,19 @@ class TextInputLayout(SmartInputLayout):
 
         self.do_layout()
 
+    def set_value(self, value):
+        """
+        Set the value
+
+        :param value:
+        :return:
+        """
+        self.textbox.set_value(value)
+
+    def get_value(self):
+        """
+        Get the value
+
+        :return:
+        """
+        return self.textbox.get_value()

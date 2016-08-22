@@ -1,0 +1,23 @@
+DPLOT/W v1.2
+data
+1
+1 0
+
+
+
+
+
+
+
+1
+0, 0
+Grid Type
+01
+LineWidths
+ 30
+Lname
+curve_legend
+PointSizes
+7
+ 10 12 12 12 12 10 10
+Stop

@@ -7,14 +7,19 @@ class AboutDialog(wx.AboutDialogInfo):
     """
     About Dialog Info
     """
-    licence = """This software is proprietary; it can not be redistribute
-    it and/or modify without the express permission of PEC.
+    licence = """This software is proprietary and cannot be redistributed and/or modified without the
+    expressed and written permission of the Protection Engineering Consultants.
 
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."""
+    Copyright (C) 2016, Protection Engineering Consultants, All Rights Reserved.
+    """
 
     def __init__(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.AboutDialogInfo.__init__(self)
 
         if kwargs.get('name'):
@@ -26,8 +31,19 @@ class AboutDialog(wx.AboutDialogInfo):
         if kwargs.get('description'):
             self.SetDescription(kwargs.get('description'))
 
-        self.SetCopyright('(C) 2016 Protection Engineer Consultants')
-        self.SetWebSite('http://www.protection-consultants.com/')
+        if kwargs.get('copyright'):
+            self.SetCopyright(kwargs['copyright'])
+        else:
+            self.SetCopyright('(C) 2016 Protection Engineering Consultants')
+
+        if kwargs.get('website'):
+            self.SetWebSite(kwargs.get('website'))
+        else:
+            self.SetWebSite('http://www.protection-consultants.com/')
+
+        if kwargs.get('license'):
+            self.licence = kwargs.get('license')
+
         self.SetLicence(self.licence)
 
         if kwargs.get('developer'):
@@ -37,4 +53,9 @@ class AboutDialog(wx.AboutDialogInfo):
             self.AddDocWriter(kwargs.get('writer'))
 
     def show(self):
+        """
+        Show the about dialog on top.
+
+        :return:
+        """
         wx.AboutBox(self)

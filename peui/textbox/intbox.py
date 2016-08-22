@@ -16,6 +16,7 @@ __author__ = 'jbui'
 class IntSmartBox(SmartTextBox):
     """
     Integer Smart Box.
+
     """
     def __init__(self, parent, signs=False, format_error=None, key_up=None, message=None, *args, **kwargs):
         """
@@ -165,15 +166,16 @@ class IntInputLayout(SmartInputLayout):
 
         self.do_layout()
 
-    def set_value(self, value, post=None, label=None):
+    def set_value(self, value=None, post=None, label=None):
         """
+        Set the components value
 
-        :param value:
-        :param post:
-        :param label:
+        :param value: textbox.Value
+        :param post: postbox.Value
+        :param label: label.Label
         :return:
         """
-        if value:
+        if value is not None:
             self.textbox.Value = str(value)
 
         if post and self.postbox:
@@ -182,29 +184,28 @@ class IntInputLayout(SmartInputLayout):
         if label:
             self.label.Label = str(label)
 
-    def get_value(self, unit):
+    def get_value(self, destination_unit=None):
+        """
+        Return the value given destination unit.
+
+        :param destination_unit: convert value to this unit
+        :return: integer
         """
 
-        :param unit:
-        :return:
-        """
-        conversion_factor = 1.0
-        if self.type == units.UNIT_AREA_KEY:
-            conversion_factor = units.get_area_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_CHARGE_KEY:
-            conversion_factor = units.get_charge_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_LENGTH_KEY:
-            conversion_factor = units.get_length_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_INERTIA_KEY:
-            conversion_factor = units.get_inertia_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_MASS_KEY:
-            conversion_factor = units.get_mass_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_PRESSURE_KEY:
-            conversion_factor = units.get_pressure_conversion_factor(self.postbox.Value, unit)
-        elif self.type == units.UNIT_VOLUME_KEY:
-            conversion_factor = units.get_volume_conversion_factor(self.postbox.Value, unit)
+        if self.postbox:
+            original_unit = self.postbox.Value
+            value = self.textbox.Value
+            unit = self.postbox.unit
 
-        return int(conversion_factor * int(self.textbox.Value))
+            if value == '' or unit is None:
+                return None
+            else:
+                return int(int(value) * unit.get_conversion_factor(original_unit, destination_unit))
+        else:
+            if self.textbox.Value == '':
+                return None
+            else:
+                return int(self.textbox.Value)
 
     def validate(self):
         """
@@ -217,11 +218,22 @@ class IntInputLayout(SmartInputLayout):
 class IntRangeValidator(wx.PyValidator):
     """
     Int Range Validator
-    """
-    def __init__(self, signs=False, *args, **kwargs):
-        wx.PyValidator.__init__(self)
 
-        self.signs = kwargs.get('signs', False)
+    """
+    def __init__(self, signs=False, min=-1*sys.maxint, max=sys.maxint, *args, **kwargs):
+        """
+        Constructor.
+
+        :param signs: signs allowed
+        :param min: minimum absolute value
+        :param max: maximum absolute value
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        wx.PyValidator.__init__(self, *args, **kwargs)
+
+        self.signs = signs
         # self.decimal = kwargs.get('decimal', False)
         # self.exponential = kwargs.get('exponential', False)
 
@@ -232,8 +244,8 @@ class IntRangeValidator(wx.PyValidator):
             self.allow_keys.append(ord('-'))
             self.allow_keys.append(ord('+'))
 
-        self._min = kwargs.get('min', -1*sys.maxint)
-        self._max = kwargs.get('max', sys.maxint)
+        self._min = min
+        self._max = max
 
         # Event Management
         self.Bind(wx.EVT_CHAR, self.OnChar)

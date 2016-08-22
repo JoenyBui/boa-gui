@@ -4,6 +4,7 @@ from wx.lib.agw.supertooltip import SuperToolTip
 
 from . import LayoutDimensions
 from .smart import SmartComboBox, SmartInputLayout
+from ..types import is_int
 
 __author__ = 'jbui'
 
@@ -14,7 +15,18 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     """
 
-    def __init__(self, parent, combobox=None, event_on_select=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, combobox=None, event_on_select=None, event_text_change=None, layout=None, *args, **kwargs):
+        """
+        Combobox input layout.
+
+        :param parent: main form
+        :param combobox:
+        :param event_on_select:
+        :param layout:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         SmartInputLayout.__init__(self, parent, event_on_select=event_on_select, layout=layout, *args, **kwargs)
 
         # Establish the combobox.
@@ -26,11 +38,14 @@ class ComboBoxInputLayout(SmartInputLayout):
         if event_on_select:
             self.combobox.Bind(wx.EVT_COMBOBOX, event_on_select)
 
+        if event_text_change:
+            self.combobox.Bind(wx.EVT_TEXT, event_text_change)
+
         self.do_layout()
 
     def get_value(self):
         """
-        Grab the value.
+        Get the combobox value.
 
         :return:
         """
@@ -38,6 +53,7 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def set_value(self, value, label=None):
         """
+        Set the combobox value.
 
         :param value:
         :param label:
@@ -51,6 +67,7 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def set_list(self, list_values):
         """
+        Set the list.
 
         :param list_values:
         :return:
@@ -59,24 +76,56 @@ class ComboBoxInputLayout(SmartInputLayout):
 
     def set_selection(self, value):
         """
+        Set the selection value.
+
+        :param value: index
+        :return:
+        """
+        if value is not None:
+            if is_int(value):
+                self.combobox.SetSelection(value)
+
+    def set_selection_by_data(self, value):
+        """
+        Set the selection given the data input.
 
         :param value:
         :return:
         """
-        self.combobox.SetSelection(value)
+        self.combobox.set_selection_by_data(value)
 
     def append(self, label, obj):
         """
+        Append data into combobox.
 
-        :param label:
-        :param obj:
+        :param label: title
+        :param obj: object data
         :return:
         """
         self.combobox.Append(label, obj)
 
     def get_data(self):
         """
+        Get the data.
 
         :return:
         """
         return self.combobox.GetClientData(self.combobox.GetSelection())
+
+    def enable(self):
+        """
+        Enable textbox and/or postbox.
+
+        :return:
+        """
+        if self.combobox:
+            self.combobox.Enable(True)
+
+    def disable(self):
+        """
+        Disable textbox and/or postbox.
+
+        :return:
+        """
+        if self.combobox:
+            self.combobox.Disable()

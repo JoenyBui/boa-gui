@@ -11,12 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: peui.app
-    :members:
+   api/index.rst
+   release_notes.rst
 
-.. automodule:: peui.units
-    :members:
-
+.. todo::
 
 Indices and tables
 ==================

@@ -1,7 +1,11 @@
+import os
 import wx
+
+import numpy as np
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
 from ..form.file import SaveXYDialog
+from ..chart.dplot import Dplot, DplotCurve
 
 from . import ChildController
 
@@ -37,9 +41,15 @@ class Chart2dController(ChildController):
         # Grab project data.
         data = self.parent.project.data
 
+        legend = []
         # Loop through the data set to have multiple plots.
         for i in range(0, len(data), 2):
             self.view.axes.plot(data[i], data[i+1])
+
+            legend.append('Curve %d' % i)
+
+        # Add legend
+        self.view.axes.legend(legend)
 
         # Call the binding for custom toolbar figure.
         self.bind_toolbar_figure()
@@ -48,26 +58,58 @@ class Chart2dController(ChildController):
         self.update_text()
 
     def update_text(self):
+        """
+
+        :return:
+        """
         self.view.axes.set_title(self.figure_setting.title)
         self.view.axes.set_ylabel(self.figure_setting.y_title)
         self.view.axes.set_xlabel(self.figure_setting.x_title)
 
     def bind_toolbar_figure(self):
+        """
+
+        :return:
+        """
         tb = self.view.toolbar
 
         tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
         tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):
+        """
+
+        :return:
+        """
         pass
 
     def sync_data(self):
+        """
+
+        :return:
+        """
+        pass
+
+    def clear_control(self):
+        """
+        Clear the control.
+
+        """
         pass
 
     def on_custom_figure_setting(self, event):
+        """
+
+        :param event:
+        :return:
+        """
         dlg = FigureSettingDialog(self.view, self, setting=self.figure_setting)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -87,6 +129,120 @@ class Chart2dController(ChildController):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
 
-            self.view.save_xy_data(path)
+            filename = dlg.GetFilename()
+
+            file, ext = os.path.splitext(filename)
+
+            if ext == '.csv':
+                self.save_xy_data(path)
+            elif ext == '.grf':
+                self.save_dplot_data(path)
 
         dlg.Destroy()
+
+    def get_data_block(self):
+        """
+        Get data in numpy matrix block.
+
+        :return:
+        """
+        data = []
+
+        for line in self.view.axes.lines:
+            x = line.get_xdata()
+            y = line.get_ydata()
+
+            data.append(x)
+            data.append(y)
+
+        return np.array(data)
+
+    def get_data_list(self):
+        """
+        Get the data in list of tuple.
+
+        :return:
+        """
+        data = []
+
+        for line in self.view.axes.lines:
+            data.append((line.get_xdata(), line.get_ydata()))
+
+        return data
+
+    def save_xy_data(self, pathname):
+        """
+        Save data file to csv x, y.
+
+        :param pathname: file path name
+        :return:
+        """
+        data = self.get_data_block()
+
+        # df = pd.DataFrame(np.array(data).transpose())
+        # df.to_csv(pathname)
+        try:
+            np.savetxt(pathname, data.transpose(), delimiter=',')
+        except TypeError as e:
+            print(e)
+
+            wx.MessageBox('TypeError: Data is not aligned and cannot be saved as csv.')
+
+    def save_dplot_data(self, pathname):
+        """
+        Save dplot data
+
+        :param pathname:
+        :return:
+        """
+
+        try:
+            dp = Dplot()
+
+            data = self.get_data_list()
+
+            # Title
+            dp.title_1 = self.view.axes.get_title()
+
+            # X-Title
+            x_axis = self.view.axes.get_xaxis()
+            dp.x_axis = x_axis.get_label().get_text()
+
+            # Y-Title
+            y_axis = self.view.axes.get_yaxis()
+            dp.y_axis = y_axis.get_label().get_text()
+
+            xscale = x_axis.get_scale()
+            yscale = y_axis.get_scale()
+
+            if xscale == 'linear' and yscale == 'linear':
+                dp.scale_mode = dp.scaling_list['A'][1]
+            elif xscale == 'linear' and yscale == 'log':
+                dp.scale_mode = dp.scaling_list['D'][1]
+            elif xscale == 'log' and yscale == 'linear':
+                dp.scale_mode = dp.scaling_list['B'][1]
+            elif xscale == 'log' and yscale == 'log':
+                dp.scale_mode = dp.scaling_list['E'][1]
+
+            for x, y in data:
+                dp.add_curve(
+                    DplotCurve(
+                        list(x), list(y)
+                    )
+                )
+
+            # Draw Legend
+            legend = self.view.axes.get_legend()
+
+            if legend:
+                texts = legend.get_texts()
+                for index in range(0, len(texts)):
+                    text = texts[index]
+
+                    dp.data[index].legend_title = text.get_text()
+
+            dp.write_dplot(pathname)
+
+        except IOError as e:
+
+            print(str(e))

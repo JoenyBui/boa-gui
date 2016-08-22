@@ -48,6 +48,13 @@ class CustomToolBarController(ChildController):
 
     """
     def __init__(self, parent, view, menu_items):
+        """
+
+        :param parent:
+        :param view:
+        :param menu_items:
+        :return:
+        """
         ChildController.__init__(self, parent, view)
 
         self.menu_items = menu_items
@@ -56,6 +63,10 @@ class CustomToolBarController(ChildController):
         self.do_layout()
 
     def do_layout(self):
+        """
+
+        :return:
+        """
         for menu in self.menu_items:
             if menu['id'] == wx.ID_SEPARATOR:
                 self.view.AddSeparator()
@@ -70,10 +81,29 @@ class CustomToolBarController(ChildController):
                 self.view.AddSimpleTool(menu['id'], menu['label'], tb, menu['label'])
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):
+        """
+
+        :return:
+        """
         pass
 
     def sync_data(self):
+        """
+
+        :return:
+        """
+        pass
+
+    def clear_control(self):
+        """
+
+        :return:
+        """
         pass

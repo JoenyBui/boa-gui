@@ -29,6 +29,7 @@ METHOD_SAVE_AS_PROJECT = wx.ID_SAVEAS
 METHOD_CLOSE_ALL = wx.ID_CLOSE_ALL
 METHOD_EXIT_PROJECT = wx.ID_EXIT
 METHOD_FILE = wx.ID_FILE
+METHOD_OUTPUT_PROJECT = wx.NewId()
 
 METHOD_EDIT = wx.ID_EDIT
 METHOD_UNDO = wx.ID_UNDO
@@ -51,6 +52,7 @@ METHOD_WINDOW_GENERAL = wx.NewId()
 METHOD_WINDOW_CHART = wx.NewId()
 METHOD_WINDOW_XLSX = wx.NewId()
 
+METHOD_DEFAULT_SETTING = wx.NewId()
 METHOD_HELP = wx.ID_HELP
 METHOD_ABOUT = wx.ID_ABOUT
 
@@ -59,6 +61,7 @@ MASTER_KEY = {
     METHOD_OPEN_PROJECT:        dict(name='Open Project'),
     METHOD_SAVE_PROJECT:        dict(name='Save Project'),
     METHOD_SAVE_AS_PROJECT:     dict(name='Save Project As'),
+    METHOD_OUTPUT_PROJECT:      dict(name='Output Project'),
     METHOD_CLOSE_ALL:           dict(name='Close All Projects'),
     METHOD_EXIT_PROJECT:        dict(name='Exit'),
 
@@ -79,6 +82,7 @@ MASTER_KEY = {
     METHOD_WINDOW_XLSX:         dict(name='Window XLSX'),
 
     METHOD_HELP:                dict(name='&Help'),
+    METHOD_DEFAULT_SETTING:     dict(name='Setting'),
     METHOD_ABOUT:               dict(name='&About')
 }
 
@@ -162,6 +166,11 @@ MENU_BAR_KEY = [
                 bitmap=wx.ART_FILE_OPEN
             ),
             OrderedDict(
+                id=METHOD_OPEN_RECENT,
+                name='&Open Recent',
+                history=True
+            ),
+            OrderedDict(
                 id=METHOD_SEPARATOR,
                 name='Separator'
             ),
@@ -174,6 +183,14 @@ MENU_BAR_KEY = [
                 id=METHOD_SAVE_AS_PROJECT,
                 name='Save As Project',
                 bitmap=wx.ART_FILE_SAVE_AS
+            ),
+            OrderedDict(
+                id=METHOD_SEPARATOR,
+                name='Separator'
+            ),
+            OrderedDict(
+                id=METHOD_OUTPUT_PROJECT,
+                name='Output Project as Word',
             ),
             OrderedDict(
                 id=METHOD_SEPARATOR,
@@ -283,6 +300,10 @@ MENU_BAR_KEY = [
         name='Help',
         id=METHOD_HELP,
         keys=[
+            OrderedDict(
+                id=METHOD_DEFAULT_SETTING,
+                name='Setting',
+            ),
             OrderedDict(
                 id=METHOD_ABOUT,
                 name='About',

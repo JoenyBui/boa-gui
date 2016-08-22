@@ -1,10 +1,17 @@
 import wx
+from wx.lib.agw.supertooltip import SuperToolTip
+
+from ..form import DpiAwareness
 
 __author__ = 'jbui'
 
 
-class LayoutDimensions(object):
+class LayoutDimensions(DpiAwareness):
     """
+    Styling for layout textbox
+
+    ** note: do not apply DPI scaling, done within class
+
 
     /---------------- OVERALL WIDTH ----------------------/
     |                                                     |
@@ -24,21 +31,24 @@ class LayoutDimensions(object):
     """
     def __init__(self, **kwargs):
         """
+        Constructor
 
         :param kwargs:
         :return:
         """
-        self.top = kwargs.get('top', 1)
-        self.bottom = kwargs.get('bottom', 1)
-        self.left = kwargs.get('left', 1)
-        self.right = kwargs.get('right', 1)
-        self.interior = kwargs.get('interior', 1)
+        DpiAwareness.__init__(self)
 
-        self.overall_width = kwargs.get('overall_width', 200)
-        self.overall_height = kwargs.get('overall_height', 30)
+        self.top = self.scale(kwargs.get('top', 1))
+        self.bottom = self.scale(kwargs.get('bottom', 1))
+        self.left = self.scale(kwargs.get('left', 1))
+        self.right = self.scale(kwargs.get('right', 1))
+        self.interior = self.scale(kwargs.get('interior', 1))
 
-        self.widths = kwargs.get('widths', (150, 100, 100, ))
-        self.height = kwargs.get('height', 24)
+        self.overall_width = self.scale(kwargs.get('overall_width', 200))
+        self.overall_height = self.scale(kwargs.get('overall_height', 30))
+
+        self.widths = self.scale(kwargs.get('widths', (150, 100, 100, )))
+        self.height = self.scale(kwargs.get('height', 24))
 
         self.absolute = kwargs.get('absolute', True)
 
@@ -51,7 +61,7 @@ class LayoutDimensions(object):
         # minimal sizer inferior to the other or not. The following sample shows a dialog with three buttons, the first
         # one has a stretch factor of 1 and thus gets stretched, whereas the other two buttons have a stretch factor of
         # zero and keep their initial width:
-        self.stretch_factor = kwargs.get('stretch_factor ', [])
+        self.stretch_factor = kwargs.get('stretch_factor', [])
 
         self.border_width = kwargs.get('border_width', [])
         self.flags = kwargs.get('flags', (wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, wx.ALIGN_CENTER))
@@ -92,3 +102,31 @@ class LayoutDimensions(object):
 
             if id >= len(self.border_width):
                 self.border_width.append(BORDER_WIDTH_NONE)
+
+
+class SmartToolTip(SuperToolTip):
+    """
+    Smarter Tooltip
+
+    """
+    def __init__(self, message, target,
+                 bodyImage=wx.NullBitmap, header=" ", headerBmp=wx.NullBitmap,
+                 footer="", footerBmp=wx.NullBitmap):
+
+        SuperToolTip.__init__(self, message=message, bodyImage=bodyImage, header=header, headerBmp=headerBmp,
+                              footer=footer, footerBmp=footerBmp)
+
+        if target:
+            self.SetTarget(target)
+
+        self.SetDrawHeaderLine(True)
+        self.ApplyStyle("Office 2007 Blue")
+        self.SetDropShadow(True)
+
+        self.Show(True)
+
+    def enable(self):
+        self.Show(True)
+
+    def disable(self):
+        self.Show(False)

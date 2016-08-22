@@ -5,10 +5,30 @@ import wx
 from wx import GridSizer
 from wx.lib.agw.supertooltip import SuperToolTip
 
-from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque, misc
+from peui.units import area, charge, inertia, length, mass, pressure, volume, tnt, density, torque
 
-from . import LayoutDimensions
+from .label import SmartLabel
+from . import LayoutDimensions, SmartToolTip
+
 from ..units import KEY_IMPERIAL, KEY_METRIC
+from ..units.acceleration import AccelerationUnit
+from ..units.angle import AngleUnit
+from ..units.area_density import AreaDensityUnit
+from ..units.area import AreaUnit
+from ..units.charge import ChargeUnit
+from ..units.density import DensityUnit
+from ..units.force import ForceUnit
+from ..units.inertia import InertiaUnit
+from ..units.length import LengthUnit
+from ..units.linear_density import LinearDensityUnit
+from ..units.linear_pressure import LinearPressureUnit
+from ..units.mass import MassUnit
+from ..units.pressure import PressureUnit
+from ..units.time import TimeUnit
+from ..units.tnt import TntUnit
+from ..units.torque import TorqueUnit
+from ..units.velocity import VelocityUnit
+from ..units.volume import VolumeUnit
 
 __author__ = 'jbui'
 
@@ -19,20 +39,30 @@ class SmartTextBox(wx.TextCtrl):
     to see if the format is correct.
 
     The validation method goes through three process:
-    1.) OnChar(): Capture ony the key character that are necessary.
-    2.) wx.EVT_TEXT: Validate that the input is actually a number.
-    3.) Validate(): Check against the tolerance level.
+
+        1. OnChar(): Capture ony the key character that are necessary.
+        2. wx.EVT_TEXT: Validate that the input is actually a number.
+        3. Validate(): Check against the tolerance level.
+
     """
-    def __init__(self, parent, key_up=None, message=None, *args, **kwargs):
+    def __init__(self, parent, key_up=None, message=None, enabled_message='',
+                 disabled_messages=None, disabled_index=None, value=None, *args, **kwargs):
         """
 
-        :param parent:
+        :param parent: parent ui
         :param key_up: bind key up handler
         :param message: add in tooltip message
+        :param enabled_message: message once the box is enabled
+        :param disabled_messages: list of array messages
+        :param disabled_index: index of the which messages to display
+        :param value: initial value for smart box
         :param args:
         :param kwargs:
         """
         wx.TextCtrl.__init__(self, parent, *args, **kwargs)
+
+        if value is not None:
+            self.Value = str(value)
 
         self.keys = kwargs.get('keys', {})
         self.parent = parent
@@ -40,13 +70,23 @@ class SmartTextBox(wx.TextCtrl):
         if key_up:
             self.Bind(wx.EVT_KEY_UP, key_up, self)
 
+        self.tooltip = None
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
 
+        self.enabled_message = enabled_message
+        self.disabled_messages = disabled_messages
+
+        if disabled_index is None and self.disabled_messages:
+            self.disabled_index = 0
+        else:
+            self.disabled_index = disabled_index
+
     @property
     def min(self):
         """
+        Return the minimum value.
 
         :return: minimum value
         """
@@ -55,6 +95,7 @@ class SmartTextBox(wx.TextCtrl):
     @min.setter
     def min(self, value):
         """
+        Set the minimum value.
 
         :param value:
         """
@@ -63,6 +104,7 @@ class SmartTextBox(wx.TextCtrl):
     @property
     def max(self):
         """
+        Return the maximum value.
 
         :return: return max value
         """
@@ -71,27 +113,69 @@ class SmartTextBox(wx.TextCtrl):
     @max.setter
     def max(self, value):
         """
+        Set the maximum value.
 
         :param: value
         """
         self.keys['max'] = value
 
-    def get_value(self, key):
+    def set_value(self, value):
         """
+        Set the textbox value
+
+        :param value: text
+        :return:
+        """
+        if value is not None:
+            self.Value = str(value)
+        else:
+            self.Value = ""
+
+    def get_value(self, key=None):
+        """
+        Get the value
 
         :param key:
         :return:
         """
         val = self.GetValue()
-        digit = chr(key)
 
-        pos = self.GetInsertionPoint()
-        if pos == len(val):
-            val += digit
-        else:
-            val = val[:pos] + digit + val[pos:]
+        if key is not None:
+            # When key is strike we capture.
+            digit = chr(key)
+
+            pos = self.GetInsertionPoint()
+            if pos == len(val):
+                val += digit
+            else:
+                val = val[:pos] + digit + val[pos:]
 
         return val
+
+    def Enable(self, *args, **kwargs):
+        """
+        On enable, clean data if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.TextCtrl.Enable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            if self.Value in self.disabled_messages:
+                self.Value = self.enabled_message
+
+    def Disable(self, *args, **kwargs):
+        """
+        On disable, add message if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.TextCtrl.Disable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            self.Value = self.disabled_messages[self.disabled_index]
 
 
 class SmartComboBox(wx.ComboBox):
@@ -99,14 +183,18 @@ class SmartComboBox(wx.ComboBox):
     Smart ComboBox is used for units conversion.
 
     """
-    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, *args, **kwargs):
+    def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None,
+                 enabled_message='', disabled_messages=None, disabled_index=None, *args, **kwargs):
         """
+        Constructor
 
-        :param parent:
-        :param data:
-        :param style:
-        :param value:
-        :param message:
+        :param parent: parent panel or frame
+        :param data: list of values
+        :param style: combobox style
+        :param value: display value
+        :param message: tooltip message
+        :param unit: Unit object
+        :param unit_system: 'imperial' or 'metric'
         :param args:
         :param kwargs:
         :return:
@@ -114,7 +202,8 @@ class SmartComboBox(wx.ComboBox):
         wx.ComboBox.__init__(self, parent, style=style, *args, **kwargs)
 
         self.convert = None
-        self.unit_system = None
+        self.unit_system = unit_system
+        self.unit = unit
 
         if data:
             self.AppendItems(data)
@@ -122,188 +211,475 @@ class SmartComboBox(wx.ComboBox):
         if value:
             self.Value = value
 
+        self.tooltip = None
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
 
-    def activate_area(self, **kwargs):
+        self.previous_index = 0
+        self.enabled_message = enabled_message
+        self.disabled_messages = disabled_messages
+
+        if disabled_index is None and self.disabled_messages:
+            self.disabled_index = 0
+        else:
+            self.disabled_index = disabled_index
+
+        if unit:
+            # If unit is passed in, activate it.
+            self.activate()
+
+        self.current_dropbox_selection = None
+
+        self.Bind(wx.EVT_COMBOBOX_DROPDOWN, self.on_dropdown_open, self)
+
+    def Enable(self, *args, **kwargs):
         """
-        Activate the area.
+        On enable, clean data if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.ComboBox.Enable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            if self.Value in self.disabled_messages:
+                for index, label in enumerate(self.Strings):
+                    if label in self.disabled_messages:
+                        self.Delete(index)
+
+                self.SetSelection(self.previous_index)
+
+    def Disable(self, *args, **kwargs):
+        """
+        On disable, add message if needed.
+
+        :param args:
+        :param kwargs:
+        """
+        wx.ComboBox.Disable(self, *args, **kwargs)
+
+        if self.disabled_messages:
+            self.previous_index = self.GetCurrentSelection()
+            self.Append(self.disabled_messages[self.disabled_index])
+            self.SetSelection(self.GetCount() - 1)
+
+    def on_dropdown_open(self, event=None):
+        """
+        Event handler to store the current selection
+
+        :param:
+        """
+        self.current_dropbox_selection = self.GetCurrentSelection()
+
+    def is_selection_change(self):
+        """
+        Check if the dropbox selection different from the previous selection before the dropbox is open.
+
+        :return: boolean
+        """
+        if self.current_dropbox_selection is self.GetSelection():
+            return False
+        else:
+            return True
+
+    def append(self, label, obj):
+        """
+        Append data into combobox.
+
+        :param label: title
+        :param obj: object data
+        :return:
+        """
+        self.Append(label, obj)
+
+    def set_selection_by_data(self, value):
+        """
+        Set the selection given the data input.
+
+        :param value:
+        :return:
+        """
+        for index, text in enumerate(self.Strings):
+            if self.HasClientData():
+                if self.GetClientData(index) == value:
+                    self.SetSelection(index)
+
+                    # Leave loop
+                    return
+
+    def get_data(self):
+        """
+        Get the data.
+
+        :return:
+        """
+        return self.GetClientData(self.GetSelection())
+
+    def set_value(self, value):
+        """
+        Set the value
+
+        :param value: string
+        :return:
+        """
+        self.Value = str(value)
+
+    def get_value(self):
+        """
+        Get the combobox value
+
+        :return:
+        """
+        return self.Value
+
+    def activate(self):
+        """
+        Activate Units.
+
+        :return:
+        """
+        self.Clear()
+        self.AppendItems(self.unit.get_list())
+        self.SetSelection(self.unit.get_default_selection())
+        self.convert = self.unit.get_conversion_factor
+
+    def activate_acceleration(self, *args, **kwargs):
+        """
+        Activate acceleration unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = AccelerationUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_angle(self, *args, **kwargs):
+        """
+        Activate angle unit
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = AngleUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_area_density(self, *args, **kwargs):
+        """
+        Activate area density unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = AreaDensityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_area(self, *args, **kwargs):
+        """
+        Activate area unit.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', area.DEFAULT_IMPERIAL__LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', area.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', area.DEFAULT_AREA_LIST))
+        self.unit = AreaUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = area.get_area_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_charge(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_charge(self, *args, **kwargs):
         """
         Activate charge weight.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', charge.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', charge.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', charge.DEFAULT_CHARGE_LIST))
+        self.unit = ChargeUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = charge.get_charge_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_inertia(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_density(self, *args, **kwargs):
         """
-        Activate Inertia
+        Activate density unit.
 
-        :param: kwargs:
+        :param args:
+        :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', inertia.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', inertia.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', inertia.DEFAULT_INERTIA_LIST))
+        self.unit = DensityUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = inertia.get_inertia_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_length(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_force(self, *args, **kwargs):
         """
-        Activate length.
+        Active force unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = ForceUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_inertia(self, *args, **kwargs):
+        """
+        Activate Inertia unit.
+
+        :param args:
+        :param kwargs:
+        """
+        self.unit = InertiaUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_length(self, *args, **kwargs):
+        """
+        Activate length unit.
+
+        :param args:
+        :param kwargs:
+        """
+        self.unit = LengthUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_linear_density(self, *args, **kwargs):
+        """
+        Activate linear density unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = LinearDensityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_linear_pressure(self, *args, **kwargs):
+        """
+        Activate linear pressure unit.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = LinearPressureUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_mass(self, *args, **kwargs):
+        """
+        Activate mass units.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', length.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', length.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', length.DEFAULT_LENGTH_LIST))
+        self.unit = MassUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = length.get_length_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_mass(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_pressure(self, *args, **kwargs):
         """
-        Activate the mass units.
+        Activate pressure unit.
 
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', mass.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', mass.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', mass.DEFAULT_MASS_LIST))
+        self.unit = PressureUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = mass.get_mass_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_pressure(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_time(self, *args, **kwargs):
         """
-        Activate the pressure.
+        Activate time unit.
 
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = TimeUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_tnt(self, *args, **kwargs):
+        """
+        Activate tnt unit.
+
+        :param args:
         :param kwargs:
         """
+        self.unit = TntUnit(*args, **kwargs)
 
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', pressure.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', pressure.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', pressure.DEFAULT_PRESSURE_LIST))
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = pressure.get_pressure_conversion_factor
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
 
-    def activate_volume(self, **kwargs):
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_torque(self, *args, **kwargs):
         """
+        Activate Torque unit.
 
+        :param args:
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', volume.DEFAULT_VOLUME_LIST))
+        self.unit = TorqueUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = volume.get_volume_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_density(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_velocity(self, *args, **kwargs):
         """
+        Activate Velocity unit.
 
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        self.unit = VelocityUnit(*args, **kwargs)
+
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
+
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def activate_volume(self, *args, **kwargs):
+        """
+        Activate volume unit.
+
+        :param args:
         :param kwargs:
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', density.DEFAULT_DENSITY_LIST))
+        self.unit = VolumeUnit(*args, **kwargs)
 
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = density.get_density_conversion_factor
+        if kwargs.get('unit_list'):
+            unit_list = kwargs.get('unit_list')
 
-    def activate_torque(self, **kwargs):
+            self.unit.metric_list = unit_list['metric']
+            self.unit.imperial_list = unit_list['imperial']
+
+        self.unit.unit_system = self.unit_system
+        self.activate()
+
+    def get_factor(self, origin, destination):
         """
+        Get the factor.
 
-        :param kwargs:
+        :param origin: origin unit
+        :param destination: destination unit
         """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', torque.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', torque.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', torque.DEFAULT_TORQUE_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = torque.get_torque_conversion_factor
-
-    def activate_misc(self, **kwargs):
-        """
-
-        :param kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', misc.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', misc.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', misc.DEFAULT_MISC_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = misc.get_misc_conversion_factor
-
-    def activate_tnt(self, **kwargs):
-        """
-
-        :param kwargs:
-        """
-        if self.unit_system == KEY_IMPERIAL:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_IMPERIAL_LIST))
-        elif self.unit_system == KEY_METRIC:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_METRIC_LIST))
-        else:
-            self.AppendItems(kwargs.get('list', tnt.DEFAULT_TNT_LIST))
-
-        self.SetSelection(kwargs.get('default', 0))
-        self.convert = tnt.get_tnt_conversion_factor
-
-    def get_factor(self, destination):
-        """
-
-        :param destination:
-        """
-        return self.convert
+        return self.convert(origin, destination)
 
 
 class SmartInputLayout(wx.BoxSizer):
@@ -336,7 +712,7 @@ class SmartInputLayout(wx.BoxSizer):
         :param width:
         :param max: maximum value for the textbox
         :param min: minimum value for the textbox
-        :param overall_width:
+        :param layout:
         :param overall_height:
         :param args:
         :param kwargs:
@@ -364,29 +740,10 @@ class SmartInputLayout(wx.BoxSizer):
             self.label = kwargs.get('label')
         else:
             if kwargs.get('name'):
-                self.label = wx.StaticText(self.parent,
-                                           label=kwargs.get('name'))
+                self.label = SmartLabel(self.parent, label=kwargs.get('name'))
+
             else:
-                self.label = wx.StaticText(self.parent,
-                                           label="TextBox Label:")
-
-        # self.label.SetMinSize(self.layout.get_size(self.INDEX_LABEL))
-        #
-        # self.textbox = None
-        #
-        # self.postbox = kwargs.get('postbox', None)
-
-        self.tooltip = kwargs.get('tooltip', SuperToolTip("HELP"))
-        # self.tooltip.SetIcon(wx.ICON_WARNING)
-        # self.tooltip.SetTarget(self.textbox)
-
-        # Additional placeholder that is significant (unit box, path button, etc.)
-
-        # Call do_layout after you have populate the label, textbox, and/or postbox
-        # self.border_space = kwargs.get('border_space', 5)
-        # self.border_space_label = kwargs.get('border_space_label', self.border_space)
-        # self.border_space_textbox = kwargs.get('border_space_textbox', self.border_space)
-        # self.border_space_postbox = kwargs.get('border_space_postbox', self.border_space)
+                self.label = SmartLabel(self.parent, label='Textbox Label:')
 
         self.min = min
         self.max = max
@@ -396,14 +753,26 @@ class SmartInputLayout(wx.BoxSizer):
         size.Height = self.layout.overall_height
         self.SetMinSize(size)
 
+    def rename(self, name=None):
+        self.label = wx.StaticText(self.parent,
+                                   label=name)
+
     @property
     def next_id(self):
+        """
+
+        :return:
+        """
         nid = self._next_id
         self._next_id += 1
         return nid
 
     @property
     def label(self):
+        """
+
+        :return:
+        """
         if self.INDEX_LABEL is None:
             return None
 
@@ -411,6 +780,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @label.setter
     def label(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -419,6 +793,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def textbox(self):
+        """
+
+        :return:
+        """
         if self.INDEX_TEXTBOX is None:
             return None
 
@@ -426,6 +804,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @textbox.setter
     def textbox(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -434,6 +817,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def postbox(self):
+        """
+
+        :return:
+        """
         if self.INDEX_POSTBOX is None:
             return None
 
@@ -441,6 +828,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @postbox.setter
     def postbox(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -449,6 +841,10 @@ class SmartInputLayout(wx.BoxSizer):
 
     @property
     def combobox(self):
+        """
+
+        :return:
+        """
         if self.INDEX_COMBOBOX is None:
             return None
 
@@ -456,6 +852,11 @@ class SmartInputLayout(wx.BoxSizer):
 
     @combobox.setter
     def combobox(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         if value is None:
             return
 
@@ -616,7 +1017,25 @@ class SmartInputLayout(wx.BoxSizer):
         """
         self.Fit(window)
 
+    def enable(self):
+        """
+        Must inherit enable input layout.
+
+        """
+        pass
+
+    def disable(self):
+        """
+        Must inherit disable input layout.
+
+        """
+        pass
+
     def validate(self):
+        """
+        Must inherit validate().
+
+        """
         pass
 
 
@@ -626,11 +1045,58 @@ class SmartButton(wx.Button):
 
     """
     def __init__(self, parent, label='', evt_button=None, message=None, *args, **kwargs):
+        """
+        Constructor.
+
+        :param parent:
+        :param label:
+        :param evt_button:
+        :param message:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         wx.Button.__init__(self, parent, label=label, *args, **kwargs)
 
         if evt_button:
             self.Bind(wx.EVT_BUTTON, evt_button)
 
+        self.tooltip = None
         if message:
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
+
+
+class SmartCheckBox(wx.CheckBox):
+    """
+    **Smarter CheckBox**
+
+    """
+    def __init__(self, parent, id=-1, label='', evt_click=None, message=None, *args, **kwargs):
+        """
+        Constructor.
+
+        :param parent:
+        :param id:
+        :param label:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        wx.CheckBox.__init__(self, parent, id=id, label=label, *args, **kwargs)
+
+        self.tooltip = None
+        if message:
+            self.tooltip = wx.ToolTip(message)
+            self.SetToolTip(self.tooltip)
+
+        if evt_click:
+            self.Bind(wx.EVT_CHECKBOX, evt_click)
+
+    def get_value(self):
+        """
+        Return the true/false
+
+        :return:
+        """
+        return self.Value

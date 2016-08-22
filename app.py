@@ -1,6 +1,19 @@
 import os
 import sys
 
+import matplotlib
+import pandas as pd
+import numpy as np
+
+from scipy.special import gamma
+
+import wx
+import wx.lib.mixins.inspection as WIT
+import wx.aui
+import wx.lib.agw.aui as aui
+
+from pelm.client import LicenseClientManager, ClientFrame
+
 if getattr(sys, 'frozen', False):
     import ctypes
     # Override dll search path.
@@ -14,20 +27,7 @@ if getattr(sys, 'frozen', False):
     # Restore dll search path.
     ctypes.windll.kernel32.SetDllDirectoryW(sys._MEIPASS)
 
-import matplotlib
-# matplotlib.use('GTKAgg')
-
-import pandas as pd
-import numpy as np
-
-import wx
-import wx.lib.mixins.inspection as WIT
-import wx.aui
-import wx.lib.agw.aui as aui
-
-from pelm.client import LicenseClientManager, ClientFrame
-
-DEBUG = False
+DEBUG = True
 
 # matplotlib.use('WXAgg')
 
@@ -89,13 +89,15 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
+    import docx
+    import docxtpl
+
     #TODO: Undo-Redo Model
     #TODO: Cut, Copy & Paste
     #TODO: Printing Pdf & Docx
     #TODO: Backup Temp File
     #TODO: Periodic Savings
     #TODO: Save Perspective View
-    #TODO: Add Settings menu item and dialog.as
     #TODO: Add license manager menu item.
 
     setting = Setting()
@@ -130,7 +132,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 "PEC-GUI License Client",
+                                 title="PEC-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -143,7 +145,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 "PEC-GUI License Client",
+                                 title="PEC-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -159,7 +161,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 "PEC-GUI License Client",
+                                 title="PEC-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -169,7 +171,8 @@ if __name__ == '__main__':
     # Check if the a file path is passed with the executable.
     project = Project()
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
-    frame = MainWindow(parent=None, controller=controller, title='Sample Editor')
+    frame = MainWindow(parent=None, controller=controller, title='Sample Editor',
+                       style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
     controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
@@ -190,7 +193,7 @@ if __name__ == '__main__':
 
     # Property Panel
     controller.add_pane(
-        PropGrid(frame, controller, None, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
+        PropGrid(frame, controller, None, column=4, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
         cfg.METHOD_WINDOW_PROP_GRID,
         wx.BOTTOM,
         'Property'

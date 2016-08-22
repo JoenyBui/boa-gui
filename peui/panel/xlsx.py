@@ -8,7 +8,18 @@ __author__ = 'jbui'
 
 
 class SpreadSheet(sheet.CSheet):
+    """
+
+    """
     def __init__(self, parent, controller, *args, **kwargs):
+        """
+
+        :param parent:
+        :param controller:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         sheet.CSheet.__init__(self, parent)
         self.row = self.col = 0
         self.SetNumberRows(55)

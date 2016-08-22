@@ -26,6 +26,10 @@ class TreeController(ChildController):
         self.view.add_root(directory)
 
     def update_layout(self):
+        """
+
+        :return:
+        """
         pass
 
     def refresh(self):
@@ -37,4 +41,8 @@ class TreeController(ChildController):
         self.update_layout()
 
     def sync_data(self):
+        """
+
+        :return:
+        """
         pass

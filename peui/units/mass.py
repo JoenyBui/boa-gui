@@ -1,49 +1,34 @@
-"""
- *  PROTECTION ENGINEERING CONSULTANTS CONFIDENTIAL
- *
- *  [2014] - [2015] Protection Engineering Consultants
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Protection Engineering Consultants and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Protection Engineering Consultants
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Protection Engineering Consultants.
-"""
+from . import Unit, UNIT_MASS_KEY
 
 __author__ = 'jbui'
 
 # UNITY_VALUE = GRAM
 FACTOR_PRESSURE_GRAM = 1.0
-FACTOR_PRESSURE_KILOGRAM = 0.001
-FACTOR_PRESSURE_POUND_MASS = 0.0022046226218
+FACTOR_PRESSURE_KILOGRAM = 1000.0
+FACTOR_PRESSURE_POUND = 453.592
 
 ID_NAME_MASS_GRAM = ('g', 'gram')
 ID_NAME_MASS_KILOGRAM = ('kg', 'kilogram')
-ID_NAME_POUND_MASS = ('lbm', 'pound')
+ID_NAME_POUND = ('lb', 'pound')
 
 MASS_KEY = {
     'g': FACTOR_PRESSURE_GRAM,
     'gram': FACTOR_PRESSURE_GRAM,
     'kg': FACTOR_PRESSURE_KILOGRAM,
     'kilogram': FACTOR_PRESSURE_KILOGRAM,
-    'lbm': FACTOR_PRESSURE_POUND_MASS,
-    'pound': FACTOR_PRESSURE_POUND_MASS
+    'lb': FACTOR_PRESSURE_POUND,
+    'pound': FACTOR_PRESSURE_POUND
 }
 
 
 DEFAULT_MASS_LIST = [
     'g',
     'kg',
-    'lbm'
+    'lb'
 ]
 
 DEFAULT_IMPERIAL_LIST = [
-    'lbm'
+    'lb'
 ]
 
 DEFAULT_METRIC_LIST = [
@@ -54,6 +39,7 @@ DEFAULT_METRIC_LIST = [
 
 def get_mass_conversion_factor(origin, destination):
     """
+    Get mass conversion factor.
 
     :param origin:
     :param destination:
@@ -62,4 +48,22 @@ def get_mass_conversion_factor(origin, destination):
     origin_factor = MASS_KEY.get(origin)
     destination_factor = MASS_KEY.get(destination)
 
-    return destination_factor / origin_factor
+    return origin_factor / destination_factor
+
+
+class MassUnit(Unit):
+    """
+    **Mass Unit**
+
+    """
+    def __init__(self, *args, **kwargs):
+        Unit.__init__(self, *args, **kwargs)
+
+        self.key = UNIT_MASS_KEY
+        self.table = MASS_KEY
+
+        self.imperial_list = DEFAULT_IMPERIAL_LIST
+        self.metric_list = DEFAULT_METRIC_LIST
+
+    def get_conversion_factor(self, origin, destination):
+        return get_mass_conversion_factor(origin, destination)
