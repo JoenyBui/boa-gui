@@ -52,6 +52,7 @@ class FigureSettingDialog(GeneralDialog):
 
     def do_layout(self):
         """
+        Layout form
 
         :return:
         """
@@ -113,6 +114,7 @@ class FigureSettingDialog(GeneralDialog):
 
 class FigureSettingController(ChildController):
     """
+    Figure Setting Controller
 
     """
     def __init__(self, parent, view):

@@ -1,6 +1,8 @@
 import os
 import wx
 
+import matplotlib.gridspec as gridspec
+
 import numpy as np
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
@@ -19,9 +21,10 @@ class Chart2dController(ChildController):
     """
     def __init__(self, parent, view, figure_setting=None):
         """
+        Constructor
 
-        :param parent:
-        :param view:
+        :param parent: parent controller
+        :param view: local view
         :param figure_setting:
         :return:
         """
@@ -38,13 +41,15 @@ class Chart2dController(ChildController):
 
         :return:
         """
+        self.view.axes = self.view.figure.add_subplot(111)
+
         # Grab project data.
         data = self.parent.project.data
 
         legend = []
         # Loop through the data set to have multiple plots.
-        for i in range(0, len(data), 2):
-            self.view.axes.plot(data[i], data[i+1])
+        for i, (x, y) in enumerate(data):
+            self.view.axes.plot(x, y)
 
             legend.append('Curve %d' % i)
 
@@ -246,3 +251,116 @@ class Chart2dController(ChildController):
         except IOError as e:
 
             print(str(e))
+
+    def plot(self, index, xdata, ydata, linewidth=None, linestyle=None, color=None, marker=None, markersize=None,
+             markeredgewidth=None, markeredgecolor=None, markerfacecolor=None, markerfacecoloralt='none',
+             fillstyle=None, antialiased=None, dash_capstyle=None, solid_capstyle=None, dash_joinstyle=None,
+             solid_joinstyle=None, pickradius=5, drawstyle=None, markevery=None, ):
+        """
+        =================== =======================================================================================================================
+        Property            Description
+        =================== =======================================================================================================================
+        agg_filter	        unknown
+        alpha	            float (0.0 transparent through 1.0 opaque)
+        animated	        [True | False]
+        antialiased or aa	[True | False]
+        axes	            an Axes instance
+        clip_box	        a matplotlib.transforms.Bbox instance
+        clip_on	            [True | False]
+        clip_path	        [ (Path, Transform) | Patch | None ]
+        color or c	        any matplotlib color
+        contains	        a callable function
+        dash_capstyle	    ['butt' | 'round' | 'projecting']
+        dash_joinstyle	    ['miter' | 'round' | 'bevel']
+        dashes	            sequence of on/off ink in points
+        drawstyle	        ['default' | 'steps' | 'steps-pre' | 'steps-mid' | 'steps-post']
+        figure	            a matplotlib.figure.Figure instance
+        fillstyle	        ['full' | 'left' | 'right' | 'bottom' | 'top' | 'none']
+        gid	                an id string
+        label	            string or anything printable with '%s' conversion.
+        linestyle or ls	    ['solid' | 'dashed', 'dashdot', 'dotted' | (offset, on-off-dash-seq) | '-' | '--' | '-.' | ':' | 'None' | ' ' | '']
+        linewidth or lw	    float value in points
+        marker	            A valid marker style
+        markeredgecolor     any matplotlib color
+        markeredgewidth     float value in points
+        markerfacecolor     any matplotlib color
+        markerfacecoloralt  any matplotlib color
+        markersize          float
+        markevery	        [None | int | length-2 tuple of int | slice | list/array of int | float | length-2 tuple of float]
+        path_effects	    unknown
+        picker	            float distance in points or callable pick function fn(artist, event)
+        pickradius	        float distance in points
+        rasterized	        [True | False | None]
+        sketch_params	    unknown
+        snap	unknown
+        solid_capstyle	    ['butt' | 'round' | 'projecting']
+        solid_joinstyle	    ['miter' | 'round' | 'bevel']
+        transform	        a matplotlib.transforms.Transform instance
+        url	                a url string
+        visible	            [True | False]
+        xdata	            1D array
+        ydata	            1D array
+        zorder	            any number
+        =================== =======================================================================================================================
+        """
+
+        pass
+
+
+class MultiChart2dController(Chart2dController):
+    """
+    Multi Graph Chart 2D
+
+    """
+    def __init__(self, parent, view, data, figure_setting=None):
+        """
+        Constructor
+
+        :param parent: parent controller
+        :param view: local view
+        :param figure_setting:
+        :return:
+        """
+        Chart2dController.__init__(self, parent, view, figure_setting=figure_setting)
+
+        self.data = data
+
+    def do_layout(self):
+        """
+        Draw the chart 2d data.
+
+        :return:
+        """
+        # Loop through the data set to have multiple plots.
+        self.view.axes = []
+
+        nrows = len(self.data)
+        ncols = 2
+        gs = gridspec.GridSpec(nrows, ncols)
+
+        for i, (x, y) in enumerate(self.data):
+            plot_number = i+1
+
+            axes = self.view.figure.add_subplot(gs[i, :])
+            # axes = plt.subplot2grid((6, 2), (i, 0), colspan=1)
+            axes.plot(x, y)
+
+            legend = ['Curve %d' % (plot_number,)]
+
+            # Add legend
+            axes.legend(legend)
+            axes.set_title('title')
+            axes.set_xlabel('x label')
+            axes.set_ylabel('y label')
+
+            self.view.axes.append(axes)
+
+        # Call the binding for custom toolbar figure.
+        self.bind_toolbar_figure()
+
+        # Make the grid nice.
+        self.view.figure.tight_layout()
+        self.view.figure.subplots_adjust(left=0.125, right=0.9)
+
+        # Update figure text.
+        # self.update_text()

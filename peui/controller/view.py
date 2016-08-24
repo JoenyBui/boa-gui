@@ -12,6 +12,7 @@ __author__ = 'jbui'
 class ViewController(BaseController):
     """
     Isolate the view controlling methods to this class controller.
+
     """
     def __init__(self, parent):
         """
