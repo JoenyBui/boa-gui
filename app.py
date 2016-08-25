@@ -90,6 +90,8 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
+    from peui.controller.xlsx import XlsxController
+
     import docx
     import docxtpl
 
@@ -236,8 +238,19 @@ if __name__ == '__main__':
         True
     )
 
+    data = (("A", "B"),
+            ("C", "D"),
+            ("E", "F"),
+            ("G", "G"),
+            ("F", "F"),
+            ("Q", "Q"))
+
+    colLabels = ("Last", "First")
+    rowLabels = ("1", "2", "3", "4", "5", "6", "7", "8", "9")
+    xlsx_local = XlsxController(controller, None, data=data, row_label=rowLabels, col_label=colLabels)
+
     controller.add_page(
-        SpreadSheet(frame, controller),
+        SpreadSheet(frame, controller, xlsx_local),
         cfg.METHOD_WINDOW_XLSX,
         'XLSX',
         True

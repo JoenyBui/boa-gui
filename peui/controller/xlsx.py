@@ -1,27 +1,135 @@
+import wx
+import wx.grid
+
 from . import ChildController
 
 __author__ = 'jbui'
 
 
-class XlsxController(ChildController):
+class GeneralColumnTable(wx.grid.PyGridTableBase):
     """
+    General PyGridTable Column First
 
     """
-    def __init__(self, parent, view):
+    def __init__(self, data=None, row_labels=None, col_labels=None):
         """
 
-        :param parent:
-        :param view:
+        :param data:
+        :param row_labels:
+        :param col_labels:
+        """
+
+        wx.grid.PyGridTableBase.__init__(self)
+
+        self.data = data
+        self.row_labels = row_labels
+        self.col_labels = col_labels
+
+    def GetNumberRows(self):
+        return len(self.data[0])
+
+    def GetNumberCols(self):
+        return len(self.data)
+
+    def GetColLabelValue(self, col):
+        if self.col_labels:
+            return self.col_labels[col]
+
+        return wx.grid.PyGridTableBase.GetColLabelValue(self, col)
+
+    def GetRowLabelValue(self, row):
+        if self.row_labels:
+            return self.row_labels[row]
+
+        return wx.grid.PyGridTableBase.GetRowLabelValue(self, row)
+
+    def IsEmptyCell(self, row, col):
+        return False
+
+    def GetValue(self, row, col):
+        return self.data[col][row]
+
+    def SetValue(self, row, col, value):
+        self.data[col][row] = value
+
+
+class GeneralRowTable(wx.grid.PyGridTableBase):
+    """
+    General PyGridTable Row First
+
+    """
+    def __init__(self, data=None, row_labels=None, col_labels=None):
+        """
+
+        :param data:
+        :param row_labels:
+        :param col_labels:
+        """
+
+        wx.grid.PyGridTableBase.__init__(self)
+
+        self.data = data
+        self.row_labels = row_labels
+        self.col_labels = col_labels
+
+    def GetNumberRows(self):
+        return len(self.data)
+
+    def GetNumberCols(self):
+        return len(self.data[0])
+
+    def GetColLabelValue(self, col):
+        if self.col_labels:
+            return self.col_labels[col]
+
+        return wx.grid.PyGridTableBase.GetColLabelValue(self, col)
+
+    def GetRowLabelValue(self, row):
+        if self.row_labels:
+            return self.row_labels[row]
+
+        return wx.grid.PyGridTableBase.GetRowLabelValue(self, row)
+
+    def IsEmptyCell(self, row, col):
+        return False
+
+    def GetValue(self, row, col):
+        return self.data[row][col]
+
+    def SetValue(self, row, col, value):
+        self.data[row][col] = value
+
+
+class XlsxController(ChildController):
+    """
+    Spreadsheet Controller
+
+    """
+    def __init__(self, parent, view, data=None, row_label=None, col_label=None):
+        """
+
+        :param parent: parent controller
+        :param view: local view
         :return:
         """
         ChildController.__init__(self, parent, view)
 
+        self.table = GeneralRowTable()
+        self.data = data
+        self.row_label = row_label
+        self.col_label = col_label
+
     def do_layout(self):
         """
+        Draw layout data
 
         :return:
         """
-        pass
+        self.table.data = self.data
+        self.table.row_labels = self.row_label
+        self.table.col_labels = self.col_label
+
+        self.view.SetTable(self.table)
 
     def update_layout(self):
         """

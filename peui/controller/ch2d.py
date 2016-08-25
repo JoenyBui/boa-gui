@@ -335,14 +335,14 @@ class MultiChart2dController(Chart2dController):
         self.view.axes = []
 
         nrows = len(self.data)
-        ncols = 2
+        ncols = 1
         gs = gridspec.GridSpec(nrows, ncols)
 
         for i, (x, y) in enumerate(self.data):
             plot_number = i+1
 
             axes = self.view.figure.add_subplot(gs[i, :])
-            # axes = plt.subplot2grid((6, 2), (i, 0), colspan=1)
+
             axes.plot(x, y)
 
             legend = ['Curve %d' % (plot_number,)]
