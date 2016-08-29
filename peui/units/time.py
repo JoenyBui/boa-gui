@@ -21,6 +21,7 @@ TIME_KEY = {
     'sec': FACTOR_TIME_SECOND,
     'second': FACTOR_TIME_SECOND,
     'ms': FACTOR_TIME_MILLISECOND,
+    'msec': FACTOR_TIME_MILLISECOND,
     'millisecond': FACTOR_TIME_MILLISECOND
 }
 

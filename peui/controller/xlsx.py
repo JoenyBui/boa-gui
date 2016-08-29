@@ -47,7 +47,10 @@ class GeneralColumnTable(wx.grid.PyGridTableBase):
         return False
 
     def GetValue(self, row, col):
-        return self.data[col][row]
+        try:
+            return self.data[col][row]
+        except IndexError as e:
+            return ''
 
     def SetValue(self, row, col, value):
         self.data[col][row] = value
@@ -94,7 +97,10 @@ class GeneralRowTable(wx.grid.PyGridTableBase):
         return False
 
     def GetValue(self, row, col):
-        return self.data[row][col]
+        try:
+            return self.data[row][col]
+        except IndexError as e:
+            return ''
 
     def SetValue(self, row, col, value):
         self.data[row][col] = value
@@ -105,7 +111,7 @@ class XlsxController(ChildController):
     Spreadsheet Controller
 
     """
-    def __init__(self, parent, view, data=None, row_label=None, col_label=None):
+    def __init__(self, parent, view, data=None, row_label=None, col_label=None, *args, **kwargs):
         """
 
         :param parent: parent controller
@@ -114,7 +120,7 @@ class XlsxController(ChildController):
         """
         ChildController.__init__(self, parent, view)
 
-        self.table = GeneralRowTable()
+        self.table = kwargs.get('table', GeneralRowTable())
         self.data = data
         self.row_label = row_label
         self.col_label = col_label
