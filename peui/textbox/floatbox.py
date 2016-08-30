@@ -24,7 +24,7 @@ class FloatSmartBox(SmartTextBox):
 
     """
     def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None,
-                 range_error=None, key_up=None, message=None, *args, **kwargs):
+                 range_error=None, key_up=None, message=None, enable=None, *args, **kwargs):
         """
         Constructor.
 
@@ -66,6 +66,9 @@ class FloatSmartBox(SmartTextBox):
 
         self._validator = FloatRangeValidator(signs=signs, decimal=decimal, exponential=exponential)
         self.SetValidator(self._validator)
+
+        if enable is not None:
+            self.Enable(enable)
 
     def on_text(self, event=None):
         """
