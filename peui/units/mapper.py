@@ -68,7 +68,10 @@ class UnitMap(object):
         :param name: key of the unit to return
         :param unit: unit to convert the value to
         """
-        keys = self.__dict__[self.src]
+        if self.src:
+            keys = self.__dict__[self.src]
+        else:
+            keys = self.__dict__
 
         # Get the magnitude value.
         value = keys[name]
@@ -87,7 +90,10 @@ class UnitMap(object):
                     if value is None or keys[base_unit] is None:
                         return None
                     else:
-                        return value * obj.get_conversion_factor(keys[base_unit], unit)
+                        if isinstance(value, list):
+                            return map(lambda x: x*obj.get_conversion_factor(keys[base_unit], unit), value)
+                        else:
+                            return value * obj.get_conversion_factor(keys[base_unit], unit)
 
     def get_conversion_factor(self, utype, origin, destination):
         """
