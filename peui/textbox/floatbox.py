@@ -301,6 +301,19 @@ class FloatInputLayout(SmartInputLayout):
         if label:
             self.label.Label = str(label)
 
+    def set_textbox(self, obj, key, fmt=None):
+        """
+        Set the textbox by calling set value and establish module.
+
+        :param obj:
+        :param key:
+        :param fmt:
+        :return:
+        """
+        unit = self.postbox.get_value()
+
+        self.textbox.set_value(obj.get_value(key, unit), fmt)
+
     def get_value(self, destination_unit=None):
         """
         Return the value given destination unit.

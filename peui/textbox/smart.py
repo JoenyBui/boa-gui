@@ -122,7 +122,7 @@ class SmartTextBox(wx.TextCtrl):
         """
         self.keys['max'] = value
 
-    def set_value(self, value):
+    def set_value(self, value, fmt=None):
         """
         Set the textbox value
 
@@ -130,7 +130,10 @@ class SmartTextBox(wx.TextCtrl):
         :return:
         """
         if value is not None:
-            self.Value = str(value)
+            if fmt:
+                self.Value = fmt%(value)
+            else:
+                self.Value = str(value)
         else:
             self.Value = ""
 
