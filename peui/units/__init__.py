@@ -149,7 +149,14 @@ class Unit(object):
         return self.default_selection
 
     def get_conversion_factor(self, origin, destination):
+        """
+        Convert value from table
+
+        :param origin:
+        :param destination:
+        :return:
+        """
         origin_factor = self.table.get(origin)
         destination_factor = self.table.get(destination)
 
-        return destination_factor / origin_factor
+        return float(destination_factor) / float(origin_factor)
