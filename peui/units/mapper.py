@@ -74,10 +74,13 @@ class UnitMap(object):
             keys = self.__dict__
 
         # Get the magnitude value.
-        value = keys[name]
+        if keys.get(name) is not None:
+            value = keys[name]
+        else:
+            return None
 
         # Utype and Base Unit
-        if self.map.get(name):
+        if self.map.get(name) is not None:
             utype, base_unit = self.map.get(name)
         else:
             utype = None

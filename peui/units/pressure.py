@@ -4,13 +4,13 @@ __author__ = 'jbui'
 
 # UNITY_VALUE == PA
 FACTOR_PRESSURE_PASCAL = 1.0
-FACTOR_PRESSURE_KILOPASCAL = 1000.0
-FACTOR_PRESSURE_MEGAPASCAL = 1E6
-FACTOR_PRESSURE_PSI = 6894.75728
-FACTOR_PRESSURE_PSF = 47.8802589
-FACTOR_PRESSURE_KSI = 6894760.0
-FACTOR_PRESSURE_ATM = 101325.0
-FACTOR_PRESSURE_KILOGRAM_M2 = 9.8067
+FACTOR_PRESSURE_KILOPASCAL = 1.0/1000.0
+FACTOR_PRESSURE_MEGAPASCAL = 1.0/1E6
+FACTOR_PRESSURE_PSI = 1.0/6894.75728
+FACTOR_PRESSURE_PSF = 1.0/47.8802589
+FACTOR_PRESSURE_KSI = 1.0/6894760.0
+FACTOR_PRESSURE_ATM = 1.0/101325.0
+FACTOR_PRESSURE_KILOGRAM_M2 = 1.0/9.8067
 
 ID_NAME_PRESSURE_PASCAL = ("Pa", "pa", "pascal")
 ID_NAME_PRESSURE_KILOPASCAL = ("kPa", "kPA", "kilopascal")
@@ -63,7 +63,7 @@ def get_pressure_conversion_factor(origin, destination):
     origin_factor = PRESSURE_KEY.get(origin)
     destination_factor = PRESSURE_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class PressureUnit(Unit):
@@ -80,5 +80,3 @@ class PressureUnit(Unit):
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL_LIST
 
-    def get_conversion_factor(self, origin, destination):
-        return get_pressure_conversion_factor(origin, destination)

@@ -1,16 +1,26 @@
-from unittest import TestCase
-from peui.units import tnt
+from base import BaseUnitTest
+
+from peui.units.tnt import TntUnit
 
 __author__ = 'jbui'
 
 
-class TestTNT(TestCase):
+class TestTNT(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = TntUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'kiloton'
 
     def test_ton(self):
-        self.assertEqual(round(tnt.get_tnt_conversion_factor('ton', 'kilogram'), 3), 907.186)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'ton')*self.magnitude, 1618)
 
     def test_kiloton(self):
-        self.assertEqual(round(tnt.get_tnt_conversion_factor('kiloton', 'ton'), 5), 1e3)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'kiloton')*self.magnitude, 1.618)
+
+    def test_kilogram(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'kg')*self.magnitude, 1467825)
+
+    def test_lb(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'lb')*self.magnitude, 3236000)

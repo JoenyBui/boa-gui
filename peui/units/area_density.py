@@ -16,10 +16,10 @@ from . import Unit, UNIT_AREA_DENSITY_KEY
 __author__ = 'jbui'
 
 FACTOR_AREA_DENSITY_KILOGRAM_M2 = 1.0
-FACTOR_AREA_DENSITY_LBM_IN2 = 1.0/0.001422334
+FACTOR_AREA_DENSITY_LBM_IN2 = 0.001422334
 # FACTOR_AREA_DENSITY_PSI_MS2_IN = 8.4368e-3
-FACTOR_AREA_DENSITY_PSI_MS2_IN = 1.0/3.683957707
-FACTOR_AREA_DENSITY_LB_S2_OVER_IN3 = 1.0/0.000003684
+FACTOR_AREA_DENSITY_PSI_MS2_IN = 3.683957707
+FACTOR_AREA_DENSITY_LB_S2_OVER_IN3 = 0.000003684
 
 AREA_DENSITY_KEY = {
     'kg/m2': FACTOR_AREA_DENSITY_KILOGRAM_M2,
@@ -55,7 +55,7 @@ def get_area_density_conversion_factor(origin, destination):
     origin_factor = AREA_DENSITY_KEY.get(origin)
     destination_factor = AREA_DENSITY_KEY.get(destination)
 
-    return float(origin_factor) / float(destination_factor)
+    return float(destination_factor) / float(origin_factor)
 
 
 class AreaDensityUnit(Unit):
@@ -77,13 +77,3 @@ class AreaDensityUnit(Unit):
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL__LIST
-
-    def get_conversion_factor(self, origin, destination):
-        """
-
-        :param origin:
-        :param destination:
-        :return:
-        """
-        return get_area_density_conversion_factor(origin, destination)
-

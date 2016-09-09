@@ -8,8 +8,9 @@ from . import Unit, UNIT_SPECIFIC_WEIGHT
 
 __author__ = 'jbui'
 
-FACTOR_KPA_MM = 1.0
-FACTOR_PSI_IN = 0.271447
+FACTOR_PA_M = 1.0
+FACTOR_KPA_MM = 0.000001
+FACTOR_PSI_IN = 0.00000368396
 
 SPECIFIC_WEIGHT_KEY = {
     'kPa/mm': FACTOR_KPA_MM,
@@ -40,7 +41,7 @@ def get_specific_weight_conversion_factor(origin, destination):
     origin_factor = SPECIFIC_WEIGHT_KEY.get(origin)
     destination_factor = SPECIFIC_WEIGHT_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class SpecificWeightUnit(Unit):

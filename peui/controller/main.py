@@ -331,6 +331,7 @@ class MainController(object):
 
         :return:
         """
+        self.refresh_main_frame_title()
         self.refresh_clear_project()
 
     def refresh_clear_project(self):
@@ -340,6 +341,25 @@ class MainController(object):
         :return:
         """
         pass
+
+    def refresh_main_frame_title(self):
+        """
+        Refresh the main title with the project.
+
+        :return:
+        """
+        if self.frame and self.project:
+            self.frame.SetTitle(self.project.name)
+
+    def refresh_status_bar(self, text):
+        """
+        Refresh the status bar.
+
+        :param text:
+        """
+        if self.frame:
+            if self.frame.status_bar:
+                self.frame.status_bar.SetStatusText(text, 0)
 
     def refresh_clear_controls(self):
         """

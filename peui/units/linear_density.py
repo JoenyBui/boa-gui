@@ -44,7 +44,7 @@ def get_linear_density_conversion_factor(origin, destination):
     origin_factor = LINEAR_DENSITY_KEY.get(origin)
     destination_factor = LINEAR_DENSITY_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class LinearDensityUnit(Unit):
@@ -60,6 +60,3 @@ class LinearDensityUnit(Unit):
 
         self.imperial_list = DEFAULT_IMPERIAL_LIST
         self.metric_list = DEFAULT_METRIC_LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_linear_density_conversion_factor(origin, destination)

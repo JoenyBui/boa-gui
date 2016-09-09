@@ -10,9 +10,8 @@ from . import Unit, UNIT_ANGLE_KEY
 
 __author__ = 'jbui'
 
-
+FACTOR_ANGLE_RADIAN = 1.0
 FACTOR_ANGLE_DEGREE = 180.0 / math.pi
-FACTOR_ANGLE_RADIAN = 1
 
 ANGLE_KEY = {
     'degrees': FACTOR_ANGLE_DEGREE,

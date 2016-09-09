@@ -1,5 +1,7 @@
 from unittest import TestCase
-from peui.units import linear_density
+from peui.units.linear_density import LinearDensityUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
@@ -7,10 +9,7 @@ __author__ = 'jbui'
 class TestLinearDensity(TestCase):
 
     def setUp(self):
-        pass
+        self.unit = LinearDensityUnit()
 
-    def test_plf(self):
-        self.assertEqual(round(linear_density.get_linear_density_conversion_factor('plf', 'klf'), 3), 0.454)
-
-    def test_klf(self):
-        self.assertEqual(round(linear_density.get_linear_density_conversion_factor('klf', 'plf'), 3), 2.205)
+        self.magnitude = 1.618
+        self.magnitude_unit = 'plf'

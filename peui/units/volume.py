@@ -4,9 +4,12 @@ __author__ = 'jbui'
 
 # UNITY_VALUE == 'm^3'
 FACTOR_VOLUME_CUBIC_METER = 1.0
-FACTOR_VOLUME_CUBIC_MM = 0.001**3
-FACTOR_VOLUME_CUBIC_FT = 0.3048**3
-FACTOR_VOLUME_CUBIC_IN = 0.0254**3
+FACTOR_VOLUME_CUBIC_MM = 1E9
+FACTOR_VOLUME_CUBIC_FT = 35.3147
+FACTOR_VOLUME_CUBIC_IN = 61023.801579099
+FACTOR_VOLUME_LITER = 1000
+FACTOR_VOLUME_GALLON = 264.172
+FACTOR_VOLUME_MILLILITER = 1E6
 
 ID_NAME_VOLUME_M3 = ("m^3", "m3", "M3")
 ID_NAME_VOLUME_MM3 = ("mm^3", "mm3", "MM3")
@@ -23,7 +26,9 @@ VOLUME_KEY = {
     'ft3': FACTOR_VOLUME_CUBIC_FT,
     'in^3': FACTOR_VOLUME_CUBIC_IN,
     'in3': FACTOR_VOLUME_CUBIC_IN,
-    'in^4/in': FACTOR_VOLUME_CUBIC_IN
+    'in^4/in': FACTOR_VOLUME_CUBIC_IN,
+    'liter': FACTOR_VOLUME_LITER,
+    'gallon': FACTOR_VOLUME_GALLON
 }
 
 DEFAULT_VOLUME_LIST = [
@@ -55,7 +60,7 @@ def get_volume_conversion_factor(origin, destination):
     origin_factor = VOLUME_KEY.get(origin)
     destination_factor = VOLUME_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class VolumeUnit(Unit):
@@ -71,6 +76,3 @@ class VolumeUnit(Unit):
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL_LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_volume_conversion_factor(origin, destination)

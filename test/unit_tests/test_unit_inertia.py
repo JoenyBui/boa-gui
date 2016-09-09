@@ -1,19 +1,27 @@
 from unittest import TestCase
-from peui.units import inertia
+from peui.units.inertia import InertiaUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestInertia(TestCase):
+class TestInertia(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = InertiaUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'm^4'
+
+    def test_m4(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'm^4')*self.magnitude, 1.618)
 
     def test_mm4(self):
-        self.assertEqual(round(inertia.get_inertia_conversion_factor('mm4', 'm4'), 13), 1e-12)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'mm^4')*self.magnitude, 1618000000000)
 
     def test_ft4(self):
-        self.assertEqual(round(inertia.get_inertia_conversion_factor('ft4', 'in4'), 5), 12**4)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'ft^4')*self.magnitude, 187.46434)
 
     def test_in4(self):
-        self.assertEqual(round(inertia.get_inertia_conversion_factor('in4', 'ft4'), 10), round(1.0/12**4, 10))
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'in^4')*self.magnitude, 3887260.55)
