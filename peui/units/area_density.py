@@ -17,7 +17,6 @@ __author__ = 'jbui'
 
 FACTOR_AREA_DENSITY_KILOGRAM_M2 = 1.0
 FACTOR_AREA_DENSITY_LBM_IN2 = 0.001422334
-# FACTOR_AREA_DENSITY_PSI_MS2_IN = 8.4368e-3
 FACTOR_AREA_DENSITY_PSI_MS2_IN = 3.683957707
 FACTOR_AREA_DENSITY_LB_S2_OVER_IN3 = 0.000003684
 
@@ -27,7 +26,8 @@ AREA_DENSITY_KEY = {
     'psi-ms^2/in': FACTOR_AREA_DENSITY_PSI_MS2_IN,
     'lb-s^2/in^3': FACTOR_AREA_DENSITY_LB_S2_OVER_IN3,
     'lb*s^2/in^3': FACTOR_AREA_DENSITY_LB_S2_OVER_IN3,
-    'lbm/in^2': FACTOR_AREA_DENSITY_LBM_IN2
+    'lbm/in^2': FACTOR_AREA_DENSITY_LBM_IN2,
+    'lb/in^2': FACTOR_AREA_DENSITY_LBM_IN2
 }
 
 DEFAULT_AREA_LIST = [
@@ -47,6 +47,7 @@ DEFAULT_METRIC_LIST = [
 
 def get_area_density_conversion_factor(origin, destination):
     """
+    Get area density conversion factor
 
     :param origin:
     :param destination:
@@ -65,6 +66,7 @@ class AreaDensityUnit(Unit):
     """
     def __init__(self, *args, **kwargs):
         """
+        Constructor
 
         :param args:
         :param kwargs:

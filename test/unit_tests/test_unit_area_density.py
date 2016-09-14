@@ -1,4 +1,4 @@
-from unittest import TestCase
+from base import BaseUnitTest
 
 import peui.units as units
 from peui.units import area_density
@@ -8,7 +8,7 @@ from peui.units.mapper import UnitMap
 __author__ = 'jbui'
 
 
-class TestAreaDensity(TestCase):
+class TestAreaDensity(BaseUnitTest):
 
     def setUp(self):
         self.um = UnitMap(src=None)

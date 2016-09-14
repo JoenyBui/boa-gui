@@ -18,6 +18,7 @@ SPECIFIC_WEIGHT_KEY = {
 }
 
 DEFAULT_SPECIFIC_WEIGHT_LIST = {
+    'Pa/m': FACTOR_PA_M,
     'kPa/mm': FACTOR_KPA_MM,
     'psi/in': FACTOR_PSI_IN,
 }
