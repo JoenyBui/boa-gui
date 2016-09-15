@@ -5,6 +5,8 @@ import matplotlib.gridspec as gridspec
 
 import numpy as np
 
+import brewer2mpl
+
 from ..chart.dlg import FigureSettingDialog, FigureSetting
 from ..form.file import SaveXYDialog
 from ..chart.dplot import Dplot, DplotCurve
@@ -29,6 +31,8 @@ class Chart2dController(ChildController):
         :return:
         """
         ChildController.__init__(self, parent, view)
+
+        self.color_set = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
 
         if figure_setting:
             self.figure_setting = figure_setting

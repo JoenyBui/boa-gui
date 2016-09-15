@@ -1,3 +1,5 @@
+import numpy as np
+
 from .acceleration import AccelerationUnit
 from .angle import AngleUnit
 from .area import AreaUnit
@@ -95,6 +97,8 @@ class UnitMap(object):
                     else:
                         if isinstance(value, list):
                             return map(lambda x: x*obj.get_conversion_factor(keys[base_unit], unit), value)
+                        elif isinstance(value, np.ndarray):
+                            return value * obj.get_conversion_factor(keys[base_unit], unit)
                         else:
                             return value * obj.get_conversion_factor(keys[base_unit], unit)
 

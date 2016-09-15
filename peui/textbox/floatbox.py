@@ -337,6 +337,19 @@ class FloatInputLayout(SmartInputLayout):
             else:
                 return float(self.textbox.Value)
 
+    def set_value_unit(self, value, original_unit, fmt=None):
+        """
+        Set the value to the base unit.
+
+        :param value:
+        :param original_unit:
+        :param fmt:
+        :return:
+        """
+        base_unit = self.postbox.get_value()
+
+        self.textbox.set_value(value*self.postbox.get_factor(original_unit, base_unit), fmt)
+
     def set_value_convert(self, original_unit, destination_unit):
         """
         Modified the textbox value given the set of conversion.
