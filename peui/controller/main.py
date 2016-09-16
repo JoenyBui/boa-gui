@@ -1,7 +1,6 @@
 import os
 import uuid
 
-import wx
 import wx.lib.agw.aui as aui
 from wx.lib.pubsub import pub
 
@@ -65,31 +64,43 @@ class MainController(object):
 
     @property
     def evt_new_project(self):
-        """
-
-        :return:
-        """
         return 'EVT_NEW_PROJECT'
 
     @property
     def evt_open_project(self):
-        """
-
-        :return:
-        """
         return 'EVT_OPEN_PROJECT'
 
     @property
     def evt_refresh_view(self):
-        """
-
-        :return:
-        """
         return 'EVT_REFRESH_VIEW'
 
     @property
     def evt_clear_controls(self):
         return 'EVT_CLEAR_CONTROLS'
+
+    @property
+    def evt_pane_close(self):
+        return 'EVT_PANE_CLOSE'
+
+    @property
+    def evt_undo(self):
+        return 'EVT_UNDO'
+
+    @property
+    def evt_redo(self):
+        return 'EVT_REDO'
+
+    @property
+    def evt_cut(self):
+        return 'EVT_CUT'
+
+    @property
+    def evt_copy(self):
+        return 'EVT_COPY'
+
+    @property
+    def evt_paste(self):
+        return 'EVT_PASTE'
 
     def subscribe_methods(self):
         """
@@ -100,6 +111,7 @@ class MainController(object):
         pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
         pub.subscribe(self.refresh_open_project, self.evt_open_project)
+        pub.subscribe(self.on_pane_close, self.evt_pane_close)
 
     def bind_methods(self):
         """
@@ -115,11 +127,11 @@ class MainController(object):
         self.master_key[METHOD_OUTPUT_PROJECT]['method'] = self.dlg_ctrl.output_project_word_doc
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
 
-        self.master_key[METHOD_UNDO]['method'] = self.evt_undo
-        self.master_key[METHOD_REDO]['method'] = self.evt_redo
-        self.master_key[METHOD_CUT]['method'] = self.evt_cut
-        self.master_key[METHOD_COPY]['method'] = self.evt_copy
-        self.master_key[METHOD_PASTE]['method'] = self.evt_paste
+        self.master_key[METHOD_UNDO]['method'] = self.on_click_undo
+        self.master_key[METHOD_REDO]['method'] = self.on_click_redo
+        self.master_key[METHOD_CUT]['method'] = self.on_click_cut
+        self.master_key[METHOD_COPY]['method'] = self.on_click_copy
+        self.master_key[METHOD_PASTE]['method'] = self.on_click_paste
 
         self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
@@ -133,62 +145,54 @@ class MainController(object):
         self.master_key[METHOD_DEFAULT_SETTING]['method'] = self.dlg_ctrl.setting_dialog
         self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
 
-    def evt_undo(self, event=None):
-        """
-        Event Undo.
-        :param event:
-        :return:
-        """
-        print('Undo')
+    def bind_aui_methods(self):
+        # self.frame.Bind(aui.EVT_AUI_PANE_ACTIVATED, self.bind_pane_open)
+        self.frame.Bind(aui.EVT_AUI_PANE_CLOSE, self.bind_pane_close)
 
-    def evt_redo(self, event=None):
-        """
-        Event Redo.
-        :param event:
-        :return:
-        """
-        print('Redo')
-
-    def evt_cut(self, event=None):
+    def bind_pane_close(self, event):
         """
 
         :param event:
         :return:
         """
-        print('Cut')
+        pane = event.GetPane()
 
-    def evt_copy(self, event=None):
+        if pane:
+            name = pane.name
+            pub.sendMessage(self.evt_pane_close, name=name)
+
+    def bind_pane_open(self, event):
         """
 
         :param event:
         :return:
         """
-        print('Copy')
-
-    def evt_paste(self, event=None):
-        """
-
-        :param event:
-        :return:
-        """
-        print('Paste')
+        name = event.GetPane().name
 
     def add_pane(self, panel, key, area=None, name=None):
         """
         Add Pane to the main view.
 
         :param panel:
-        :param key:
+        :param key: menu item key
         :param area:
         :param name:
         :return:
         """
         self.windows[key] = panel
 
+        # Add panel to model.
         pane = self.frame.add_pane(panel, area, name)
 
+        # If has controller, add to child array.
         if panel.__dict__.get('controller'):
             self.childs.append(panel.controller)
+
+        # If have menu item, then enable/check.
+        menu_item = self.frame.menu_bar.menus.get(key)
+        if menu_item:
+            menu_item.Enable(True)
+            menu_item.Check(True)
 
         return pane
 
@@ -213,6 +217,12 @@ class MainController(object):
 
         if page.__dict__.get('controller'):
             self.childs.append(page.controller)
+
+        # If have menu item, then enable/check.
+        menu_item = self.frame.menu_bar.menus.get(key)
+        if menu_item:
+            menu_item.Enable(True)
+            menu_item.Check(True)
 
         return pane
 
@@ -249,6 +259,17 @@ class MainController(object):
 
         # Add History
         self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
+
+    def on_pane_close(self, name=None):
+        """
+        On pane close, un-check the menu item
+
+        :param name:
+        :return:
+        """
+        menu = self.frame.menu_bar.menus.get(name)
+        if menu:
+            menu.Check(False)
 
     def on_file_history(self, event):
         """
@@ -439,3 +460,18 @@ class MainController(object):
         self.frame.Close(True)
         self.frame.Destroy()
         event.Skip()
+
+    def on_click_undo(self, event):
+        pass
+
+    def on_click_redo(self, event):
+        pass
+
+    def on_click_cut(self, event):
+        pass
+
+    def on_click_copy(self, event):
+        pass
+
+    def on_click_paste(self, event):
+        pass

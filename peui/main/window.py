@@ -48,6 +48,7 @@ class MainWindow(wx.Frame):
         self.SetStatusBar(self.status_bar)
 
         self.controller.bind_methods()
+        self.controller.bind_aui_methods()
 
     def add_pane(self, panel, arg1=None, arg2=None, target=None):
         """

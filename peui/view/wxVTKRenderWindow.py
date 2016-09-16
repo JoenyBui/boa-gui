@@ -8,10 +8,6 @@ Based on vtkTkRenderWindget.py
 
 Updated to new wx namespace and some cleaning by Andrea Gavana,
 December 2006
-
-"""
-
-"""
 Please see the example at the end of this file.
 
 ----------------------------------------

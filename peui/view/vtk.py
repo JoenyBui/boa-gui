@@ -9,6 +9,7 @@ __author__ = 'jbui'
 
 class VtkViewer(wx.Panel):
     """
+    Vtk Viewer
 
     """
     def __init__(self, parent):

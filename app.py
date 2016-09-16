@@ -176,6 +176,10 @@ if __name__ == '__main__':
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
     frame = MainWindow(parent=None, controller=controller, title='Sample Editor',
                        style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
+
+    # Set Components.
+    controller.set_key(MENU_BAR_KEY)
+
     controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
 
@@ -185,36 +189,45 @@ if __name__ == '__main__':
                     (np.arange(0.0, 3.0, 0.04), np.cos(1.5 * np.pi * np.arange(0.0, 3.0, 0.04))),
                     (np.arange(0.0, 2.5, 0.005), np.sin(0.5 * np.pi * np.arange(0.0, 2.5, 0.005)))]
 
-    # Set Components.
-    controller.set_key(MENU_BAR_KEY)
-
     # Tree Panel.
     controller.add_pane(
         ProjectTree(frame, controller, project),
         cfg.METHOD_WINDOW_TREE,
-        wx.LEFT,
-        'Project Tree'
+        aui.AuiPaneInfo()
+            .Name(cfg.METHOD_WINDOW_TREE)
+            .Caption('Tree')
+            .Left()
     )
 
     # Property Panel
     controller.add_pane(
         PropGrid(frame, controller, None, column=4, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
         cfg.METHOD_WINDOW_PROP_GRID,
-        wx.BOTTOM,
-        'Property'
+        aui.AuiPaneInfo()
+            .Name(cfg.METHOD_WINDOW_PROP_GRID)
+            .Caption('Property')
+            .Bottom()
     )
 
     controller.add_pane(
         Console(frame, controller),
         cfg.METHOD_WINDOW_CONSOLE,
-        wx.BOTTOM,
+        aui.AuiPaneInfo()
+            .Name(cfg.METHOD_WINDOW_CONSOLE)
+            .Caption('Output')
+            .Bottom(),
         'Output'
     )
 
     controller.add_pane(
         CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
         cfg.METHOD_TOOLBAR_STANDARD,
-        aui.AuiPaneInfo().Name('std_tb').Caption('Standard Toolbar').ToolbarPane().Top().Gripper()
+        aui.AuiPaneInfo()
+            .Name('std_tb')
+            .Caption('Standard Toolbar')
+            .ToolbarPane()
+            .Top()
+            .Gripper()
     )
 
     controller.add_page(
