@@ -1,9 +1,14 @@
 import sys
+
 import wx
+import wx.lib.newevent
 
 from ..controller import ChildController
 
 __author__ = 'jbui'
+
+# Create Event Type
+wxLogEvent, EVT_WX_LOG_EVENT = wx.lib.newevent.NewEvent()
 
 
 class Console(wx.Panel):

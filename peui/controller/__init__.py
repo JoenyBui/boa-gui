@@ -80,6 +80,8 @@ class ChildController(BaseController):
         self.parent = parent
         self.view = view
 
+        self.bind_objects = {}
+
     @abstractmethod
     def do_layout(self):
         """

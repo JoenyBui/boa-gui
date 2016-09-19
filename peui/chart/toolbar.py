@@ -138,3 +138,5 @@ class MatplotlibCustomToolbar(NavigationToolbar):
                           y2 - self.pan_percentage*ONE_SCREEN)
         self.canvas.draw()
 
+    def update(self):
+        NavigationToolbar.update(self)

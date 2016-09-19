@@ -5,6 +5,8 @@ from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextInputLayout, TextSmartBox
 from ..controller import ChildController
 
+from ..model.bind import BindOjbect
+
 __author__ = 'jbui'
 
 
@@ -33,7 +35,7 @@ class FigureSettingDialog(GeneralDialog):
     Modify figure setting.
 
     """
-    def __init__(self, parent, controller=None, setting=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+    def __init__(self, parent, controller=None, setting=None, local=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
         """
         Figure setting dialog.
 
@@ -44,11 +46,16 @@ class FigureSettingDialog(GeneralDialog):
         :param kwargs:
         :return:
         """
-        self.setting = setting
-
         GeneralDialog.__init__(self, parent, title="Figure Setting", controller=controller, btn_flags=btn_flags, **kwargs)
 
         self.btnsizer.AffirmativeButton.Bind(wx.EVT_BUTTON, self.button_ok_click)
+
+        if local:
+            self.local = local
+        else:
+            self.local = FigureSettingController(self.parent, self, setting)
+
+        self.local.sync_data()
 
     def do_layout(self):
         """
@@ -64,34 +71,22 @@ class FigureSettingDialog(GeneralDialog):
         self.layouts['title'] = TextInputLayout(self,
                                                 name='Title',
                                                 layout=layout,
-                                                textbox=TextSmartBox(self, value=self.setting.title))
+                                                textbox=TextSmartBox(self))
         self.layouts['x_title'] = TextInputLayout(self,
                                                   name='X Title',
                                                   layout=layout,
-                                                  textbox=TextSmartBox(self, value=self.setting.x_title))
-        # self.layouts['x_subtitle'] = TextInputLayout(self,
-        #                                              name='X SubTitle',
-        #                                              layout=layout,
-        #                                              textbox=TextSmartBox(self, value=self.setting.x_subtitle))
+                                                  textbox=TextSmartBox(self))
         self.layouts['y_title'] = TextInputLayout(self,
                                                   name='Y Title',
                                                   layout=layout,
-                                                  textbox=TextSmartBox(self, value=self.setting.y_title))
-        # self.layouts['y_subtitle'] = TextInputLayout(self,
-        #                                              name='Y SubTitle',
-        #                                              layout=layout,
-        #                                              textbox=TextSmartBox(self, value=self.setting.y_subtitle))
+                                                  textbox=TextSmartBox(self))
 
         vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['title'], 1, wx.EXPAND | wx.ALL, 0)
         vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['x_title'], 1, wx.EXPAND | wx.ALL, 0)
         vsizer.AddSpacer(5)
-        # vsizer.Add(self.layouts['x_subtitle'], 1, wx.EXPAND | wx.ALL, 0)
-        # vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['y_title'], 1, wx.EXPAND | wx.ALL, 0)
-        # vsizer.AddSpacer(5)
-        # vsizer.Add(self.layouts['y_subtitle'], 1, wx.EXPAND | wx.ALL, 0)
 
         return vsizer
 
@@ -117,7 +112,7 @@ class FigureSettingController(ChildController):
     Figure Setting Controller
 
     """
-    def __init__(self, parent, view):
+    def __init__(self, parent, view, settings):
         """
 
         :param parent:
@@ -126,21 +121,29 @@ class FigureSettingController(ChildController):
         """
         ChildController.__init__(self, parent, view)
 
-        self.figure_setting = FigureSetting()
+        self.setting = FigureSetting()
 
     def sync_data(self):
         """
+        Sync Data
 
         :return:
         """
-        self.register_two_way_bind(
-            self.view.layout['title'],
-            self.figure_setting.title
-        )
+        self.bind_objects['title'] = BindOjbect(self.setting.__dict__,
+                                                self.view.layouts['title'].textbox,
+                                                'title')
+        self.bind_objects['x_title'] = BindOjbect(self.setting.__dict__,
+                                                  self.view.layouts['x_title'].textbox,
+                                                  'x_title')
+        self.bind_objects['y_title'] = BindOjbect(self.setting.__dict__,
+                                                  self.view.layouts['y_title'].textbox,
+                                                  'y_title')
 
-    def bind_textctrl_model(self):
-        """
+    def do_layout(self):
+        pass
 
-        :return:
-        """
+    def refresh(self):
+        pass
+
+    def update_layout(self):
         pass

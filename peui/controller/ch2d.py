@@ -5,7 +5,7 @@ import matplotlib.gridspec as gridspec
 
 import numpy as np
 
-import brewer2mpl
+import palettable
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
 from ..form.file import SaveXYDialog
@@ -32,7 +32,7 @@ class Chart2dController(ChildController):
         """
         ChildController.__init__(self, parent, view, *args, **kwargs)
 
-        self.color_set = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
+        self.color_set = palettable.cubehelix.classic_16.mpl_colors
 
         if figure_setting:
             self.figure_setting = figure_setting
@@ -59,6 +59,7 @@ class Chart2dController(ChildController):
 
         # Add legend
         self.view.axes.legend(legend)
+        # self.view.axes.set_prop_cycle(self.color_set)
 
         # Call the binding for custom toolbar figure.
         self.bind_toolbar_figure()
@@ -74,6 +75,7 @@ class Chart2dController(ChildController):
         self.view.axes.set_title(self.figure_setting.title)
         self.view.axes.set_ylabel(self.figure_setting.y_title)
         self.view.axes.set_xlabel(self.figure_setting.x_title)
+        self.view.figure.canvas.draw()
 
     def bind_toolbar_figure(self):
         """
@@ -122,7 +124,7 @@ class Chart2dController(ChildController):
         dlg = FigureSettingDialog(self.view, self, setting=self.figure_setting)
 
         if dlg.ShowModal() == wx.ID_OK:
-            self.figure_setting = dlg.setting
+            self.figure_setting = dlg.local.setting
 
             self.update_text()
 
