@@ -118,7 +118,7 @@ class XlsxController(ChildController):
         :param view: local view
         :return:
         """
-        ChildController.__init__(self, parent, view)
+        ChildController.__init__(self, parent, view, *args, **kwargs)
 
         self.table = kwargs.get('table', GeneralRowTable())
         self.data = data

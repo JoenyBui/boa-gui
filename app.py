@@ -179,9 +179,9 @@ if __name__ == '__main__':
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)
-
     controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
+    controller.bind_all_methods()
 
     # Add test data
     project.data = [(np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01))),
@@ -231,21 +231,21 @@ if __name__ == '__main__':
     )
 
     controller.add_page(
-        GeneralPanel(parent=frame),
+        GeneralPanel(parent=frame, id=cfg.METHOD_WINDOW_GENERAL),
         cfg.METHOD_WINDOW_GENERAL,
         'General',
         False
     )
 
     controller.add_page(
-        Chart2d(frame, controller, None),
+        Chart2d(frame, controller, None, id=cfg.METHOD_WINDOW_CHART),
         cfg.METHOD_WINDOW_CHART,
         'Chart',
         True
     )
 
     controller.add_page(
-        Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data), figsize=(1, 10)),
+        Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data, id=cfg.METHOD_WINDOW_CHART), figsize=(1, 10)),
         cfg.METHOD_WINDOW_CHART,
         'Multi-Chart',
         True
@@ -260,7 +260,7 @@ if __name__ == '__main__':
 
     colLabels = ("Last", "First")
     rowLabels = ("1", "2", "3", "4", "5", "6", "7", "8", "9")
-    xlsx_local = XlsxController(controller, None, data=data, row_label=rowLabels, col_label=colLabels)
+    xlsx_local = XlsxController(controller, None, data=data, row_label=rowLabels, col_label=colLabels, id=cfg.METHOD_WINDOW_XLSX)
 
     controller.add_page(
         SpreadSheet(frame, controller, xlsx_local),

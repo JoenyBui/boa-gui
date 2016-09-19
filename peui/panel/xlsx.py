@@ -50,7 +50,7 @@ class SpreadSheet(sheet.CSheet):
             self.controller = local
             self.controller.view = self
         else:
-            self.controller = XlsxController(controller, self)
+            self.controller = XlsxController(controller, self, *args, **kwargs)
 
         sheet.CSheet.__init__(self, parent)
 

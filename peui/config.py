@@ -294,6 +294,12 @@ MENU_BAR_KEY = [
                     ),
                 ]
             ),
+            OrderedDict(
+                id=METHOD_WINDOW_XLSX,
+                name='XLSX',
+                kind=wx.ITEM_CHECK,
+                checked=True
+            )
         ]
     ),
     OrderedDict(

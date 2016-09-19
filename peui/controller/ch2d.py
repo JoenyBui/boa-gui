@@ -21,7 +21,7 @@ class Chart2dController(ChildController):
     Chart 2d controller.
 
     """
-    def __init__(self, parent, view, figure_setting=None):
+    def __init__(self, parent, view, figure_setting=None, *args, **kwargs):
         """
         Constructor
 
@@ -30,7 +30,7 @@ class Chart2dController(ChildController):
         :param figure_setting:
         :return:
         """
-        ChildController.__init__(self, parent, view)
+        ChildController.__init__(self, parent, view, *args, **kwargs)
 
         self.color_set = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
 
@@ -256,10 +256,28 @@ class Chart2dController(ChildController):
 
             print(str(e))
 
-    def plot(self, index, xdata, ydata, linewidth=None, linestyle=None, color=None, marker=None, markersize=None,
-             markeredgewidth=None, markeredgecolor=None, markerfacecolor=None, markerfacecoloralt='none',
-             fillstyle=None, antialiased=None, dash_capstyle=None, solid_capstyle=None, dash_joinstyle=None,
-             solid_joinstyle=None, pickradius=5, drawstyle=None, markevery=None, ):
+    def plot(self,
+             index,
+             xdata,
+             ydata,
+             linewidth=None,
+             linestyle=None,
+             color=None,
+             marker=None,
+             markersize=None,
+             markeredgewidth=None,
+             markeredgecolor=None,
+             markerfacecolor=None,
+             markerfacecoloralt='none',
+             fillstyle=None,
+             antialiased=None,
+             dash_capstyle=None,
+             solid_capstyle=None,
+             dash_joinstyle=None,
+             solid_joinstyle=None,
+             pickradius=5,
+             drawstyle=None,
+             markevery=None,):
         """
         =================== =======================================================================================================================
         Property            Description
@@ -316,7 +334,7 @@ class MultiChart2dController(Chart2dController):
     Multi Graph Chart 2D
 
     """
-    def __init__(self, parent, view, data, figure_setting=None):
+    def __init__(self, parent, view, data, figure_setting=None, *args, **kwargs):
         """
         Constructor
 
@@ -325,7 +343,7 @@ class MultiChart2dController(Chart2dController):
         :param figure_setting:
         :return:
         """
-        Chart2dController.__init__(self, parent, view, figure_setting=figure_setting)
+        Chart2dController.__init__(self, parent, view, figure_setting=figure_setting, *args, **kwargs)
 
         self.data = data
 

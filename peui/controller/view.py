@@ -76,6 +76,17 @@ class ViewController(BaseController):
         if self.windows.get(id):
             self.show_pane(self.windows[id])
 
+    def view_switch_page(self, event):
+        """
+
+        :param event:
+        :return:
+        """
+        id = event.Id
+
+        if self.windows.get(id):
+            self.show_page(self.windows.get(id))
+
     def view_tree_window(self, event=None):
         """
         Trigger the tree window.

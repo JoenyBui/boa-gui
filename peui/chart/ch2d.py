@@ -63,7 +63,7 @@ class Chart2d(wx.ScrolledWindow):
             self.controller = local
             self.controller.view = self
         else:
-            self.controller = Chart2dController(controller, self)
+            self.controller = Chart2dController(controller, self, **kwargs)
 
         self.axes = None
         # self.axes = self.figure.add_subplot(*args, **kwargs)

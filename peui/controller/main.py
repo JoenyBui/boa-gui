@@ -62,6 +62,16 @@ class MainController(object):
 
         self.subscribe_methods()
 
+    def bind_all_methods(self):
+        """
+        Bind all event menus.
+
+        :return:
+        """
+        self.bind_methods()
+        self.bind_aui_methods()
+        self.bind_menu_bars()
+
     @property
     def evt_new_project(self):
         return 'EVT_NEW_PROJECT'
@@ -81,6 +91,14 @@ class MainController(object):
     @property
     def evt_pane_close(self):
         return 'EVT_PANE_CLOSE'
+
+    @property
+    def evt_page_close(self):
+        return 'EVT_PAGE_CLOSE'
+
+    @property
+    def evt_page_closed(self):
+        return 'EVT_PAGE_CLOSED'
 
     @property
     def evt_undo(self):
@@ -104,6 +122,7 @@ class MainController(object):
 
     def subscribe_methods(self):
         """
+        Subscribe methods
 
         :return:
         """
@@ -112,6 +131,8 @@ class MainController(object):
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
         pub.subscribe(self.refresh_open_project, self.evt_open_project)
         pub.subscribe(self.on_pane_close, self.evt_pane_close)
+        pub.subscribe(self.on_page_close, self.evt_page_close)
+        pub.subscribe(self.on_page_closed, self.evt_page_closed)
 
     def bind_methods(self):
         """
@@ -138,7 +159,7 @@ class MainController(object):
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
         # self.master_key[METHOD_WINDOW_GENERAL]['method'] = self.view_ctrl.view_general_window
         # self.master_key[METHOD_WINDOW_CHART]['method'] = self.view_ctrl.view_chart_window
-        # self.master_key[METHOD_WINDOW_XLSX]['method'] = self.view_ctrl.view_xlsx_window
+        self.master_key[METHOD_WINDOW_XLSX]['method'] = self.view_ctrl.view_switch_page
 
         self.master_key[METHOD_TOOLBAR_STANDARD]['method'] = self.view_ctrl.view_toolbar_standard
 
@@ -146,11 +167,58 @@ class MainController(object):
         self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
 
     def bind_aui_methods(self):
-        # self.frame.Bind(aui.EVT_AUI_PANE_ACTIVATED, self.bind_pane_open)
+        """
+        Bind aui notebook.
+
+        :return:
+        """
+        self.notebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.bind_page_close)
+        self.notebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSED, self.bind_page_closed)
         self.frame.Bind(aui.EVT_AUI_PANE_CLOSE, self.bind_pane_close)
+
+    def bind_menu_bars(self):
+
+        for id, menu in self.frame.menu_bar.menus.items():
+            if self.master_key.get(id):
+                if self.master_key[id].get('method'):
+                    if menu:
+                        self.frame.Bind(wx.EVT_MENU, self.master_key[id]['method'], menu)
+
+        # Add History
+        self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
+
+    def bind_page_close(self, event):
+        """
+        Page close event
+
+        :param event:
+        :return:
+        """
+        page = self.notebook.GetPage(event.Selection)
+
+        if page:
+            if hasattr(page, 'controller'):
+                if page.controller.id:
+                    pub.sendMessage(self.evt_page_close, id=page.controller.id)
+
+    def bind_page_closed(self, event):
+        """
+        Page closed event
+
+        :param event:
+        :return:
+        """
+        pass
+        page = self.notebook.GetPage(event.Selection)
+
+        if page:
+            if hasattr(page, 'controller'):
+                if page.controller.id:
+                    pub.sendMessage(self.evt_page_closed, id=page.controller.id)
 
     def bind_pane_close(self, event):
         """
+        Pane close event.
 
         :param event:
         :return:
@@ -158,8 +226,7 @@ class MainController(object):
         pane = event.GetPane()
 
         if pane:
-            name = pane.name
-            pub.sendMessage(self.evt_pane_close, name=name)
+            pub.sendMessage(self.evt_pane_close, name=pane.name)
 
     def bind_pane_open(self, event):
         """
@@ -248,17 +315,8 @@ class MainController(object):
 
         menu_bar.set_menu_item(key)
 
-        for id, menu in menu_bar.menus.items():
-            if self.master_key.get(id):
-                if self.master_key[id].get('method'):
-                    if menu:
-                        self.frame.Bind(wx.EVT_MENU, self.master_key[id]['method'], menu)
-
         self.frame.menu_bar = menu_bar
         self.frame.SetMenuBar(self.frame.menu_bar)
-
-        # Add History
-        self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
     def on_pane_close(self, name=None):
         """
@@ -268,6 +326,18 @@ class MainController(object):
         :return:
         """
         menu = self.frame.menu_bar.menus.get(name)
+        if menu:
+            menu.Check(False)
+
+    def on_page_close(self, id=None):
+        menu = self.frame.menu_bar.menus.get(id)
+        if menu:
+            menu.Check(False)
+
+        del self.windows[id]
+
+    def on_page_closed(self, id=None):
+        menu = self.frame.menu_bar.menus.get(id)
         if menu:
             menu.Check(False)
 
