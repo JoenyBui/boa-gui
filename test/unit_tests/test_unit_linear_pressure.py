@@ -1,19 +1,25 @@
-from unittest import TestCase
+from peui.units.linear_pressure import LinearPressureUnit
+
 from peui.units import linear_pressure
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestLinearPressure(TestCase):
+class TestLinearPressure(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = LinearPressureUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'plf'
 
     def test_plf(self):
-        self.assertEqual(round(linear_pressure.get_linear_pressure_conversion_factor('plf', 'lb/in'), 5), round(1.0/12, 5))
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'plf')*self.magnitude, 1.618)
 
     def test_pli(self):
-        self.assertEqual(round(linear_pressure.get_linear_pressure_conversion_factor('lb/in', 'lb/ft'), 3), 12.0)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'pli')*self.magnitude, 0.1348333)
 
     def test_klf(self):
-        self.assertEqual(round(linear_pressure.get_linear_pressure_conversion_factor('klf', 'lb/in'), 3), round(1000.0/12, 3))
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'klf')*self.magnitude, 0.001618)

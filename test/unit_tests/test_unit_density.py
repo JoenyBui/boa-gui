@@ -1,19 +1,27 @@
 from unittest import TestCase
-from peui.units import density
+from peui.units.density import DensityUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestDensity(TestCase):
+class TestDensity(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = DensityUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'kg/m^3'
 
     def test_kg_m3(self):
-        self.assertEqual(round(density.get_density_conversion_factor('kg/m3', 'g/cm3'), 5), 0.001)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'kg/m^3')*self.magnitude, 1.618)
+
+    def test_g_cm3(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'g/cm^3')*self.magnitude, 0.001618)
 
     def test_lb_ft3(self):
-        self.assertEqual(round(density.get_density_conversion_factor('lb/ft3', 'lb/in3'), 5), round(1.0/12**3, 5))
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'lb/ft^3')*self.magnitude, 0.10100844)
 
     def test_lb_in3(self):
-        self.assertEqual(round(density.get_density_conversion_factor('lb/in3', 'lb/ft3'), 0), 12**3)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'lb/in^3')*self.magnitude, 0.000058454)

@@ -9,15 +9,15 @@ from . import Unit, UNIT_AREA_KEY
 __author__ = 'jbui'
 
 # UNITY_VALUE == 'm^2'
-FACTOR_AREA_SQUARE_KILOMETER = 1E6
 FACTOR_AREA_SQUARE_METER = 1.0
-FACTOR_AREA_SQUARE_CENTIMETER = 0.0001
-FACTOR_AREA_SQUARE_MILLIMETER = 1E-6
-FACTOR_AREA_SQUARE_INCH = 0.00064516
-FACTOR_AREA_SQUARE_FEET = 0.092903
-FACTOR_AREA_SQUARE_YARD = 0.836127
-FACTOR_AREA_SQUARE_MILE = 2.59E6
-FACTOR_AREA_ACRE = 4046.86
+FACTOR_AREA_SQUARE_KILOMETER = 1E-6
+FACTOR_AREA_SQUARE_CENTIMETER = 10000
+FACTOR_AREA_SQUARE_MILLIMETER = 1000000
+FACTOR_AREA_SQUARE_INCH = 1550
+FACTOR_AREA_SQUARE_FEET = 10.7639
+FACTOR_AREA_SQUARE_YARD = 1.19599
+FACTOR_AREA_SQUARE_MILE = 3.861E-7
+FACTOR_AREA_ACRE = 0.000247105
 
 ID_NAME_AREA_FEET = ("ft2", "feet2", "Foot2")
 ID_NAME_AREA_INCH = ("in2", "in.^2", "inches2")
@@ -37,20 +37,23 @@ AREA_KEY = {
     'inch2': FACTOR_AREA_SQUARE_INCH,
     'in.2': FACTOR_AREA_SQUARE_INCH,
     'in^2': FACTOR_AREA_SQUARE_INCH,
-    'yd2': FACTOR_AREA_SQUARE_YARD,
-    'yard2': FACTOR_AREA_SQUARE_YARD,
+    'in^3/in': FACTOR_AREA_SQUARE_INCH,
     'mm2': FACTOR_AREA_SQUARE_MILLIMETER,
     'millimeter2': FACTOR_AREA_SQUARE_MILLIMETER,
     'mm^2': FACTOR_AREA_SQUARE_MILLIMETER,
+    'mm^3/mm': FACTOR_AREA_SQUARE_MILLIMETER,
     'cm2': FACTOR_AREA_SQUARE_CENTIMETER,
     'centimeter2': FACTOR_AREA_SQUARE_CENTIMETER,
     'cm^2': FACTOR_AREA_SQUARE_CENTIMETER,
     'm2': FACTOR_AREA_SQUARE_METER,
+    'm^2': FACTOR_AREA_SQUARE_METER,
     'meter2': FACTOR_AREA_SQUARE_METER,
-    'm^2': FACTOR_AREA_SQUARE_KILOMETER,
+    'km^2': FACTOR_AREA_SQUARE_KILOMETER,
     'km2': FACTOR_AREA_SQUARE_KILOMETER,
     'kilometer2': FACTOR_AREA_SQUARE_KILOMETER,
-    'km^2': FACTOR_AREA_SQUARE_KILOMETER
+    'yd2': FACTOR_AREA_SQUARE_YARD,
+    'yard2': FACTOR_AREA_SQUARE_YARD,
+    'yd^2': FACTOR_AREA_SQUARE_YARD
 }
 
 DEFAULT_AREA_LIST = [
@@ -81,7 +84,7 @@ def get_area_conversion_factor(origin, destination):
     origin_factor = AREA_KEY.get(origin)
     destination_factor = AREA_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class AreaUnit(Unit):
@@ -97,6 +100,3 @@ class AreaUnit(Unit):
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL__LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_area_conversion_factor(origin, destination)

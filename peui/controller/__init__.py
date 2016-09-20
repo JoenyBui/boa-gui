@@ -8,16 +8,18 @@ __author__ = 'jbui'
 
 class BaseController(object):
     """
+    Base Controller
 
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
 
         :param kwargs:
         :return:
         """
+        self.id = kwargs.get('id', None)
         self.title = kwargs.get('title', '')
 
     @abstractmethod
@@ -59,6 +61,7 @@ class BaseController(object):
 
 class ChildController(BaseController):
     """
+    Child Controller
 
     """
     __metaclass__ = ABCMeta
@@ -72,10 +75,12 @@ class ChildController(BaseController):
         :param kwargs:
         :return:
         """
-        BaseController.__init__(self)
+        BaseController.__init__(self, *args, **kwargs)
 
         self.parent = parent
         self.view = view
+
+        self.bind_objects = {}
 
     @abstractmethod
     def do_layout(self):

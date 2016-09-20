@@ -46,7 +46,7 @@ class SmartTextBox(wx.TextCtrl):
 
     """
     def __init__(self, parent, key_up=None, message=None, enabled_message='',
-                 disabled_messages=None, disabled_index=None, value=None, *args, **kwargs):
+                 disabled_messages=None, disabled_index=None, value=None, enable=None, *args, **kwargs):
         """
 
         :param parent: parent ui
@@ -82,6 +82,9 @@ class SmartTextBox(wx.TextCtrl):
             self.disabled_index = 0
         else:
             self.disabled_index = disabled_index
+
+        if enable is not None:
+            self.Enable(enable)
 
     @property
     def min(self):
@@ -119,7 +122,7 @@ class SmartTextBox(wx.TextCtrl):
         """
         self.keys['max'] = value
 
-    def set_value(self, value):
+    def set_value(self, value, fmt=None):
         """
         Set the textbox value
 
@@ -127,7 +130,10 @@ class SmartTextBox(wx.TextCtrl):
         :return:
         """
         if value is not None:
-            self.Value = str(value)
+            if fmt:
+                self.Value = fmt%(value)
+            else:
+                self.Value = str(value)
         else:
             self.Value = ""
 
@@ -184,7 +190,7 @@ class SmartComboBox(wx.ComboBox):
 
     """
     def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None,
-                 enabled_message='', disabled_messages=None, disabled_index=None, *args, **kwargs):
+                 enabled_message='', disabled_messages=None, disabled_index=None, enable=None, *args, **kwargs):
         """
         Constructor
 
@@ -232,6 +238,9 @@ class SmartComboBox(wx.ComboBox):
         self.current_dropbox_selection = None
 
         self.Bind(wx.EVT_COMBOBOX_DROPDOWN, self.on_dropdown_open, self)
+
+        if enable is not None:
+            self.Enable(enable)
 
     def Enable(self, *args, **kwargs):
         """
@@ -704,7 +713,7 @@ class SmartInputLayout(wx.BoxSizer):
 
     MAKE_VERTICAL_STRETCHABLE = 1
 
-    def __init__(self, parent, max=None, min=None, layout=None, *args, **kwargs):
+    def __init__(self, parent, max=None, min=None, layout=None, label=None, *args, **kwargs):
         """
         Constructor.
 
@@ -713,7 +722,7 @@ class SmartInputLayout(wx.BoxSizer):
         :param max: maximum value for the textbox
         :param min: minimum value for the textbox
         :param layout:
-        :param overall_height:
+        :param label: pass in wx.Label or SmartLabel
         :param args:
         :param kwargs:
         """
@@ -736,14 +745,12 @@ class SmartInputLayout(wx.BoxSizer):
             self.layout.calculate()
 
         # Add in the label.
-        if kwargs.get('label'):
-            self.label = kwargs.get('label')
+        if label:
+            self.label = label
+        elif kwargs.get('name'):
+            self.label = SmartLabel(self.parent, label=kwargs.get('name'))
         else:
-            if kwargs.get('name'):
-                self.label = SmartLabel(self.parent, label=kwargs.get('name'))
-
-            else:
-                self.label = SmartLabel(self.parent, label='Textbox Label:')
+            self.label = SmartLabel(self.parent, label='Textbox Label:')
 
         self.min = min
         self.max = max
@@ -909,6 +916,19 @@ class SmartInputLayout(wx.BoxSizer):
                             wx.ALL | wx.EXPAND,
                             self.layout.border_width[id])
 
+        # Add blank space if no component exists.
+        for id_blank in range(id+1, len(self.layout.widths)):
+            self.hsizer.AddSpacer(self.layout.interior)
+
+            blank_label = wx.StaticText(self.parent, label="")
+            blank_label.SetMinSize(self.layout.get_size(id_blank))
+
+            self.hsizer.Add(blank_label,
+                            self.layout.stretch_factor[id_blank],
+                            wx.ALL | wx.EXPAND,
+                            self.layout.border_width[id_blank])
+
+
         self.hsizer.AddSpacer(self.layout.right)
 
         self.Add(self.hsizer, 1, wx.EXPAND | wx.ALL, 0)
@@ -1044,7 +1064,7 @@ class SmartButton(wx.Button):
     Smarter Button Class
 
     """
-    def __init__(self, parent, label='', evt_button=None, message=None, *args, **kwargs):
+    def __init__(self, parent, label='', evt_button=None, message=None, enable=None, *args, **kwargs):
         """
         Constructor.
 
@@ -1066,13 +1086,16 @@ class SmartButton(wx.Button):
             self.tooltip = wx.ToolTip(message)
             self.SetToolTip(self.tooltip)
 
+        if enable is not None:
+            self.Enable(enable)
+
 
 class SmartCheckBox(wx.CheckBox):
     """
     **Smarter CheckBox**
 
     """
-    def __init__(self, parent, id=-1, label='', evt_click=None, message=None, *args, **kwargs):
+    def __init__(self, parent, id=-1, label='', evt_click=None, message=None, enable=None, *args, **kwargs):
         """
         Constructor.
 
@@ -1092,6 +1115,9 @@ class SmartCheckBox(wx.CheckBox):
 
         if evt_click:
             self.Bind(wx.EVT_CHECKBOX, evt_click)
+
+        if enable is not None:
+            self.Enable(enable)
 
     def get_value(self):
         """

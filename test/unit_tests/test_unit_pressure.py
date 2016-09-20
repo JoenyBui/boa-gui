@@ -1,25 +1,30 @@
+from base import BaseUnitTest
+
 from unittest import TestCase
-from peui.units import pressure
+from peui.units.pressure import PressureUnit
 
 __author__ = 'jbui'
 
 
-class TestPressure(TestCase):
+class TestPressure(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = PressureUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'psi'
 
     def test_kPa(self):
-        self.assertEqual(round(pressure.get_pressure_conversion_factor('kPa', 'Pa'), 5), 1000)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'kPa')*self.magnitude, 11.155)
 
     def test_MPa(self):
-        self.assertEqual(round(pressure.get_pressure_conversion_factor('MPa', 'Pa'), 5), 1e6)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'MPa')*self.magnitude, 0.01115571)
 
     def test_psi(self):
-        self.assertEqual(round(pressure.get_pressure_conversion_factor('psi', 'Pa'), 2), 6894.76)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'psi')*self.magnitude, 1.618)
 
     def test_ksi(self):
-        self.assertEqual(round(pressure.get_pressure_conversion_factor('ksi', 'psi'), 2), 1e3)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'ksi')*self.magnitude, 0.001618)
 
     def test_psf(self):
-        self.assertEqual(round(pressure.get_pressure_conversion_factor('psf', 'psi'), 5), round(1.0/12**2, 5))
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'psf')*self.magnitude, 232.992)

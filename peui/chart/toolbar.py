@@ -80,12 +80,14 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         :param evt:
         :return:
         """
-        ONE_SCREEN = 1
-        axes = self.canvas.figure.axes[0]
-        x1,x2 = axes.get_xlim()
-        ONE_SCREEN = x2 - x1
-        axes.set_xlim(x1 - self.pan_percentage*ONE_SCREEN,
-                      x2 - self.pan_percentage*ONE_SCREEN)
+        for axes in self.canvas.figure.axes:
+            x1, x2 = axes.get_xlim()
+
+            ONE_SCREEN = x2 - x1
+
+            axes.set_xlim(x1 - self.pan_percentage*ONE_SCREEN,
+                          x2 - self.pan_percentage*ONE_SCREEN)
+
         self.canvas.draw()
 
     def _on_custom_pan_right(self, evt):
@@ -95,12 +97,13 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         :param evt:
         :return:
         """
-        ONE_SCREEN = 1
-        axes = self.canvas.figure.axes[0]
-        x1,x2 = axes.get_xlim()
-        ONE_SCREEN = x2 - x1
-        axes.set_xlim(x1 + self.pan_percentage*ONE_SCREEN,
-                      x2 + self.pan_percentage*ONE_SCREEN)
+        for axes in self.canvas.figure.axes:
+            x1, x2 = axes.get_xlim()
+
+            ONE_SCREEN = x2 - x1
+
+            axes.set_xlim(x1 + self.pan_percentage*ONE_SCREEN,
+                          x2 + self.pan_percentage*ONE_SCREEN)
         self.canvas.draw()
 
     def _on_custom_pan_up(self, evt):
@@ -110,11 +113,13 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         :param evt:
         :return:
         """
-        axes = self.canvas.figure.axes[0]
-        y1, y2 = axes.get_ylim()
-        ONE_SCREEN = y2 - y1
-        axes.set_ylim(y1 + self.pan_percentage*ONE_SCREEN,
-                      y2 + self.pan_percentage*ONE_SCREEN)
+        for axes in self.canvas.figure.axes:
+            y1, y2 = axes.get_ylim()
+
+            ONE_SCREEN = y2 - y1
+
+            axes.set_ylim(y1 + self.pan_percentage*ONE_SCREEN,
+                          y2 + self.pan_percentage*ONE_SCREEN)
         self.canvas.draw()
 
     def _on_custom_pan_down(self, evt):
@@ -124,10 +129,14 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         :param evt:
         :return:
         """
-        axes = self.canvas.figure.axes[0]
-        y1, y2 = axes.get_ylim()
-        ONE_SCREEN = y2 - y1
-        axes.set_ylim(y1 - self.pan_percentage*ONE_SCREEN,
-                      y2 - self.pan_percentage*ONE_SCREEN)
+        for axes in self.canvas.figure.axes:
+            y1, y2 = axes.get_ylim()
+
+            ONE_SCREEN = y2 - y1
+
+            axes.set_ylim(y1 - self.pan_percentage*ONE_SCREEN,
+                          y2 - self.pan_percentage*ONE_SCREEN)
         self.canvas.draw()
 
+    def update(self):
+        NavigationToolbar.update(self)

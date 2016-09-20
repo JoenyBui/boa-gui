@@ -3,10 +3,11 @@ from . import Unit, UNIT_DENSITY_KEY
 __author__ = 'jbui'
 
 # UNITY_VALUE == g/cm^3
-FACTOR_DENSITY_G_CM3 = 1
+FACTOR_DENSITY_G_M3 = 1.0
+FACTOR_DENSITY_G_CM3 = 0.000001
 FACTOR_DENSITY_KG_M3 = 0.001
-FACTOR_DENSITY_LB_FT3 = 0.0160185
-FACTOR_DENSITY_LB_IN3 = 27.6799
+FACTOR_DENSITY_LB_FT3 = 0.000062428
+FACTOR_DENSITY_LB_IN3 = 0.000000036
 
 ID_NAME_DENSITY_G_CM3 = ("g/cm3", "g/cm^3", "G/CM3", "G/CM^3")
 ID_NAME_DENSITY_KG_M3 = ("kg/m3", "kg/m^3", "KG/M3", "KG/M^3")
@@ -14,6 +15,8 @@ ID_NAME_DENSITY_LB_FT3 = ("lb/ft^3", "lb/ft3", "LB/FT3", "LB/FT^3")
 ID_NAME_DENSITY_LB_IN3 = ("lb/in^3", "lb/in3", "LB/IN3", "LB/IN^3")
 
 DENSITY_KEY = {
+    "g/m3": FACTOR_DENSITY_G_M3,
+    "g/m^3": FACTOR_DENSITY_G_M3,
     "g/cm3": FACTOR_DENSITY_G_CM3,
     "g/cm^3": FACTOR_DENSITY_G_CM3,
     "G/CM3": FACTOR_DENSITY_G_CM3,
@@ -23,11 +26,15 @@ DENSITY_KEY = {
     "KG/M3": FACTOR_DENSITY_KG_M3,
     "KG/M^3": FACTOR_DENSITY_KG_M3,
     "lb/ft^3": FACTOR_DENSITY_LB_FT3,
+    "lbs/ft^3": FACTOR_DENSITY_LB_FT3,
     "lb/ft3": FACTOR_DENSITY_LB_FT3,
+    "lbs/ft3": FACTOR_DENSITY_LB_FT3,
     "LB/FT3": FACTOR_DENSITY_LB_FT3,
     "LB/FT^3": FACTOR_DENSITY_LB_FT3,
     "lb/in^3": FACTOR_DENSITY_LB_IN3,
+    "lbs/in^3": FACTOR_DENSITY_LB_IN3,
     "lb/in3": FACTOR_DENSITY_LB_IN3,
+    "lbs/in3": FACTOR_DENSITY_LB_IN3,
     "LB/IN3": FACTOR_DENSITY_LB_IN3,
     "LB/IN^3": FACTOR_DENSITY_LB_IN3
 }
@@ -61,7 +68,7 @@ def get_density_conversion_factor(origin, destination):
     origin_factor = DENSITY_KEY.get(origin)
     destination_factor = DENSITY_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class DensityUnit(Unit):
@@ -77,6 +84,3 @@ class DensityUnit(Unit):
 
         self.imperial_list = DEFAULT_IMPERIAL_LIST
         self.metric_list = DEFAULT_METRIC_LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_density_conversion_factor(origin, destination)

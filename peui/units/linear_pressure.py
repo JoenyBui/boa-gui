@@ -10,17 +10,25 @@ from . import Unit, UNIT_LINEAR_PRESSURE
 
 __author__ = 'jbui'
 
-FACTOR_LINEAR_PRESSURE_KG_M = 1.0
-FACTOR_LINEAR_PRESSURE_KN_LF = 101.97
-FACTOR_LINEAR_PRESSURE_PLF = 1.48816394
-FACTOR_LINEAR_PRESSURE_KLF = 1488.16394
-FACTOR_LINEAR_PRESSURE_PLI = 17.858
+FACTOR_LINEAR_PRESSURE_N_M = 1.0
+FACTOR_LINEAR_PRESSURE_N_CM = 0.01
+FACTOR_LINEAR_PRESSURE_N_MM = 0.001
+FACTOR_LINEAR_PRESSURE_KN_M = 0.001
+FACTOR_LINEAR_PRESSURE_KG_M = 0.1019716212978
+FACTOR_LINEAR_PRESSURE_PLF = 0.068521763
+FACTOR_LINEAR_PRESSURE_KLF = 0.000068521
+FACTOR_LINEAR_PRESSURE_PLI = 0.005710143
 
 LINEAR_PRESSURE_KEY = {
-    'kg/m': FACTOR_LINEAR_PRESSURE_KG_M,
-    'plf': FACTOR_LINEAR_PRESSURE_PLF,
+    'N/m': FACTOR_LINEAR_PRESSURE_N_M,
+    'N/cm': FACTOR_LINEAR_PRESSURE_N_CM,
+    'N/mm': FACTOR_LINEAR_PRESSURE_N_MM,
+    'KN/m': FACTOR_LINEAR_PRESSURE_KN_M,
     'lb/ft': FACTOR_LINEAR_PRESSURE_PLF,
+    'plf': FACTOR_LINEAR_PRESSURE_PLF,
     'lb/in': FACTOR_LINEAR_PRESSURE_PLI,
+    'pli': FACTOR_LINEAR_PRESSURE_PLI,
+    'kip/ft': FACTOR_LINEAR_PRESSURE_KLF,
     'klf': FACTOR_LINEAR_PRESSURE_KLF
 }
 
@@ -52,7 +60,7 @@ def get_linear_pressure_conversion_factor(origin, destination):
     origin_factor = LINEAR_PRESSURE_KEY.get(origin)
     destination_factor = LINEAR_PRESSURE_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class LinearPressureUnit(Unit):
@@ -68,6 +76,3 @@ class LinearPressureUnit(Unit):
 
         self.imperial_list = DEFAULT_IMPERIAL_LIST
         self.metric_list = DEFAULT_METRIC_LIST
-
-    # def get_conversion_factor(self, origin, destination):
-    #     return get_linear_pressure_conversion_factor(origin, destination)

@@ -9,19 +9,20 @@ from . import Unit, UNIT_LINEAR_DENSITY
 __author__ = 'jbui'
 
 
-FACTOR_LINEAR_DENSITY_KN_LF = 1.0
-FACTOR_LINEAR_DENSITY_PLF = 0.00444822
-FACTOR_LINEAR_DENSITY_KLF = 0.00980663
+FACTOR_LINEAR_DENSITY_G_M = 1.0
+FACTOR_LINEAR_DENSITY_KG_M = 0.001
+FACTOR_LINEAR_DENSITY_PLF = 0.000671969
 
 LINEAR_DENSITY_KEY = {
+    'g/m': FACTOR_LINEAR_DENSITY_G_M,
+    'kg/m': FACTOR_LINEAR_DENSITY_KG_M,
+    'lbm/ft': FACTOR_LINEAR_DENSITY_PLF,
     'plf': FACTOR_LINEAR_DENSITY_PLF,
-    'lb/ft': FACTOR_LINEAR_DENSITY_PLF,
-    'klf': FACTOR_LINEAR_DENSITY_KLF
+    'lb/ft': FACTOR_LINEAR_DENSITY_PLF
 }
 
 DEFAULT_LINEAR_DENSITY_LIST = {
     'plf': FACTOR_LINEAR_DENSITY_PLF,
-    'klf': FACTOR_LINEAR_DENSITY_KLF,
 }
 
 DEFAULT_IMPERIAL_LIST = [
@@ -29,7 +30,7 @@ DEFAULT_IMPERIAL_LIST = [
 ]
 
 DEFAULT_METRIC_LIST = [
-    'klf'
+    'kg/m'
 ]
 
 
@@ -44,7 +45,7 @@ def get_linear_density_conversion_factor(origin, destination):
     origin_factor = LINEAR_DENSITY_KEY.get(origin)
     destination_factor = LINEAR_DENSITY_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class LinearDensityUnit(Unit):
@@ -60,6 +61,3 @@ class LinearDensityUnit(Unit):
 
         self.imperial_list = DEFAULT_IMPERIAL_LIST
         self.metric_list = DEFAULT_METRIC_LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_linear_density_conversion_factor(origin, destination)

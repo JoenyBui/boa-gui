@@ -1,13 +1,21 @@
 from unittest import TestCase
-from peui.units import time
+from peui.units.time import TimeUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestTime(TestCase):
+class TestTime(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = TimeUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'ms'
 
     def test_ms(self):
-        self.assertEqual(round(time.get_time_conversion_factor('ms', 's'), 5), 0.001)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'ms')*self.magnitude, 1.618)
+
+    def test_s(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 's')*self.magnitude, 0.001618)

@@ -9,7 +9,7 @@ unity value = s
 from . import Unit, UNIT_TIME_KEY
 
 FACTOR_TIME_SECOND = 1.0
-FACTOR_TIME_MILLISECOND = 0.001
+FACTOR_TIME_MILLISECOND = 1000.0
 
 ID_NAME_TIME_SECOND = ('s', 'sec')
 ID_NAME_TIME_MILLISECOND = ('ms', 'millisecond')
@@ -21,6 +21,7 @@ TIME_KEY = {
     'sec': FACTOR_TIME_SECOND,
     'second': FACTOR_TIME_SECOND,
     'ms': FACTOR_TIME_MILLISECOND,
+    'msec': FACTOR_TIME_MILLISECOND,
     'millisecond': FACTOR_TIME_MILLISECOND
 }
 
@@ -51,7 +52,7 @@ def get_time_conversion_factor(origin, destination):
     origin_factor = TIME_KEY.get(origin)
     destination_factor = TIME_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class TimeUnit(Unit):
@@ -68,5 +69,3 @@ class TimeUnit(Unit):
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL__LIST
 
-    def get_conversion_factor(self, origin, destination):
-        return get_time_conversion_factor(origin, destination)

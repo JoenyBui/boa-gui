@@ -24,7 +24,7 @@ class FloatSmartBox(SmartTextBox):
 
     """
     def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None,
-                 range_error=None, key_up=None, message=None, *args, **kwargs):
+                 range_error=None, key_up=None, message=None, enable=None, *args, **kwargs):
         """
         Constructor.
 
@@ -66,6 +66,9 @@ class FloatSmartBox(SmartTextBox):
 
         self._validator = FloatRangeValidator(signs=signs, decimal=decimal, exponential=exponential)
         self.SetValidator(self._validator)
+
+        if enable is not None:
+            self.Enable(enable)
 
     def on_text(self, event=None):
         """
@@ -298,6 +301,19 @@ class FloatInputLayout(SmartInputLayout):
         if label:
             self.label.Label = str(label)
 
+    def set_textbox(self, obj, key, fmt=None):
+        """
+        Set the textbox by calling set value and establish module.
+
+        :param obj:
+        :param key:
+        :param fmt:
+        :return:
+        """
+        unit = self.postbox.get_value()
+
+        self.textbox.set_value(obj.get_value(key, unit), fmt)
+
     def get_value(self, destination_unit=None):
         """
         Return the value given destination unit.
@@ -320,6 +336,19 @@ class FloatInputLayout(SmartInputLayout):
                 return None
             else:
                 return float(self.textbox.Value)
+
+    def set_value_unit(self, value, original_unit, fmt=None):
+        """
+        Set the value to the base unit.
+
+        :param value:
+        :param original_unit:
+        :param fmt:
+        :return:
+        """
+        base_unit = self.postbox.get_value()
+
+        self.textbox.set_value(value*self.postbox.get_factor(original_unit, base_unit), fmt)
 
     def set_value_convert(self, original_unit, destination_unit):
         """
