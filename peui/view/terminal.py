@@ -70,7 +70,7 @@ class ConsoleController(ChildController):
         """
         pass
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:

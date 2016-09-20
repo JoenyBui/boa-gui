@@ -166,3 +166,24 @@ class DlgController(object):
         """
         abt = AboutDialog(name='Generic Gui')
         abt.show()
+
+    def close_project_dialog(self, event=None):
+        """
+        Close project dialog
+
+        :param event:
+        :return:
+        """
+
+        if self.parent.project:
+
+            dlg = wx.MessageDialog(None,
+                                   'Do you want to close the project?',
+                                   'Close %s Project' % self.parent.project.name,
+                                   wx.YES_NO)
+
+            if dlg.ShowModal() == wx.ID_YES:
+                self.parent.refresh_clear_project()
+
+        else:
+            self.parent.refresh_clear_project()

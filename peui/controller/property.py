@@ -42,7 +42,14 @@ class PropertyGridController(BaseController):
         self.cells['author'] = self.view.add_string_property('Author Name', 'author', self.parent.project.author, 'Author Name')
         self.cells['project_folder'] = self.view.add_file_property('Project Path', 'project_folder', self.parent.project.project_folder, 'Project Folder')
 
-    def update_layout(self):
+    def update_layout(self, state):
+        """
+
+        :return:
+        """
+        pass
+
+    def refresh(self):
         """
 
         :return:
@@ -50,13 +57,6 @@ class PropertyGridController(BaseController):
         self.cells['name'].m_value = self.parent.project.name
         self.cells['author'].m_value = self.parent.project.author
         self.cells['project_folder'].m_value = self.parent.project.project_folder
-
-    def refresh(self):
-        """
-
-        :return:
-        """
-        self.update_layout()
 
     def sync_data(self):
         """

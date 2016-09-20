@@ -80,7 +80,7 @@ class CustomToolBarController(ChildController):
 
                 self.view.AddSimpleTool(menu['id'], menu['label'], tb, menu['label'])
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:

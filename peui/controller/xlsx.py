@@ -137,7 +137,7 @@ class XlsxController(ChildController):
 
         self.view.SetTable(self.table)
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:

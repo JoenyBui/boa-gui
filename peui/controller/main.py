@@ -72,6 +72,16 @@ class MainController(object):
         self.bind_aui_methods()
         self.bind_menu_bars()
 
+    def initialize_notebook(self, frame, size=(300, 400)):
+        """
+        Add notebook
+        :param frame:
+        :return:
+        """
+        self.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS, size=size)
+
+        self.frame.add_pane(self.notebook, wx.CENTER, 'Notebook')
+
     @property
     def evt_new_project(self):
         return 'EVT_NEW_PROJECT'
@@ -146,6 +156,7 @@ class MainController(object):
         self.master_key[METHOD_SAVE_PROJECT]['method'] = self.dlg_ctrl.save_project_dialog
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.dlg_ctrl.save_as_project_dialog
         self.master_key[METHOD_OUTPUT_PROJECT]['method'] = self.dlg_ctrl.output_project_word_doc
+        self.master_key[METHOD_CLOSE_PROJECT]['method'] = self.dlg_ctrl.close_project_dialog
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
 
         self.master_key[METHOD_UNDO]['method'] = self.on_click_undo
@@ -235,6 +246,18 @@ class MainController(object):
         :return:
         """
         name = event.GetPane().name
+
+    def delete_pane(self, key):
+        pane = self.windows[key]
+
+        # Detach pane
+        self.frame.mgr.DetachPane(pane)
+
+        # Destroy
+        pane.Destroy()
+
+        # Update pane
+        self.frame.mgr.Update()
 
     def add_pane(self, panel, key, area=None, name=None):
         """
@@ -431,7 +454,10 @@ class MainController(object):
 
         :return:
         """
-        pass
+        pub.sendMessage(EVT_CHANGE_STATE, state=STATE_CLOSE_PROJECT)
+
+        self.refresh_clear_controls()
+        self.refresh_clear_panels()
 
     def refresh_main_frame_title(self):
         """
@@ -452,6 +478,19 @@ class MainController(object):
             if self.frame.status_bar:
                 self.frame.status_bar.SetStatusText(text, 0)
 
+    def refresh_clear_panels(self):
+        """
+
+        :return:
+        """
+        for key in self.windows.keys():
+            pane = self.windows[key]
+
+            if pane.__dict__.get('controller'):
+                self.delete_pane(key)
+
+                del self.windows[key]
+
     def refresh_clear_controls(self):
         """
         Clear controls and remove tab.
@@ -465,6 +504,8 @@ class MainController(object):
         for index in range(0, self.notebook.GetPageCount()):
             # Loop and remove all the pages inside the viewer.
             self.notebook.DeletePage(0)
+
+        self.childs = []
 
     def refresh(self):
         """

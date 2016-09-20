@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from ..config import EVT_CHANGE_STATE
 
 import wx
 from wx.lib.pubsub import pub
@@ -21,6 +22,9 @@ class BaseController(object):
         """
         self.id = kwargs.get('id', None)
         self.title = kwargs.get('title', '')
+
+        self.bind_objects = {}
+        self.state = None
 
     @abstractmethod
     def sync_data(self):
@@ -80,7 +84,7 @@ class ChildController(BaseController):
         self.parent = parent
         self.view = view
 
-        self.bind_objects = {}
+        pub.subscribe(self.update_layout, EVT_CHANGE_STATE)
 
     @abstractmethod
     def do_layout(self):
@@ -91,8 +95,9 @@ class ChildController(BaseController):
         pass
 
     @abstractmethod
-    def update_layout(self):
+    def update_layout(self, state):
         """
+        Update layout based off of change state.
 
         :return:
         """

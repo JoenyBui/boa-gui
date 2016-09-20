@@ -188,7 +188,7 @@ class FigureSettingController(ChildController):
     def refresh(self):
         pass
 
-    def update_layout(self):
+    def update_layout(self, state):
         pass
 
     def button_ok_click(self, event):

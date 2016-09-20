@@ -73,6 +73,7 @@ class Chart2dController(ChildController):
         """
         Update text
 
+        :param settings: update the title axes
         :return:
         """
 
@@ -85,6 +86,7 @@ class Chart2dController(ChildController):
 
     def bind_toolbar_figure(self):
         """
+        Bind Toolbar Figure
 
         :return:
         """
@@ -93,7 +95,7 @@ class Chart2dController(ChildController):
         tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
         tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:

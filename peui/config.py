@@ -18,6 +18,12 @@ ICONS = {
     'dplot': os.path.join(path, 'dplot.bmp')
 }
 
+EVT_CHANGE_STATE = 'EVT_CHANGE_STATE'
+
+# States are used when we need to broadcast projects state.
+STATE_OPEN_PROJECT = 0
+STATE_CLOSE_PROJECT = 1
+
 # There are method keys that corresponds to a specific controller action from the project.
 METHOD_SEPARATOR = wx.ID_SEPARATOR
 
@@ -26,6 +32,7 @@ METHOD_OPEN_PROJECT = wx.ID_OPEN
 METHOD_OPEN_RECENT = wx.NewId()
 METHOD_SAVE_PROJECT = wx.ID_SAVE
 METHOD_SAVE_AS_PROJECT = wx.ID_SAVEAS
+METHOD_CLOSE_PROJECT = wx.NewId()
 METHOD_CLOSE_ALL = wx.ID_CLOSE_ALL
 METHOD_EXIT_PROJECT = wx.ID_EXIT
 METHOD_FILE = wx.ID_FILE
@@ -62,7 +69,7 @@ MASTER_KEY = {
     METHOD_SAVE_PROJECT:        dict(name='Save Project'),
     METHOD_SAVE_AS_PROJECT:     dict(name='Save Project As'),
     METHOD_OUTPUT_PROJECT:      dict(name='Output Project'),
-    METHOD_CLOSE_ALL:           dict(name='Close All Projects'),
+    METHOD_CLOSE_PROJECT:       dict(name='Close Projects'),
     METHOD_EXIT_PROJECT:        dict(name='Exit'),
 
     METHOD_EDIT:                dict(name='Edit'),
@@ -191,6 +198,14 @@ MENU_BAR_KEY = [
             OrderedDict(
                 id=METHOD_OUTPUT_PROJECT,
                 name='Output Project as Word',
+            ),
+            OrderedDict(
+                id=METHOD_SEPARATOR,
+                name='Separator'
+            ),
+            OrderedDict(
+                id=METHOD_CLOSE_PROJECT,
+                name='Close Project'
             ),
             OrderedDict(
                 id=METHOD_SEPARATOR,

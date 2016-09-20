@@ -178,9 +178,8 @@ if __name__ == '__main__':
                        style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
 
     # Set Components.
+    controller.initialize_notebook(frame)
     controller.set_key(MENU_BAR_KEY)
-    controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS, size=(300, 400))
-    controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
     controller.bind_all_methods()
 
     # Add test data
