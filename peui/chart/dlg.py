@@ -30,32 +30,27 @@ class FigureSetting(object):
         self.y_subtitle = kwargs.get('y_subtitle', '')
 
 
-class FigureSettingDialog(GeneralDialog):
+class FigureSettingPanel(wx.Panel):
     """
-    Modify figure setting.
+    Particular Figure Setting
 
     """
-    def __init__(self, parent, controller=None, setting=None, local=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+    def __init__(self, parent, setting, *args, **kwargs):
         """
-        Figure setting dialog.
 
-        :param parent:
-        :param controller:
         :param setting:
-        :param btn_flags:
+        :param args:
         :param kwargs:
         :return:
         """
-        GeneralDialog.__init__(self, parent, title="Figure Setting", controller=controller, btn_flags=btn_flags, **kwargs)
+        wx.Panel.__init__(self, parent, *args, **kwargs)
 
-        self.btnsizer.AffirmativeButton.Bind(wx.EVT_BUTTON, self.button_ok_click)
+        self.layouts = {}
+        self.bind_objects = {}
 
-        if local:
-            self.local = local
-        else:
-            self.local = FigureSettingController(self.parent, self, setting)
+        self.setting = setting
 
-        self.local.sync_data()
+        self.SetSizerAndFit(self.do_layout())
 
     def do_layout(self):
         """
@@ -87,24 +82,80 @@ class FigureSettingDialog(GeneralDialog):
         vsizer.Add(self.layouts['x_title'], 1, wx.EXPAND | wx.ALL, 0)
         vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['y_title'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
 
         return vsizer
 
-    def button_ok_click(self, event):
+    def sync_data(self):
         """
+        Sync textbox data
 
-        :param event:
+        """
+        self.bind_objects['title'] = BindOjbect(self.setting.__dict__,
+                                                self.layouts['title'].textbox,
+                                                'title')
+        self.bind_objects['x_title'] = BindOjbect(self.setting.__dict__,
+                                                  self.layouts['x_title'].textbox,
+                                                  'x_title')
+        self.bind_objects['y_title'] = BindOjbect(self.setting.__dict__,
+                                                  self.layouts['y_title'].textbox,
+                                                  'y_title')
+
+
+class FigureSettingDialog(GeneralDialog):
+    """
+    Modify figure setting.
+
+    """
+    def __init__(self, parent, controller=None, setting=None, local=None, btn_flags=wx.OK | wx.CANCEL, **kwargs):
+        """
+        Figure setting dialog.
+
+        :param parent:
+        :param controller:
+        :param setting:
+        :param btn_flags:
+        :param kwargs:
         :return:
         """
-        error = False
+        self.nb = None
+        self.pages = {}
 
-        #TODO: Need to bind the textbox with the data.
-
-        if error is False:
-            event.Skip()
+        if local:
+            self.local = local
+            self.local.view = self
         else:
-            if not wx.Validator_IsSilent():
-                wx.Bell()
+            self.local = FigureSettingController(parent, self, setting)
+
+        GeneralDialog.__init__(self,
+                               parent,
+                               title="Figure Setting",
+                               controller=controller,
+                               local=self.local,
+                               btn_flags=btn_flags,
+                               **kwargs)
+
+        self.btnsizer.AffirmativeButton.Bind(wx.EVT_BUTTON, self.local.button_ok_click)
+
+    def do_layout(self):
+        """
+        Draw layout
+
+        :return:
+        """
+        self.nb = wx.Notebook(self)
+
+        for index, setting in enumerate(self.local.settings):
+            # Create Panel.
+            self.pages[index] = FigureSettingPanel(self.nb, setting)
+
+            # Add to tab page.
+            self.nb.AddPage(self.pages[index], "Plot %d" % (index + 1))
+
+            # Sync Data
+            self.pages[index].sync_data()
+
+        return self.nb
 
 
 class FigureSettingController(ChildController):
@@ -119,9 +170,9 @@ class FigureSettingController(ChildController):
         :param view:
         :return:
         """
-        ChildController.__init__(self, parent, view)
+        ChildController.__init__(self, parent, view, settings)
 
-        self.setting = FigureSetting()
+        self.settings = settings
 
     def sync_data(self):
         """
@@ -129,15 +180,7 @@ class FigureSettingController(ChildController):
 
         :return:
         """
-        self.bind_objects['title'] = BindOjbect(self.setting.__dict__,
-                                                self.view.layouts['title'].textbox,
-                                                'title')
-        self.bind_objects['x_title'] = BindOjbect(self.setting.__dict__,
-                                                  self.view.layouts['x_title'].textbox,
-                                                  'x_title')
-        self.bind_objects['y_title'] = BindOjbect(self.setting.__dict__,
-                                                  self.view.layouts['y_title'].textbox,
-                                                  'y_title')
+        pass
 
     def do_layout(self):
         pass
@@ -147,3 +190,20 @@ class FigureSettingController(ChildController):
 
     def update_layout(self):
         pass
+
+    def button_ok_click(self, event):
+        """
+        Button ok click
+
+        :param event:
+        :return:
+        """
+        error = False
+
+        #TODO: Need to bind the textbox with the data.
+
+        if error is False:
+            event.Skip()
+        else:
+            if not wx.Validator_IsSilent():
+                wx.Bell()

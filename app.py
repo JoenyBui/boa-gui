@@ -179,7 +179,7 @@ if __name__ == '__main__':
 
     # Set Components.
     controller.set_key(MENU_BAR_KEY)
-    controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
+    controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS, size=(300, 400))
     controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
     controller.bind_all_methods()
 

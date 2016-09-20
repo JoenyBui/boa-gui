@@ -21,23 +21,19 @@ class Chart2dController(ChildController):
     Chart 2d controller.
 
     """
-    def __init__(self, parent, view, figure_setting=None, *args, **kwargs):
+    def __init__(self, parent, view, *args, **kwargs):
         """
         Constructor
 
         :param parent: parent controller
         :param view: local view
-        :param figure_setting:
+        :param *args:
+        :param **kwargs:
         :return:
         """
         ChildController.__init__(self, parent, view, *args, **kwargs)
 
-        self.color_set = palettable.cubehelix.classic_16.mpl_colors
-
-        if figure_setting:
-            self.figure_setting = figure_setting
-        else:
-            self.figure_setting = FigureSetting()
+        self.color_set = palettable.colorbrewer.qualitative.Dark2_7.mpl_colors
 
     def do_layout(self):
         """
@@ -45,7 +41,9 @@ class Chart2dController(ChildController):
 
         :return:
         """
-        self.view.axes = self.view.figure.add_subplot(111)
+        self.view.axes = []
+
+        self.view.axes.append(self.view.figure.add_subplot(111))
 
         # Grab project data.
         data = self.parent.project.data
@@ -53,28 +51,36 @@ class Chart2dController(ChildController):
         legend = []
         # Loop through the data set to have multiple plots.
         for i, (x, y) in enumerate(data):
-            self.view.axes.plot(x, y)
+            self.view.axes[0].plot(x, y)
 
             legend.append('Curve %d' % i)
 
+        self.view.axes[0].set_title('Title')
+        self.view.axes[0].set_ylabel('Y Title')
+        self.view.axes[0].set_xlabel('X Title')
+
         # Add legend
-        self.view.axes.legend(legend)
+        self.view.axes[0].legend(legend)
         # self.view.axes.set_prop_cycle(self.color_set)
 
         # Call the binding for custom toolbar figure.
         self.bind_toolbar_figure()
 
         # Update figure text.
-        self.update_text()
+        # self.update_text()
 
-    def update_text(self):
+    def update_text(self, settings):
         """
+        Update text
 
         :return:
         """
-        self.view.axes.set_title(self.figure_setting.title)
-        self.view.axes.set_ylabel(self.figure_setting.y_title)
-        self.view.axes.set_xlabel(self.figure_setting.x_title)
+
+        for index, setting in enumerate(settings):
+            self.view.axes[index].set_title(setting.title)
+            self.view.axes[index].set_ylabel(setting.y_title)
+            self.view.axes[index].set_xlabel(setting.x_title)
+
         self.view.figure.canvas.draw()
 
     def bind_toolbar_figure(self):
@@ -115,18 +121,44 @@ class Chart2dController(ChildController):
         """
         pass
 
+    def get_figure_settings(self):
+        """
+        Get the figure setting array for each plot.
+
+        :return:
+        """
+        fs_array = []
+
+        for axes in self.view.axes:
+            fs = FigureSetting()
+
+            fs.title = axes.get_title()
+            fs.x_title = axes.get_xlabel()
+            fs.y_title = axes.get_ylabel()
+
+            fs_array.append(fs)
+
+        return fs_array
+
     def on_custom_figure_setting(self, event):
         """
 
         :param event:
         :return:
         """
-        dlg = FigureSettingDialog(self.view, self, setting=self.figure_setting)
+        dlg = FigureSettingDialog(self.view, self, setting=self.get_figure_settings())
 
         if dlg.ShowModal() == wx.ID_OK:
-            self.figure_setting = dlg.local.setting
+            self.update_text(dlg.local.settings)
 
-            self.update_text()
+    def update_figure_settings(self, fs):
+        """
+
+        :param fs:
+        :return:
+        """
+        for setting in fs:
+            pass
 
     def on_click_save_xy_data(self, event):
         """
