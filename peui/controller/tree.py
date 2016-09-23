@@ -1,21 +1,31 @@
 import pecutil.folder
 
-from . import ChildController
+from . import PaneController
 
 __author__ = 'jbui'
 
 
-class TreeController(ChildController):
+class TreeController(PaneController):
     """
     Tree Controller
 
     """
     def __init__(self, parent, view, *args, **kwargs):
-        ChildController.__init__(self, parent, view)
+        """
+        Constructor
+
+        :param parent:
+        :param view:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        PaneController.__init__(self, parent, view, *args, **kwargs)
 
     def do_layout(self):
         """
-
+        Draw layout
+        
         :return:
         """
         directory = pecutil.folder.get_directory_structure(self.parent.project.project_folder)
@@ -24,13 +34,6 @@ class TreeController(ChildController):
         self.view.DeleteAllItems()
 
         self.view.add_root(directory)
-
-    def update_layout(self, state):
-        """
-
-        :return:
-        """
-        pass
 
     def refresh(self):
         """

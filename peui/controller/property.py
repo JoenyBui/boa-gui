@@ -1,11 +1,11 @@
 from wx import propgrid
 
-from . import BaseController
+from . import PaneController
 
 __author__ = 'jbui'
 
 
-class PropertyGridController(BaseController):
+class PropertyGridController(PaneController):
     """
     Property Grid Controller
 
@@ -19,10 +19,8 @@ class PropertyGridController(BaseController):
         :param kwargs:
         :return:
         """
-        BaseController.__init__(self)
+        PaneController.__init__(self, parent, view, *args, **kwargs)
 
-        self.parent = parent
-        self.view = view
         self.cells = dict()
 
     def do_layout(self):
@@ -42,13 +40,6 @@ class PropertyGridController(BaseController):
         self.cells['author'] = self.view.add_string_property('Author Name', 'author', self.parent.project.author, 'Author Name')
         self.cells['project_folder'] = self.view.add_file_property('Project Path', 'project_folder', self.parent.project.project_folder, 'Project Folder')
 
-    def update_layout(self, state):
-        """
-
-        :return:
-        """
-        pass
-
     def refresh(self):
         """
 
@@ -67,4 +58,3 @@ class PropertyGridController(BaseController):
 
     def clear_control(self):
         pass
-

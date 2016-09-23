@@ -7,6 +7,7 @@ from ..model.project import Project
 from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
 from ..form.about import AboutDialog
 from ..form.setting import BaseSettingDialog
+from ..config import EVT_CHANGE_PROJECT, STATE_OPEN_PROJECT, STATE_CLOSE_PROJECT, STATE_NEW_PROJECT, STATE_SAVE_PROJECT, STATE_OUTPUT_DOC, EVT_EMPTY_TRASH
 
 __author__ = 'jbui'
 
@@ -61,13 +62,16 @@ class DlgController(object):
         dlg = NewProjectDialog(self.frame, self.parent.setting)
 
         if dlg.ShowModal():
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_CLOSE_PROJECT)
+            pub.sendMessage(EVT_EMPTY_TRASH)
+
             self.parent.new_project(dlg.get_project())
 
             # Reset file path
             self.parent.file_path = None
 
             # Broadcast new project dialog.
-            pub.sendMessage(self.parent.evt_clear_controls)
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_NEW_PROJECT)
 
         dlg.Destroy()
 
@@ -81,6 +85,9 @@ class DlgController(object):
         dlg = OpenProjectDialog(self.frame)
 
         if dlg.ShowModal() == wx.ID_OK:
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_CLOSE_PROJECT)
+            pub.sendMessage(EVT_EMPTY_TRASH)
+
             # Save the default file path
             self.parent.file_path = dlg.GetPath()
 
@@ -91,7 +98,8 @@ class DlgController(object):
 
             self.parent.open_project(self.parent.file_path)
 
-            pub.sendMessage(self.parent.evt_open_project)
+            # Send Open Project
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_OPEN_PROJECT)
 
         dlg.Destroy()
 
@@ -104,6 +112,9 @@ class DlgController(object):
         """
         if self.parent.file_path:
             self.parent.save_project(self.parent.file_path)
+
+            # Save Project
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_SAVE_PROJECT)
         else:
             self.save_as_project_dialog(event=event)
 
@@ -123,6 +134,9 @@ class DlgController(object):
             # Override the save file
             self.parent.save_project(self.parent.file_path)
 
+            # Save Project As
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_SAVE_PROJECT)
+
         dlg.Destroy()
 
     def output_project_word_doc(self, event=None):
@@ -138,6 +152,8 @@ class DlgController(object):
             path = dlg.GetPath()
 
             self.parent.output_project(path)
+
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_OUTPUT_DOC)
 
         dlg.Destroy()
 
@@ -183,7 +199,12 @@ class DlgController(object):
                                    wx.YES_NO)
 
             if dlg.ShowModal() == wx.ID_YES:
-                self.parent.refresh_clear_project()
+                self.parent.project = None
+
+                # Close Project
+                pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_CLOSE_PROJECT)
 
         else:
-            self.parent.refresh_clear_project()
+            pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_CLOSE_PROJECT)
+
+        pub.sendMessage(EVT_EMPTY_TRASH)

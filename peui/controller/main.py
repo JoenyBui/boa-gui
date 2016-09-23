@@ -56,6 +56,7 @@ class MainController(object):
 
         self.toolbars = []
         self.childs = []        # Controller for specific views, dlgs, etc...
+        self.trash = []
 
         self.master_key = master_key
 
@@ -63,10 +64,21 @@ class MainController(object):
 
         self.subscribe_methods()
 
-        pub.subscribe(self.update_state, EVT_CHANGE_STATE)
+    def update_project_state(self, state):
+        """
+        Update the project state.
 
-    def update_state(self, state):
-        pass
+        :param state:
+        :return:
+        """
+        if state == STATE_OPEN_PROJECT:
+            self.update_open_project()
+
+        elif state == STATE_NEW_PROJECT:
+            self.update_new_project()
+
+        elif state == STATE_CLOSE_PROJECT:
+            self.update_clear_project()
 
     def bind_all_methods(self):
         """
@@ -81,20 +93,22 @@ class MainController(object):
     def initialize_notebook(self, frame, size=(300, 400)):
         """
         Add notebook
+
         :param frame:
+        :param size:
         :return:
         """
         self.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS, size=size)
 
         self.frame.add_pane(self.notebook, wx.CENTER, 'Notebook')
 
-    @property
-    def evt_new_project(self):
-        return 'EVT_NEW_PROJECT'
-
-    @property
-    def evt_open_project(self):
-        return 'EVT_OPEN_PROJECT'
+    # @property
+    # def evt_new_project(self):
+    #     return 'EVT_NEW_PROJECT'
+    #
+    # @property
+    # def evt_open_project(self):
+    #     return 'EVT_OPEN_PROJECT'
 
     @property
     def evt_refresh_view(self):
@@ -142,14 +156,21 @@ class MainController(object):
 
         :return:
         """
-        pub.subscribe(self.new_project, self.evt_new_project)
+
+        pub.subscribe(self.update_project_state, EVT_CHANGE_PROJECT)
+        pub.subscribe(self.update_status_bar, EVT_UPDATE_STATUS)
+        pub.subscribe(self.update_frame_title, EVT_UPDATE_TITLE)
+
+        # pub.subscribe(self.new_project, self.evt_new_project)
 
         # pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
-        pub.subscribe(self.refresh_open_project, self.evt_open_project)
+        # pub.subscribe(self.refresh_open_project, self.evt_open_project)
         pub.subscribe(self.on_pane_close, self.evt_pane_close)
         pub.subscribe(self.on_page_close, self.evt_page_close)
         pub.subscribe(self.on_page_closed, self.evt_page_closed)
+
+        pub.subscribe(self.empty_trash, EVT_EMPTY_TRASH)
 
     def bind_methods(self):
         """
@@ -195,7 +216,11 @@ class MainController(object):
         self.frame.Bind(aui.EVT_AUI_PANE_CLOSE, self.bind_pane_close)
 
     def bind_menu_bars(self):
+        """
+        Bind menu bars
 
+        :return:
+        """
         for id, menu in self.frame.menu_bar.menus.items():
             if self.master_key.get(id):
                 if self.master_key[id].get('method'):
@@ -248,6 +273,7 @@ class MainController(object):
 
     def bind_pane_open(self, event):
         """
+        Bind open pane.
 
         :param event:
         :return:
@@ -388,6 +414,11 @@ class MainController(object):
             menu.Check(False)
 
     def on_page_close(self, id=None):
+        """
+
+        :param id:
+        :return:
+        """
         menu = self.frame.menu_bar.menus.get(id)
         if menu:
             menu.Check(False)
@@ -395,6 +426,11 @@ class MainController(object):
         del self.windows[id]
 
     def on_page_closed(self, id=None):
+        """
+
+        :param id:
+        :return:
+        """
         menu = self.frame.menu_bar.menus.get(id)
         if menu:
             menu.Check(False)
@@ -412,13 +448,19 @@ class MainController(object):
         # Move up the list
         self.filehistory.AddFileToHistory(self.file_path)
 
+        # Close existing project first
+        pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_CLOSE_PROJECT)
+        pub.sendMessage(EVT_EMPTY_TRASH)
+
         # Do whatever you want with the file path...
         self.open_project(self.file_path)
 
-        pub.sendMessage(self.evt_open_project)
+        # Open Project
+        pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_OPEN_PROJECT)
 
     def set_ribbon_bar(self, key):
         """
+        Set Ribbon Bar
 
         :param key:
         :return:
@@ -474,16 +516,24 @@ class MainController(object):
         """
         self.project.load(path)
 
-    def refresh_open_project(self):
+    def update_new_project(self):
         """
-        Refresh open project
+        Update new project.
 
         :return:
         """
-        self.refresh_main_frame_title()
-        self.refresh_clear_project()
+        pub.sendMessage(EVT_UPDATE_TITLE, text='*New Project*')
+        pub.sendMessage(EVT_UPDATE_STATUS, text='')
 
-    def refresh_clear_project(self):
+    def update_open_project(self):
+        """
+        Update open project views
+
+        :return:
+        """
+        pub.sendMessage(EVT_UPDATE_TITLE, text=self.file_path)
+
+    def update_clear_project(self):
         """
         Refresh clear project
 
@@ -491,23 +541,17 @@ class MainController(object):
         """
         pub.sendMessage(EVT_CHANGE_STATE, state=STATE_CLOSE_PROJECT)
 
-        self.refresh_delete_controls()
+        self.childs = []
 
-        pub.sendMessage(EVT_CHANGE_STATE, state=STATE_NEW_PROJECT)
-        #
-        # self.refresh_clear_controls()
-        # self.refresh_clear_panels()
-
-    def refresh_main_frame_title(self):
+    def update_frame_title(self, text):
         """
         Refresh the main title with the project.
 
         :return:
         """
-        if self.frame and self.project:
-            self.frame.SetTitle(self.project.name)
+        self.frame.SetTitle(text)
 
-    def refresh_status_bar(self, text):
+    def update_status_bar(self, text):
         """
         Refresh the status bar.
 
@@ -516,47 +560,6 @@ class MainController(object):
         if self.frame:
             if self.frame.status_bar:
                 self.frame.status_bar.SetStatusText(text, 0)
-
-    def refresh_delete_controls(self):
-        """
-        Refresh delete controls
-
-        """
-        # for child in self.childs:
-        #     child.delete_control()
-
-        self.childs = []
-
-
-    # def refresh_clear_panels(self):
-    #     """
-    #     Refresh clear panels
-    #
-    #     :return:
-    #     """
-    #     for key in self.windows.keys():
-    #         pane = self.windows[key]
-    #
-    #         if pane.__dict__.get('controller'):
-    #             self.delete_pane(key)
-    #
-    #             del self.windows[key]
-    #
-    # def refresh_clear_controls(self):
-    #     """
-    #     Clear controls and remove tab.
-    #
-    #     :return:
-    #     """
-    #     for child in self.childs:
-    #         if hasattr(child, 'clear_control'):
-    #             child.clear_control()
-    #
-    #     for index in range(0, self.notebook.GetPageCount()):
-    #         # Loop and remove all the pages inside the viewer.
-    #         self.notebook.DeletePage(0)
-    #
-    #     self.childs = []
 
     def refresh(self):
         """
@@ -637,3 +640,15 @@ class MainController(object):
 
     def on_click_paste(self, event):
         pass
+
+    def empty_trash(self):
+        """
+        Empty trash of the controls.
+
+        :return:
+        """
+        for item in self.trash:
+            if item in self.childs:
+                self.childs.remove(item)
+
+        self.trash = []

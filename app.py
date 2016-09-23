@@ -220,13 +220,20 @@ if __name__ == '__main__':
     )
 
     controller.add_pane(
-        Console(frame, controller),
+        Console(frame, controller, None),
         cfg.METHOD_WINDOW_CONSOLE,
         aui.AuiPaneInfo()
             .Name(cfg.METHOD_WINDOW_CONSOLE)
             .Caption('Output')
             .Bottom(),
         'Output'
+    )
+
+    controller.add_page(
+        Chart2d(frame, controller, None, id=cfg.METHOD_WINDOW_CHART),
+        wx.NewId(),
+        'Chart',
+        True
     )
 
     controller.add_page(
@@ -237,15 +244,8 @@ if __name__ == '__main__':
     )
 
     controller.add_page(
-        Chart2d(frame, controller, None, id=cfg.METHOD_WINDOW_CHART),
-        cfg.METHOD_WINDOW_CHART,
-        'Chart',
-        True
-    )
-
-    controller.add_page(
         Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data, id=cfg.METHOD_WINDOW_CHART), figsize=(1, 10)),
-        cfg.METHOD_WINDOW_CHART,
+        wx.NewId(),
         'Multi-Chart',
         True
     )

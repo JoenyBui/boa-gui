@@ -3,7 +3,9 @@ import logging
 import wx
 import wx.grid
 
-from . import ChildController
+from . import TabPageController
+
+from ..config import STATE_CLOSE_PROJECT
 
 __author__ = 'jbui'
 
@@ -112,7 +114,7 @@ class GeneralRowTable(wx.grid.PyGridTableBase):
         self.data[row][col] = value
 
 
-class XlsxController(ChildController):
+class XlsxController(TabPageController):
     """
     Spreadsheet Controller
 
@@ -124,7 +126,7 @@ class XlsxController(ChildController):
         :param view: local view
         :return:
         """
-        ChildController.__init__(self, parent, view, *args, **kwargs)
+        TabPageController.__init__(self, parent, view, *args, **kwargs)
 
         self.table = kwargs.get('table', GeneralRowTable())
         self.data = data
@@ -150,7 +152,24 @@ class XlsxController(ChildController):
 
         :return:
         """
-        self.sync_data()
+        if state == STATE_CLOSE_PROJECT:
+            self.delete_control()
+        else:
+            self.sync_data()
+
+    # def delete_control(self):
+    #     """
+    #     Delete Control
+    #
+    #     """
+    #
+    #     # Remove from the dictionary
+    #     if self.parent.windows:
+    #         ctrl, idx = self.parent.notebook.FindTab(self.view)
+    #
+    #         self.parent.delete_page(idx)
+    #
+    #         del self.parent.windows[self.key]
 
     def refresh(self):
         """

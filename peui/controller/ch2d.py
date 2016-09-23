@@ -14,12 +14,13 @@ from ..chart.dlg import FigureSettingDialog, FigureSetting
 from ..form.file import SaveXYDialog
 from ..chart.dplot import Dplot, DplotCurve
 
-from . import ChildController
+from . import TabPageController
+from ..config import STATE_CLOSE_PROJECT
 
 __author__ = 'jbui'
 
 
-class Chart2dController(ChildController):
+class Chart2dController(TabPageController):
     """
     Chart 2d controller.
 
@@ -34,7 +35,7 @@ class Chart2dController(ChildController):
         :param **kwargs:
         :return:
         """
-        ChildController.__init__(self, parent, view, *args, **kwargs)
+        TabPageController.__init__(self, parent, view, *args, **kwargs)
 
         self.data = None
         self.color_set = palettable.colorbrewer.qualitative.Dark2_7.mpl_colors
@@ -116,8 +117,12 @@ class Chart2dController(ChildController):
         elif state < self.state:
             self.delete_control()
 
+        else:
+            TabPageController.update_layout(self, state)
+
     def refresh(self):
         """
+        Refresh
 
         :return:
         """
@@ -125,6 +130,7 @@ class Chart2dController(ChildController):
 
     def sync_data(self):
         """
+        Sync data
 
         :return:
         """
@@ -138,18 +144,19 @@ class Chart2dController(ChildController):
         for axes in self.view.axes:
             axes.cla()
 
-    def delete_control(self):
-        """
-        Delete Control
-
-        """
-        # Remove from the dictionary
-        if self.parent.windows:
-            ctrl, idx = self.parent.notebook.FindTab(self.view)
-
-            self.parent.delete_page(idx)
-
-            del self.parent.windows[self.key]
+    # def delete_control(self):
+    #     """
+    #     Delete Control
+    #
+    #     """
+    #
+    #     # Remove from the dictionary
+    #     if self.parent.windows:
+    #         ctrl, idx = self.parent.notebook.FindTab(self.view)
+    #
+    #         self.parent.delete_page(idx)
+    #
+    #         del self.parent.windows[self.key]
 
     def get_figure_settings(self):
         """
@@ -485,7 +492,6 @@ class Chart2dController(ChildController):
                 if self.figure_settings[i1].legend:
                     self.view.axes[i1].legend(self.figure_settings[i1].legend)
 
-
             self.view.figure.canvas.draw()
 
     def plot_axis(self, axes):
@@ -520,7 +526,6 @@ class Chart2dController(ChildController):
         diff = (max_y - min_y)*self.margin
 
         axes.set_ylim(bottom=min_y - diff/2.0, top=max_y + diff/2.0)
-
 
 
 class MultiChart2dController(Chart2dController):

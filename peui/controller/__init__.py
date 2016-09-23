@@ -4,6 +4,8 @@ from ..config import EVT_CHANGE_STATE
 import wx
 from wx.lib.pubsub import pub
 
+from ..config import STATE_CLOSE_PROJECT
+
 __author__ = 'jbui'
 
 
@@ -98,14 +100,14 @@ class ChildController(BaseController):
         """
         pass
 
-    @abstractmethod
     def update_layout(self, state):
         """
         Update layout based off of change state.
 
         :return:
         """
-        pass
+        if state == STATE_CLOSE_PROJECT:
+            self.delete_control()
 
     @abstractmethod
     def refresh(self):
@@ -115,12 +117,78 @@ class ChildController(BaseController):
         """
         pass
 
+    @abstractmethod
+    def delete_control(self):
+        """
+        Remove the pane/page, delete the pointer in parent windows, and than remove self from child.
+
+        """
+        pass
+
+
+class TabPageController(ChildController):
+    """
+    Tab Page Controller
+
+    """
+    def __init__(self, parent, view, *args, **kwargs):
+        """
+
+        :param parent:
+        :param view:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        ChildController.__init__(self, parent, view, *args, **kwargs)
+
+    def delete_control(self):
+        """
+        Remove the page, delete the pointer in the parent window.
+
+        :return:
+        """
+        if self.parent.windows:
+            # Find tab.
+            ctrl, idx = self.parent.notebook.FindTab(self.view)
+
+            # Delete page index.
+            self.parent.delete_page(idx)
+
+            # Delete parent windows.
+            del self.parent.windows[self.key]
+
+            # Add to trash.
+            self.parent.trash.append(self)
+
+
+class PaneController(ChildController):
+    """
+    Pane Controller
+
+    """
+    def __init__(self, parent, view, *args, **kwargs):
+        """
+
+        :param parent:
+        :param view:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        ChildController.__init__(self, parent, view, *args, **kwargs)
+
     def delete_control(self):
         """
         Remove the pane, delete the pointer in parent windows, and than remove self from child.
 
         """
         if self.parent.windows:
+            # Delete pane from frame manager.
             self.parent.delete_pane(self.key)
 
+            # Delete parent windows.
             del self.parent.windows[self.key]
+
+            # Add to trash.
+            self.parent.trash.append(self)

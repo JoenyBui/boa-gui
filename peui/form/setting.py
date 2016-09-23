@@ -225,3 +225,5 @@ class ControllerBaseDialog(ChildController):
         """
         pass
 
+    def delete_control(self):
+        pass
