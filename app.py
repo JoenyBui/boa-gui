@@ -188,6 +188,17 @@ if __name__ == '__main__':
                     (np.arange(0.0, 3.0, 0.04), np.cos(1.5 * np.pi * np.arange(0.0, 3.0, 0.04))),
                     (np.arange(0.0, 2.5, 0.005), np.sin(0.5 * np.pi * np.arange(0.0, 2.5, 0.005)))]
 
+    controller.add_toolbar(
+        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
+        cfg.METHOD_TOOLBAR_STANDARD,
+        aui.AuiPaneInfo()
+            .Name('std_tb')
+            .Caption('Standard Toolbar')
+            .ToolbarPane()
+            .Top()
+            .Gripper()
+    )
+
     # Tree Panel.
     controller.add_pane(
         ProjectTree(frame, controller, project),
@@ -216,17 +227,6 @@ if __name__ == '__main__':
             .Caption('Output')
             .Bottom(),
         'Output'
-    )
-
-    controller.add_pane(
-        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
-        cfg.METHOD_TOOLBAR_STANDARD,
-        aui.AuiPaneInfo()
-            .Name('std_tb')
-            .Caption('Standard Toolbar')
-            .ToolbarPane()
-            .Top()
-            .Gripper()
     )
 
     controller.add_page(

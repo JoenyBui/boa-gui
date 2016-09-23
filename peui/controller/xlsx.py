@@ -1,3 +1,5 @@
+import logging
+
 import wx
 import wx.grid
 
@@ -53,7 +55,11 @@ class GeneralColumnTable(wx.grid.PyGridTableBase):
             return ''
 
     def SetValue(self, row, col, value):
-        self.data[col][row] = value
+        try:
+            self.data[col][row] = value
+        except Exception as e:
+            logging.error('GeneralColumnTable->SetValue error')
+            logging.error(str(e))
 
 
 class GeneralRowTable(wx.grid.PyGridTableBase):
@@ -131,18 +137,20 @@ class XlsxController(ChildController):
 
         :return:
         """
-        self.table.data = self.data
-        self.table.row_labels = self.row_label
-        self.table.col_labels = self.col_label
-
-        self.view.SetTable(self.table)
+        # self.table.data = self.data
+        # self.table.row_labels = self.row_label
+        # self.table.col_labels = self.col_label
+        #
+        # self.view.SetTable(self.table)
+        #
+        pass
 
     def update_layout(self, state):
         """
 
         :return:
         """
-        pass
+        self.sync_data()
 
     def refresh(self):
         """
@@ -156,4 +164,8 @@ class XlsxController(ChildController):
 
         :return:
         """
-        pass
+        self.table.data = self.data
+        self.table.row_labels = self.row_label
+        self.table.col_labels = self.col_label
+
+        self.view.SetTable(self.table, True)

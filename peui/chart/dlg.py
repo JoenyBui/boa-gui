@@ -29,6 +29,9 @@ class FigureSetting(object):
         self.y_title = kwargs.get('y_title', 'Y Title')
         self.y_subtitle = kwargs.get('y_subtitle', '')
 
+        self.linewidth = kwargs.get('linewidth', 2)
+        self.legend = kwargs.get('legend', [])
+
 
 class FigureSettingPanel(wx.Panel):
     """

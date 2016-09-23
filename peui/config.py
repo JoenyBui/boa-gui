@@ -21,8 +21,9 @@ ICONS = {
 EVT_CHANGE_STATE = 'EVT_CHANGE_STATE'
 
 # States are used when we need to broadcast projects state.
-STATE_OPEN_PROJECT = 0
-STATE_CLOSE_PROJECT = 1
+STATE_CLOSE_PROJECT = -1
+STATE_NEW_PROJECT = 0
+STATE_OPEN_PROJECT = 1
 
 # There are method keys that corresponds to a specific controller action from the project.
 METHOD_SEPARATOR = wx.ID_SEPARATOR

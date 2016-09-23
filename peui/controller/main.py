@@ -54,6 +54,7 @@ class MainController(object):
         self.dlg_ctrl = kwargs.get('dlg_ctrl', DlgController(self))
         self.view_ctrl = kwargs.get('view_ctrl', ViewController(self))
 
+        self.toolbars = []
         self.childs = []        # Controller for specific views, dlgs, etc...
 
         self.master_key = master_key
@@ -61,6 +62,11 @@ class MainController(object):
         self.uuid = str(uuid.uuid4())
 
         self.subscribe_methods()
+
+        pub.subscribe(self.update_state, EVT_CHANGE_STATE)
+
+    def update_state(self, state):
+        pass
 
     def bind_all_methods(self):
         """
@@ -137,7 +143,8 @@ class MainController(object):
         :return:
         """
         pub.subscribe(self.new_project, self.evt_new_project)
-        pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
+
+        # pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
         pub.subscribe(self.refresh_open_project, self.evt_open_project)
         pub.subscribe(self.on_pane_close, self.evt_pane_close)
@@ -248,16 +255,42 @@ class MainController(object):
         name = event.GetPane().name
 
     def delete_pane(self, key):
-        pane = self.windows[key]
+        """
+        Delete Pane given key
 
+        :param key:
+        """
         # Detach pane
-        self.frame.mgr.DetachPane(pane)
+        self.frame.mgr.DetachPane(self.windows[key])
 
         # Destroy
-        pane.Destroy()
+        self.windows[key].Destroy()
 
         # Update pane
         self.frame.mgr.Update()
+
+    def delete_page(self, page_index):
+        """
+        Delete notebook page
+
+        :param page_index:
+        """
+        self.notebook.DeletePage(page_index)
+
+    def add_toolbar(self, toolbar, key, area):
+        """
+        Add toolbar to the manager frame.
+
+        :param toolbar:
+        :param key:
+        :param area:
+        """
+        self.windows[key] = toolbar
+
+        # Add panel to model.
+        pane = self.frame.add_pane(toolbar, area, None)
+
+        self.toolbars.append(toolbar.controller)
 
     def add_pane(self, panel, key, area=None, name=None):
         """
@@ -277,6 +310,7 @@ class MainController(object):
         # If has controller, add to child array.
         if panel.__dict__.get('controller'):
             self.childs.append(panel.controller)
+            panel.controller.key = key
 
         # If have menu item, then enable/check.
         menu_item = self.frame.menu_bar.menus.get(key)
@@ -307,6 +341,7 @@ class MainController(object):
 
         if page.__dict__.get('controller'):
             self.childs.append(page.controller)
+            page.controller.key = key
 
         # If have menu item, then enable/check.
         menu_item = self.frame.menu_bar.menus.get(key)
@@ -456,8 +491,12 @@ class MainController(object):
         """
         pub.sendMessage(EVT_CHANGE_STATE, state=STATE_CLOSE_PROJECT)
 
-        self.refresh_clear_controls()
-        self.refresh_clear_panels()
+        self.refresh_delete_controls()
+
+        pub.sendMessage(EVT_CHANGE_STATE, state=STATE_NEW_PROJECT)
+        #
+        # self.refresh_clear_controls()
+        # self.refresh_clear_panels()
 
     def refresh_main_frame_title(self):
         """
@@ -478,34 +517,46 @@ class MainController(object):
             if self.frame.status_bar:
                 self.frame.status_bar.SetStatusText(text, 0)
 
-    def refresh_clear_panels(self):
+    def refresh_delete_controls(self):
         """
+        Refresh delete controls
 
-        :return:
         """
-        for key in self.windows.keys():
-            pane = self.windows[key]
-
-            if pane.__dict__.get('controller'):
-                self.delete_pane(key)
-
-                del self.windows[key]
-
-    def refresh_clear_controls(self):
-        """
-        Clear controls and remove tab.
-
-        :return:
-        """
-        for child in self.childs:
-            if hasattr(child, 'clear_control'):
-                child.clear_control()
-
-        for index in range(0, self.notebook.GetPageCount()):
-            # Loop and remove all the pages inside the viewer.
-            self.notebook.DeletePage(0)
+        # for child in self.childs:
+        #     child.delete_control()
 
         self.childs = []
+
+
+    # def refresh_clear_panels(self):
+    #     """
+    #     Refresh clear panels
+    #
+    #     :return:
+    #     """
+    #     for key in self.windows.keys():
+    #         pane = self.windows[key]
+    #
+    #         if pane.__dict__.get('controller'):
+    #             self.delete_pane(key)
+    #
+    #             del self.windows[key]
+    #
+    # def refresh_clear_controls(self):
+    #     """
+    #     Clear controls and remove tab.
+    #
+    #     :return:
+    #     """
+    #     for child in self.childs:
+    #         if hasattr(child, 'clear_control'):
+    #             child.clear_control()
+    #
+    #     for index in range(0, self.notebook.GetPageCount()):
+    #         # Loop and remove all the pages inside the viewer.
+    #         self.notebook.DeletePage(0)
+    #
+    #     self.childs = []
 
     def refresh(self):
         """

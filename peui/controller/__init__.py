@@ -28,8 +28,10 @@ class BaseController(object):
 
     @abstractmethod
     def sync_data(self):
-        ""
+        """
+        Sync data with the view
 
+        """
         pass
 
     def register_two_way_bind(self, view_ctrl, view_message, view_function,
@@ -83,12 +85,14 @@ class ChildController(BaseController):
 
         self.parent = parent
         self.view = view
+        self.key = None
 
         pub.subscribe(self.update_layout, EVT_CHANGE_STATE)
 
     @abstractmethod
     def do_layout(self):
         """
+        Draw the layout
 
         :return:
         """
@@ -111,4 +115,12 @@ class ChildController(BaseController):
         """
         pass
 
+    def delete_control(self):
+        """
+        Remove the pane, delete the pointer in parent windows, and than remove self from child.
 
+        """
+        if self.parent.windows:
+            self.parent.delete_pane(self.key)
+
+            del self.parent.windows[self.key]
