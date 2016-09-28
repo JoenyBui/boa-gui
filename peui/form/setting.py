@@ -211,7 +211,7 @@ class ControllerBaseDialog(ChildController):
         self.parent.setting.ekey = self.view.layouts['ekey'].get_value()
         self.parent.setting.efile = self.view.layouts['efile'].get_value()
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:
@@ -225,3 +225,5 @@ class ControllerBaseDialog(ChildController):
         """
         pass
 
+    def delete_control(self):
+        pass

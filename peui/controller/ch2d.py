@@ -7,16 +7,20 @@ import numpy as np
 
 import palettable
 
+from pecutil.threads import threaded
+from pecutil.general import check_empty
+
 from ..chart.dlg import FigureSettingDialog, FigureSetting
 from ..form.file import SaveXYDialog
 from ..chart.dplot import Dplot, DplotCurve
 
-from . import ChildController
+from . import TabPageController
+from ..config import STATE_CLOSE_PROJECT
 
 __author__ = 'jbui'
 
 
-class Chart2dController(ChildController):
+class Chart2dController(TabPageController):
     """
     Chart 2d controller.
 
@@ -31,9 +35,13 @@ class Chart2dController(ChildController):
         :param **kwargs:
         :return:
         """
-        ChildController.__init__(self, parent, view, *args, **kwargs)
+        TabPageController.__init__(self, parent, view, *args, **kwargs)
 
+        self.data = None
         self.color_set = palettable.colorbrewer.qualitative.Dark2_7.mpl_colors
+        self.figure_settings = []
+
+        self.margin = 0.1
 
     def do_layout(self):
         """
@@ -73,6 +81,7 @@ class Chart2dController(ChildController):
         """
         Update text
 
+        :param settings: update the title axes
         :return:
         """
 
@@ -85,6 +94,7 @@ class Chart2dController(ChildController):
 
     def bind_toolbar_figure(self):
         """
+        Bind Toolbar Figure
 
         :return:
         """
@@ -93,15 +103,26 @@ class Chart2dController(ChildController):
         tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
         tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
+        Update the layout given the state.
 
         :return:
         """
-        pass
+        if self.state == state:
+            self.clear_control()
+
+            self.view.figure.canvas.draw()
+
+        elif state < self.state:
+            self.delete_control()
+
+        else:
+            TabPageController.update_layout(self, state)
 
     def refresh(self):
         """
+        Refresh
 
         :return:
         """
@@ -109,6 +130,7 @@ class Chart2dController(ChildController):
 
     def sync_data(self):
         """
+        Sync data
 
         :return:
         """
@@ -116,10 +138,25 @@ class Chart2dController(ChildController):
 
     def clear_control(self):
         """
-        Clear the control.
+        Clear the axis control.
 
         """
-        pass
+        for axes in self.view.axes:
+            axes.cla()
+
+    # def delete_control(self):
+    #     """
+    #     Delete Control
+    #
+    #     """
+    #
+    #     # Remove from the dictionary
+    #     if self.parent.windows:
+    #         ctrl, idx = self.parent.notebook.FindTab(self.view)
+    #
+    #         self.parent.delete_page(idx)
+    #
+    #         del self.parent.windows[self.key]
 
     def get_figure_settings(self):
         """
@@ -290,6 +327,16 @@ class Chart2dController(ChildController):
 
             print(str(e))
 
+    def add_figure_setting(self, *args, **kwargs):
+        """
+        Add figure setting.
+
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+        setting = FigureSetting(*args, **kwargs)
+        self.figure_settings.append(setting)
+
     def plot(self,
              index,
              xdata,
@@ -362,13 +409,131 @@ class Chart2dController(ChildController):
 
         pass
 
+    @threaded
+    def plot_data(self):
+        """
+        Plot data
+
+        :return:
+        """
+        if self.data:
+            for i1, data in enumerate(self.data):
+                min_x = max_x = min_y = max_y = 0.0
+
+                for i2, (x, y) in enumerate(data):
+
+                    self.view.axes[i1].plot(x, y,
+                                            linewidth=self.figure_settings[i1].linewidth,
+                                            color=self.color_set[i2])
+
+                    if check_empty(x):
+                        if min_x > min(x):
+                            min_x = min(x)
+
+                        if max_x < max(x):
+                            max_x = max(x)
+
+                    if check_empty(y):
+                        if min_y > min(y):
+                            min_y = min(y)
+
+                        if max_y < max(y):
+                            max_y = max(y)
+
+                self.set_xlimits(self.view.axes[i1], min_x, max_x)
+                self.set_ylimits(self.view.axes[i1], min_y, max_y)
+
+                if self.figure_settings[i1].legend:
+                    self.view.axes[i1].legend(self.figure_settings[i1].legend)
+
+                self.plot_axis(self.view.axes[i1])
+
+            self.view.figure.canvas.draw()
+
+    @threaded
+    def update_data(self):
+        """
+        Update data
+
+        """
+
+        if self.data:
+
+            # Clear Control
+            for i1, data in enumerate(self.data):
+                axes = self.view.axes[i1]
+
+                # Initialize min/max
+                min_x = max_x = min_y = max_y = 0.0
+
+                lines = axes.get_lines()
+                for i2, (x, y) in enumerate(data):
+
+                    line = lines[i2]
+                    line.set_data(x, y)
+
+                    if check_empty(x):
+                        if min_x > min(x):
+                            min_x = min(x)
+
+                        if max_x < max(x):
+                            max_x = max(x)
+
+                    if check_empty(y):
+                        if min_y > min(y):
+                            min_y = min(y)
+
+                        if max_y < max(y):
+                            max_y = max(y)
+
+                self.set_xlimits(axes, min_x, max_x)
+                self.set_ylimits(axes, min_y, max_y)
+
+                if self.figure_settings[i1].legend:
+                    self.view.axes[i1].legend(self.figure_settings[i1].legend)
+
+            self.view.figure.canvas.draw()
+
+    def plot_axis(self, axes):
+        """
+        Plot horizontal and vertical axis.
+
+        :param axes: Axes2d
+        """
+        axes.axhline(0, color='black', linewidth=1)
+        axes.axvline(0, color='black', linewidth=1)
+
+    def set_xlimits(self, axes, min_x, max_x):
+        """
+        Set x limits range.
+
+        :param axes: Axes2d
+        :param min_x: minimum x value
+        :param max_x: maximum x value
+        """
+        diff = (max_x - min_x)*self.margin
+
+        axes.set_xlim(left=min_x - diff/2.0, right=max_x + diff/2.0)
+
+    def set_ylimits(self, axes, min_y, max_y):
+        """
+        Set y limits range.
+
+        :param axes: Axes2d
+        :param min_y: minimum y value
+        :param max_y: maximum y value
+        """
+        diff = (max_y - min_y)*self.margin
+
+        axes.set_ylim(bottom=min_y - diff/2.0, top=max_y + diff/2.0)
+
 
 class MultiChart2dController(Chart2dController):
     """
     Multi Graph Chart 2D
 
     """
-    def __init__(self, parent, view, data, figure_setting=None, *args, **kwargs):
+    def __init__(self, parent, view, data=None, figure_setting=None, *args, **kwargs):
         """
         Constructor
 

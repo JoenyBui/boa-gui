@@ -57,15 +57,13 @@ class Chart2d(wx.ScrolledWindow):
 
         self.SetScrollRate(5, 5)
 
-        # wx.Panel.__init__(self, parent)
-
         if local:
             self.controller = local
             self.controller.view = self
         else:
             self.controller = Chart2dController(controller, self, **kwargs)
 
-        self.axes = None
+        self.axes = []
         # self.axes = self.figure.add_subplot(*args, **kwargs)
         self.canvas = FigureCanvas(self, -1, self.figure)
 

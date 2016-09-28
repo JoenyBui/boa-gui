@@ -178,9 +178,8 @@ if __name__ == '__main__':
                        style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
 
     # Set Components.
+    controller.initialize_notebook(frame)
     controller.set_key(MENU_BAR_KEY)
-    controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS, size=(300, 400))
-    controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
     controller.bind_all_methods()
 
     # Add test data
@@ -188,6 +187,17 @@ if __name__ == '__main__':
                     (np.arange(0.0, 1.5, 0.02), np.cos(2 * np.pi * np.arange(0.0, 1.5, 0.02))),
                     (np.arange(0.0, 3.0, 0.04), np.cos(1.5 * np.pi * np.arange(0.0, 3.0, 0.04))),
                     (np.arange(0.0, 2.5, 0.005), np.sin(0.5 * np.pi * np.arange(0.0, 2.5, 0.005)))]
+
+    controller.add_toolbar(
+        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
+        cfg.METHOD_TOOLBAR_STANDARD,
+        aui.AuiPaneInfo()
+            .Name('std_tb')
+            .Caption('Standard Toolbar')
+            .ToolbarPane()
+            .Top()
+            .Gripper()
+    )
 
     # Tree Panel.
     controller.add_pane(
@@ -210,7 +220,7 @@ if __name__ == '__main__':
     )
 
     controller.add_pane(
-        Console(frame, controller),
+        Console(frame, controller, None),
         cfg.METHOD_WINDOW_CONSOLE,
         aui.AuiPaneInfo()
             .Name(cfg.METHOD_WINDOW_CONSOLE)
@@ -219,15 +229,11 @@ if __name__ == '__main__':
         'Output'
     )
 
-    controller.add_pane(
-        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
-        cfg.METHOD_TOOLBAR_STANDARD,
-        aui.AuiPaneInfo()
-            .Name('std_tb')
-            .Caption('Standard Toolbar')
-            .ToolbarPane()
-            .Top()
-            .Gripper()
+    controller.add_page(
+        Chart2d(frame, controller, None, id=cfg.METHOD_WINDOW_CHART),
+        wx.NewId(),
+        'Chart',
+        True
     )
 
     controller.add_page(
@@ -238,15 +244,8 @@ if __name__ == '__main__':
     )
 
     controller.add_page(
-        Chart2d(frame, controller, None, id=cfg.METHOD_WINDOW_CHART),
-        cfg.METHOD_WINDOW_CHART,
-        'Chart',
-        True
-    )
-
-    controller.add_page(
         Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data, id=cfg.METHOD_WINDOW_CHART), figsize=(1, 10)),
-        cfg.METHOD_WINDOW_CHART,
+        wx.NewId(),
         'Multi-Chart',
         True
     )

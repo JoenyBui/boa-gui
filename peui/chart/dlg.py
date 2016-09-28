@@ -29,6 +29,9 @@ class FigureSetting(object):
         self.y_title = kwargs.get('y_title', 'Y Title')
         self.y_subtitle = kwargs.get('y_subtitle', '')
 
+        self.linewidth = kwargs.get('linewidth', 2)
+        self.legend = kwargs.get('legend', [])
+
 
 class FigureSettingPanel(wx.Panel):
     """
@@ -188,7 +191,7 @@ class FigureSettingController(ChildController):
     def refresh(self):
         pass
 
-    def update_layout(self):
+    def update_layout(self, state):
         pass
 
     def button_ok_click(self, event):
@@ -207,3 +210,6 @@ class FigureSettingController(ChildController):
         else:
             if not wx.Validator_IsSilent():
                 wx.Bell()
+
+    def delete_control(self):
+        pass

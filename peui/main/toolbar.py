@@ -1,8 +1,10 @@
 import wx
 from wx.lib.agw import aui
 from wx.lib.agw.aui import auibar
+from wx.lib.pubsub import pub
 
 from ..controller import ChildController
+from ..config import EVT_UPDATE_TITLE, EVT_UPDATE_STATUS
 
 
 __author__ = 'jbui'
@@ -57,10 +59,23 @@ class CustomToolBarController(ChildController):
         """
         ChildController.__init__(self, parent, view)
 
+        self.buttons = {}
         self.menu_items = menu_items
         self.bitmap_size = wx.Size(16, 16)
 
         self.do_layout()
+
+        self.view.Bind(wx.EVT_SET_CURSOR, self.evt_on_hover)
+
+    def evt_on_hover(self, event):
+        self.view.StopPreviewTimer()
+
+        action_item = self.view.FindToolForPosition(event.GetX(), event.GetY())
+
+        if action_item:
+            pub.sendMessage(EVT_UPDATE_STATUS, text=action_item.short_help)
+
+        event.Skip()
 
     def do_layout(self):
         """
@@ -70,17 +85,19 @@ class CustomToolBarController(ChildController):
         for menu in self.menu_items:
             if menu['id'] == wx.ID_SEPARATOR:
                 self.view.AddSeparator()
+
             elif menu.get('icon'):
                 icon = wx.Bitmap(menu['icon'])
                 # icon.SetSize(self.bitmap_size)
 
                 self.view.AddSimpleTool(menu['id'], menu['label'], icon, menu['label'])
+
             else:
                 tb = wx.ArtProvider.GetBitmap(menu['bitmap'], wx.ART_TOOLBAR, self.bitmap_size)
 
-                self.view.AddSimpleTool(menu['id'], menu['label'], tb, menu['label'])
+                self.buttons[menu['id']] = self.view.AddSimpleTool(menu['id'], menu['label'], tb, menu['label'])
 
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:
@@ -106,4 +123,7 @@ class CustomToolBarController(ChildController):
 
         :return:
         """
+        pass
+
+    def delete_control(self):
         pass

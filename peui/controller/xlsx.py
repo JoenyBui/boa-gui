@@ -1,7 +1,11 @@
+import logging
+
 import wx
 import wx.grid
 
-from . import ChildController
+from . import TabPageController
+
+from ..config import STATE_CLOSE_PROJECT
 
 __author__ = 'jbui'
 
@@ -53,7 +57,11 @@ class GeneralColumnTable(wx.grid.PyGridTableBase):
             return ''
 
     def SetValue(self, row, col, value):
-        self.data[col][row] = value
+        try:
+            self.data[col][row] = value
+        except Exception as e:
+            logging.error('GeneralColumnTable->SetValue error')
+            logging.error(str(e))
 
 
 class GeneralRowTable(wx.grid.PyGridTableBase):
@@ -106,7 +114,7 @@ class GeneralRowTable(wx.grid.PyGridTableBase):
         self.data[row][col] = value
 
 
-class XlsxController(ChildController):
+class XlsxController(TabPageController):
     """
     Spreadsheet Controller
 
@@ -118,7 +126,7 @@ class XlsxController(ChildController):
         :param view: local view
         :return:
         """
-        ChildController.__init__(self, parent, view, *args, **kwargs)
+        TabPageController.__init__(self, parent, view, *args, **kwargs)
 
         self.table = kwargs.get('table', GeneralRowTable())
         self.data = data
@@ -131,18 +139,37 @@ class XlsxController(ChildController):
 
         :return:
         """
-        self.table.data = self.data
-        self.table.row_labels = self.row_label
-        self.table.col_labels = self.col_label
+        # self.table.data = self.data
+        # self.table.row_labels = self.row_label
+        # self.table.col_labels = self.col_label
+        #
+        # self.view.SetTable(self.table)
+        #
+        pass
 
-        self.view.SetTable(self.table)
-
-    def update_layout(self):
+    def update_layout(self, state):
         """
 
         :return:
         """
-        pass
+        if state == STATE_CLOSE_PROJECT:
+            self.delete_control()
+        else:
+            self.sync_data()
+
+    # def delete_control(self):
+    #     """
+    #     Delete Control
+    #
+    #     """
+    #
+    #     # Remove from the dictionary
+    #     if self.parent.windows:
+    #         ctrl, idx = self.parent.notebook.FindTab(self.view)
+    #
+    #         self.parent.delete_page(idx)
+    #
+    #         del self.parent.windows[self.key]
 
     def refresh(self):
         """
@@ -156,4 +183,8 @@ class XlsxController(ChildController):
 
         :return:
         """
-        pass
+        self.table.data = self.data
+        self.table.row_labels = self.row_label
+        self.table.col_labels = self.col_label
+
+        self.view.SetTable(self.table, True)

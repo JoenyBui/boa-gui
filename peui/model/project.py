@@ -33,7 +33,6 @@ class Project(object):
             self.author = kwargs.get('author', 'Anonymous')
             self.project_folder = kwargs.get('project_folder', os.getcwd())
 
-
     def save(self, path):
         """
         Save project model.
