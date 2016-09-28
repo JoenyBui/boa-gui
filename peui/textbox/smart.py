@@ -181,7 +181,10 @@ class SmartTextBox(wx.TextCtrl):
         wx.TextCtrl.Disable(self, *args, **kwargs)
 
         if self.disabled_messages:
-            self.Value = self.disabled_messages[self.disabled_index]
+            self.set_disable_message()
+
+    def set_disable_message(self):
+        self.Value = self.disabled_messages[self.disabled_index]
 
 
 class SmartComboBox(wx.ComboBox):
@@ -757,7 +760,7 @@ class SmartInputLayout(wx.BoxSizer):
         elif kwargs.get('name'):
             self.label = SmartLabel(self.parent, label=kwargs.get('name'))
         else:
-            self.label = SmartLabel(self.parent, label='Textbox Label:')
+            self.label = None
 
         self.min = min
         self.max = max
@@ -768,8 +771,13 @@ class SmartInputLayout(wx.BoxSizer):
         self.SetMinSize(size)
 
     def rename(self, name=None):
-        self.label = wx.StaticText(self.parent,
-                                   label=name)
+        """
+        Rename
+
+        :param name:
+        :return:
+        """
+        self.label = wx.StaticText(self.parent, label=name)
 
     @property
     def next_id(self):
