@@ -54,7 +54,7 @@ class FloatSmartBox(SmartTextBox):
         # self.Bind(wx.EVT_CHAR, self.on_key_char, self)
         # self.Bind(wx.EVT_CHAR_HOOK, self.on_key_char_hook, self)
         if key_up:
-            self.Bind(wx.EVT_KEY_UP, key_up, self)
+            self.bind_key_up(key_up)
 
         # self.Bind(wx.EVT_KEY_UP, self.on_key_up, self)
         # self.Bind(wx.EVT_KEY_DOWN, self.on_key_down, self)
@@ -69,6 +69,14 @@ class FloatSmartBox(SmartTextBox):
 
         if enable is not None:
             self.Enable(enable)
+
+    def bind_key_up(self, handle):
+        """
+        Bind key up handle with textbox.
+
+        :param handle:
+        """
+        self.Bind(wx.EVT_KEY_UP, handle, self)
 
     def on_text(self, event=None):
         """

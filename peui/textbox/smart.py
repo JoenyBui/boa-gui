@@ -242,6 +242,13 @@ class SmartComboBox(wx.ComboBox):
         if enable is not None:
             self.Enable(enable)
 
+    def bind_dropdown(self, handle):
+        """
+        Bind dropdown event to handle.
+
+        """
+        self.Bind(wx.EVT_COMBOBOX, handle)
+
     def Enable(self, *args, **kwargs):
         """
         On enable, clean data if needed.

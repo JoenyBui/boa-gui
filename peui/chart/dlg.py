@@ -210,3 +210,6 @@ class FigureSettingController(ChildController):
         else:
             if not wx.Validator_IsSilent():
                 wx.Bell()
+
+    def delete_control(self):
+        pass
