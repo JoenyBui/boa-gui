@@ -18,6 +18,13 @@ class ImageCanvas(wx.Panel):
         wx.Panel.__init__(self, parent=parent, *args, **kwargs)
 
         self.image_path = image_path
+        if self.image_path:
+            bmp = wx.Bitmap(self.image_path)
+
+            padding = 10
+            self.SetMinClientSize((bmp.GetWidth() + padding,
+                                   bmp.GetHeight() + padding))
+
         self.glyphs = []
 
         # self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
