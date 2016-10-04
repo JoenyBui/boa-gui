@@ -12,6 +12,7 @@ __author__ = 'jbui'
 class MainWindow(wx.Frame):
     """
     Main Window
+
     """
     def __init__(self, parent, controller, title='', width=800, height=600, style=wx.DEFAULT_FRAME_STYLE, **kwargs):
         """
@@ -46,8 +47,6 @@ class MainWindow(wx.Frame):
         # Status Bar
         self.status_bar = CustomStatusBar(self)
         self.SetStatusBar(self.status_bar)
-
-        self.controller.bind_methods()
 
     def add_pane(self, panel, arg1=None, arg2=None, target=None):
         """

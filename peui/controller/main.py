@@ -1,7 +1,6 @@
 import os
 import uuid
 
-import wx
 import wx.lib.agw.aui as aui
 from wx.lib.pubsub import pub
 
@@ -55,7 +54,9 @@ class MainController(object):
         self.dlg_ctrl = kwargs.get('dlg_ctrl', DlgController(self))
         self.view_ctrl = kwargs.get('view_ctrl', ViewController(self))
 
+        self.toolbars = []
         self.childs = []        # Controller for specific views, dlgs, etc...
+        self.trash = []
 
         self.master_key = master_key
 
@@ -63,43 +64,113 @@ class MainController(object):
 
         self.subscribe_methods()
 
-    @property
-    def evt_new_project(self):
+    def update_project_state(self, state):
         """
+        Update the project state.
+
+        :param state:
+        :return:
+        """
+        if state == STATE_OPEN_PROJECT:
+            self.update_open_project()
+
+        elif state == STATE_NEW_PROJECT:
+            self.update_new_project()
+
+        elif state == STATE_CLOSE_PROJECT:
+            self.update_clear_project()
+
+    def bind_all_methods(self):
+        """
+        Bind all event menus.
 
         :return:
         """
-        return 'EVT_NEW_PROJECT'
+        self.bind_methods()
+        self.bind_aui_methods()
+        self.bind_menu_bars()
 
-    @property
-    def evt_open_project(self):
+    def initialize_notebook(self, frame, size=(300, 400)):
         """
+        Add notebook
 
+        :param frame:
+        :param size:
         :return:
         """
-        return 'EVT_OPEN_PROJECT'
+        self.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS, size=size)
+
+        self.frame.add_pane(self.notebook, wx.CENTER, 'Notebook')
+
+    # @property
+    # def evt_new_project(self):
+    #     return 'EVT_NEW_PROJECT'
+    #
+    # @property
+    # def evt_open_project(self):
+    #     return 'EVT_OPEN_PROJECT'
 
     @property
     def evt_refresh_view(self):
-        """
-
-        :return:
-        """
         return 'EVT_REFRESH_VIEW'
 
     @property
     def evt_clear_controls(self):
         return 'EVT_CLEAR_CONTROLS'
 
+    @property
+    def evt_pane_close(self):
+        return 'EVT_PANE_CLOSE'
+
+    @property
+    def evt_page_close(self):
+        return 'EVT_PAGE_CLOSE'
+
+    @property
+    def evt_page_closed(self):
+        return 'EVT_PAGE_CLOSED'
+
+    @property
+    def evt_undo(self):
+        return 'EVT_UNDO'
+
+    @property
+    def evt_redo(self):
+        return 'EVT_REDO'
+
+    @property
+    def evt_cut(self):
+        return 'EVT_CUT'
+
+    @property
+    def evt_copy(self):
+        return 'EVT_COPY'
+
+    @property
+    def evt_paste(self):
+        return 'EVT_PASTE'
+
     def subscribe_methods(self):
         """
+        Subscribe methods
 
         :return:
         """
-        pub.subscribe(self.new_project, self.evt_new_project)
-        pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
+
+        pub.subscribe(self.update_project_state, EVT_CHANGE_PROJECT)
+        pub.subscribe(self.update_status_bar, EVT_UPDATE_STATUS)
+        pub.subscribe(self.update_frame_title, EVT_UPDATE_TITLE)
+
+        # pub.subscribe(self.new_project, self.evt_new_project)
+
+        # pub.subscribe(self.refresh_clear_controls, self.evt_clear_controls)
         pub.subscribe(self.refresh_view, self.evt_refresh_view)
-        pub.subscribe(self.refresh_open_project, self.evt_open_project)
+        # pub.subscribe(self.refresh_open_project, self.evt_open_project)
+        pub.subscribe(self.on_pane_close, self.evt_pane_close)
+        pub.subscribe(self.on_page_close, self.evt_page_close)
+        pub.subscribe(self.on_page_closed, self.evt_page_closed)
+
+        pub.subscribe(self.empty_trash, EVT_EMPTY_TRASH)
 
     def bind_methods(self):
         """
@@ -113,82 +184,165 @@ class MainController(object):
         self.master_key[METHOD_SAVE_PROJECT]['method'] = self.dlg_ctrl.save_project_dialog
         self.master_key[METHOD_SAVE_AS_PROJECT]['method'] = self.dlg_ctrl.save_as_project_dialog
         self.master_key[METHOD_OUTPUT_PROJECT]['method'] = self.dlg_ctrl.output_project_word_doc
+        self.master_key[METHOD_CLOSE_PROJECT]['method'] = self.dlg_ctrl.close_project_dialog
         self.master_key[METHOD_EXIT_PROJECT]['method'] = self.exit_project
 
-        self.master_key[METHOD_UNDO]['method'] = self.evt_undo
-        self.master_key[METHOD_REDO]['method'] = self.evt_redo
-        self.master_key[METHOD_CUT]['method'] = self.evt_cut
-        self.master_key[METHOD_COPY]['method'] = self.evt_copy
-        self.master_key[METHOD_PASTE]['method'] = self.evt_paste
+        self.master_key[METHOD_UNDO]['method'] = self.on_click_undo
+        self.master_key[METHOD_REDO]['method'] = self.on_click_redo
+        self.master_key[METHOD_CUT]['method'] = self.on_click_cut
+        self.master_key[METHOD_COPY]['method'] = self.on_click_copy
+        self.master_key[METHOD_PASTE]['method'] = self.on_click_paste
 
         self.master_key[METHOD_WINDOW_TREE]['method'] = self.view_ctrl.view_tree_window
         self.master_key[METHOD_WINDOW_CONSOLE]['method'] = self.view_ctrl.view_console_window
         self.master_key[METHOD_WINDOW_PROP_GRID]['method'] = self.view_ctrl.view_property_grid_window
         # self.master_key[METHOD_WINDOW_GENERAL]['method'] = self.view_ctrl.view_general_window
         # self.master_key[METHOD_WINDOW_CHART]['method'] = self.view_ctrl.view_chart_window
-        # self.master_key[METHOD_WINDOW_XLSX]['method'] = self.view_ctrl.view_xlsx_window
+        self.master_key[METHOD_WINDOW_XLSX]['method'] = self.view_ctrl.view_switch_page
 
         self.master_key[METHOD_TOOLBAR_STANDARD]['method'] = self.view_ctrl.view_toolbar_standard
 
         self.master_key[METHOD_DEFAULT_SETTING]['method'] = self.dlg_ctrl.setting_dialog
         self.master_key[METHOD_ABOUT]['method'] = self.dlg_ctrl.about_dialog
 
-    def evt_undo(self, event=None):
+    def bind_aui_methods(self):
         """
-        Event Undo.
-        :param event:
+        Bind aui notebook.
+
         :return:
         """
-        print('Undo')
+        self.notebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.bind_page_close)
+        self.notebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSED, self.bind_page_closed)
+        self.frame.Bind(aui.EVT_AUI_PANE_CLOSE, self.bind_pane_close)
 
-    def evt_redo(self, event=None):
+    def bind_menu_bars(self):
         """
-        Event Redo.
-        :param event:
+        Bind menu bars
+
         :return:
         """
-        print('Redo')
+        for id, menu in self.frame.menu_bar.menus.items():
+            if self.master_key.get(id):
+                if self.master_key[id].get('method'):
+                    if menu:
+                        self.frame.Bind(wx.EVT_MENU, self.master_key[id]['method'], menu)
 
-    def evt_cut(self, event=None):
-        """
+        # Add History
+        self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
 
-        :param event:
-        :return:
+    def bind_page_close(self, event):
         """
-        print('Cut')
-
-    def evt_copy(self, event=None):
-        """
-
-        :param event:
-        :return:
-        """
-        print('Copy')
-
-    def evt_paste(self, event=None):
-        """
+        Page close event
 
         :param event:
         :return:
         """
-        print('Paste')
+        page = self.notebook.GetPage(event.Selection)
+
+        if page:
+            if hasattr(page, 'controller'):
+                if page.controller.id:
+                    pub.sendMessage(self.evt_page_close, id=page.controller.id)
+
+    def bind_page_closed(self, event):
+        """
+        Page closed event
+
+        :param event:
+        :return:
+        """
+        pass
+        page = self.notebook.GetPage(event.Selection)
+
+        if page:
+            if hasattr(page, 'controller'):
+                if page.controller.id:
+                    pub.sendMessage(self.evt_page_closed, id=page.controller.id)
+
+    def bind_pane_close(self, event):
+        """
+        Pane close event.
+
+        :param event:
+        :return:
+        """
+        pane = event.GetPane()
+
+        if pane:
+            pub.sendMessage(self.evt_pane_close, name=pane.name)
+
+    def bind_pane_open(self, event):
+        """
+        Bind open pane.
+
+        :param event:
+        :return:
+        """
+        name = event.GetPane().name
+
+    def delete_pane(self, key):
+        """
+        Delete Pane given key
+
+        :param key:
+        """
+        # Detach pane
+        self.frame.mgr.DetachPane(self.windows[key])
+
+        # Destroy
+        self.windows[key].Destroy()
+
+        # Update pane
+        self.frame.mgr.Update()
+
+    def delete_page(self, page_index):
+        """
+        Delete notebook page
+
+        :param page_index:
+        """
+        self.notebook.DeletePage(page_index)
+
+    def add_toolbar(self, toolbar, key, area):
+        """
+        Add toolbar to the manager frame.
+
+        :param toolbar:
+        :param key:
+        :param area:
+        """
+        self.windows[key] = toolbar
+
+        # Add panel to model.
+        pane = self.frame.add_pane(toolbar, area, None)
+
+        self.toolbars.append(toolbar.controller)
 
     def add_pane(self, panel, key, area=None, name=None):
         """
         Add Pane to the main view.
 
         :param panel:
-        :param key:
+        :param key: menu item key
         :param area:
         :param name:
         :return:
         """
         self.windows[key] = panel
 
+        # Add panel to model.
         pane = self.frame.add_pane(panel, area, name)
 
+        # If has controller, add to child array.
         if panel.__dict__.get('controller'):
             self.childs.append(panel.controller)
+            panel.controller.key = key
+
+        # If have menu item, then enable/check.
+        menu_item = self.frame.menu_bar.menus.get(key)
+        if menu_item:
+            menu_item.Enable(True)
+            menu_item.Check(True)
 
         return pane
 
@@ -213,6 +367,13 @@ class MainController(object):
 
         if page.__dict__.get('controller'):
             self.childs.append(page.controller)
+            page.controller.key = key
+
+        # If have menu item, then enable/check.
+        menu_item = self.frame.menu_bar.menus.get(key)
+        if menu_item:
+            menu_item.Enable(True)
+            menu_item.Check(True)
 
         return pane
 
@@ -238,17 +399,41 @@ class MainController(object):
 
         menu_bar.set_menu_item(key)
 
-        for id, menu in menu_bar.menus.items():
-            if self.master_key.get(id):
-                if self.master_key[id].get('method'):
-                    if menu:
-                        self.frame.Bind(wx.EVT_MENU, self.master_key[id]['method'], menu)
-
         self.frame.menu_bar = menu_bar
         self.frame.SetMenuBar(self.frame.menu_bar)
 
-        # Add History
-        self.frame.Bind(wx.EVT_MENU_RANGE, self.on_file_history, id=wx.ID_FILE1, id2=wx.ID_FILE9)
+    def on_pane_close(self, name=None):
+        """
+        On pane close, un-check the menu item
+
+        :param name:
+        :return:
+        """
+        menu = self.frame.menu_bar.menus.get(name)
+        if menu:
+            menu.Check(False)
+
+    def on_page_close(self, id=None):
+        """
+
+        :param id:
+        :return:
+        """
+        menu = self.frame.menu_bar.menus.get(id)
+        if menu:
+            menu.Check(False)
+
+        del self.windows[id]
+
+    def on_page_closed(self, id=None):
+        """
+
+        :param id:
+        :return:
+        """
+        menu = self.frame.menu_bar.menus.get(id)
+        if menu:
+            menu.Check(False)
 
     def on_file_history(self, event):
         """
@@ -263,13 +448,19 @@ class MainController(object):
         # Move up the list
         self.filehistory.AddFileToHistory(self.file_path)
 
+        # Close existing project first
+        pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_CLOSE_PROJECT)
+        pub.sendMessage(EVT_EMPTY_TRASH)
+
         # Do whatever you want with the file path...
         self.open_project(self.file_path)
 
-        pub.sendMessage(self.evt_open_project)
+        # Open Project
+        pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_OPEN_PROJECT)
 
     def set_ribbon_bar(self, key):
         """
+        Set Ribbon Bar
 
         :param key:
         :return:
@@ -325,35 +516,50 @@ class MainController(object):
         """
         self.project.load(path)
 
-    def refresh_open_project(self):
+    def update_new_project(self):
         """
-        Refresh open project
+        Update new project.
 
         :return:
         """
-        self.refresh_clear_project()
+        pub.sendMessage(EVT_UPDATE_TITLE, text='*New Project*')
+        pub.sendMessage(EVT_UPDATE_STATUS, text='')
 
-    def refresh_clear_project(self):
+    def update_open_project(self):
+        """
+        Update open project views
+
+        :return:
+        """
+        pub.sendMessage(EVT_UPDATE_TITLE, text=self.file_path)
+
+    def update_clear_project(self):
         """
         Refresh clear project
 
         :return:
         """
-        pass
+        pub.sendMessage(EVT_CHANGE_STATE, state=STATE_CLOSE_PROJECT)
 
-    def refresh_clear_controls(self):
+        self.childs = []
+
+    def update_frame_title(self, text):
         """
-        Clear controls and remove tab.
+        Refresh the main title with the project.
 
         :return:
         """
-        for child in self.childs:
-            if hasattr(child, 'clear_control'):
-                child.clear_control()
+        self.frame.SetTitle(text)
 
-        for index in range(0, self.notebook.GetPageCount()):
-            # Loop and remove all the pages inside the viewer.
-            self.notebook.DeletePage(0)
+    def update_status_bar(self, text):
+        """
+        Refresh the status bar.
+
+        :param text:
+        """
+        if self.frame:
+            if self.frame.status_bar:
+                self.frame.status_bar.SetStatusText(text, 0)
 
     def refresh(self):
         """
@@ -419,3 +625,30 @@ class MainController(object):
         self.frame.Close(True)
         self.frame.Destroy()
         event.Skip()
+
+    def on_click_undo(self, event):
+        pass
+
+    def on_click_redo(self, event):
+        pass
+
+    def on_click_cut(self, event):
+        pass
+
+    def on_click_copy(self, event):
+        pass
+
+    def on_click_paste(self, event):
+        pass
+
+    def empty_trash(self):
+        """
+        Empty trash of the controls.
+
+        :return:
+        """
+        for item in self.trash:
+            if item in self.childs:
+                self.childs.remove(item)
+
+        self.trash = []

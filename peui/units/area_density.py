@@ -16,17 +16,29 @@ from . import Unit, UNIT_AREA_DENSITY_KEY
 __author__ = 'jbui'
 
 FACTOR_AREA_DENSITY_KILOGRAM_M2 = 1.0
-FACTOR_AREA_DENSITY_PSI_MS2_IN = 8.4368e-3
+FACTOR_AREA_DENSITY_LBM_IN2 = 0.001422334
+FACTOR_AREA_DENSITY_PSI_MS2_IN = 3.683957707
+FACTOR_AREA_DENSITY_LB_S2_OVER_IN3 = 0.000003684
+FACTOR_AREA_DENSITY_LB_MS2_OVER_IN3 = 0.000003684*(1000**2)
+FACTOR_AREA_DENSITY_PSF = 0.20481614401362
 
 AREA_DENSITY_KEY = {
     'kg/m2': FACTOR_AREA_DENSITY_KILOGRAM_M2,
     'kg/m^2': FACTOR_AREA_DENSITY_KILOGRAM_M2,
-    'psi-ms^2/in': FACTOR_AREA_DENSITY_PSI_MS2_IN
+    'psi-ms^2/in': FACTOR_AREA_DENSITY_PSI_MS2_IN,
+    'lb-s^2/in^3': FACTOR_AREA_DENSITY_LB_S2_OVER_IN3,
+    'lb*s^2/in^3': FACTOR_AREA_DENSITY_LB_S2_OVER_IN3,
+    'lb*ms^2/in^3': FACTOR_AREA_DENSITY_LB_MS2_OVER_IN3,
+    'lbm/in^2': FACTOR_AREA_DENSITY_LBM_IN2,
+    'lb/in^2': FACTOR_AREA_DENSITY_LBM_IN2,
+    'psf': FACTOR_AREA_DENSITY_PSF
 }
 
 DEFAULT_AREA_LIST = [
     'kg/m2',
-    'psi-ms^2/in'
+    'psi-ms^2/in',
+    'lb-s^2/in^3',
+    'lb-ms^2/in^3'
 ]
 
 DEFAULT_IMPERIAL__LIST = [
@@ -40,15 +52,16 @@ DEFAULT_METRIC_LIST = [
 
 def get_area_density_conversion_factor(origin, destination):
     """
+    Get area density conversion factor
 
     :param origin:
     :param destination:
     :return:
     """
-    origin_factor = AREA_DENSITY.get(origin)
-    destination_factor = AREA_DENSITY.get(destination)
+    origin_factor = AREA_DENSITY_KEY.get(origin)
+    destination_factor = AREA_DENSITY_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class AreaDensityUnit(Unit):
@@ -58,6 +71,7 @@ class AreaDensityUnit(Unit):
     """
     def __init__(self, *args, **kwargs):
         """
+        Constructor
 
         :param args:
         :param kwargs:
@@ -70,13 +84,3 @@ class AreaDensityUnit(Unit):
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL__LIST
-
-    def get_conversion_factor(self, origin, destination):
-        """
-
-        :param origin:
-        :param destination:
-        :return:
-        """
-        return get_area_density_conversion_factor(origin, destination)
-

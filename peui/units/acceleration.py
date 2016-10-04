@@ -18,18 +18,33 @@ from . import Unit, UNIT_ACCELERATION_KEY
 __author__ = 'jbui'
 
 FACTOR_ACCELERATION_M_S2 = 1.0
-FACTOR_ACCELERATION_GAL = 0.01
-FACTOR_ACCELERATION_FT_S2 = 0.3048
-FACTOR_ACCELERATION_GRAVITY = 1.0
+FACTOR_ACCELERATION_MM_MS2 = 0.001
+FACTOR_ACCELERATION_KM_S2 = 0.001
+FACTOR_ACCELERATION_MM_S2 = 1000.0
+FACTOR_ACCELERATION_GAL = 100.0
+FACTOR_ACCELERATION_MILE_S2 = 0.0006214
+FACTOR_ACCELERATION_FT_S2 = 3.281
+FACTOR_ACCELERATION_INCH_S2 = 39.370
+FACTOR_ACCELERATION_INCH_MS2 = 3.93700787E-5
+FACTOR_ACCELERATION_GRAVITY = 100.0
 
 ACCELERATION_KEY = {
     'm/s2': FACTOR_ACCELERATION_M_S2,
     'm/s^2': FACTOR_ACCELERATION_M_S2,
+    'km/s2': FACTOR_ACCELERATION_KM_S2,
+    'km/s^2': FACTOR_ACCELERATION_KM_S2,
+    'mm/s2': FACTOR_ACCELERATION_MM_S2,
+    'mm/s^2': FACTOR_ACCELERATION_MM_S2,
+    'mm/ms2': FACTOR_ACCELERATION_MM_MS2,
+    'mm/ms^2': FACTOR_ACCELERATION_MM_MS2,
+    'in/s^2': FACTOR_ACCELERATION_INCH_S2,
+    'in/ms^2': FACTOR_ACCELERATION_INCH_MS2,
+    'in/ms2': FACTOR_ACCELERATION_INCH_MS2,
     'ft/s2': FACTOR_ACCELERATION_FT_S2,
     'ft/s^2': FACTOR_ACCELERATION_FT_S2,
     'cm/s^2': FACTOR_ACCELERATION_GAL,
     'cm/s2': FACTOR_ACCELERATION_GAL,
-    'gal': FACTOR_ACCELERATION_GAL
+    # 'gal': FACTOR_ACCELERATION_GAL
 }
 
 
@@ -59,7 +74,7 @@ def get_acceleration_conversion_factor(origin, destination):
     origin_factor = ACCELERATION_KEY.get(origin)
     destination_factor = ACCELERATION_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class AccelerationUnit(Unit):
@@ -76,5 +91,5 @@ class AccelerationUnit(Unit):
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL__LIST
 
-    def get_conversion_factor(self, origin, destination):
-        return get_acceleration_conversion_factor(origin, destination)
+    # def get_conversion_factor(self, origin, destination):
+    #     return get_acceleration_conversion_factor(origin, destination)

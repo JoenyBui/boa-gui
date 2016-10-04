@@ -84,17 +84,21 @@ if __name__ == '__main__':
     from peui.view.vtk import VtkViewer
     from peui.panel.xlsx import SpreadSheet
     from peui.view.terminal import Console
+    from peui.controller.ch2d import MultiChart2dController
 
     import peui.config as cfg
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
+
+    from peui.controller.xlsx import XlsxController
+    from peui.panel.image import ImageCanvas
 
     import docx
     import docxtpl
 
     #TODO: Undo-Redo Model
     #TODO: Cut, Copy & Paste
-    #TODO: Printing Pdf & Docx
+    #TODO: Printing Pdf
     #TODO: Backup Temp File
     #TODO: Periodic Savings
     #TODO: Save Perspective View
@@ -173,61 +177,100 @@ if __name__ == '__main__':
     controller = MainController(project, master_key=MASTER_KEY, setting=setting)
     frame = MainWindow(parent=None, controller=controller, title='Sample Editor',
                        style=(wx.DEFAULT_FRAME_STYLE | wx.WS_EX_CONTEXTHELP))
-    controller.notebook = aui.AuiNotebook(frame, agwStyle=aui.AUI_NB_CLOSE_ON_ALL_TABS)
-    controller.add_pane(controller.notebook, 'notebook', wx.CENTER, 'Notebook')
-
-    # Add test data
-    project.data = [np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
-                    np.arange(0.0, 1.5, 0.02), np.cos(2 * np.pi * np.arange(0.0, 1.5, 0.02))]
 
     # Set Components.
+    controller.initialize_notebook(frame)
     controller.set_key(MENU_BAR_KEY)
+    controller.bind_all_methods()
+
+    # Add test data
+    project.data = [(np.arange(0.0, 3.0, 0.01), np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01))),
+                    (np.arange(0.0, 1.5, 0.02), np.cos(2 * np.pi * np.arange(0.0, 1.5, 0.02))),
+                    (np.arange(0.0, 3.0, 0.04), np.cos(1.5 * np.pi * np.arange(0.0, 3.0, 0.04))),
+                    (np.arange(0.0, 2.5, 0.005), np.sin(0.5 * np.pi * np.arange(0.0, 2.5, 0.005)))]
+
+    controller.add_toolbar(
+        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
+        cfg.METHOD_TOOLBAR_STANDARD,
+        aui.AuiPaneInfo()
+            .Name('std_tb')
+            .Caption('Standard Toolbar')
+            .ToolbarPane()
+            .Top()
+            .Gripper()
+    )
 
     # Tree Panel.
     controller.add_pane(
         ProjectTree(frame, controller, project),
         cfg.METHOD_WINDOW_TREE,
-        wx.LEFT,
-        'Project Tree'
+        aui.AuiPaneInfo()
+            .Name(cfg.METHOD_WINDOW_TREE)
+            .Caption('Tree')
+            .Left()
     )
 
     # Property Panel
     controller.add_pane(
         PropGrid(frame, controller, None, column=4, style=wx.propgrid.PG_SPLITTER_AUTO_CENTER),
         cfg.METHOD_WINDOW_PROP_GRID,
-        wx.BOTTOM,
-        'Property'
+        aui.AuiPaneInfo()
+            .Name(cfg.METHOD_WINDOW_PROP_GRID)
+            .Caption('Property')
+            .Bottom()
     )
 
     controller.add_pane(
-        Console(frame, controller),
+        Console(frame, controller, None),
         cfg.METHOD_WINDOW_CONSOLE,
-        wx.BOTTOM,
+        aui.AuiPaneInfo()
+            .Name(cfg.METHOD_WINDOW_CONSOLE)
+            .Caption('Output')
+            .Bottom(),
         'Output'
     )
 
-    controller.add_pane(
-        CustomToolBar(frame, controller, TOOLBAR_FILE_KEY, agwStyle=aui.AUI_TB_GRIPPER | aui.AUI_TB_OVERFLOW),
-        cfg.METHOD_TOOLBAR_STANDARD,
-        aui.AuiPaneInfo().Name('std_tb').Caption('Standard Toolbar').ToolbarPane().Top().Gripper()
+    controller.add_page(
+        Chart2d(frame, controller, None, id=cfg.METHOD_WINDOW_CHART),
+        wx.NewId(),
+        'Chart',
+        True
     )
 
     controller.add_page(
-        GeneralPanel(parent=frame),
+        GeneralPanel(parent=frame, id=cfg.METHOD_WINDOW_GENERAL),
         cfg.METHOD_WINDOW_GENERAL,
         'General',
         False
     )
 
     controller.add_page(
-        Chart2d(frame, controller, None, 111),
-        cfg.METHOD_WINDOW_CHART,
-        'Chart',
+        Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data, id=cfg.METHOD_WINDOW_CHART), figsize=(1, 10)),
+        wx.NewId(),
+        'Multi-Chart',
         True
     )
 
     controller.add_page(
-        SpreadSheet(frame, controller),
+        ImageCanvas(parent=frame, image_path=os.path.join(r'D:\DEVEL\pec_gui\peui\splash\PEC.jpg'), id=wx.ID_ANY),
+        wx.NewId(),
+        'Image',
+        False
+    )
+
+    data = (("A", "B"),
+            ("C", "D"),
+            ("E", "F"),
+            ("G", "G"),
+            ("F", "F"),
+            ("Q", "Q"))
+
+    colLabels = ("Last", "First")
+    rowLabels = ("1", "2", "3", "4", "5", "6", "7", "8", "9")
+    xlsx_local = XlsxController(controller, None, data=data, row_label=rowLabels, col_label=colLabels, id=cfg.METHOD_WINDOW_XLSX)
+
+    controller.add_page(
+        SpreadSheet(frame, controller, xlsx_local),
         cfg.METHOD_WINDOW_XLSX,
         'XLSX',
         True

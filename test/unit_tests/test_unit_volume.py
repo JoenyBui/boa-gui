@@ -1,19 +1,26 @@
-from unittest import TestCase
-from peui.units import volume
+from base import BaseUnitTest
+
+from peui.units.volume import VolumeUnit
 
 __author__ = 'jbui'
 
 
-class TestVolume(TestCase):
+class TestVolume(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = VolumeUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'in^3'
+
+    def test_m3(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'm^3')*self.magnitude, 2.651427e-5)
 
     def test_mm3(self):
-        self.assertEqual(round(volume.get_volume_conversion_factor('mm3', 'm3'), 10), 0.001**3)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'mm^3')*self.magnitude, 26514.27)
 
     def test_ft3(self):
-        self.assertEqual(round(volume.get_volume_conversion_factor('ft3', 'mm3'), 5), round(304.8**3, 5))
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'ft^3')*self.magnitude, 0.00093634259)
 
     def test_in3(self):
-        self.assertEqual(round(volume.get_volume_conversion_factor('in3', 'mm3'), 3), 25.4**3)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'in^3')*self.magnitude, 1.618)

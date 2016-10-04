@@ -5,7 +5,8 @@ import wx
 from ..model.project import Project
 from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextSmartBox, TextInputLayout
-from ..textbox.pathbox import PathSmartBox, PathInputLayout
+from ..textbox.pathbox import PathSmartBox, PathInputLayout, SmartPathInputLayout
+
 from . import DpiAwareness
 
 __author__ = 'jbui'
@@ -90,6 +91,7 @@ class NewProjectDialog(wx.Dialog, DpiAwareness):
         field1_sz = TextInputLayout(self, name='Project Name:', textbox=self.tb_project, layout=layout)
         field2_sz = TextInputLayout(self, name='Author Name:', textbox=self.tb_author, layout=layout)
         field3_sz = PathInputLayout(self, name='Path', textbox=self.tb_path, layout=layout)
+        field4_sz = SmartPathInputLayout(self, name='Smart Part')
 
         # Now finish the layout by adding the two sizers to the main vertical sizer.
         # vsizer.AddStretchSpacer()
@@ -100,6 +102,8 @@ class NewProjectDialog(wx.Dialog, DpiAwareness):
         vsizer.Add(field2_sz, 0, BOTH_SIDES, self.scale(20))
         vsizer.AddSpacer(self.scale(10))
         vsizer.Add(field3_sz, 0, BOTH_SIDES, self.scale(20))
+        vsizer.AddSpacer(self.scale(10))
+        vsizer.Add(field4_sz, 0, BOTH_SIDES, self.scale(20))
         vsizer.AddSpacer(self.scale(10))
 
         return vsizer

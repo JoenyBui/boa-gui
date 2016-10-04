@@ -11,9 +11,7 @@ Fixes and updates by Charl P. Botha 2003-2008
 
 Updated to new wx namespace and some cleaning up by Andrea Gavana,
 December 2006
-"""
 
-"""
 Please see the example at the end of this file.
 
 ----------------------------------------

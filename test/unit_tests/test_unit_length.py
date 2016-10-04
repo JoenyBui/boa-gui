@@ -1,29 +1,38 @@
 from unittest import TestCase
 from peui.units import length
+from peui.units.length import LengthUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestLength(TestCase):
+class TestLength(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = LengthUnit()
+
+        self.golden_ratio = 1.618
+        self.golden_ratio_unit = 'yard'
+
+    def test_meter(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'm')*self.golden_ratio, 1.4794992)
 
     def test_km(self):
-        self.assertEqual(round(length.get_length_conversion_factor('km', 'm'), 5), 1000)
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'km')*self.golden_ratio, 0.0014794992)
 
     def test_cm(self):
-        self.assertEqual(round(length.get_length_conversion_factor('cm', 'm'), 5), 0.01)
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'cm')*self.golden_ratio, 147.94992)
 
     def test_mm(self):
-        self.assertEqual(round(length.get_length_conversion_factor('mm', 'm'), 5), 0.001)
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'mm')*self.golden_ratio, 1479.4992)
 
     def test_in(self):
-        self.assertEqual(round(length.get_length_conversion_factor('in', 'ft'), 5), round(1.0/12, 5))
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'in')*self.golden_ratio, 58.248)
 
     def test_ft(self):
-        self.assertEqual(round(length.get_length_conversion_factor('ft', 'in'), 5), 12)
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'ft')*self.golden_ratio, 4.854)
 
     def test_yd(self):
-        self.assertEqual(round(length.get_length_conversion_factor('yd', 'in'), 5), 36)
+        self.assertTolerance(self.unit.get_conversion_factor(self.golden_ratio_unit, 'yd')*self.golden_ratio, 1.618)
 

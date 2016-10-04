@@ -4,6 +4,7 @@ __author__ = 'jbui'
 
 
 # UNITY_VALUE = 'tnt'
+FACTOR_CHARGE_TNT = 1.0
 FACTOR_CHARGE_ANFO = 0.82
 FACTOR_CHARGE_COMPOSITION_A3 = 1.09
 FACTOR_CHARGE_COMPOSITION_B = 1.11
@@ -22,7 +23,6 @@ FACTOR_CHARGE_PICRATOL = 0.90
 FACTOR_CHARGE_TETRYL = 1.07
 FACTOR_CHARGE_TETRYTOL = 1.06
 FACTOR_CHARGE_TNETB = 1.36
-FACTOR_CHARGE_TNT = 1.0
 FACTOR_CHARGE_TRITONAL = 1.07
 
 
@@ -31,11 +31,13 @@ CHARGE_KEY = {
     'Composition A-3': FACTOR_CHARGE_COMPOSITION_A3,
     'Composition B': FACTOR_CHARGE_COMPOSITION_B,
     'Cyclotol (70/30)': FACTOR_CHARGE_CYCLOTOL,
+    'Cyclotol)': FACTOR_CHARGE_CYCLOTOL,
     'HBX-1': FACTOR_CHARGE_HBX_1,
     'HBX-3': FACTOR_CHARGE_HBX_3,
     'H-6': FACTOR_CHARGE_H6,
     'Minoi II': FACTOR_CHARGE_MINOL_II,
     'Octol (70/30)': FACTOR_CHARGE_OCTOL,
+    'Octol': FACTOR_CHARGE_OCTOL,
     'PBX-9404': FACTOR_CHARGE_PBX_9404,
     'PBX-9010': FACTOR_CHARGE_PBX_9010,
     'PETN': FACTOR_CHARGE_PETN,
@@ -74,7 +76,7 @@ def get_charge_conversion_factor(origin, destination):
     origin_factor = CHARGE_KEY.get(origin)
     destination_factor = CHARGE_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class ChargeUnit(Unit):
@@ -86,10 +88,7 @@ class ChargeUnit(Unit):
         Unit.__init__(self, *args, **kwargs)
 
         self.key = UNIT_CHARGE_KEY
-        self.list = CHARGE_KEY
+        self.table = CHARGE_KEY
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL_LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_charge_conversion_factor(origin, destination)

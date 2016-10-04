@@ -10,9 +10,9 @@ __author__ = 'jbui'
 
 # UNITY_VALUE == 'm^3'
 FACTOR_INERTIA_QUADRATIC_METER = 1.0
-FACTOR_INERTIA_QUADRATIC_MM = 0.001**4
-FACTOR_INERTIA_QUADRATIC_FT = 0.3048**4
-FACTOR_INERTIA_QUADRATIC_IN = 0.0254**4
+FACTOR_INERTIA_QUADRATIC_MM = 1.0/(0.001**4)
+FACTOR_INERTIA_QUADRATIC_FT = 1.0/0.3048**4
+FACTOR_INERTIA_QUADRATIC_IN = 1.0/0.0254**4
 
 ID_NAME_INERTIA_M4 = ("m^4", "m4", "M4")
 ID_NAME_INERTIA_MM4 = ("mm^4", "mm4", "MM4")
@@ -59,7 +59,7 @@ def get_inertia_conversion_factor(origin, destination):
     origin_factor = INERTIA_KEY.get(origin)
     destination_factor = INERTIA_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class InertiaUnit(Unit):
@@ -75,6 +75,3 @@ class InertiaUnit(Unit):
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL_LIST
-
-    def get_conversion_factor(self, origin, destination):
-        return get_inertia_conversion_factor(origin, destination)

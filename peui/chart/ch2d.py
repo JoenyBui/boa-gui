@@ -18,30 +18,53 @@ from .toolbar import MatplotlibCustomToolbar
 __author__ = 'jbui'
 
 
-class Chart2d(wx.Panel):
+class Chart2d(wx.ScrolledWindow):
     """
-    Chart 2d Panel.
+    Chart 2D Panel
+
     """
-    def __init__(self, parent, controller, local, *args, **kwargs):
+    def __init__(self, parent, controller, local, figsize=None, dpi=None, facecolor=None, edgecolor=None,
+                 linewidth=0.0, frameon=None, subplotpars=None, tight_layout=None, *args, **kwargs):
         """
         Constructor.
 
-        :param parent:
+        :param parent: parent view
         :param controller: parent controller
         :param local: local controller
+        :param figsize: width, height tuples in inches
+        :param dpi: Dots per inch
+        :param facecolor: The figure patch facecolor; defaults to rc figure.facecolor
+        :param edgecolor: The figure patch edge color; defaults to rc figure.edgecolor
+        :param linewidth: The figure patch edge linewidth; the default linewidth of the frame
+        :param frameon: If False, suppress drawing the figure frame
+        :param subplotpars: A SubplotParams instance, defaults to rc
+        :param tight_layout: If False use subplotpars; if True adjust subplot parameters using tight_layout() with
+            default padding. When providing a dict containing the keys pad, w_pad, h_pad and rect, the default
+            tight_layout() paddings will be overridden. Defaults to rc figure.autolayout.
         :param args:
+            nrows - number of rows
+            ncols - number of columns
+            plot_number - plot number
         :param kwargs:
+
         :return:
         """
-        wx.Panel.__init__(self, parent)
+        wx.ScrolledWindow.__init__(self, parent=parent, size=wx.Size(200, 200), id=wx.ID_ANY, style=wx.VSCROLL)
+
+        self.figure = plt.Figure(figsize=figsize, dpi=dpi, facecolor=facecolor, edgecolor=edgecolor,
+                                 linewidth=linewidth, frameon=frameon, subplotpars=subplotpars,
+                                 tight_layout=tight_layout)
+
+        self.SetScrollRate(5, 5)
 
         if local:
             self.controller = local
+            self.controller.view = self
         else:
-            self.controller = Chart2dController(controller, self)
+            self.controller = Chart2dController(controller, self, **kwargs)
 
-        self.figure = plt.Figure()
-        self.axes = self.figure.add_subplot(*args, **kwargs)
+        self.axes = []
+        # self.axes = self.figure.add_subplot(*args, **kwargs)
         self.canvas = FigureCanvas(self, -1, self.figure)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -51,9 +74,11 @@ class Chart2d(wx.Panel):
 
         self.toolbar = None
 
+        # Add custom toolbar
         self.add_toolbar()
 
-        if not local:
+        # if not local:
+        if hasattr(self.controller, 'do_layout'):
             self.controller.do_layout()
 
     def plot(self, xs, ys, *args, **kwargs):

@@ -21,12 +21,14 @@ from . import Unit, UNIT_VELOCITY_KEY
 __author__ = 'jbui'
 
 FACTOR_VELOCITY_M_S = 1.0
-FACTOR_VELOCITY_KM_H = 0.277778
-FACTOR_VELOCITY_FT_S = 0.3048
+FACTOR_VELOCITY_KM_H = 3.6
+FACTOR_VELOCITY_MPH = 2.23694
+FACTOR_VELOCITY_FT_S = 3.28084
+FACTOR_VELOCITY_KNOT = 1.94384
 FACTOR_VELOCITY_MM_MS = 1.0
-FACTOR_VELOCITY_MM_SEC = 1.0
-FACTOR_VELOCITY_IN_MS = 1.0
-FACTOR_VELOCITY_IN_SEC = 1.0
+FACTOR_VELOCITY_MM_SEC = 1000.0
+FACTOR_VELOCITY_IN_MS = 0.0393701
+FACTOR_VELOCITY_IN_SEC = 39.3701
 
 VELOCITY_KEY = {
     'm/s': FACTOR_VELOCITY_M_S,
@@ -37,7 +39,9 @@ VELOCITY_KEY = {
     'ft/sec': FACTOR_VELOCITY_FT_S,
     'km/h': FACTOR_VELOCITY_KM_H,
     'in/ms': FACTOR_VELOCITY_IN_MS,
-    'in/sec': FACTOR_VELOCITY_IN_SEC
+    'in/sec': FACTOR_VELOCITY_IN_SEC,
+    'in/s': FACTOR_VELOCITY_IN_SEC,
+    'mph': FACTOR_VELOCITY_MPH
 }
 
 
@@ -69,7 +73,7 @@ def get_velocity_conversion_factor(origin, destination):
     origin_factor = VELOCITY_KEY.get(origin)
     destination_factor = VELOCITY_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class VelocityUnit(Unit):

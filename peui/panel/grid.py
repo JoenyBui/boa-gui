@@ -460,7 +460,7 @@ class PropGrid(propgrid.PropertyGrid):
 
         return cell.GetCell(column)
 
-    def set_text(self, key, column, value, *args, **kwargs):
+    def set_text(self, key, column, value, fmt=None, *args, **kwargs):
         """
         Set the cell value for the property item.
 
@@ -476,9 +476,16 @@ class PropGrid(propgrid.PropertyGrid):
 
         if column == 1:
             item = self.get_item(key)
-            item.SetValue(str(value))
+
+            if fmt:
+                item.SetValue(fmt%(value))
+            else:
+                item.SetValue(str(value))
         else:
-            cell.SetText(str(value))
+            if fmt:
+                cell.SetText(fmt%(value))
+            else:
+                cell.SetText(str(value))
 
         if kwargs.get('fgcol'):
             cell.SetFgCol(kwargs.get('fgcol'))

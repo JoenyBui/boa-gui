@@ -54,6 +54,9 @@ class CustomMenuBar(wx.MenuBar):
                 else:
                     mi = wx.MenuItem(sub_menu_object, item['id'], title)
 
+                if item.get('enable') is False:
+                    mi.Enable(False)
+
                 if item.get('bitmap'):
                     mi.SetBitmap(wx.ArtProvider.GetBitmap(item['bitmap'], wx.ART_MENU, MB_ICON_SIZE))
 

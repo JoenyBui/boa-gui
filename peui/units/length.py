@@ -1,16 +1,22 @@
+"""
+1 Meter = [value] Destination Unit
+
+
+"""
 from . import Unit, UNIT_LENGTH_KEY
+
 
 __author__ = 'jbui'
 
 # UNITY_VALUE == 'meter
 FACTOR_LENGTH_METER = 1.0
-FACTOR_LENGTH_KILOMETER = 1000
-FACTOR_LENGTH_CENTIMETER = 0.01
-FACTOR_LENGTH_MILLIMETER = 0.001
-FACTOR_LENGTH_INCH = 0.0254
-FACTOR_LENGTH_FEET = 0.3048
-FACTOR_LENGTH_YARD = 0.9144
-FACTOR_LENGTH_MILE = 1609.34
+FACTOR_LENGTH_KILOMETER = 0.001
+FACTOR_LENGTH_CENTIMETER = 100
+FACTOR_LENGTH_MILLIMETER = 1000
+FACTOR_LENGTH_INCH = 39.370
+FACTOR_LENGTH_FEET = 3.28084
+FACTOR_LENGTH_YARD = 1.09361
+FACTOR_LENGTH_MILE = 0.000621371192237
 
 ID_NAME_LENGTH_FEET = ("ft", "feet", "Foot")
 ID_NAME_LENGTH_INCH = ("in", "in.", "inches")
@@ -29,6 +35,7 @@ LENGTH_KEY = {
     'in': FACTOR_LENGTH_INCH,
     'inch': FACTOR_LENGTH_INCH,
     'in.': FACTOR_LENGTH_INCH,
+    'in^2/in': FACTOR_LENGTH_INCH,
     'yd': FACTOR_LENGTH_YARD,
     'yard': FACTOR_LENGTH_YARD,
     'm': FACTOR_LENGTH_METER,
@@ -38,7 +45,9 @@ LENGTH_KEY = {
     'cm': FACTOR_LENGTH_CENTIMETER,
     'centimeter': FACTOR_LENGTH_CENTIMETER,
     'mm': FACTOR_LENGTH_MILLIMETER,
-    'millimeter': FACTOR_LENGTH_MILLIMETER
+    'millimeter': FACTOR_LENGTH_MILLIMETER,
+    'mm^2/mm': FACTOR_LENGTH_MILLIMETER,
+    'mile': FACTOR_LENGTH_MILE
 }
 
 
@@ -75,7 +84,7 @@ def get_length_conversion_factor(origin, destination):
     origin_factor = LENGTH_KEY.get(origin)
     destination_factor = LENGTH_KEY.get(destination)
 
-    return origin_factor / destination_factor
+    return float(destination_factor) / float(origin_factor)
 
 
 class LengthUnit(Unit):
@@ -92,6 +101,6 @@ class LengthUnit(Unit):
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL_LIST
 
-    def get_conversion_factor(self, origin, destination):
-        return get_length_conversion_factor(origin, destination)
+    # def get_conversion_factor(self, origin, destination):
+    #     return get_length_conversion_factor(origin, destination)
 

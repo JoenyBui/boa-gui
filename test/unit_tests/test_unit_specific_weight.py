@@ -1,13 +1,22 @@
 from unittest import TestCase
-from peui.units import specific_weight
+from peui.units.specific_weight import SpecificWeightUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestForce(TestCase):
+class TestSpecificWeight(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = SpecificWeightUnit()
+
+        self.magnitude = 1.618
+        self.magnitude_unit = 'kPa/mm'
+
+    def test_kPa_mm(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'kPa/mm')*self.magnitude, 1.618)
 
     def test_psi_in(self):
-        self.assertEqual(round(specific_weight.get_specific_weight_conversion_factor('psi/in', 'kPa/mm'), 5), 0.27145)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'psi/in')*self.magnitude, 5.9606)
+

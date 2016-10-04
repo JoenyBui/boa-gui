@@ -1,16 +1,26 @@
 from unittest import TestCase
+
 from peui.units import acceleration
+from peui.units.acceleration import AccelerationUnit
+
+from base import BaseUnitTest
 
 __author__ = 'jbui'
 
 
-class TestAcceleration(TestCase):
+class TestAcceleration(BaseUnitTest):
 
     def setUp(self):
-        pass
+        self.unit = AccelerationUnit()
 
-    def test_gal(self):
-        self.assertEqual(round(acceleration.get_acceleration_conversion_factor('ft/s2', 'm/s2'), 5), 0.3048)
+        self.magnitude = 1.618
+        self.magnitude_unit = 'ft/s^2'
+
+    def test_m2(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'm/s^2')*self.magnitude, 1618)
+
+    def test_mm2(self):
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'mm/s^2')*self.magnitude, 1618000)
 
     def test_ft_s2(self):
-        self.assertEqual(round(acceleration.get_acceleration_conversion_factor('gal', 'm/s2'), 3), 0.01)
+        self.assertTolerance(self.unit.get_conversion_factor(self.magnitude_unit, 'ft/s^2')*self.magnitude, 5308)

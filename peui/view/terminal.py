@@ -1,17 +1,22 @@
 import sys
-import wx
 
-from ..controller import ChildController
+import wx
+import wx.lib.newevent
+
+from ..controller import PaneController
 
 __author__ = 'jbui'
 
+# Create Event Type
+wxLogEvent, EVT_WX_LOG_EVENT = wx.lib.newevent.NewEvent()
 
-class Console(wx.Panel):
+
+class Console(wx.ScrolledWindow):
     """
     Output console info.
 
     """
-    def __init__(self, parent, controller, local=None):
+    def __init__(self, parent, controller, local=None, *args, **kwargs):
         """
 
         :param parent:
@@ -19,7 +24,14 @@ class Console(wx.Panel):
         :param local:
         :return:
         """
-        wx.Panel.__init__(self, parent, wx.ID_ANY)
+        wx.ScrolledWindow.__init__(self, parent=parent, size=wx.Size(200, 200), id=wx.ID_ANY, style=wx.VSCROLL)
+        self.SetScrollRate(5, 5)
+
+        if local:
+            self.controller = local
+            self.controller.view = self
+        else:
+            self.controller = ConsoleController(controller, self, *args, **kwargs)
 
         # Add a panel so it looks the correct on all platforms
         style = wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL
@@ -37,35 +49,21 @@ class Console(wx.Panel):
         # redirect text here
         sys.stdout = log
 
-        if local:
-            self.controller = local
-        else:
-            self.controller = ConsoleController(controller, self)
 
-        self.parent = parent
-
-
-class ConsoleController(ChildController):
+class ConsoleController(PaneController):
     """
 
     """
-    def __init__(self, parent, view):
+    def __init__(self, parent, view, *args, **kwargs):
         """
 
         :param parent:
         :param view:
         :return:
         """
-        ChildController.__init__(self, parent, view)
+        PaneController.__init__(self, parent, view, *args, **kwargs)
 
     def do_layout(self):
-        """
-
-        :return:
-        """
-        pass
-
-    def update_layout(self):
         """
 
         :return:
