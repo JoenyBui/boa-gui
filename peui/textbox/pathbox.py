@@ -1,5 +1,6 @@
 import wx, os
 
+from ..textbox import LayoutDimensions
 from .smart import SmartTextBox, SmartInputLayout
 
 __author__ = 'jbui'
@@ -91,7 +92,13 @@ class PathInputLayout(SmartInputLayout):
             # Change the path string..
             self.textbox.SetValue(dlg.GetPath())
 
+            ret_val = wx.ID_OK
+        else:
+            ret_val = wx.ID_CANCEL
+
         dlg.Destroy()
+
+        return ret_val
 
     def pick_file_path(self, event):
         """
@@ -110,7 +117,13 @@ class PathInputLayout(SmartInputLayout):
             # Change the path string..
             self.textbox.SetValue(dlg.GetPath())
 
+            ret_val = wx.ID_OK
+        else:
+            ret_val = wx.ID_CANCEL
+
         dlg.Destroy()
+
+        return ret_val
 
     def enable(self):
         """
@@ -149,3 +162,102 @@ class PathInputLayout(SmartInputLayout):
 
         """
         return self.textbox.get_value()
+
+
+class SmartPathInputLayout(PathInputLayout):
+    """
+    Smart Path Input Layout
+
+    """
+    def __init__(self, parent, name=None, textbox=None, postbox=None, layout=None, is_file=False, *args, **kwargs):
+        """
+        Constructor
+
+        :param parent:
+        :param name:
+        :param textbox:
+        :param postbox:
+        :param layout:
+        :param is_file:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if textbox is None:
+            textbox = PathSmartBox(parent, disabled_messages=[name])
+            textbox.Disable()
+
+        if postbox is None:
+            postbox = wx.Button(parent, label='Browse', id=wx.ID_ANY)
+
+        if layout is None:
+            layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2,
+                                      widths=(125, 75),
+                                      stretch_factor=(1, 0))
+            layout.calculate()
+
+        PathInputLayout.__init__(self,
+                                 parent,
+                                 label=None,
+                                 textbox=textbox,
+                                 postbox=postbox,
+                                 layout=layout,
+                                 is_file=is_file,
+                                 *args,
+                                 **kwargs)
+
+        self.path = None
+
+    def pick_file_path(self, event):
+        """
+        Pick file path
+
+        :param event:
+        :return:
+        """
+        retval = PathInputLayout.pick_file_path(self, event)
+
+        if retval == wx.ID_CANCEL:
+            self.textbox.set_disable_message()
+
+            self.path = None
+        else:
+            self.path = self.textbox.get_value()
+
+        return retval
+
+    def pick_folder_path(self, event):
+        """
+        Pick folder path
+
+        :param event:
+        :return:
+        """
+        retval = PathInputLayout.pick_folder_path(self, event)
+
+        if retval == wx.ID_CANCEL:
+            self.textbox.set_disable_message()
+
+            self.path = None
+        else:
+            self.path = self.textbox.get_value()
+
+        return retval
+
+    def enable(self):
+        """
+        Enable textbox and/or postbox.
+
+        :return:
+        """
+        if self.postbox:
+            self.postbox.Enable(True)
+
+    def disable(self):
+        """
+        Disable textbox and/or postbox.
+
+        :return:
+        """
+        if self.postbox:
+            self.postbox.Disable()

@@ -91,6 +91,7 @@ if __name__ == '__main__':
     from peui.main.toolbar import CustomToolBar
 
     from peui.controller.xlsx import XlsxController
+    from peui.panel.image import ImageCanvas
 
     import docx
     import docxtpl
@@ -248,6 +249,13 @@ if __name__ == '__main__':
         wx.NewId(),
         'Multi-Chart',
         True
+    )
+
+    controller.add_page(
+        ImageCanvas(parent=frame, image_path=os.path.join(r'D:\DEVEL\pec_gui\peui\splash\PEC.jpg'), id=wx.ID_ANY),
+        wx.NewId(),
+        'Image',
+        False
     )
 
     data = (("A", "B"),

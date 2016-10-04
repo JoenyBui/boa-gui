@@ -1,6 +1,8 @@
 alabaster==0.7.9
+args==0.1.0
 Babel==2.3.4
 cffi==1.5.2
+clint==0.5.1
 colorama==0.3.7
 cryptography==1.3.1
 cycler==0.9.0
@@ -23,11 +25,12 @@ netaddr==0.7.18
 numpy==1.10.4
 palettable==2.1.1
 pandas==0.17.1
--e git+git@bitbucket.org:protectionconsultants/pec_document.git@c026fbc9406b02438ac2e7d64c1e8eae13ca3e09#egg=pecdoc
--e git+git@bitbucket.org:protectionconsultants/pec_utility.git@4d78b77d381a03bc05e5d72b12c3ed72fcf9f824#egg=pecutil
+-e git+git@bitbucket.org:protectionconsultants/pec_document.git@97e2f8a91ffe99d3dee20c67b83e3dad9a3d2ac6#egg=pecdoc
+-e git+git@bitbucket.org:protectionconsultants/pec_utility.git@db4cb7aea444544e7c4a202dcba940f4944beeff#egg=pecutil
 pefile==2016.3.28
 pelm==0.50
 Pillow==3.1.0
+pkginfo==1.3.2
 pockets==0.3
 py==1.4.31
 pyasn1==0.1.9
@@ -42,6 +45,8 @@ python-dateutil==2.4.2
 python-docx==0.8.6
 pytz==2016.6.1
 reportlab==3.2.0
+requests==2.11.1
+requests-toolbelt==0.7.0
 scipy==0.16.0
 six==1.10.0
 snowballstemmer==1.2.1
@@ -49,3 +54,4 @@ Sphinx==1.4.5
 sphinx-rtd-theme==0.1.9
 sphinxcontrib-napoleon==0.5.2
 tqdm==4.7.6
+twine==1.8.1

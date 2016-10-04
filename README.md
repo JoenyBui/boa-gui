@@ -6,7 +6,6 @@ This README would normally document whatever steps are necessary to get your app
 
 * Quick summary
 * Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
@@ -24,10 +23,10 @@ This README would normally document whatever steps are necessary to get your app
 * Other guidelines
 * Minion Pull Request
 
-    git checkout v1
-    git remote add protectionconsultants/pec_gui ssh://git@bitbucket.org/protectionconsultants/pec_gui.git
-    git fetch protectionconsultants/pec_gui
-    git merge remotes/protectionconsultants/pec_gui/v1
+        git checkout v1
+        git remote add protectionconsultants/pec_gui ssh://git@bitbucket.org/protectionconsultants/pec_gui.git
+        git fetch protectionconsultants/pec_gui
+        git merge remotes/protectionconsultants/pec_gui/v1
 
 * Requirements
     There are two sets of requirements to output (pip and conda)

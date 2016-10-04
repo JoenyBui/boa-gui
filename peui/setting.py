@@ -116,6 +116,7 @@ class Setting(object):
     @property
     def efile(self):
         """
+        Get electronic file
 
         :return:
         """
@@ -124,6 +125,7 @@ class Setting(object):
     @efile.setter
     def efile(self, value):
         """
+        Set electronic file
 
         :param value:
         :return:
@@ -133,6 +135,7 @@ class Setting(object):
     @property
     def ekey(self):
         """
+        Get electronic key
 
         :return:
         """
@@ -141,6 +144,7 @@ class Setting(object):
     @ekey.setter
     def ekey(self, value):
         """
+        Set electronic key
 
         :param value:
         :return:
@@ -150,6 +154,7 @@ class Setting(object):
     @property
     def esignature(self):
         """
+        Get electronic signature
 
         :return:
         """
@@ -158,6 +163,7 @@ class Setting(object):
     @esignature.setter
     def esignature(self, value):
         """
+        Set electronic signature
 
         :param value:
         :return:
@@ -195,6 +201,7 @@ class Setting(object):
 
     def load(self, file_path):
         """
+        Load file
 
         :param file_path:
         :return:
@@ -204,6 +211,7 @@ class Setting(object):
 
     def save_to_settings(self):
         """
+        Save to settings
 
         :return:
         """
