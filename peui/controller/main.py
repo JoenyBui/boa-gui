@@ -35,6 +35,7 @@ class MainController(object):
 
         # Add controller to project
         self.project.controller = self
+        self.basefolder = kwargs.get('basefolder')
 
         self.setting = kwargs.get('setting')
 

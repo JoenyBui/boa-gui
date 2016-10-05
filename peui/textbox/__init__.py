@@ -130,3 +130,21 @@ class SmartToolTip(SuperToolTip):
 
     def disable(self):
         self.Show(False)
+
+
+class SmartHelpButton(wx.ContextHelpButton):
+    """
+    Smart Help Button
+
+    """
+    def __init__(self, parent, helptext=None, minsize=wx.Size(24, 24), evt_click=None, *args, **kwargs):
+        wx.ContextHelpButton.__init__(self, parent, *args, **kwargs)
+
+        if helptext:
+            self.SetHelpText(helptext)
+
+        if minsize:
+            self.SetMinSize(minsize)
+
+        if evt_click:
+            self.Bind(wx.EVT_BUTTON, evt_click)
