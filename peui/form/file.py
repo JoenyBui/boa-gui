@@ -196,13 +196,25 @@ class SaveXYDialog(wx.FileDialog):
         :param kwargs:
         :return:
         """
-        wilcard = "DPlot (*.grf)|*.grf| Comma Separated Value (*.csv)|*.csv"
+        if kwargs.get('wildcard'):
+            wildcard = kwargs.get('wildcard')
+            kwargs.pop('wildcard')
+        else:
+            wildcard = "DPlot (*.grf)|*.grf| Comma Separated Value (*.csv)|*.csv"
+
+        if kwargs.get('message'):
+            message = kwargs.get('message')
+            kwargs.pop('message')
+        else:
+            message = "Save data as..."
 
         wx.FileDialog.__init__(self,
                                parent,
-                               "Save data as...",
-                               os.getcwd(), "", wilcard,
-                               wx.SAVE | wx.OVERWRITE_PROMPT,
+                               message=message,
+                               defaultDir=os.getcwd(),
+                               defaultFile="",
+                               wildcard=wildcard,
+                               style=wx.SAVE | wx.OVERWRITE_PROMPT,
                                *args,
                                **kwargs)
 

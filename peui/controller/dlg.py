@@ -3,6 +3,8 @@ import os
 import wx
 from wx.lib.pubsub import pub
 
+import pandas as pd
+
 from pecutil.file import open_file
 
 from ..model.project import Project

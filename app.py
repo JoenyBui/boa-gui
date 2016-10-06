@@ -11,6 +11,7 @@ import wx
 import wx.lib.mixins.inspection as WIT
 import wx.aui
 import wx.lib.agw.aui as aui
+from wx.lib.pubsub import pub
 
 from pelm.client import LicenseClientManager, ClientFrame
 
@@ -90,7 +91,7 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
-    from peui.controller.xlsx import XlsxController
+    from peui.controller.xlsx import XlsxController, GeneralColumnTable
     from peui.panel.image import ImageCanvas
 
     import docx
@@ -265,12 +266,25 @@ if __name__ == '__main__':
             ("F", "F"),
             ("Q", "Q"))
 
-    colLabels = ("Last", "First")
-    rowLabels = ("1", "2", "3", "4", "5", "6", "7", "8", "9")
-    xlsx_local = XlsxController(controller, None, data=data, row_label=rowLabels, col_label=colLabels, id=cfg.METHOD_WINDOW_XLSX)
+    colLabels = ("1st", "2nd", "3rd", "4th")
+    data = [
+        np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+        np.sin(0.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
+        np.cos(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+        np.cos(7.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
+    ]
+
+    table = GeneralColumnTable(data=data)
 
     controller.add_page(
-        SpreadSheet(frame, controller, xlsx_local),
+        SpreadSheet(controller.notebook,
+                    controller,
+                    XlsxController(
+                        controller,
+                        None,
+                        table=table,
+                        id=cfg.METHOD_WINDOW_XLSX
+                    )),
         cfg.METHOD_WINDOW_XLSX,
         'XLSX',
         True
@@ -280,5 +294,7 @@ if __name__ == '__main__':
     frame.Show(True)
     app.SetTopWindow(frame=frame)
     controller.refresh()
+
+    pub.sendMessage(cfg.EVT_CHANGE_STATE, state=cfg.STATE_OPEN_PROJECT)
 
     app.MainLoop()
