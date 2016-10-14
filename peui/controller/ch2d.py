@@ -11,7 +11,7 @@ from pecutil.threads import threaded
 from pecutil.general import check_empty
 
 from ..chart.dlg import FigureSettingDialog, FigureSetting
-from ..form.file import SaveXYDialog
+from ..form.file import SaveXYDialog, PlotChooseAxisDialog
 from ..chart.dplot import Dplot, DplotCurve
 
 from . import TabPageController
@@ -188,14 +188,14 @@ class Chart2dController(TabPageController):
         if dlg.ShowModal() == wx.ID_OK:
             self.update_text(dlg.local.settings)
 
-    def update_figure_settings(self, fs):
+    def update_figure_settings(self):
         """
+        Update figure settings
 
         :param fs:
         :return:
         """
-        for setting in fs:
-            pass
+        self.update_text(self.figure_settings)
 
     def on_click_save_xy_data(self, event):
         """
@@ -204,23 +204,27 @@ class Chart2dController(TabPageController):
         :param event:
         :return:
         """
-        dlg = SaveXYDialog(self.view)
+        if len(self.view.axes) == 1:
+            dlg = SaveXYDialog(self.view)
+        else:
+            dlg = PlotChooseAxisDialog(self.view)
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
 
+            axis_index = dlg.get_axis_index()
             filename = dlg.GetFilename()
 
             file, ext = os.path.splitext(filename)
 
             if ext == '.csv':
-                self.save_xy_data(path)
+                self.save_xy_data(path, axis_index)
             elif ext == '.grf':
-                self.save_dplot_data(path)
+                self.save_dplot_data(path, axis_index)
 
         dlg.Destroy()
 
-    def get_data_block(self):
+    def get_data_block(self, index):
         """
         Get data in numpy matrix block.
 
@@ -228,7 +232,7 @@ class Chart2dController(TabPageController):
         """
         data = []
 
-        for line in self.view.axes.lines:
+        for line in self.view.axes[index].lines:
             x = line.get_xdata()
             y = line.get_ydata()
 
@@ -237,7 +241,7 @@ class Chart2dController(TabPageController):
 
         return np.array(data)
 
-    def get_data_list(self):
+    def get_data_list(self, axis_index):
         """
         Get the data in list of tuple.
 
@@ -245,22 +249,23 @@ class Chart2dController(TabPageController):
         """
         data = []
 
-        for line in self.view.axes.lines:
+        # for axes in self.view.axes[axis_index]:
+        axes = self.view.axes[axis_index]
+
+        for line in axes.lines:
             data.append((line.get_xdata(), line.get_ydata()))
 
         return data
 
-    def save_xy_data(self, pathname):
+    def save_xy_data(self, pathname, axis_index):
         """
         Save data file to csv x, y.
 
         :param pathname: file path name
         :return:
         """
-        data = self.get_data_block()
+        data = self.get_data_block(axis_index)
 
-        # df = pd.DataFrame(np.array(data).transpose())
-        # df.to_csv(pathname)
         try:
             np.savetxt(pathname, data.transpose(), delimiter=',')
         except TypeError as e:
@@ -268,7 +273,7 @@ class Chart2dController(TabPageController):
 
             wx.MessageBox('TypeError: Data is not aligned and cannot be saved as csv.')
 
-    def save_dplot_data(self, pathname):
+    def save_dplot_data(self, pathname, axis_index):
         """
         Save dplot data
 
@@ -279,17 +284,17 @@ class Chart2dController(TabPageController):
         try:
             dp = Dplot()
 
-            data = self.get_data_list()
+            data = self.get_data_list(axis_index)
 
             # Title
-            dp.title_1 = self.view.axes.get_title()
+            dp.title_1 = self.view.axes[axis_index].get_title()
 
             # X-Title
-            x_axis = self.view.axes.get_xaxis()
+            x_axis = self.view.axes[axis_index].get_xaxis()
             dp.x_axis = x_axis.get_label().get_text()
 
             # Y-Title
-            y_axis = self.view.axes.get_yaxis()
+            y_axis = self.view.axes[axis_index].get_yaxis()
             dp.y_axis = y_axis.get_label().get_text()
 
             xscale = x_axis.get_scale()
@@ -312,7 +317,7 @@ class Chart2dController(TabPageController):
                 )
 
             # Draw Legend
-            legend = self.view.axes.get_legend()
+            legend = self.view.axes[axis_index].get_legend()
 
             if legend:
                 texts = legend.get_texts()

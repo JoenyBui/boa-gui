@@ -958,7 +958,6 @@ class SmartInputLayout(wx.BoxSizer):
                             wx.ALL | wx.EXPAND,
                             self.layout.border_width[id_blank])
 
-
         self.hsizer.AddSpacer(self.layout.right)
 
         self.Add(self.hsizer, 1, wx.EXPAND | wx.ALL, 0)

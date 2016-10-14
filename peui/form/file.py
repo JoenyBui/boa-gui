@@ -6,6 +6,8 @@ from ..model.project import Project
 from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextSmartBox, TextInputLayout
 from ..textbox.pathbox import PathSmartBox, PathInputLayout, SmartPathInputLayout
+from ..textbox.smart import SmartComboBox
+from ..textbox.combobox import ComboBoxInputLayout
 
 from . import DpiAwareness
 
@@ -219,3 +221,87 @@ class SaveXYDialog(wx.FileDialog):
                                **kwargs)
 
         self.parent = parent
+
+    def get_axis_index(self):
+        return 0
+
+
+class PlotChooseAxisDialog(wx.Dialog, DpiAwareness):
+    """
+
+    """
+    def __init__(self, parent, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, *args, **kwargs):
+        DpiAwareness.__init__(self)
+
+        wx.Dialog.__init__(self, parent,
+                           title='Choose Axis to Save',
+                           style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                           *args, **kwargs)
+
+        self.parent = parent
+        self.flags = style
+
+        self.layouts = {}
+
+        self.Bind(wx.EVT_BUTTON, self.on_okay, id=wx.ID_OK)
+        self.btnsizer = self.CreateButtonSizer(btn_flags)
+
+        # Layout
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        vsizer.Add(self.do_layout(), 0, wx.EXPAND | wx.ALL, 5)
+        vsizer.AddStretchSpacer(1)
+        vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
+
+        self.SetSizer(vsizer)
+        self.SetInitialSize()
+        self.CenterOnParent()
+        self.Fit()
+
+    def do_layout(self):
+        layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2,
+                                  widths=(150, 300),
+                                  stretch_factor=(0, 1))
+        layout.calculate()
+
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.layouts['axis'] = ComboBoxInputLayout(self,
+                                                   name='Choose Plot Axis',
+                                                   combobox=SmartComboBox(self),
+                                                   layout=layout)
+
+        self.layouts['file'] = SmartPathInputLayout(self, name='Save File Path',
+                                                    is_file=True, is_save=True,
+                                                    message='Save File Path',
+                                                    wildcard='DPlot (*.grf)|*.grf| Comma Separated Value (*.csv)|*.csv')
+
+        for index, axes in enumerate(self.parent.axes):
+            self.layouts['axis'].append(
+                '%d - %s' % (index, axes.get_title()),
+                index
+            )
+
+        self.layouts['axis'].set_selection(0)
+
+        vsizer.AddSpacer(10)
+        vsizer.Add(self.layouts['axis'], 0, wx.ALL | wx.EXPAND, 5)
+        vsizer.AddSpacer(10)
+        vsizer.Add(self.layouts['file'], 0, wx.EXPAND | wx.ALL, 5)
+
+        return vsizer
+
+    def get_axis_index(self):
+        return self.layouts['axis'].get_data()
+
+    def GetPath(self):
+        file_path = self.layouts['file'].textbox.get_value()
+
+        return file_path
+
+    def GetFilename(self):
+        file_path = self.layouts['file'].textbox.get_value()
+
+        return os.path.split(file_path)[1]
+
+    def on_okay(self, event):
+        event.Skip()

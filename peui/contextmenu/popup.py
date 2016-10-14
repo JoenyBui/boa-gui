@@ -4,13 +4,29 @@ __author__ = 'jbui'
 
 
 class PopupMenu(wx.Menu):
+    """
+    Popup Menus
 
+    """
     def __init__(self, parent, *args, **kwargs):
+        """
+        Constructor
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        """
         wx.Menu.__init__(self, *args, **kwargs)
 
         self.parent = parent
 
     def add_menu_item(self, title, handle):
+        """
+        Add menu item.
+        :param title:
+        :param handle:
+        :return:
+        """
         # Set menu item.
         item = wx.MenuItem(self, wx.ID_ANY, title)
 
