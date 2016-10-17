@@ -41,6 +41,7 @@ class Chart2dController(TabPageController):
         self.color_set = palettable.colorbrewer.qualitative.Dark2_7.mpl_colors
         self.figure_settings = []
 
+        self.show_origin_axis = kwargs.get('show_origin_axis', True)
         self.margin = 0.1
 
     def do_layout(self):
@@ -77,9 +78,9 @@ class Chart2dController(TabPageController):
         # Update figure text.
         # self.update_text()
 
-    def update_text(self, settings):
+    def update_figure_setting(self, settings):
         """
-        Update text
+        Update figure setting text
 
         :param settings: update the title axes
         :return:
@@ -89,6 +90,9 @@ class Chart2dController(TabPageController):
             self.view.axes[index].set_title(setting.title)
             self.view.axes[index].set_ylabel(setting.y_title)
             self.view.axes[index].set_xlabel(setting.x_title)
+
+            self.view.axes[index].set_xlim(left=setting.x_min, right=setting.x_max)
+            self.view.axes[index].set_ylim(bottom=setting.y_min, top=setting.y_max)
 
         self.view.figure.canvas.draw()
 
@@ -107,6 +111,7 @@ class Chart2dController(TabPageController):
         """
         Update the layout given the state.
 
+        :param state:
         :return:
         """
         if self.state == state:
@@ -173,6 +178,14 @@ class Chart2dController(TabPageController):
             fs.x_title = axes.get_xlabel()
             fs.y_title = axes.get_ylabel()
 
+            xlim = axes.get_xlim()
+            ylim = axes.get_ylim()
+
+            fs.x_min = xlim[0]
+            fs.x_max = xlim[1]
+            fs.y_min = ylim[0]
+            fs.y_max = ylim[1]
+
             fs_array.append(fs)
 
         return fs_array
@@ -186,7 +199,7 @@ class Chart2dController(TabPageController):
         dlg = FigureSettingDialog(self.view, self, setting=self.get_figure_settings())
 
         if dlg.ShowModal() == wx.ID_OK:
-            self.update_text(dlg.local.settings)
+            self.update_figure_setting(dlg.local.settings)
 
     def update_figure_settings(self):
         """
@@ -195,7 +208,7 @@ class Chart2dController(TabPageController):
         :param fs:
         :return:
         """
-        self.update_text(self.figure_settings)
+        self.update_figure_setting(self.figure_settings)
 
     def on_click_save_xy_data(self, event):
         """
@@ -228,6 +241,7 @@ class Chart2dController(TabPageController):
         """
         Get data in numpy matrix block.
 
+        :param index:
         :return:
         """
         data = []
@@ -245,6 +259,7 @@ class Chart2dController(TabPageController):
         """
         Get the data in list of tuple.
 
+        :param axis_index:
         :return:
         """
         data = []
@@ -252,8 +267,13 @@ class Chart2dController(TabPageController):
         # for axes in self.view.axes[axis_index]:
         axes = self.view.axes[axis_index]
 
-        for line in axes.lines:
-            data.append((line.get_xdata(), line.get_ydata()))
+        if self.show_origin_axis:
+            for line in axes.lines[:-2]:
+                data.append((line.get_xdata(), line.get_ydata()))
+
+        else:
+            for line in axes.lines:
+                data.append((line.get_xdata(), line.get_ydata()))
 
         return data
 
@@ -262,6 +282,7 @@ class Chart2dController(TabPageController):
         Save data file to csv x, y.
 
         :param pathname: file path name
+        :param axis_index:
         :return:
         """
         data = self.get_data_block(axis_index)
@@ -278,6 +299,7 @@ class Chart2dController(TabPageController):
         Save dplot data
 
         :param pathname:
+        :param axis_index:
         :return:
         """
 
@@ -410,6 +432,7 @@ class Chart2dController(TabPageController):
         ydata	            1D array
         zorder	            any number
         =================== =======================================================================================================================
+
         """
 
         pass
@@ -505,8 +528,23 @@ class Chart2dController(TabPageController):
 
         :param axes: Axes2d
         """
-        axes.axhline(0, color='black', linewidth=1)
-        axes.axvline(0, color='black', linewidth=1)
+        # axes.spines['right'].set_position('zero')
+        # axes.spines['right'].set_smart_bounds(True)
+
+        # axes.spines['left'].set_position('center')
+        # axes.spines['right'].set_color('none')
+        # axes.spines['bottom'].set_position('center')
+        # axes.spines['top'].set_position('zero')
+        # axes.spines['top'].set_smart_bounds(True)
+
+        # axes.spines['left'].set_smart_bounds(True)
+        # axes.spines['bottom'].set_smart_bounds(True)
+        # axes.xaxis.set_ticks_position('bottom')
+        # axes.yaxis.set_ticks_position('left')
+        # pass
+        if self.show_origin_axis:
+            axes.axhline(0, color='black', linewidth=1)
+            axes.axvline(0, color='black', linewidth=1)
 
     def set_xlimits(self, axes, min_x, max_x):
         """
@@ -544,6 +582,7 @@ class MultiChart2dController(Chart2dController):
 
         :param parent: parent controller
         :param view: local view
+        :param data:
         :param figure_setting:
         :return:
         """

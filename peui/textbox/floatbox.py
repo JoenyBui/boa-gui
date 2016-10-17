@@ -588,6 +588,10 @@ class FloatRangeValidator(wx.PyValidator):
 
     def TransferToWindow(self, *args, **kwargs):
         """
+        Transfer data from validator to window.
+
+        The default implementation returns False, indicating that an error occurred.
+        We simply return True, as we don't do any data transfer.
 
         :param args:
         :param kwargs:
@@ -597,6 +601,10 @@ class FloatRangeValidator(wx.PyValidator):
 
     def TransferFromWindow(self):
         """
+        Transfer data from window to validator.
+
+        The default implementation returns False, indicating that an error occurred.  We simply return True,
+        as we don't do any data transfer.
 
         :return:
         """

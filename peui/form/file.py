@@ -130,6 +130,7 @@ class OpenProjectDialog(wx.FileDialog):
 
 class SaveProjectDialog(wx.FileDialog):
     """
+    Save Project Dialog
 
     """
     def __init__(self, parent, *args, **kwargs):
@@ -147,6 +148,7 @@ class SaveProjectDialog(wx.FileDialog):
 
 class SaveAsProjectDialog(wx.FileDialog):
     """
+    Save As Project Dialog
 
     """
     def __init__(self, parent, title='Save project as...', ext='*.json', *args, **kwargs):
@@ -171,6 +173,7 @@ class SaveAsProjectDialog(wx.FileDialog):
 
 class CloseProjectDialog(wx.Dialog):
     """
+    Close Project Dialog
 
     """
     def __init__(self, parent, **kwargs):
@@ -223,14 +226,29 @@ class SaveXYDialog(wx.FileDialog):
         self.parent = parent
 
     def get_axis_index(self):
+        """
+        Get the axis index
+
+        :return:
+        """
         return 0
 
 
 class PlotChooseAxisDialog(wx.Dialog, DpiAwareness):
     """
+    Plot Choose Axis Dialog
 
     """
     def __init__(self, parent, style=wx.OK, btn_flags=wx.OK | wx.CANCEL, *args, **kwargs):
+        """
+        Constructor
+
+        :param parent:
+        :param style:
+        :param btn_flags:
+        :param args:
+        :param kwargs:
+        """
         DpiAwareness.__init__(self)
 
         wx.Dialog.__init__(self, parent,
@@ -258,6 +276,11 @@ class PlotChooseAxisDialog(wx.Dialog, DpiAwareness):
         self.Fit()
 
     def do_layout(self):
+        """
+        Draw layout
+
+        :return:
+        """
         layout = LayoutDimensions(left=2, right=2, top=2, bottom=2, interior=2,
                                   widths=(150, 300),
                                   stretch_factor=(0, 1))
@@ -291,17 +314,38 @@ class PlotChooseAxisDialog(wx.Dialog, DpiAwareness):
         return vsizer
 
     def get_axis_index(self):
+        """
+        Get axis index
+
+        :return:
+        """
         return self.layouts['axis'].get_data()
 
     def GetPath(self):
+        """
+        Get file path
+
+        :return:
+        """
         file_path = self.layouts['file'].textbox.get_value()
 
         return file_path
 
     def GetFilename(self):
+        """
+        Get file name
+
+        :return:
+        """
         file_path = self.layouts['file'].textbox.get_value()
 
         return os.path.split(file_path)[1]
 
     def on_okay(self, event):
+        """
+        On okay
+
+        :param event:
+        :return:
+        """
         event.Skip()

@@ -94,6 +94,8 @@ if __name__ == '__main__':
     from peui.controller.xlsx import XlsxController, GeneralColumnTable
     from peui.panel.image import ImageCanvas
 
+    from peui.splash.screen import SplashScreen
+
     import docx
     import docxtpl
 
@@ -172,6 +174,10 @@ if __name__ == '__main__':
                 app.MainLoop()
 
             valid_license = True
+
+    # splash = SplashScreen(image_path=os.path.join(os.path.dirname(__file__), 'peui', 'splash', 'PEC_SMALL.JPG'),
+    #                       shadowcolour=wx.WHITE,
+    #                       agwStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_NO_TIMEOUT)
 
     # Check if the a file path is passed with the executable.
     project = Project()
@@ -253,7 +259,7 @@ if __name__ == '__main__':
     )
 
     controller.add_page(
-        ImageCanvas(parent=frame, image_path=os.path.join(r'D:\DEVEL\pec_gui\peui\splash\PEC.jpg'), id=wx.ID_ANY),
+        ImageCanvas(parent=frame, image_path=os.path.join(os.path.dirname(__file__), 'peui', 'splash', 'PEC.jpg'), id=wx.ID_ANY),
         wx.NewId(),
         'Image',
         False
@@ -296,5 +302,8 @@ if __name__ == '__main__':
     controller.refresh()
 
     pub.sendMessage(cfg.EVT_CHANGE_STATE, state=cfg.STATE_OPEN_PROJECT)
+
+    # Destroy splash screen.
+    # splash.Destroy()
 
     app.MainLoop()

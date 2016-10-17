@@ -44,7 +44,7 @@ class GeneralDialog(wx.Dialog):
         self.btnsizer = self.CreateButtonSizer(btn_flags)
 
         vsizer.Add(self.do_layout(), 0, wx.EXPAND, wx.ALL, 5)
-        vsizer.AddSpacer(10)
+        vsizer.AddStretchSpacer(1)
         vsizer.Add(self.btnsizer, 0, wx.EXPAND | wx.ALL, 5)
 
         self.SetSizer(vsizer)

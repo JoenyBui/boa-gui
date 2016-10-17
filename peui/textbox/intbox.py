@@ -5,6 +5,7 @@ import types
 import wx
 
 from pecutil.refmt import get_number_fmt, parse_number
+from pecutil.types import isInt
 
 from peui import units
 
@@ -88,6 +89,16 @@ class IntSmartBox(SmartTextBox):
         """
         self.SetBackgroundColour(self.color_range_error)
 
+    def get_value(self, key=None):
+        val = SmartTextBox.get_value(self, key=key)
+
+        if key is None:
+            if isInt(val):
+                return int(val)
+        else:
+            return None
+
+        return val
 
 class IntInputLayout(SmartInputLayout):
     """
