@@ -23,8 +23,7 @@ class FloatSmartBox(SmartTextBox):
     Float Smart Box.
 
     """
-    def __init__(self, parent, signs=False, decimal=True, exponential=False, normal=None, format_error=None,
-                 range_error=None, key_up=None, message=None, enable=None, *args, **kwargs):
+    def __init__(self, parent, signs=False, decimal=True, exponential=False, key_up=None, message=None, enable=None, *args, **kwargs):
         """
         Constructor.
 
@@ -32,9 +31,6 @@ class FloatSmartBox(SmartTextBox):
         :param signs:
         :param decimal:
         :param exponential:
-        :param normal:
-        :param format_error:
-        :param range_error:
         :param key_up: event handler
         :param args:
         :param kwargs:
@@ -59,10 +55,6 @@ class FloatSmartBox(SmartTextBox):
         # self.Bind(wx.EVT_KEY_UP, self.on_key_up, self)
         # self.Bind(wx.EVT_KEY_DOWN, self.on_key_down, self)
         self.Bind(wx.EVT_TEXT, self.on_text, self)
-
-        self.color_normal = kwargs.get('normal', (255, 255, 255))
-        self.color_format_error = kwargs.get('format_error', (228, 115, 115))
-        self.color_range_error = kwargs.get('range_error', (244, 67, 54))
 
         self._validator = FloatRangeValidator(signs=signs, decimal=decimal, exponential=exponential)
         self.SetValidator(self._validator)
@@ -131,30 +123,6 @@ class FloatSmartBox(SmartTextBox):
         """
         kc = event.GetKeyCode()
         event.Skip()
-
-    def set_normal_color(self):
-        """
-        Set normal color.
-
-        """
-        self.SetBackgroundColour(self.color_normal)
-        self.Refresh()
-
-    def set_format_error_color(self):
-        """
-        Set format error color.
-
-        """
-        self.SetBackgroundColour(self.color_format_error)
-        self.Refresh()
-
-    def set_range_error_color(self):
-        """
-        Set range error color.
-
-        """
-        self.SetBackgroundColour(self.color_range_error)
-        self.Refresh()
 
     def get_value(self, key=None):
         """

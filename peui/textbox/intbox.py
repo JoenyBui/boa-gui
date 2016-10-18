@@ -36,10 +36,6 @@ class IntSmartBox(SmartTextBox):
 
         self.fmt = get_number_fmt(signs=kwargs.get('signs'), decimal=False, exponential=False)
 
-        self.color_normal = kwargs.get('normal', (255, 255, 255))
-        self.color_format_error = kwargs.get('format_error', (228, 115, 115))
-        self.color_range_error = kwargs.get('range_error', (244, 67, 54))
-
         self._validator = IntRangeValidator(**kwargs)
         self.SetValidator(self._validator)
 
@@ -68,27 +64,6 @@ class IntSmartBox(SmartTextBox):
         self.Refresh()
         event.Skip()
 
-    def set_normal_color(self):
-        """
-        Set the normal color
-
-        """
-        self.SetBackgroundColour(self.color_normal)
-
-    def set_format_error_color(self):
-        """
-        Set the format color
-
-        """
-        self.SetBackgroundColour(self.color_format_error)
-
-    def set_range_error_color(self):
-        """
-        Set the background color
-
-        """
-        self.SetBackgroundColour(self.color_range_error)
-
     def get_value(self, key=None):
         val = SmartTextBox.get_value(self, key=key)
 
@@ -99,6 +74,7 @@ class IntSmartBox(SmartTextBox):
             return None
 
         return val
+
 
 class IntInputLayout(SmartInputLayout):
     """

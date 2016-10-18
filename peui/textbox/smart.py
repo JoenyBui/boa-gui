@@ -47,7 +47,8 @@ class SmartTextBox(wx.TextCtrl):
     """
     def __init__(self, parent, key_up=None, message=None, enabled_message='',
                  disabled_messages=None, disabled_index=None, value=None, enable=None,
-                 helptext=None, *args, **kwargs):
+                 helptext=None, required=False,
+                 normal=(255, 255, 255), format_error=(228, 115, 115), range_error=(244, 67, 54), *args, **kwargs):
         """
 
         :param parent: parent ui
@@ -59,6 +60,10 @@ class SmartTextBox(wx.TextCtrl):
         :param value: initial value for smart box
         :param enable: enable box
         :param helptext: add in context help button
+        :param required: requirement
+        :param normal: rgb
+        :param format_error: rgb
+        :param range_error: rgb
         :param args:
         :param kwargs:
         """
@@ -88,6 +93,12 @@ class SmartTextBox(wx.TextCtrl):
 
         if helptext:
             self.SetHelpText(helptext)
+
+        self.required = required
+
+        self.color_normal = normal
+        self.color_format_error = format_error
+        self.color_range_error = range_error
 
         if enable is not None:
             self.Enable(enable)
@@ -189,8 +200,56 @@ class SmartTextBox(wx.TextCtrl):
         if self.disabled_messages:
             self.set_disable_message()
 
+    def set_normal_color(self):
+        """
+        Set normal color.
+
+        """
+        self.SetBackgroundColour(self.color_normal)
+        self.Refresh()
+
+    def set_format_error_color(self):
+        """
+        Set format error color.
+
+        """
+        self.SetBackgroundColour(self.color_format_error)
+        self.Refresh()
+
+    def set_range_error_color(self):
+        """
+        Set range error color.
+
+        """
+        self.SetBackgroundColour(self.color_range_error)
+        self.Refresh()
+
     def set_disable_message(self):
+        """
+        Set disable message.
+
+        :return:
+        """
         self.Value = self.disabled_messages[self.disabled_index]
+
+    def check_requirement(self):
+        """
+        Check if the textbox has value
+
+        :return:
+        """
+        if self.required:
+            if self.Enabled:
+                if self.get_value() is None:
+                    return False
+                else:
+                    return True
+            else:
+                # If textbox is not active, than it's not required.
+                return True
+        else:
+            # If not required, than return true.
+            return True
 
 
 class SmartComboBox(wx.ComboBox):
@@ -200,7 +259,7 @@ class SmartComboBox(wx.ComboBox):
     """
     def __init__(self, parent, data=None, style=wx.CB_READONLY, value='', message=None, unit=None, unit_system=None,
                  enabled_message='', disabled_messages=None, disabled_index=None, enable=None,
-                 helptext=None, *args, **kwargs):
+                 helptext=None, required=False, *args, **kwargs):
         """
         Constructor
 
@@ -216,6 +275,7 @@ class SmartComboBox(wx.ComboBox):
         :param disabled_index:
         :param enable: enable combobox
         :param helptext: add in context help
+        :param required:
         :param args:
         :param kwargs:
         :return:
@@ -256,6 +316,8 @@ class SmartComboBox(wx.ComboBox):
 
         if helptext:
             self.SetHelpText(helptext)
+
+        self.required = required
 
         if enable is not None:
             self.Enable(enable)
@@ -715,6 +777,25 @@ class SmartComboBox(wx.ComboBox):
         """
         return self.convert(origin, destination)
 
+    def check_requirement(self):
+        """
+        Check if the textbox has value
+
+        :return:
+        """
+        if self.required:
+            if self.Enabled:
+                if self.get_value() is None:
+                    return False
+                else:
+                    return True
+            else:
+                # If textbox is not active, than it's not required.
+                return True
+        else:
+            # If not required, than return true.
+            return True
+
 
 class SmartInputLayout(wx.BoxSizer):
     """
@@ -1086,6 +1167,26 @@ class SmartInputLayout(wx.BoxSizer):
 
         """
         pass
+
+    def check_requirement(self):
+        """
+
+        :return:
+        """
+        requirement_satisfy = True
+
+        for item in self.components:
+            if hasattr(item, 'check_requirement'):
+                if item.check_requirement():
+                    if hasattr(item, 'set_normal_color'):
+                        item.set_normal_color()
+                else:
+                    if hasattr(item, 'set_range_error_color'):
+                        item.set_range_error_color()
+
+                        requirement_satisfy = False
+
+        return requirement_satisfy
 
 
 class SmartButton(wx.Button):
