@@ -241,15 +241,18 @@ class SmartTextBox(wx.TextCtrl):
         if self.required:
             if self.Enabled:
                 if self.get_value() is None:
+
+                    # Set error box.
+                    if hasattr(self, 'set_range_error_color'):
+                        self.set_format_error_color()
+
                     return False
-                else:
-                    return True
-            else:
-                # If textbox is not active, than it's not required.
-                return True
-        else:
-            # If not required, than return true.
-            return True
+
+        if hasattr(self, 'set_normal_color'):
+            self.set_normal_color()
+
+        # If not required, than return true.
+        return True
 
 
 class SmartComboBox(wx.ComboBox):
@@ -1170,6 +1173,7 @@ class SmartInputLayout(wx.BoxSizer):
 
     def check_requirement(self):
         """
+        Check requirement
 
         :return:
         """
@@ -1177,14 +1181,8 @@ class SmartInputLayout(wx.BoxSizer):
 
         for item in self.components:
             if hasattr(item, 'check_requirement'):
-                if item.check_requirement():
-                    if hasattr(item, 'set_normal_color'):
-                        item.set_normal_color()
-                else:
-                    if hasattr(item, 'set_range_error_color'):
-                        item.set_range_error_color()
-
-                        requirement_satisfy = False
+                if item.check_requirement() is False:
+                    requirement_satisfy = False
 
         return requirement_satisfy
 

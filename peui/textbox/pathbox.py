@@ -29,6 +29,34 @@ class PathSmartBox(SmartTextBox):
         """
         pass
 
+    def is_file_exists(self):
+        """
+        Is file exists.
+
+        :return:
+        """
+        filepath = self.get_value()
+
+        if filepath:
+            if os.path.exists(filepath):
+                return os.path.isfile(filepath)
+
+        return False
+
+    def is_dir_exists(self):
+        """
+        Is path exists.
+
+        :return:
+        """
+        path = self.get_value()
+
+        if path:
+            if os.path.exists(path):
+                return os.path.isdir(path)
+
+        return False
+
 
 class PathInputLayout(SmartInputLayout):
     """
@@ -50,11 +78,19 @@ class PathInputLayout(SmartInputLayout):
                  *args,
                  **kwargs):
         """
+        Constructor
 
         :param parent:
         :param textbox:
         :param postbox:
         :param layout:
+        :param is_file:
+        :param is_save:
+        :param message:
+        :param defaultDir:
+        :param defaultFile:
+        :param wildcard:
+        :param style:
         :param args:
         :param kwargs:
         :return:
@@ -121,6 +157,7 @@ class PathInputLayout(SmartInputLayout):
 
     def pick_file_path(self, event):
         """
+        Pick file path
 
         :param event:
         :return:
@@ -191,6 +228,17 @@ class PathInputLayout(SmartInputLayout):
 
         """
         return self.textbox.get_value()
+
+    def is_valid_path(self):
+        """
+        Is valid path
+
+        :return:
+        """
+        if self.is_file:
+            return self.textbox.is_file_exists()
+        else:
+            return self.textbox.is_dir_exists()
 
 
 class SmartPathInputLayout(PathInputLayout):
@@ -289,3 +337,11 @@ class SmartPathInputLayout(PathInputLayout):
         """
         if self.postbox:
             self.postbox.Disable()
+
+    def get_value(self):
+        """
+        Get the value
+
+        :return:
+        """
+        return self.path
