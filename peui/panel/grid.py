@@ -478,12 +478,14 @@ class PropGrid(propgrid.PropertyGrid):
             item = self.get_item(key)
 
             if fmt:
-                item.SetValue(fmt%(value))
+                if value is not None:
+                    item.SetValue(fmt%(value))
             else:
                 item.SetValue(str(value))
         else:
             if fmt:
-                cell.SetText(fmt%(value))
+                if value is not None:
+                    cell.SetText(fmt%(value))
             else:
                 cell.SetText(str(value))
 
