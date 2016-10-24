@@ -35,6 +35,7 @@ class MainController(object):
 
         # Add controller to project
         self.project.controller = self
+        self.basefolder = kwargs.get('basefolder')
 
         self.setting = kwargs.get('setting')
 
@@ -358,6 +359,9 @@ class MainController(object):
         """
         self.windows[key] = page
 
+        # Freeze Notebook View
+        self.notebook.Freeze()
+
         pane = self.notebook.AddPage(page, name)
 
         if not close:
@@ -374,6 +378,8 @@ class MainController(object):
         if menu_item:
             menu_item.Enable(True)
             menu_item.Check(True)
+
+        self.notebook.Thaw()
 
         return pane
 

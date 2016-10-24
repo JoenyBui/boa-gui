@@ -3,13 +3,50 @@ import wx
 __author__ = 'jbui'
 
 
+class PopupMenu(wx.Menu):
+    """
+    Popup Menus
+
+    """
+    def __init__(self, parent, *args, **kwargs):
+        """
+        Constructor
+
+        :param parent:
+        :param args:
+        :param kwargs:
+        """
+        wx.Menu.__init__(self, *args, **kwargs)
+
+        self.parent = parent
+
+    def add_menu_item(self, title, handle):
+        """
+        Add menu item.
+        :param title:
+        :param handle:
+        :return:
+        """
+        # Set menu item.
+        item = wx.MenuItem(self, wx.ID_ANY, title)
+
+        # Add menu item.
+        self.AppendItem(item)
+
+        # Bind new handle
+        self.Bind(wx.EVT_MENU, handle, item)
+
+        return item
+
+
 class PopupMenuMixin(object):
     """
     Popup Menu Mixin (to be used with multiple inheritance)
 
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
+        Constructor
 
         """
         super(PopupMenuMixin, self).__init__()

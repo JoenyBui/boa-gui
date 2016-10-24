@@ -22,6 +22,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
 
     def __init__(self, canvas, chart, pan_tool=True, pan_percentage=0.5):
         """
+        Constructor
 
         :param canvas:
         :param chart:
@@ -139,4 +140,9 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         self.canvas.draw()
 
     def update(self):
+        """
+        Update toolbar
+
+        :return:
+        """
         NavigationToolbar.update(self)

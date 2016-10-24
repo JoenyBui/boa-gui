@@ -32,3 +32,20 @@ class SmartLabel(wx.StaticText):
                 self.SetWindowStyle(wx.ALIGN_RIGHT)
             elif alignment == 'center':
                 self.SetWindowStyle(wx.ALIGN_CENTER)
+
+    def set_value(self, value):
+        """
+        Set text value
+
+        :param value:
+        :return:
+        """
+        self.Label = value
+
+    def get_value(self):
+        """
+        Get text value
+
+        :return:
+        """
+        return self.Label

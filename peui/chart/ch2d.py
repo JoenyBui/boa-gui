@@ -12,10 +12,27 @@ from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
 
+from matplotlib.pyplot import FuncFormatter
+
 from ..controller.ch2d import Chart2dController
 from .toolbar import MatplotlibCustomToolbar
 
 __author__ = 'jbui'
+
+
+def log_10_product(x, pos):
+    """
+    The two args are the value are tick position.
+    Label ticks with the product of the exponentiation.
+
+    :param x:
+    :param pos:
+    :return:
+    """
+    if x < 1.0:
+        return x
+    else:
+        return '%1i' % (x)
 
 
 class Chart2d(wx.ScrolledWindow):

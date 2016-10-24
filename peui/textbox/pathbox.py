@@ -29,40 +29,83 @@ class PathSmartBox(SmartTextBox):
         """
         pass
 
+    def is_file_exists(self):
+        """
+        Is file exists.
+
+        :return:
+        """
+        filepath = self.get_value()
+
+        if filepath:
+            if os.path.exists(filepath):
+                return os.path.isfile(filepath)
+
+        return False
+
+    def is_dir_exists(self):
+        """
+        Is path exists.
+
+        :return:
+        """
+        path = self.get_value()
+
+        if path:
+            if os.path.exists(path):
+                return os.path.isdir(path)
+
+        return False
+
 
 class PathInputLayout(SmartInputLayout):
     """
     Path Input Layout.
 
     """
-    def __init__(self, parent, textbox=None, postbox=None, max=None, min=None, layout=None, is_file=False, *args, **kwargs):
+    def __init__(self,
+                 parent,
+                 textbox=None,
+                 postbox=None,
+                 layout=None,
+                 is_file=False,
+                 is_save=False,
+                 message=wx.FileSelectorPromptStr,
+                 defaultDir=wx.EmptyString,
+                 defaultFile=wx.EmptyString,
+                 wildcard=wx.FileSelectorDefaultWildcardStr,
+                 style=wx.FD_DEFAULT_STYLE,
+                 *args,
+                 **kwargs):
         """
+        Constructor
 
         :param parent:
         :param textbox:
         :param postbox:
         :param layout:
+        :param is_file:
+        :param is_save:
+        :param message:
+        :param defaultDir:
+        :param defaultFile:
+        :param wildcard:
+        :param style:
         :param args:
         :param kwargs:
         :return:
         """
-        SmartInputLayout.__init__(self, parent, max=max, min=min, layout=layout, *args, **kwargs)
-
-        # self.label = kwargs.get('label', 'Path:')
+        SmartInputLayout.__init__(self, parent, layout=layout, *args, **kwargs)
 
         if textbox:
             self.textbox = textbox
         else:
             self.textbox = PathSmartBox(parent)
 
-        # self.textbox.SetSize(self.layout.get_size(self.INDEX_TEXTBOX))
-
         if postbox:
             self.postbox = postbox
         else:
             self.postbox = wx.Button(parent, id=wx.ID_ANY, size=(24, 24))
-
-        # self.postbox.SetSize(self.layout.get_size(self.INDEX_POSTBOX))
 
         if self.postbox:
             if is_file:
@@ -71,6 +114,18 @@ class PathInputLayout(SmartInputLayout):
             else:
                 self.postbox.Bind(wx.EVT_BUTTON, self.pick_folder_path)
                 self.postbox.SetToolTip(wx.ToolTip("Choose Path"))
+
+        self.is_file = is_file
+        self.is_save = is_save
+
+        self.message = message
+        self.defaultDir = defaultDir
+        self.defaultFile = defaultFile
+        self.wildcard = wildcard
+
+        self.style = style
+        if is_save and is_file:
+            self.style = wx.SAVE | wx.OVERWRITE_PROMPT
 
         self.do_layout()
 
@@ -102,6 +157,7 @@ class PathInputLayout(SmartInputLayout):
 
     def pick_file_path(self, event):
         """
+        Pick file path
 
         :param event:
         :return:
@@ -109,9 +165,19 @@ class PathInputLayout(SmartInputLayout):
         path = self.textbox.Value
 
         if os.path.isfile(path):
-            dlg = wx.FileDialog(self.parent, defaultFile=path)
+            dlg = wx.FileDialog(self.parent,
+                                message=self.message,
+                                defaultDir=self.defaultDir,
+                                defaultFile=path,
+                                wildcard=self.wildcard,
+                                style=self.style)
         else:
-            dlg = wx.FileDialog(self.parent)
+            dlg = wx.FileDialog(self.parent,
+                                message=self.message,
+                                defaultDir=self.defaultDir,
+                                defaultFile=self.defaultFile,
+                                wildcard=self.wildcard,
+                                style=self.style)
 
         if dlg.ShowModal() == wx.ID_OK:
             # Change the path string..
@@ -163,13 +229,24 @@ class PathInputLayout(SmartInputLayout):
         """
         return self.textbox.get_value()
 
+    def is_valid_path(self):
+        """
+        Is valid path
+
+        :return:
+        """
+        if self.is_file:
+            return self.textbox.is_file_exists()
+        else:
+            return self.textbox.is_dir_exists()
+
 
 class SmartPathInputLayout(PathInputLayout):
     """
     Smart Path Input Layout
 
     """
-    def __init__(self, parent, name=None, textbox=None, postbox=None, layout=None, is_file=False, *args, **kwargs):
+    def __init__(self, parent, name=None, textbox=None, postbox=None, layout=None, *args, **kwargs):
         """
         Constructor
 
@@ -202,7 +279,6 @@ class SmartPathInputLayout(PathInputLayout):
                                  textbox=textbox,
                                  postbox=postbox,
                                  layout=layout,
-                                 is_file=is_file,
                                  *args,
                                  **kwargs)
 
@@ -261,3 +337,11 @@ class SmartPathInputLayout(PathInputLayout):
         """
         if self.postbox:
             self.postbox.Disable()
+
+    def get_value(self):
+        """
+        Get the value
+
+        :return:
+        """
+        return self.path

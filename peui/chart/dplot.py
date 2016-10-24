@@ -163,9 +163,12 @@ class Dplot(object):
             write('PointSizes')
             write('7')
             write(' %d %d %d %d %d %d %d' %
-                  (self.font_size['numbers'], self.font_size['first_title'],
-                   self.font_size['second_title'], self.font_size['x_axis'],
-                   self.font_size['y_axis'], self.font_size['legend'],
+                  (self.font_size['numbers'],
+                   self.font_size['first_title'],
+                   self.font_size['second_title'],
+                   self.font_size['x_axis'],
+                   self.font_size['y_axis'],
+                   self.font_size['legend'],
                    self.font_size['note']))
 
             # Symbol Size

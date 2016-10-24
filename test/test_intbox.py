@@ -27,3 +27,8 @@ class TestIntInputLayout(TestCase):
     def test_get_value_length(self):
         self.assertNotEqual(self.tl.get_value('ft'), 1.5)
         self.assertEqual(self.tl.get_value('ft'), 1)
+
+    def test_validator_zero(self):
+        self.tl.textbox.set_value('00')
+
+        self.assertEqual(self.tl.textbox.get_value(), 0)

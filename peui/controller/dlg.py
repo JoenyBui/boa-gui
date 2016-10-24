@@ -3,6 +3,10 @@ import os
 import wx
 from wx.lib.pubsub import pub
 
+import pandas as pd
+
+from pecutil.file import open_file
+
 from ..model.project import Project
 from ..form.file import NewProjectDialog, OpenProjectDialog, SaveProjectDialog, SaveAsProjectDialog, CloseProjectDialog
 from ..form.about import AboutDialog
@@ -154,6 +158,11 @@ class DlgController(object):
             self.parent.output_project(path)
 
             pub.sendMessage(EVT_CHANGE_PROJECT, state=STATE_OUTPUT_DOC)
+
+            try:
+                open_file(path)
+            except Exception as e:
+                print(e)
 
         dlg.Destroy()
 

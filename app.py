@@ -11,6 +11,7 @@ import wx
 import wx.lib.mixins.inspection as WIT
 import wx.aui
 import wx.lib.agw.aui as aui
+from wx.lib.pubsub import pub
 
 from pelm.client import LicenseClientManager, ClientFrame
 
@@ -90,8 +91,10 @@ if __name__ == '__main__':
     from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
     from peui.main.toolbar import CustomToolBar
 
-    from peui.controller.xlsx import XlsxController
+    from peui.controller.xlsx import XlsxController, GeneralColumnTable
     from peui.panel.image import ImageCanvas
+
+    from peui.splash.screen import SplashScreen
 
     import docx
     import docxtpl
@@ -171,6 +174,10 @@ if __name__ == '__main__':
                 app.MainLoop()
 
             valid_license = True
+
+    # splash = SplashScreen(image_path=os.path.join(os.path.dirname(__file__), 'peui', 'splash', 'PEC_SMALL.JPG'),
+    #                       shadowcolour=wx.WHITE,
+    #                       agwStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_NO_TIMEOUT)
 
     # Check if the a file path is passed with the executable.
     project = Project()
@@ -252,7 +259,7 @@ if __name__ == '__main__':
     )
 
     controller.add_page(
-        ImageCanvas(parent=frame, image_path=os.path.join(r'D:\DEVEL\pec_gui\peui\splash\PEC.jpg'), id=wx.ID_ANY),
+        ImageCanvas(parent=frame, image_path=os.path.join(os.path.dirname(__file__), 'peui', 'splash', 'PEC.jpg'), id=wx.ID_ANY),
         wx.NewId(),
         'Image',
         False
@@ -265,12 +272,25 @@ if __name__ == '__main__':
             ("F", "F"),
             ("Q", "Q"))
 
-    colLabels = ("Last", "First")
-    rowLabels = ("1", "2", "3", "4", "5", "6", "7", "8", "9")
-    xlsx_local = XlsxController(controller, None, data=data, row_label=rowLabels, col_label=colLabels, id=cfg.METHOD_WINDOW_XLSX)
+    colLabels = ("1st", "2nd", "3rd", "4th")
+    data = [
+        np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+        np.sin(0.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
+        np.cos(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+        np.cos(7.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
+    ]
+
+    table = GeneralColumnTable(data=data)
 
     controller.add_page(
-        SpreadSheet(frame, controller, xlsx_local),
+        SpreadSheet(controller.notebook,
+                    controller,
+                    XlsxController(
+                        controller,
+                        None,
+                        table=table,
+                        id=cfg.METHOD_WINDOW_XLSX
+                    )),
         cfg.METHOD_WINDOW_XLSX,
         'XLSX',
         True
@@ -280,5 +300,10 @@ if __name__ == '__main__':
     frame.Show(True)
     app.SetTopWindow(frame=frame)
     controller.refresh()
+
+    pub.sendMessage(cfg.EVT_CHANGE_STATE, state=cfg.STATE_OPEN_PROJECT)
+
+    # Destroy splash screen.
+    # splash.Destroy()
 
     app.MainLoop()

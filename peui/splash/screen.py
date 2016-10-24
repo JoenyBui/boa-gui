@@ -1,3 +1,4 @@
+import os
 
 import wx
 import wx.lib.agw.advancedsplash as AS
@@ -5,22 +6,49 @@ import wx.lib.agw.advancedsplash as AS
 
 class SplashScreen(AS.AdvancedSplash):
     """
+    Splash Screen
 
     """
-    def __init__(self, imagePath='PEC.png'):
+    def __init__(self,
+                 image_path=None,
+                 bitmap=None,
+                 title='Title',
+                 agwStyle=AS.AS_TIMEOUT | AS.AS_CENTER_ON_PARENT,
+                 shadowcolour=wx.NullColour,
+                 timeout=5000,
+                 *args,
+                 **kwargs):
         """
+        Constructor
 
-        :param imagePath:
+        :param image_path:
+        :param bitmap:
+        :param agwStyle:
+        :param shadowcolour:
+        :param timeout:
+        :param args:
+        :param kwargs:
         :return:
         """
-        frame = wx.Frame(None, -1, "AdvancedSplash Test")
+        self.frame = wx.Frame(None, -1, title=title)
 
-        bitmap = wx.Bitmap(imagePath, wx.BITMAP_TYPE_PNG)
-        shadow = wx.WHITE
+        if image_path:
+            file_name, file_ext = os.path.splitext(image_path)
+
+            if file_ext.lower() == '.jpg':
+                bitmap = wx.Bitmap(image_path, wx.BITMAP_TYPE_JPEG)
+            elif file_ext.lower() == '.png':
+                bitmap = wx.Bitmap(image_path, wx.BITMAP_TYPE_PNG)
+            elif file_ext.lower() == '.bmp':
+                bitmap = wx.Bitmap(image_path, wx.BITMAP_TYPE_BMP)
 
         AS.AdvancedSplash.__init__(
-            self, frame, bitmap=bitmap, timeout=5000,
-            agwStyle=AS.AS_TIMEOUT | AS.AS_CENTER_ON_PARENT | AS.AS_SHADOW_BITMAP, shadowcolour=shadow
+            self,
+            self.frame,
+            bitmap=bitmap,
+            timeout=timeout,
+            agwStyle=agwStyle,
+            shadowcolour=shadowcolour
         )
 
         # Attributes
@@ -30,8 +58,17 @@ class SplashScreen(AS.AdvancedSplash):
         rect = self.GetClientRect()
         new_size = (rect.width, 16)
         self.gauge.SetSize(new_size)
-        self.SetSizer((rect.width, rect.height + 16))
+        self.SetSize(wx.Size(rect.width, rect.height + 16))
+
         self.gauge.SetPosition((0, rect.height))
+
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        vsizer.AddStretchSpacer(1)
+        vsizer.Add(self.gauge, 0, wx.EXPAND | wx.ALL, 5)
+
+        self.frame.SetSizer(vsizer)
+
+        wx.Yield()
 
     def set_progress(self, percent):
         """
@@ -44,6 +81,7 @@ class SplashScreen(AS.AdvancedSplash):
 
     def get_progress(self):
         """
+        Get progress value
 
         :return:
         """
