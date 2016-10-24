@@ -152,14 +152,17 @@ class TabPageController(ChildController):
             # Find tab.
             ctrl, idx = self.parent.notebook.FindTab(self.view)
 
-            # Delete page index.
-            self.parent.delete_page(idx)
+            if idx is not -1:
+                # Delete page index.
+                self.parent.delete_page(idx)
 
-            # Delete parent windows.
-            del self.parent.windows[self.key]
+                # Delete parent windows.
+                del self.parent.windows[self.key]
 
-            # Add to trash.
-            self.parent.trash.append(self)
+                # Add to trash.
+                self.parent.trash.append(self)
+            else:
+                print('Could not delete page.')
 
 
 class PaneController(ChildController):

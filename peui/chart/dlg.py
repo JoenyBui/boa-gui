@@ -3,6 +3,7 @@ import wx
 from ..form.general import GeneralDialog
 from ..textbox import LayoutDimensions
 from ..textbox.textbox import TextInputLayout, TextSmartBox
+from ..textbox.floatbox import FloatInputLayout, FloatSmartBox
 from ..controller import ChildController
 
 from ..model.bind import BindOjbect
@@ -28,6 +29,11 @@ class FigureSetting(object):
         self.x_subtitle = kwargs.get('x_subtitle', '')
         self.y_title = kwargs.get('y_title', 'Y Title')
         self.y_subtitle = kwargs.get('y_subtitle', '')
+
+        self.x_min = kwargs.get('x_min', None)
+        self.x_max = kwargs.get('x_max', None)
+        self.y_min = kwargs.get('y_min', None)
+        self.y_max = kwargs.get('y_max', None)
 
         self.linewidth = kwargs.get('linewidth', 2)
         self.legend = kwargs.get('legend', [])
@@ -63,7 +69,9 @@ class FigureSettingPanel(wx.Panel):
         """
         vsizer = wx.BoxSizer(wx.VERTICAL)
 
-        layout = LayoutDimensions(top=2, bottom=2, left=4, right=4, interior=2, widths=(100, 200), height=24)
+        layout = LayoutDimensions(top=2, bottom=2, left=4, right=4, interior=2,
+                                  widths=(100, 200),
+                                  stretch_factor=(0, 1), height=24)
         layout.calculate()
 
         self.layouts['title'] = TextInputLayout(self,
@@ -79,12 +87,40 @@ class FigureSettingPanel(wx.Panel):
                                                   layout=layout,
                                                   textbox=TextSmartBox(self))
 
+        self.layouts['x_min'] = FloatInputLayout(self,
+                                                 name='X Min',
+                                                 layout=layout,
+                                                 textbox=FloatSmartBox(self, signs=True))
+
+        self.layouts['x_max'] = FloatInputLayout(self,
+                                                 name='X Max',
+                                                 layout=layout,
+                                                 textbox=FloatSmartBox(self, signs=True))
+
+        self.layouts['y_min'] = FloatInputLayout(self,
+                                                 name='Y Min',
+                                                 layout=layout,
+                                                 textbox=FloatSmartBox(self, signs=True))
+
+        self.layouts['y_max'] = FloatInputLayout(self,
+                                                 name='Y Max',
+                                                 layout=layout,
+                                                 textbox=FloatSmartBox(self, signs=True))
+
         vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['title'], 1, wx.EXPAND | wx.ALL, 0)
         vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['x_title'], 1, wx.EXPAND | wx.ALL, 0)
         vsizer.AddSpacer(5)
         vsizer.Add(self.layouts['y_title'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['x_min'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['x_max'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['y_min'], 1, wx.EXPAND | wx.ALL, 0)
+        vsizer.AddSpacer(5)
+        vsizer.Add(self.layouts['y_max'], 1, wx.EXPAND | wx.ALL, 0)
         vsizer.AddSpacer(5)
 
         return vsizer
@@ -103,6 +139,18 @@ class FigureSettingPanel(wx.Panel):
         self.bind_objects['y_title'] = BindOjbect(self.setting.__dict__,
                                                   self.layouts['y_title'].textbox,
                                                   'y_title')
+        self.bind_objects['x_min'] = BindOjbect(self.setting.__dict__,
+                                                self.layouts['x_min'].textbox,
+                                                'x_min')
+        self.bind_objects['x_max'] = BindOjbect(self.setting.__dict__,
+                                                self.layouts['x_max'].textbox,
+                                                'x_max')
+        self.bind_objects['y_min'] = BindOjbect(self.setting.__dict__,
+                                                self.layouts['y_min'].textbox,
+                                                'y_min')
+        self.bind_objects['y_max'] = BindOjbect(self.setting.__dict__,
+                                                self.layouts['y_max'].textbox,
+                                                'y_max')
 
 
 class FigureSettingDialog(GeneralDialog):
@@ -133,6 +181,7 @@ class FigureSettingDialog(GeneralDialog):
         GeneralDialog.__init__(self,
                                parent,
                                title="Figure Setting",
+                               style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                                controller=controller,
                                local=self.local,
                                btn_flags=btn_flags,

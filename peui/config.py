@@ -69,6 +69,7 @@ METHOD_WINDOW_XLSX = wx.NewId()
 METHOD_DEFAULT_SETTING = wx.NewId()
 METHOD_HELP = wx.ID_HELP
 METHOD_ABOUT = wx.ID_ABOUT
+METHOD_HELP_PDF = wx.NewId()
 
 MASTER_KEY = {
     METHOD_NEW_PROJECT:         dict(name='New Project'),
@@ -97,7 +98,8 @@ MASTER_KEY = {
 
     METHOD_HELP:                dict(name='&Help'),
     METHOD_DEFAULT_SETTING:     dict(name='Setting'),
-    METHOD_ABOUT:               dict(name='&About')
+    METHOD_ABOUT:               dict(name='&About'),
+    METHOD_HELP_PDF:            dict(name='Help')
 }
 
 

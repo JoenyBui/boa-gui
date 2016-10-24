@@ -74,6 +74,18 @@ class ComboBoxInputLayout(SmartInputLayout):
         """
         self.combobox.SetItems(list_values)
 
+    def set_dict(self, dict_values):
+        """
+        Set the combobox with a new dictionary set.
+
+        :param dict_values:
+        :return:
+        """
+        self.combobox.Clear()
+
+        for key, index in dict_values.items():
+            self.append(index, key)
+
     def set_selection(self, value):
         """
         Set the selection value.

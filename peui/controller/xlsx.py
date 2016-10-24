@@ -1,117 +1,16 @@
-import logging
-
 import wx
-import wx.grid
+import wx.grid as grid
+
+import pandas as pd
 
 from . import TabPageController
 
-from ..config import STATE_CLOSE_PROJECT
+from ..form.file import SaveXYDialog
+from ..contextmenu.popup import PopupMenu
+from ..component.table import GeneralRowTable, GeneralColumnTable
+from ..config import STATE_NEW_PROJECT, STATE_CLOSE_PROJECT
 
 __author__ = 'jbui'
-
-
-class GeneralColumnTable(wx.grid.PyGridTableBase):
-    """
-    General PyGridTable Column First
-
-    """
-    def __init__(self, data=None, row_labels=None, col_labels=None):
-        """
-
-        :param data:
-        :param row_labels:
-        :param col_labels:
-        """
-
-        wx.grid.PyGridTableBase.__init__(self)
-
-        self.data = data
-        self.row_labels = row_labels
-        self.col_labels = col_labels
-
-    def GetNumberRows(self):
-        return len(self.data[0])
-
-    def GetNumberCols(self):
-        return len(self.data)
-
-    def GetColLabelValue(self, col):
-        if self.col_labels:
-            return self.col_labels[col]
-
-        return wx.grid.PyGridTableBase.GetColLabelValue(self, col)
-
-    def GetRowLabelValue(self, row):
-        if self.row_labels:
-            return self.row_labels[row]
-
-        return wx.grid.PyGridTableBase.GetRowLabelValue(self, row)
-
-    def IsEmptyCell(self, row, col):
-        return False
-
-    def GetValue(self, row, col):
-        try:
-            return self.data[col][row]
-        except IndexError as e:
-            return ''
-
-    def SetValue(self, row, col, value):
-        try:
-            self.data[col][row] = value
-        except Exception as e:
-            logging.error('GeneralColumnTable->SetValue error')
-            logging.error(str(e))
-
-
-class GeneralRowTable(wx.grid.PyGridTableBase):
-    """
-    General PyGridTable Row First
-
-    """
-    def __init__(self, data=None, row_labels=None, col_labels=None):
-        """
-
-        :param data:
-        :param row_labels:
-        :param col_labels:
-        """
-
-        wx.grid.PyGridTableBase.__init__(self)
-
-        self.data = data
-        self.row_labels = row_labels
-        self.col_labels = col_labels
-
-    def GetNumberRows(self):
-        return len(self.data)
-
-    def GetNumberCols(self):
-        return len(self.data[0])
-
-    def GetColLabelValue(self, col):
-        if self.col_labels:
-            return self.col_labels[col]
-
-        return wx.grid.PyGridTableBase.GetColLabelValue(self, col)
-
-    def GetRowLabelValue(self, row):
-        if self.row_labels:
-            return self.row_labels[row]
-
-        return wx.grid.PyGridTableBase.GetRowLabelValue(self, row)
-
-    def IsEmptyCell(self, row, col):
-        return False
-
-    def GetValue(self, row, col):
-        try:
-            return self.data[row][col]
-        except IndexError as e:
-            return ''
-
-    def SetValue(self, row, col, value):
-        self.data[row][col] = value
 
 
 class XlsxController(TabPageController):
@@ -119,7 +18,7 @@ class XlsxController(TabPageController):
     Spreadsheet Controller
 
     """
-    def __init__(self, parent, view, data=None, row_label=None, col_label=None, *args, **kwargs):
+    def __init__(self, parent, view, table=None, data=None, row_label=None, col_label=None, *args, **kwargs):
         """
 
         :param parent: parent controller
@@ -128,10 +27,22 @@ class XlsxController(TabPageController):
         """
         TabPageController.__init__(self, parent, view, *args, **kwargs)
 
-        self.table = kwargs.get('table', GeneralRowTable())
-        self.data = data
-        self.row_label = row_label
-        self.col_label = col_label
+        if table:
+            self.table = table
+        elif data:
+            self.table = GeneralRowTable(data, row_labels=row_label, col_labels=col_label)
+        else:
+            self.table = None
+
+        self.state = STATE_NEW_PROJECT
+
+    def bind_methods(self):
+        """
+        Bind the handles at the end of initialization.
+
+        :return:
+        """
+        self.view.Bind(grid.EVT_GRID_CELL_RIGHT_CLICK, self.on_grid_right_click)
 
     def do_layout(self):
         """
@@ -139,16 +50,12 @@ class XlsxController(TabPageController):
 
         :return:
         """
-        # self.table.data = self.data
-        # self.table.row_labels = self.row_label
-        # self.table.col_labels = self.col_label
-        #
-        # self.view.SetTable(self.table)
-        #
-        pass
+
+        self.view.AutoSize()
 
     def update_layout(self, state):
         """
+        Update layout
 
         :return:
         """
@@ -156,20 +63,7 @@ class XlsxController(TabPageController):
             self.delete_control()
         else:
             self.sync_data()
-
-    # def delete_control(self):
-    #     """
-    #     Delete Control
-    #
-    #     """
-    #
-    #     # Remove from the dictionary
-    #     if self.parent.windows:
-    #         ctrl, idx = self.parent.notebook.FindTab(self.view)
-    #
-    #         self.parent.delete_page(idx)
-    #
-    #         del self.parent.windows[self.key]
+            self.view.AutoSize()
 
     def refresh(self):
         """
@@ -180,11 +74,53 @@ class XlsxController(TabPageController):
 
     def sync_data(self):
         """
+        Sync data table
 
         :return:
         """
-        self.table.data = self.data
-        self.table.row_labels = self.row_label
-        self.table.col_labels = self.col_label
-
         self.view.SetTable(self.table, True)
+
+    def get_popup_menu(self):
+        """
+        Return the popup menu.
+
+        :return:
+        """
+        popup = PopupMenu(self.view)
+
+        popup.add_menu_item('Output CSV', self.on_output_csv)
+
+        return popup
+
+    def on_grid_right_click(self, event):
+        """
+        On grid right click.
+
+        :param event:
+        :return:
+        """
+        self.view.PopupMenu(self.get_popup_menu())
+
+    def on_output_csv(self, event):
+        """
+        Output data to CSV.
+
+        :param event:
+        :return:
+        """
+        dlg = SaveXYDialog(self.view, message='Save to csv.', wildcard="Comma Separated Value (*.csv)|*.csv")
+
+        if dlg.ShowModal() == wx.ID_OK:
+            # Override the save file project
+            file_path = dlg.GetPath()
+
+            df = self.table.get_dataframe()
+            df.to_csv(file_path)
+
+            ret_val = wx.ID_OK
+        else:
+            ret_val = wx.ID_CANCEL
+
+        dlg.Destroy()
+
+        return ret_val

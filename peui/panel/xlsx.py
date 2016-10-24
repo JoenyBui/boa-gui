@@ -35,7 +35,7 @@ class SpreadSheet(sheet.CSheet):
         * SetNumberRows(self, numRows)
             Set the number of rows in the sheet
     """
-    def __init__(self, parent, controller, local=None, *args, **kwargs):
+    def __init__(self, parent, controller, local=None, editing=False, *args, **kwargs):
         """
         Constructor
 
@@ -57,8 +57,14 @@ class SpreadSheet(sheet.CSheet):
         self.SetLabelBackgroundColour('#DBD4D4')
         self.SetRowLabelAlignment(wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
 
+        # Disable Editing at all.
+        self.EnableEditing(editing)
+
         if hasattr(self.controller, 'do_layout'):
             self.controller.do_layout()
+
+        if hasattr(self.controller, 'bind_methods'):
+            self.controller.bind_methods()
 
     def OnGridSelectCell(self, event):
         pass
