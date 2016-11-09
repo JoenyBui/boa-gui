@@ -472,6 +472,7 @@ class Chart2dController(TabPageController):
                 self.set_ylimits(self.view.axes[i1], min_y, max_y)
 
                 if self.figure_settings[i1].legend:
+                    print(self.figure_settings[i1].legend)
                     self.view.axes[i1].legend(self.figure_settings[i1].legend)
 
                 self.plot_axis(self.view.axes[i1])
