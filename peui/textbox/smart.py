@@ -1274,3 +1274,6 @@ class SmartCheckBox(wx.CheckBox):
         :return:
         """
         return self.Value
+
+    def set_value(self, value):
+        self.SetValue(value)
