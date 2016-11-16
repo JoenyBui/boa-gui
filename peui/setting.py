@@ -185,6 +185,15 @@ class Setting(object):
 
         return temp_folder
 
+    @property
+    def home_folder(self):
+        """
+        Settings home folder
+
+        :return:
+        """
+        return os.path.join(self.get_home_folder(), self.folder)
+
     def get_temp_folder(self, folder):
         """
         Get temporary folder.

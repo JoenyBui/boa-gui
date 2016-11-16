@@ -17,6 +17,11 @@ from ..chart.dplot import Dplot, DplotCurve
 from . import TabPageController
 from ..config import STATE_CLOSE_PROJECT
 
+AXIS_X_MAIN = 1
+AXIS_X_TWIN = 2
+AXIS_Y_MAIN = 3
+AXIS_Y_TWIN = 4
+
 __author__ = 'jbui'
 
 
@@ -38,11 +43,26 @@ class Chart2dController(TabPageController):
         TabPageController.__init__(self, parent, view, *args, **kwargs)
 
         self.data = None
+        self.data_loc = []
+
         self.color_set = palettable.colorbrewer.qualitative.Dark2_7.mpl_colors
         self.figure_settings = []
 
         self.show_origin_axis = kwargs.get('show_origin_axis', True)
         self.margin = 0.1
+
+    def set_data_axis(self):
+        """
+        Set original data axis.
+
+        :return:
+        """
+        for i1, data in enumerate(self.data):
+            data_axis = []
+            for i2, (x, y) in enumerate(data):
+                data_axis.append((AXIS_X_MAIN, AXIS_Y_MAIN))
+
+            self.data_loc.append(data_axis)
 
     def do_layout(self):
         """
@@ -50,6 +70,9 @@ class Chart2dController(TabPageController):
 
         :return:
         """
+        # Set the data axis.
+        self.set_data_axis()
+
         self.view.axes = []
 
         self.view.axes.append(self.view.figure.add_subplot(111))
@@ -437,47 +460,129 @@ class Chart2dController(TabPageController):
 
         pass
 
-    @threaded
+    # @threaded
     def plot_data(self):
         """
-        Plot data
+        Plot data.
 
         :return:
         """
         if self.data:
             for i1, data in enumerate(self.data):
+                # Axes
+                ax1 = self.view.axes[i1]
+
+                # Minimum and maximum x, y limits.
                 min_x = max_x = min_y = max_y = 0.0
 
+                # Use twin axis.
+                use_twinx = False
+                min_x_twin = max_x_twin = min_y_twin = max_y_twin = 0.0
+
+                # Grab line width.
+                linewidth=self.figure_settings[i1].linewidth
+
                 for i2, (x, y) in enumerate(data):
+                    # Colorset
+                    colorset=self.color_set[i2]
 
-                    self.view.axes[i1].plot(x, y,
-                                            linewidth=self.figure_settings[i1].linewidth,
-                                            color=self.color_set[i2])
+                    if self.data_loc == [] or self.data_loc[i1][i2][0] == AXIS_X_MAIN:
+                        # Set the main axis.
+                        self.view.axes[i1].plot(x, y, linewidth=linewidth, color=colorset)
 
-                    if check_empty(x):
-                        if min_x > min(x):
-                            min_x = min(x)
+                        if check_empty(x):
+                            if min_x > min(x):
+                                min_x = min(x)
 
-                        if max_x < max(x):
-                            max_x = max(x)
+                            if max_x < max(x):
+                                max_x = max(x)
 
-                    if check_empty(y):
-                        if min_y > min(y):
-                            min_y = min(y)
+                        if check_empty(y):
+                            if min_y > min(y):
+                                min_y = min(y)
 
-                        if max_y < max(y):
-                            max_y = max(y)
+                            if max_y < max(y):
+                                max_y = max(y)
+                    else:
+                        # Run through the twinx axis.
+                        use_twinx = True
 
+                        ax2 = self.view.axes[i1].twinx()
+
+                        ax2.plot(x, y, linewidth=linewidth, color=colorset)
+
+                        if check_empty(x):
+                            if min_x_twin > min(x):
+                                min_x_twin = min(x)
+
+                            if max_x_twin < max(x):
+                                max_x_twin = max(x)
+
+                        if check_empty(y):
+                            if min_y_twin > min(y):
+                                min_y_twin = min(y)
+
+                            if max_y_twin < max(y):
+                                max_y_twin = max(y)
+
+                # Set the minimum and maximum for main axis.
                 self.set_xlimits(self.view.axes[i1], min_x, max_x)
                 self.set_ylimits(self.view.axes[i1], min_y, max_y)
 
+                if use_twinx:
+                    # Set the minimum and maximum for twin axis.
+                    ax2 = self.view.axes[i1].twinx()
+                    # self.set_xlimits(ax2, min_x_twin, max_x_twin)
+                    # self.set_ylimits(ax2, min_y_twin, max_y_twin)
+
+                    # Align the two axes at 0.0
+                    self.align_yaxis(self.view.axes[i1], 0, ax2, 0)
+
+                # Set the legend.
                 if self.figure_settings[i1].legend:
-                    print(self.figure_settings[i1].legend)
                     self.view.axes[i1].legend(self.figure_settings[i1].legend)
 
                 self.plot_axis(self.view.axes[i1])
 
             self.view.figure.canvas.draw()
+
+    def align_yaxis(self, ax1, v1, ax2, v2):
+        """adjust ax2 ylimit so that v2 in ax2 is aligned to v1 in ax1"""
+        _, y1 = ax1.transData.transform((0, v1))
+        _, y2 = ax2.transData.transform((0, v2))
+        self.adjust_yaxis(ax2, (y1 - y2) / 2, v2)
+        self.adjust_yaxis(ax1, (y2 - y1) / 2, v1)
+
+    def adjust_yaxis(self, ax, ydif, v):
+        """shift axis ax by ydiff, maintaining point v at the same location"""
+        inv = ax.transData.inverted()
+        _, dy = inv.transform((0, 0)) - inv.transform((0, ydif))
+        miny, maxy = ax.get_ylim()
+        miny, maxy = miny - v, maxy - v
+        if -miny > maxy or (-miny == maxy and dy > 0):
+            nminy = miny
+            nmaxy = miny * (maxy + dy) / (miny + dy)
+        else:
+            nmaxy = maxy
+            nminy = maxy * (miny + dy) / (maxy + dy)
+        ax.set_ylim(nminy + v, nmaxy + v)
+
+    # def align_yaxis(self, ax1, v1, ax2, v2):
+    #     """
+    #     Adjust ax2 ylimit so that v2 in ax2 is aligned to v1 in ax1
+    #
+    #     :param ax1: axes 1
+    #     :param v1: vertical 1
+    #     :param ax2: axes 2
+    #     :param v2: vertical 2
+    #     :return:
+    #     """
+    #     _, y1 = ax1.transData.transform((0, v1))
+    #     _, y2 = ax2.transData.transform((0, v2))
+    #     inv = ax2.transData.inverted()
+    #     _, dy = inv.transform((0, 0)) - inv.transform((0, y1 - y2))
+    #     miny, maxy = ax2.get_ylim()
+    #     ax2.set_ylim(miny + dy, maxy + dy)
 
     @threaded
     def update_data(self):
@@ -597,6 +702,8 @@ class MultiChart2dController(Chart2dController):
 
         :return:
         """
+        self.set_data_axis()
+
         # Loop through the data set to have multiple plots.
         self.view.axes = []
 
