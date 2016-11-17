@@ -462,7 +462,7 @@ class Chart2dController(TabPageController):
 
         pass
 
-    # @threaded
+    @threaded
     def plot_data(self):
         """
         Plot data.
@@ -485,6 +485,10 @@ class Chart2dController(TabPageController):
                 # Set the legend.
                 if self.figure_settings[i1].legend:
                     self.view.axes[i1].legend(self.figure_settings[i1].legend)
+
+                if i1 == 1:
+                    #TODO: Need to completely redo the way we plot.
+                    self.twinx[1][1].legend(['Dynamic Axial Load'], loc='upper center')
 
                 self.plot_axis(self.view.axes[i1])
 
@@ -576,9 +580,10 @@ class Chart2dController(TabPageController):
 
     def align_both_set(self, ax1, ax2, max_y1, min_y1, max_y2, min_y2):
         """
+        Align both set of data with each other.
 
-        :param ax1:
-        :param ax2:
+        :param ax1: axes 1
+        :param ax2: axes 2
         :param max_y1:
         :param min_y1:
         :param max_y2:
@@ -587,6 +592,9 @@ class Chart2dController(TabPageController):
         """
         total_y1 = abs(max_y1)  + abs(min_y1)
         total_y2 = abs(max_y2) + abs(min_y2)
+
+        if total_y1 == 0 or total_y2 == 0:
+            return
 
         top1 = abs(max_y1)/total_y1
         bot1 = abs(min_y1)/total_y1
