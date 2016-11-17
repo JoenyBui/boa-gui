@@ -178,10 +178,13 @@ class Setting(object):
         :return:
         """
         temp_folder = os.path.expanduser('~')
+        print('Temp folder: %s' % temp_folder)
 
         if os.name == 'nt':
             # In window we store in user temporary folder
             temp_folder = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
+
+            print('Temp folder: %s' % temp_folder)
 
         return temp_folder
 
