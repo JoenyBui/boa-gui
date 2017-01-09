@@ -466,40 +466,53 @@ class PropGrid(propgrid.PropertyGrid):
 
         :param key: name of property key
         :param column: column of item (0 index)
+            0 = Label
+            1 = Value
+            2...n = Text
         :param value: item name
         :param args:
         :param kwargs:
         :return:
         """
+        if column == 0:
+            cell = self.get_item(key)
 
-        cell = self.get_cell(key, column)
-
-        if column == 1:
-            item = self.get_item(key)
-
-            if fmt:
-                if value is not None:
-                    item.SetValue(fmt%(value))
-            else:
-                item.SetValue(str(value))
+            cell.SetLabel(value)
         else:
-            if fmt:
-                if value is not None:
-                    cell.SetText(fmt%(value))
+
+            cell = self.get_cell(key, column)
+
+            if column == 1:
+                item = self.get_item(key)
+
+                if fmt:
+                    if value is not None:
+                        item.SetValue(fmt%(value))
+                    else:
+                        item.SetValue('')
+                else:
+                    item.SetValue(str(value))
+
             else:
-                cell.SetText(str(value))
+                if fmt:
+                    if value is not None:
+                        cell.SetText(fmt%(value))
+                    else:
+                        cell.SetText('')
+                else:
+                    cell.SetText(str(value))
 
-        if kwargs.get('fgcol'):
-            cell.SetFgCol(kwargs.get('fgcol'))
+            if kwargs.get('fgcol'):
+                cell.SetFgCol(kwargs.get('fgcol'))
 
-        if kwargs.get('bgcol'):
-            cell.SetBgCol(kwargs.get('bgcol'))
+            if kwargs.get('bgcol'):
+                cell.SetBgCol(kwargs.get('bgcol'))
 
-        if kwargs.get('bitmap'):
-            cell.SetBitmap(kwargs.get('bitmap'))
+            if kwargs.get('bitmap'):
+                cell.SetBitmap(kwargs.get('bitmap'))
 
-        if kwargs.get('font'):
-            cell.SetFont(kwargs.get('font'))
+            if kwargs.get('font'):
+                cell.SetFont(kwargs.get('font'))
 
     def get_text(self, key, column, *args, **kwargs):
         """
