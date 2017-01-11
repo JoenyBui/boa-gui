@@ -100,7 +100,3 @@ class LengthUnit(Unit):
 
         self.metric_list = DEFAULT_METRIC_LIST
         self.imperial_list = DEFAULT_IMPERIAL_LIST
-
-    # def get_conversion_factor(self, origin, destination):
-    #     return get_length_conversion_factor(origin, destination)
-
