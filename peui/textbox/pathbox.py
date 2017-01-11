@@ -345,3 +345,11 @@ class SmartPathInputLayout(PathInputLayout):
         :return:
         """
         return self.path
+
+    def set_value(self, value):
+        """
+        Set the file path
+
+        """
+        self.path = value
+        self.textbox.set_value(value)

@@ -484,11 +484,24 @@ class Chart2dController(TabPageController):
 
                 # Set the legend.
                 if self.figure_settings[i1].legend:
-                    self.view.axes[i1].legend(self.figure_settings[i1].legend)
+                    # if isinstance(self.figure_settings[i1].legend, list):
 
-                if i1 == 1:
-                    #TODO: Need to completely redo the way we plot.
-                    self.twinx[1][1].legend(['Dynamic Axial Load'], loc='upper center')
+                    for i2, legend in enumerate(self.figure_settings[i1].legend):
+                        if i2 == 0:
+                            self.view.axes[i1].legend(legend)
+                        else:
+                            if self.twinx:
+                                if self.twinx[i1]:
+                                    self.twinx[i1][i2].legend(legend, loc='upper center')
+                    # else:
+                    #     self.view.axes[i1].legend(self.figure_settings[i1].legend)
+
+                # if self.figure_settings[i1].legend:
+                #     self.view.axes[i1].legend(self.figure_settings[i1].legend)
+                #
+                # if i1 == 1:
+                #     #TODO: Need to completely redo the way we plot.
+                #     self.twinx[1][1].legend(['Dynamic Axial Load'], loc='upper center')
 
                 self.plot_axis(self.view.axes[i1])
 
@@ -564,16 +577,23 @@ class Chart2dController(TabPageController):
         if use_twinx:
             self.set_xlimits(ax1, min_x, max_x)
 
+            # Remove teh align axis.
+
             # Set the minimum and maximum for twin axis.
             #TODO: This is bad.  Need to remove it and create a class for ChartFigure and ChartData.
-            ax2 = self.twinx[1][1]
 
-            # self.set_xlimits(ax2, min_x_twin, max_x_twin)
-            # self.set_ylimits(ax2, min_y_twin, max_y_twin)
-            self.align_both_set(ax1, ax2, max_y, min_y, min_y_twin, max_y_twin)
+            if False:
 
-            # Align the two axes at 0.0
-            self.align_yaxis(ax1, 0, ax2, 0)
+                ax2 = self.twinx[1][1]
+
+                # self.set_xlimits(ax2, min_x_twin, max_x_twin)
+                # self.set_ylimits(ax2, min_y_twin, max_y_twin)
+                self.align_both_set(ax1, ax2, max_y, min_y, min_y_twin, max_y_twin)
+
+                # Align the two axes at 0.0
+                self.align_yaxis(ax1, 0, ax2, 0)
+            else:
+                self.set_ylimits(ax2, min_y_twin, max_y_twin)
         else:
             self.set_xlimits(ax1, min_x, max_x)
             self.set_ylimits(ax1, min_y, max_y)

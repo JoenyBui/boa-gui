@@ -22,6 +22,7 @@ UNIT_CHARGE_KEY = 'charge'
 UNIT_DENSITY_KEY = 'density'
 UNIT_FORCE_KEY = 'force'
 UNIT_INERTIA_KEY = 'inertia'
+UNIT_IMPULSE_KEY = 'impulse'
 UNIT_LENGTH_KEY = 'length'
 UNIT_LINEAR_DENSITY = 'linear_density'
 UNIT_LINEAR_PRESSURE = 'linear_pressure'
@@ -35,14 +36,14 @@ UNIT_VELOCITY_KEY = 'velocity'
 UNIT_VOLUME_KEY = 'volume'
 
 BASE_UNITS = dict(
-    acceleration='m/s2',
+    acceleration='m/s^2',
     angle='degrees',
-    area='m2',
+    area='m^2',
     area_density='kg/m^2',
     charge='TNT',
-    density='lb/ft3',
+    density='lb/ft^3',
     force='N',
-    inertia='m4',
+    inertia='m^4',
     length='meter',
     linear_density='plf',
     linear_pressure='plf',
@@ -53,7 +54,7 @@ BASE_UNITS = dict(
     tnt='ton',
     torque='lb-in',
     velocity='m/s',
-    volume='m3',
+    volume='m^3',
 )
 
 
