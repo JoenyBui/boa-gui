@@ -520,7 +520,11 @@ class MainController(object):
         :param path:
         :return:
         """
-        self.project.load(path)
+        if os.path.isfile(path):
+            self.project.load(path)
+        else:
+            dlg = wx.MessageDialog(None, 'File %s does not exists!' % path, 'Error: File Path', wx.OK | wx.ICON_ERROR)
+            dlg.ShowModal()
 
     def update_new_project(self):
         """
