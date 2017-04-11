@@ -845,6 +845,7 @@ class SmartInputLayout(wx.BoxSizer):
         self.INDEX_TEXTBOX = None
         self.INDEX_POSTBOX = None
         self.INDEX_COMBOBOX = None
+        self.INDEX_BUTTON = None
 
         if layout:
             self.layout = layout

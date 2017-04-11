@@ -21,7 +21,6 @@ class TextSmartBox(SmartTextBox):
         SmartTextBox.__init__(self, parent, key_up=key_up, message=message, *args, **kwargs)
 
 
-
 class TextInputLayout(SmartInputLayout):
     """
     Text Input Layout
