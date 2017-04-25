@@ -151,7 +151,7 @@ class SaveAsProjectDialog(wx.FileDialog):
     Save As Project Dialog
 
     """
-    def __init__(self, parent, title='Save project as...', ext='*.json', *args, **kwargs):
+    def __init__(self, parent, defaultDir=None, title='Save project as...', ext='*.json', *args, **kwargs):
         """
 
         :param parent:
@@ -159,9 +159,12 @@ class SaveAsProjectDialog(wx.FileDialog):
         :param kwargs:
         :return:
         """
+        if defaultDir is None:
+            defaultDir = os.getcwd()
+
         wx.FileDialog.__init__(self, parent,
                                title,
-                               os.getcwd(),
+                               defaultDir,
                                "",
                                ext,
                                wx.SAVE | wx.OVERWRITE_PROMPT,

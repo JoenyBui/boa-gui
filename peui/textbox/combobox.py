@@ -52,6 +52,7 @@ class ComboBoxInputLayout(SmartInputLayout):
         return self.combobox.Value
 
     def set_value(self, value, label=None):
+        # type: (object, object) -> object
         """
         Set the combobox value.
 

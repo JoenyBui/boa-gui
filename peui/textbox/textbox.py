@@ -53,6 +53,7 @@ class TextInputLayout(SmartInputLayout):
         self.do_layout()
 
     def set_value(self, value):
+        # type: (object) -> object
         """
         Set the value
 

@@ -34,6 +34,7 @@ class SmartLabel(wx.StaticText):
                 self.SetWindowStyle(wx.ALIGN_CENTER)
 
     def set_value(self, value):
+        # type: (object) -> object
         """
         Set text value
 

@@ -216,6 +216,7 @@ class PathInputLayout(SmartInputLayout):
             self.postbox.Disable()
 
     def set_value(self, value):
+        # type: (object) -> object
         """
         Set the file path
 
@@ -347,6 +348,7 @@ class SmartPathInputLayout(PathInputLayout):
         return self.path
 
     def set_value(self, value):
+        # type: (object) -> object
         """
         Set the file path
 

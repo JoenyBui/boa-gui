@@ -154,6 +154,7 @@ class IntInputLayout(SmartInputLayout):
         self.do_layout()
 
     def set_value(self, value=None, post=None, label=None):
+        # type: (object, object, object) -> object
         """
         Set the components value
 

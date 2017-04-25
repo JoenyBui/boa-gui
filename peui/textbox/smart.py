@@ -48,8 +48,10 @@ class SmartTextBox(wx.TextCtrl):
     def __init__(self, parent, key_up=None, message=None, enabled_message='',
                  disabled_messages=None, disabled_index=None, value=None, enable=None,
                  helptext=None, required=False,
-                 normal=(255, 255, 255), format_error=(228, 115, 115), range_error=(244, 67, 54), *args, **kwargs):
+                 normal=(255, 255, 255), format_error=(228, 115, 115), range_error=(244, 67, 54),
+                 data=None, *args, **kwargs):
         """
+        Constructor
 
         :param parent: parent ui
         :param key_up: bind key up handler
@@ -64,6 +66,7 @@ class SmartTextBox(wx.TextCtrl):
         :param normal: rgb
         :param format_error: rgb
         :param range_error: rgb
+        :param data: used to hold any unique data that can be assessed later
         :param args:
         :param kwargs:
         """
@@ -74,6 +77,7 @@ class SmartTextBox(wx.TextCtrl):
 
         self.keys = kwargs.get('keys', {})
         self.parent = parent
+        self.data = data
 
         if key_up:
             self.Bind(wx.EVT_KEY_UP, key_up, self)
@@ -102,6 +106,9 @@ class SmartTextBox(wx.TextCtrl):
 
         if enable is not None:
             self.Enable(enable)
+
+    def clear(self):
+        self.Clear()
 
     @property
     def min(self):
@@ -140,6 +147,7 @@ class SmartTextBox(wx.TextCtrl):
         self.keys['max'] = value
 
     def set_value(self, value, fmt=None):
+        # type: (object, object) -> object
         """
         Set the textbox value
 
@@ -413,9 +421,13 @@ class SmartComboBox(wx.ComboBox):
 
         :return:
         """
-        return self.GetClientData(self.GetSelection())
+        if self.GetSelection() == -1:
+            return None
+        else:
+            return self.GetClientData(self.GetSelection())
 
     def set_value(self, value):
+        # type: (object) -> object
         """
         Set the value
 
@@ -1003,25 +1015,24 @@ class SmartInputLayout(wx.BoxSizer):
 
         for id in range(0, len(self.components)):
             """
-                wx.BoxSizer.Add(window, proportion=0, flag=0, border=0, userData=None)
-                    Append a child to the sizer
+            wx.BoxSizer.Add(window, proportion=0, flag=0, border=0, userData=None)
+                Append a child to the sizer
 
-                    :param window: a window, a spacer or another sizer to be added to the sizer.  Its initial size
-                        (either set explicitly by the user or calculated internally) is interpreted as the minimal and
-                        in many cases also the initial size.
-                    :param proportion: (int) the parameter is used in wx.BoxSizer to indicate if a child of a sizer can
-                        change its size in the main orientation of the wx.BoxSizer - where 0 stands for non changeable
-                        and a value of more than zero is interpreted relative to the value of other children of the
-                        same wx.BosSizer.  For example, you might have a horizontal wx.BoxSizer with three children,
-                        two of which are supposed to change their size with the sizer.  Then the two stretchable
-                        windows would get a value of 1 each to make item grow and shrink equally with the sizer's
-                        horizontal dimension.
-                    :param flag: (int): combinations of flags affecting sizer's behavior
-                    :param border: (int): determines the border width, if the flag parameter is set to include any
-                        border flag
-                    :param userData: (object) allows an extra object to be attached to the sizer item, for use in
-                        derived classes when sizing information
-
+                :param window: a window, a spacer or another sizer to be added to the sizer.  Its initial size
+                    (either set explicitly by the user or calculated internally) is interpreted as the minimal and
+                    in many cases also the initial size.
+                :param proportion: (int) the parameter is used in wx.BoxSizer to indicate if a child of a sizer can
+                    change its size in the main orientation of the wx.BoxSizer - where 0 stands for non changeable
+                    and a value of more than zero is interpreted relative to the value of other children of the
+                    same wx.BosSizer.  For example, you might have a horizontal wx.BoxSizer with three children,
+                    two of which are supposed to change their size with the sizer.  Then the two stretchable
+                    windows would get a value of 1 each to make item grow and shrink equally with the sizer's
+                    horizontal dimension.
+                :param flag: (int): combinations of flags affecting sizer's behavior
+                :param border: (int): determines the border width, if the flag parameter is set to include any
+                    border flag
+                :param userData: (object) allows an extra object to be attached to the sizer item, for use in
+                    derived classes when sizing information
             """
             self.components[id].SetMinSize(self.layout.get_size(id))
 
@@ -1277,4 +1288,5 @@ class SmartCheckBox(wx.CheckBox):
         return self.Value
 
     def set_value(self, value):
+        # type: (object) -> object
         self.SetValue(value)

@@ -23,6 +23,7 @@ class CheckboxInputLayout(SmartInputLayout):
         self.do_layout()
 
     def set_value(self, value):
+        # type: (object) -> object
         self.label.SetValue(bool(value))
 
     def get_value(self):
