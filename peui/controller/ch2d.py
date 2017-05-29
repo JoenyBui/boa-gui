@@ -59,12 +59,16 @@ class Chart2dController(TabPageController):
 
         :return:
         """
-        for i1, data in enumerate(self.data):
-            data_axis = []
-            for i2, (x, y) in enumerate(data):
-                data_axis.append((AXIS_X_MAIN, AXIS_Y_MAIN))
+        if self.data:
 
-            self.data_loc.append(data_axis)
+            # Loop through data.
+            for i1, data in enumerate(self.data):
+                data_axis = []
+
+                for i2, (x, y) in enumerate(data):
+                    data_axis.append((AXIS_X_MAIN, AXIS_Y_MAIN))
+
+                self.data_loc.append(data_axis)
 
     def do_layout(self):
         """
@@ -462,7 +466,7 @@ class Chart2dController(TabPageController):
 
         pass
 
-    @threaded
+    # @threaded
     def plot_data(self):
         """
         Plot data.
@@ -477,33 +481,38 @@ class Chart2dController(TabPageController):
                     data_loc = None
 
                 # Axes
-                self.plot_figure(self.view.axes[i1],
-                                 data,
-                                 linewidth=self.figure_settings[i1].linewidth,
-                                 data_loc=data_loc)
+                if len(self.view.axes) > i1:
 
-                # Set the legend.
-                if self.figure_settings[i1].legend:
-                    # if isinstance(self.figure_settings[i1].legend, list):
+                    self.plot_figure(self.view.axes[i1],
+                                     data,
+                                     linewidth=self.figure_settings[i1].linewidth,
+                                     data_loc=data_loc)
 
-                    for i2, legend in enumerate(self.figure_settings[i1].legend):
-                        if i2 == 0:
-                            self.view.axes[i1].legend(legend)
-                        else:
-                            if self.twinx:
-                                if self.twinx[i1]:
-                                    self.twinx[i1][i2].legend(legend, loc='upper center')
-                    # else:
+                    # Set the legend.
+                    if self.figure_settings[i1].legend:
+                        # if isinstance(self.figure_settings[i1].legend, list):
+
+                        for i2, legend in enumerate(self.figure_settings[i1].legend):
+                            if i2 == 0:
+                                self.view.axes[i1].legend(legend)
+                            else:
+                                if self.twinx:
+                                    if self.twinx[i1]:
+                                        self.twinx[i1][i2].legend(legend, loc='upper center')
+                        # else:
+                        #     self.view.axes[i1].legend(self.figure_settings[i1].legend)
+
+                    # if self.figure_settings[i1].legend:
                     #     self.view.axes[i1].legend(self.figure_settings[i1].legend)
+                    #
+                    # if i1 == 1:
+                    #     #TODO: Need to completely redo the way we plot.
+                    #     self.twinx[1][1].legend(['Dynamic Axial Load'], loc='upper center')
 
-                # if self.figure_settings[i1].legend:
-                #     self.view.axes[i1].legend(self.figure_settings[i1].legend)
-                #
-                # if i1 == 1:
-                #     #TODO: Need to completely redo the way we plot.
-                #     self.twinx[1][1].legend(['Dynamic Axial Load'], loc='upper center')
+                    self.plot_axis(self.view.axes[i1])
+                else:
+                    print('No axes in chart2d.')
 
-                self.plot_axis(self.view.axes[i1])
 
             self.view.figure.canvas.draw()
 
@@ -530,48 +539,49 @@ class Chart2dController(TabPageController):
         data_loc = kwargs.get('data_loc')
 
         # Loop through the data.
-        for i2, (x, y) in enumerate(data):
-            # Colorset
-            colorset = self.color_set[i2]
+        if data:
+            for i2, (x, y) in enumerate(data):
+                # Colorset
+                colorset = self.color_set[i2]
 
-            if data_loc is None or data_loc[i2][0] == AXIS_X_MAIN:
-                # Set the main axis.
-                ax1.plot(x, y, linewidth=linewidth, color=colorset)
+                if data_loc is None or data_loc[i2][0] == AXIS_X_MAIN:
+                    # Set the main axis.
+                    ax1.plot(x, y, linewidth=linewidth, color=colorset)
 
-                if check_empty(x):
-                    if min_x > min(x):
-                        min_x = min(x)
+                    if check_empty(x):
+                        if min_x > min(x):
+                            min_x = min(x)
 
-                    if max_x < max(x):
-                        max_x = max(x)
+                        if max_x < max(x):
+                            max_x = max(x)
 
-                if check_empty(y):
-                    if min_y > min(y):
-                        min_y = min(y)
+                    if check_empty(y):
+                        if min_y > min(y):
+                            min_y = min(y)
 
-                    if max_y < max(y):
-                        max_y = max(y)
-            else:
-                # Run through the twinx axis.
-                use_twinx = True
+                        if max_y < max(y):
+                            max_y = max(y)
+                else:
+                    # Run through the twinx axis.
+                    use_twinx = True
 
-                ax2 = self.twinx[1][1]
+                    ax2 = self.twinx[1][1]
 
-                ax2.plot(x, y, linewidth=linewidth, color=colorset)
+                    ax2.plot(x, y, linewidth=linewidth, color=colorset)
 
-                if check_empty(x):
-                    if min_x_twin > min(x):
-                        min_x_twin = min(x)
+                    if check_empty(x):
+                        if min_x_twin > min(x):
+                            min_x_twin = min(x)
 
-                    if max_x_twin < max(x):
-                        max_x_twin = max(x)
+                        if max_x_twin < max(x):
+                            max_x_twin = max(x)
 
-                if check_empty(y):
-                    if min_y_twin > min(y):
-                        min_y_twin = min(y)
+                    if check_empty(y):
+                        if min_y_twin > min(y):
+                            min_y_twin = min(y)
 
-                    if max_y_twin < max(y):
-                        max_y_twin = max(y)
+                        if max_y_twin < max(y):
+                            max_y_twin = max(y)
 
         # Set the minimum and maximum for main axis.
         if use_twinx:

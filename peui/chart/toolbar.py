@@ -4,6 +4,7 @@ from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as Navigat
 from matplotlib.backends.backend_wx import _load_bitmap
 
 from ..config import ICONS
+from ..util import load_bitmap
 
 __author__ = 'jbui'
 
@@ -43,7 +44,7 @@ class MatplotlibCustomToolbar(NavigationToolbar):
                            'Save XY to csv.')
 
         self.AddSimpleTool(self.ON_CUSTOM_FIGURE_SETTING,
-                           _load_bitmap('hand.xpm'),
+                           load_bitmap('hand.xpm'),
                            'Open figure setting',
                            'Open figure setting.')
         # wx.EVT_TOOL(self, self.ON_CUSTOM_FIGURE_SETTING, self._on_custom_figure_setting)
@@ -58,19 +59,19 @@ class MatplotlibCustomToolbar(NavigationToolbar):
         self.AddStretchableSpace()
 
         if pan_tool:
-            self.AddSimpleTool(self.ON_CUSTOM_LEFT, _load_bitmap('stock_left.xpm'),
+            self.AddSimpleTool(self.ON_CUSTOM_LEFT, load_bitmap('stock_left.xpm'),
                                'Pan to the left', 'Pan graph to the left')
             self.Bind(wx.EVT_TOOL, self._on_custom_pan_left, None, self.ON_CUSTOM_LEFT)
 
-            self.AddSimpleTool(self.ON_CUSTOM_RIGHT, _load_bitmap('stock_right.xpm'),
+            self.AddSimpleTool(self.ON_CUSTOM_RIGHT, load_bitmap('stock_right.xpm'),
                                'Pan to the right', 'Pan graph to the right')
             self.Bind(wx.EVT_TOOL, self._on_custom_pan_right, None, self.ON_CUSTOM_RIGHT)
 
-            self.AddSimpleTool(self.ON_CUSTOM_UP, _load_bitmap('stock_up.xpm'),
+            self.AddSimpleTool(self.ON_CUSTOM_UP, load_bitmap('stock_up.xpm'),
                                'Pan to the top', 'Pan graph to the top')
             self.Bind(wx.EVT_TOOL, self._on_custom_pan_up, None, self.ON_CUSTOM_UP)
 
-            self.AddSimpleTool(self.ON_CUSTOM_DOWN, _load_bitmap('stock_down.xpm'),
+            self.AddSimpleTool(self.ON_CUSTOM_DOWN, load_bitmap('stock_down.xpm'),
                                'Pan to the bottom', 'Pan graph to the bottom')
             self.Bind(wx.EVT_TOOL, self._on_custom_pan_down, None, self.ON_CUSTOM_DOWN)
 
