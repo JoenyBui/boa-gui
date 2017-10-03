@@ -1,8 +1,8 @@
 .. _api_splash_screen:
 
 ******************
-peui.splash.screen
+boaui.splash.screen
 ******************
 
-.. automodule:: peui.splash.screen
+.. automodule:: boaui.splash.screen
     :members:

@@ -1,7 +1,7 @@
 .. _api_contextmenu:
 
 ****************
-peui.contextmenu
+boaui.contextmenu
 ****************
 
 .. toctree::

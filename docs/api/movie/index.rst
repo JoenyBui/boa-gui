@@ -1,7 +1,7 @@
 .. _api_movie:
 
 **********
-peui.movie
+boaui.movie
 **********
 
 .. toctree::

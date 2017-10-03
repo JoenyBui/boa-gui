@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# PEC-GUI documentation build configuration file, created by
+# BOA-UI documentation build configuration file, created by
 # sphinx-quickstart on Wed May 25 11:00:26 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -48,7 +48,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'PEC-GUI'
+project = u'boaui'
 copyright = u'2016, Joeny Bui'
 author = u'Joeny Bui'
 
@@ -124,7 +124,7 @@ html_theme = 'sphinx_rtd_theme'
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-#html_title = u'PEC-GUI v0.1'
+#html_title = u'boaui v0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -206,7 +206,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'peui_doc'
+htmlhelp_basename = 'boaui_doc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -228,7 +228,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PEC-GUI.tex', u'PEC-GUI Documentation',
+    (master_doc, 'boaui.tex', u'boaui Documentation',
      u'Joeny Bui', 'manual'),
 ]
 
@@ -258,7 +258,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pec-gui', u'PEC-GUI Documentation',
+    (master_doc, 'boaui', u'boaui Documentation',
      [author], 1)
 ]
 
@@ -272,8 +272,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PEC-GUI', u'PEC-GUI Documentation',
-     author, 'PEC-GUI', 'One line description of project.',
+    (master_doc, 'boaui', u'boaui Documentation',
+     author, 'boaui', 'One line description of project.',
      'Miscellaneous'),
 ]
 

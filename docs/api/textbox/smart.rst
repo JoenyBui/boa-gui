@@ -1,8 +1,8 @@
 .. _api_textbox_smart:
 
 ******************
-peui.textbox.smart
+boaui.textbox.smart
 ******************
 
-.. automodule:: peui.textbox.smart
+.. automodule:: boaui.textbox.smart
     :members:

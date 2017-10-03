@@ -1,8 +1,8 @@
 .. _api_view_vtk:
 
 *************
-peui.view.vtk
+boaui.view.vtk
 *************
 
-.. automodule:: peui.view.vtk
+.. automodule:: boaui.view.vtk
     :members:

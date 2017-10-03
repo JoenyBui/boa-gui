@@ -1,11 +1,11 @@
 import os
 
-from pecutil.run import copy_folder_minify
+from boautil.run import copy_folder_minify
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 if __name__ == '__main__':
-    package_name = 'peui'
+    package_name = 'boaui'
 
     LOCAL_FOLDER = os.path.dirname(os.path.abspath(__file__))
     SOURCE_LOCATION = os.path.join(os.path.split(LOCAL_FOLDER)[0], package_name)

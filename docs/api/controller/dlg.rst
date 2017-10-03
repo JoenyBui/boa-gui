@@ -1,8 +1,8 @@
 .. _api_controller_dlg:
 
 *******************
-peui.controller.dlg
+boaui.controller.dlg
 *******************
 
-.. automodule:: peui.controller.dlg
+.. automodule:: boaui.controller.dlg
     :members:

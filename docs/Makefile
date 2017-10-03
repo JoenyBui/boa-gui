@@ -96,9 +96,9 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/PEC-GUI.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/boaui.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/PEC-GUI.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/boaui.qhc"
 
 .PHONY: applehelp
 applehelp:
@@ -115,8 +115,8 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/PEC-GUI"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/PEC-GUI"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/boaui"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/boaui"
 	@echo "# devhelp"
 
 .PHONY: epub

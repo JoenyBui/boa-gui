@@ -1,8 +1,8 @@
 .. _api_main_menubar:
 
 *****************
-peui.main.menubar
+boaui.main.menubar
 *****************
 
-.. automodule:: peui.main.menubar
+.. automodule:: boaui.main.menubar
     :members:

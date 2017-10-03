@@ -1,11 +1,11 @@
 from unittest import TestCase
 
-from peui.units import acceleration
-from peui.units.acceleration import AccelerationUnit
+from boaui.units import acceleration
+from boaui.units.acceleration import AccelerationUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestAcceleration(BaseUnitTest):

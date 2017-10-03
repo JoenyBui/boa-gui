@@ -1,7 +1,7 @@
 .. _api_controller:
 
 ***************
-peui.controller
+boaui.controller
 ***************
 
 .. toctree::

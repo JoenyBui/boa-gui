@@ -14,6 +14,6 @@
 
 .. _BSD License: http://opensource.org/licenses/bsd-license.php
 
-.. _peui: http://
+.. _boaui: http://
 .. _pelm: http://
 .. _pecutil: http://

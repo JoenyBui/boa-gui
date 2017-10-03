@@ -21,12 +21,6 @@ This README would normally document whatever steps are necessary to get your app
 * Writing tests
 * Code review
 * Other guidelines
-* Minion Pull Request
-
-        git checkout v1
-        git remote add protectionconsultants/pec_gui ssh://git@bitbucket.org/protectionconsultants/pec_gui.git
-        git fetch protectionconsultants/pec_gui
-        git merge remotes/protectionconsultants/pec_gui/v1
 
 * Requirements
     There are two sets of requirements to output (pip and conda)
@@ -49,10 +43,15 @@ This README would normally document whatever steps are necessary to get your app
 
         pip install <project>.whl
 
+### Installing with Ubuntu
+
+Additional dependicies...
+
+        sudo apt-get install libgtk2.0-dev
+
 ### Who do I talk to? ###
 
 * Repo owner or admin
 Joeny Bui
-Eyenunwana Nwoko
  
 * Other community or team contact

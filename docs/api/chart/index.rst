@@ -1,7 +1,7 @@
 .. _api_chart:
 
 **********
-peui.chart
+boaui.chart
 **********
 
 .. toctree::

@@ -1,8 +1,8 @@
 .. _api_controller_ribbon:
 
 **********************
-peui.controller.ribbon
+boaui.controller.ribbon
 **********************
 
-.. automodule:: peui.controller.ribbon
+.. automodule:: boaui.controller.ribbon
     :members:

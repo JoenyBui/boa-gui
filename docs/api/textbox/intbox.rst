@@ -1,8 +1,8 @@
 .. _api_textbox_intbox:
 
 *******************
-peui.textbox.intbox
+boaui.textbox.intbox
 *******************
 
-.. automodule:: peui.textbox.intbox
+.. automodule:: boaui.textbox.intbox
     :members:

@@ -1,8 +1,8 @@
 .. _api_tree_project:
 
 *****************
-peui.tree.project
+boaui.tree.project
 *****************
 
-.. automodule:: peui.tree.project
+.. automodule:: boaui.tree.project
     :members:

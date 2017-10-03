@@ -1,7 +1,7 @@
 .. _api_app:
 
 ********
-peui.app
+boaui.app
 ********
 
 .. automodule:: app

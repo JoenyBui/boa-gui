@@ -1,68 +1,68 @@
 .. _api_units:
 
 **********
-peui.units
+boaui.units
 **********
 
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: peui.units
+.. automodule:: boaui.units
     :members:
 
-.. automodule:: peui.units.acceleration
+.. automodule:: boaui.units.acceleration
     :members:
 
-.. automodule:: peui.units.area
+.. automodule:: boaui.units.area
     :members:
 
-.. automodule:: peui.units.area_density
+.. automodule:: boaui.units.area_density
     :members:
 
-.. automodule:: peui.units.charge
+.. automodule:: boaui.units.charge
     :members:
 
-.. automodule:: peui.units.density
+.. automodule:: boaui.units.density
     :members:
 
-.. automodule:: peui.units.force
+.. automodule:: boaui.units.force
     :members:
 
-.. automodule:: peui.units.inertia
+.. automodule:: boaui.units.inertia
     :members:
 
-.. automodule:: peui.units.length
+.. automodule:: boaui.units.length
     :members:
 
-.. automodule:: peui.units.linear_density
+.. automodule:: boaui.units.linear_density
     :members:
 
-.. automodule:: peui.units.linear_pressure
+.. automodule:: boaui.units.linear_pressure
     :members:
 
-.. automodule:: peui.units.mapper
+.. automodule:: boaui.units.mapper
     :members:
 
-.. automodule:: peui.units.mass
+.. automodule:: boaui.units.mass
     :members:
 
-.. automodule:: peui.units.pressure
+.. automodule:: boaui.units.pressure
     :members:
 
-.. automodule:: peui.units.specific_weight
+.. automodule:: boaui.units.specific_weight
     :members:
 
-.. automodule:: peui.units.time
+.. automodule:: boaui.units.time
     :members:
 
-.. automodule:: peui.units.tnt
+.. automodule:: boaui.units.tnt
     :members:
 
-.. automodule:: peui.units.torque
+.. automodule:: boaui.units.torque
     :members:
 
-.. automodule:: peui.units.velocity
+.. automodule:: boaui.units.velocity
     :members:
 
-.. automodule:: peui.units.volume
+.. automodule:: boaui.units.volume
     :members:

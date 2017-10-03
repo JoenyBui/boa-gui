@@ -1,12 +1,12 @@
 .. _api_panel_grid:
 
 ***************
-peui.panel.grid
+boaui.panel.grid
 ***************
 
 Grid
 ----
 
-.. automodule:: peui.panel.grid
+.. automodule:: boaui.panel.grid
     :members:
 

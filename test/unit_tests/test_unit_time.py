@@ -1,9 +1,9 @@
 from unittest import TestCase
-from peui.units.time import TimeUnit
+from boaui.units.time import TimeUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestTime(BaseUnitTest):

@@ -1,7 +1,7 @@
 .. _api_decorate:
 
 *************
-peui.decorate
+boaui.decorate
 *************
 
 .. toctree::

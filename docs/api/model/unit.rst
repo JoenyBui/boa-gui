@@ -1,8 +1,8 @@
 .. _api_model_unit:
 
 ***************
-peui.model.unit
+boaui.model.unit
 ***************
 
-.. automodule:: peui.model.unit
+.. automodule:: boaui.model.unit
     :members:

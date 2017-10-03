@@ -1,8 +1,8 @@
 .. _api_main_window:
 
 ****************
-peui.main.window
+boaui.main.window
 ****************
 
-.. automodule:: peui.main.window
+.. automodule:: boaui.main.window
     :members:

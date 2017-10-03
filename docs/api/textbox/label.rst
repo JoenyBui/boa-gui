@@ -1,8 +1,8 @@
 .. _api_textbox_label:
 
 ******************
-peui.textbox.label
+boaui.textbox.label
 ******************
 
-.. automodule:: peui.textbox.label
+.. automodule:: boaui.textbox.label
     :members:

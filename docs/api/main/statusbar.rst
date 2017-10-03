@@ -1,8 +1,8 @@
 .. _api_main_statusbar:
 
 *******************
-peui.main.statusbar
+boaui.main.statusbar
 *******************
 
-.. automodule:: peui.main.statusbar
+.. automodule:: boaui.main.statusbar
     :members:

@@ -1,8 +1,8 @@
 .. _api_form_file:
 
 **************
-peui.form.file
+boaui.form.file
 **************
 
-.. automodule:: peui.form.file
+.. automodule:: boaui.form.file
     :members:

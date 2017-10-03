@@ -1,8 +1,8 @@
 .. _api_textbox_combobox:
 
 *********************
-peui.textbox.combobox
+boaui.textbox.combobox
 *********************
 
-.. automodule:: peui.textbox.combobox
+.. automodule:: boaui.textbox.combobox
     :members:

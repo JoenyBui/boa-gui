@@ -1,8 +1,8 @@
 from base import BaseUnitTest
 
-from peui.units.charge import ChargeUnit
+from boaui.units.charge import ChargeUnit
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestTNT(BaseUnitTest):

@@ -1,8 +1,8 @@
 .. _api_textbox_textbox:
 
 ********************
-peui.textbox.textbox
+boaui.textbox.textbox
 ********************
 
-.. automodule:: peui.textbox.textbox
+.. automodule:: boaui.textbox.textbox
     :members:

@@ -1,8 +1,8 @@
 .. _api_controller_main:
 
 ********************
-peui.controller.main
+boaui.controller.main
 ********************
 
-.. automodule:: peui.controller.main
+.. automodule:: boaui.controller.main
     :members:

@@ -1,8 +1,8 @@
 .. _api_chart_toolbar:
 
 ******************
-peui.chart.toolbar
+boaui.chart.toolbar
 ******************
 
-.. automodule:: peui.chart.toolbar
+.. automodule:: boaui.chart.toolbar
     :members:

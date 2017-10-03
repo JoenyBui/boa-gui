@@ -1,8 +1,8 @@
 .. _api_setting:
 
 ************
-peui.setting
+boaui.setting
 ************
 
-.. automodule:: peui.setting
+.. automodule:: boaui.setting
     :members:

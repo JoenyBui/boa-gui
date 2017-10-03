@@ -1,8 +1,8 @@
 .. _api_textbox_floatbox:
 
 *********************
-peui.textbox.floatbox
+boaui.textbox.floatbox
 *********************
 
-.. automodule:: peui.textbox.floatbox
+.. automodule:: boaui.textbox.floatbox
     :members:

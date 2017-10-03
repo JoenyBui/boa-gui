@@ -2,12 +2,12 @@ from unittest import TestCase
 
 import wx
 
-from peui.units import KEY_IMPERIAL
+from boaui.units import KEY_IMPERIAL
 
-from peui.textbox.combobox import SmartComboBox
-from peui.textbox.intbox import IntInputLayout, IntSmartBox
+from boaui.textbox.combobox import SmartComboBox
+from boaui.textbox.intbox import IntInputLayout, IntSmartBox
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestIntInputLayout(TestCase):

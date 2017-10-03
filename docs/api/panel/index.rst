@@ -1,7 +1,7 @@
 .. _api_panel:
 
 **********
-peui.panel
+boaui.panel
 **********
 
 .. toctree::

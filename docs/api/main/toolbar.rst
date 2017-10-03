@@ -1,8 +1,8 @@
 .. _api_main_toolbar:
 
 *****************
-peui.main.toolbar
+boaui.main.toolbar
 *****************
 
-.. automodule:: peui.main.toolbar
+.. automodule:: boaui.main.toolbar
     :members:

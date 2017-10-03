@@ -1,8 +1,8 @@
 .. _api_view_terminal:
 
 ******************
-peui.view.terminal
+boaui.view.terminal
 ******************
 
-.. automodule:: peui.view.terminal
+.. automodule:: boaui.view.terminal
     :members:

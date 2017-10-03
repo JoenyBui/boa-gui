@@ -1,8 +1,8 @@
 import pytest
 
-from peui.units import length, mass, pressure, charge
+from boaui.units import length, mass, pressure, charge
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestLength():

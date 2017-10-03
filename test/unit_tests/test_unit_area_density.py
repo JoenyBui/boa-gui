@@ -1,11 +1,11 @@
 from base import BaseUnitTest
 
-import peui.units as units
-from peui.units import area_density
-from peui.units.area_density import AreaDensityUnit
-from peui.units.mapper import UnitMap
+import boaui.units as units
+from boaui.units import area_density
+from boaui.units.area_density import AreaDensityUnit
+from boaui.units.mapper import UnitMap
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestAreaDensity(BaseUnitTest):

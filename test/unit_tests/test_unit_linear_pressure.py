@@ -1,10 +1,10 @@
-from peui.units.linear_pressure import LinearPressureUnit
+from boaui.units.linear_pressure import LinearPressureUnit
 
-from peui.units import linear_pressure
+from boaui.units import linear_pressure
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestLinearPressure(BaseUnitTest):

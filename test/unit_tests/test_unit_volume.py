@@ -1,8 +1,8 @@
 from base import BaseUnitTest
 
-from peui.units.volume import VolumeUnit
+from boaui.units.volume import VolumeUnit
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestVolume(BaseUnitTest):

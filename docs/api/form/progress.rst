@@ -1,8 +1,8 @@
 .. _api_form_progress:
 
 ******************
-peui.form.progress
+boaui.form.progress
 ******************
 
-.. automodule:: peui.form.progress
+.. automodule:: boaui.form.progress
     :members:

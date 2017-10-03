@@ -1,10 +1,10 @@
 from unittest import TestCase
-from peui.units import length
-from peui.units.length import LengthUnit
+from boaui.units import length
+from boaui.units.length import LengthUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestLength(BaseUnitTest):

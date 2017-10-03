@@ -1,9 +1,9 @@
 from unittest import TestCase
-from peui.units.specific_weight import SpecificWeightUnit
+from boaui.units.specific_weight import SpecificWeightUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestSpecificWeight(BaseUnitTest):

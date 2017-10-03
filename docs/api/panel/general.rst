@@ -1,12 +1,12 @@
 .. _api_panel_general:
 
 ******************
-peui.panel.general
+boaui.panel.general
 ******************
 
 General
 -------
 
-.. automodule:: peui.panel.general
+.. automodule:: boaui.panel.general
     :members:
 

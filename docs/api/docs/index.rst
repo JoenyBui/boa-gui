@@ -1,7 +1,7 @@
 .. _api_docs:
 
 *********
-peui.docs
+boaui.docs
 *********
 
 .. toctree::

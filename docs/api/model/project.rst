@@ -1,8 +1,8 @@
 .. _api_model_project:
 
 ******************
-peui.model.project
+boaui.model.project
 ******************
 
-.. automodule:: peui.model.project
+.. automodule:: boaui.model.project
     :members:

@@ -1,8 +1,8 @@
 .. _api_controller_wait:
 
 ******************
-peui.decorate.wait
+boaui.decorate.wait
 ******************
 
-.. automodule:: peui.decorate.wait
+.. automodule:: boaui.decorate.wait
     :members:

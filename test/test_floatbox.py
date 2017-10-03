@@ -2,11 +2,11 @@ from unittest import TestCase
 
 import wx
 
-from peui.units import KEY_IMPERIAL, KEY_METRIC
+from boaui.units import KEY_IMPERIAL, KEY_METRIC
 
-from peui.textbox.combobox import SmartComboBox
-from peui.textbox.floatbox import FloatInputLayout, FloatSmartBox
-from peui.textbox.intbox import IntInputLayout
+from boaui.textbox.combobox import SmartComboBox
+from boaui.textbox.floatbox import FloatInputLayout, FloatSmartBox
+from boaui.textbox.intbox import IntInputLayout
 
 
 class TestFloatInputLayout(TestCase):

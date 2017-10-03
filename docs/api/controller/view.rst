@@ -1,8 +1,8 @@
 .. _api_controller_view:
 
 ********************
-peui.controller.view
+boaui.controller.view
 ********************
 
-.. automodule:: peui.controller.view
+.. automodule:: boaui.controller.view
     :members:

@@ -1,9 +1,9 @@
 from unittest import TestCase
-from peui.units.linear_density import LinearDensityUnit
+from boaui.units.linear_density import LinearDensityUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestLinearDensity(BaseUnitTest):

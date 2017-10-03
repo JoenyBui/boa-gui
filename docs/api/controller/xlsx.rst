@@ -1,8 +1,8 @@
 .. _api_controller_xlsx:
 
 ********************
-peui.controller.xlsx
+boaui.controller.xlsx
 ********************
 
-.. automodule:: peui.controller.xlsx
+.. automodule:: boaui.controller.xlsx
     :members:

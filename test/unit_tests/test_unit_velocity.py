@@ -1,8 +1,8 @@
 from base import BaseUnitTest
 
-from peui.units.velocity import VelocityUnit
+from boaui.units.velocity import VelocityUnit
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestVelocity(BaseUnitTest):

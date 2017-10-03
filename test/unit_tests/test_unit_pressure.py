@@ -1,9 +1,9 @@
 from base import BaseUnitTest
 
 from unittest import TestCase
-from peui.units.pressure import PressureUnit
+from boaui.units.pressure import PressureUnit
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestPressure(BaseUnitTest):

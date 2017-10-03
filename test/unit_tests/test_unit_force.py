@@ -1,9 +1,9 @@
 from unittest import TestCase
-from peui.units.force import ForceUnit
+from boaui.units.force import ForceUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestForce(BaseUnitTest):

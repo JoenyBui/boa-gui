@@ -1,11 +1,11 @@
 from unittest import TestCase
-from peui.units import area
+from boaui.units import area
 
-from peui.units.area import AreaUnit
+from boaui.units.area import AreaUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestArea(BaseUnitTest):

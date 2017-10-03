@@ -30,15 +30,15 @@ def get_packages(package):
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
-version = get_version('peui')
+version = get_version('boagui')
 
 setup(
-      name="peui",
+      name="boaui",
       version=version,
-      description="Protection Enginering User Interface",
+      description="",
       author="Joeny Bui",
-      author_email="jbui@protection-consultants.com",
+      author_email="joeny.bui@gmail.com",
       platforms=["any"],
-      license="BSD",
+      license="MIT",
       packages=find_packages(),
 )

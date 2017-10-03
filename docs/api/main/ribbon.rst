@@ -1,8 +1,8 @@
 .. _api_main_ribbon:
 
 ****************
-peui.main.ribbon
+boaui.main.ribbon
 ****************
 
-.. automodule:: peui.main.ribbon
+.. automodule:: boaui.main.ribbon
     :members:

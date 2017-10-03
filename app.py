@@ -2,10 +2,10 @@ import os
 import sys
 
 import matplotlib
-import pandas as pd
+# import pandas as pd
 import numpy as np
 
-from scipy.special import gamma
+# from scipy.special import gamma
 
 import wx
 import wx.lib.mixins.inspection as WIT
@@ -13,7 +13,7 @@ import wx.aui
 import wx.lib.agw.aui as aui
 from wx.lib.pubsub import pub
 
-from pelm.client import LicenseClientManager, ClientFrame
+# from pelm.client import LicenseClientManager, ClientFrame
 
 if getattr(sys, 'frozen', False):
     import ctypes
@@ -72,29 +72,29 @@ ywIDAQAB
 
 if __name__ == '__main__':
     # Relative Import Hack
-    package_name = 'peui'
+    package_name = 'boaui'
 
-    from peui.main.window import MainWindow
-    from peui.controller.main import MainController
-    from peui.model.project import Project
-    from peui.tree.project import ProjectTree
-    from peui.panel.general import GeneralPanel
-    from peui.panel.grid import PropGrid
-    from peui.chart.ch2d import Chart2d
-    from peui.setting import Setting
-    from peui.view.vtk import VtkViewer
-    from peui.panel.xlsx import SpreadSheet
-    from peui.view.terminal import Console
-    from peui.controller.ch2d import MultiChart2dController
+    from boaui.main.window import MainWindow
+    from boaui.controller.main import MainController
+    from boaui.model.project import Project
+    from boaui.tree.project import ProjectTree
+    from boaui.panel.general import GeneralPanel
+    from boaui.panel.grid import PropGrid
+    from boaui.chart.ch2d import Chart2d
+    from boaui.setting import Setting
+    from boaui.view.vtk import VtkViewer
+    from boaui.panel.xlsx import SpreadSheet
+    from boaui.view.terminal import Console
+    from boaui.controller.ch2d import MultiChart2dController
 
-    import peui.config as cfg
-    from peui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
-    from peui.main.toolbar import CustomToolBar
+    import boaui.config as cfg
+    from boaui.config import MASTER_KEY, MENU_BAR_KEY, TOOLBAR_FILE_KEY
+    from boaui.main.toolbar import CustomToolBar
 
-    from peui.controller.xlsx import XlsxController, GeneralColumnTable
-    from peui.panel.image import ImageCanvas
+    from boaui.controller.xlsx import XlsxController, GeneralColumnTable
+    from boaui.panel.image import ImageCanvas
 
-    from peui.splash.screen import SplashScreen
+    from boaui.splash.screen import SplashScreen
 
     import docx
     import docxtpl
@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
         # Run a loop to check for encryption.
         while valid_license is False:
-            message = "Please contact jbui@protection-consultants and provide the following information. \n"
+            message = "Please contact joeny.bui@gmail.com and provide the following information. \n"
 
             # Try to open the three combinations.  If okay than we move on the next steps.
             if not (lm.open_encrypted_file(setting.efile) and \
@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 title="PEC-GUI License Client",
+                                 title="BOA-GUI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -152,7 +152,7 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 title="PEC-GUI License Client",
+                                 title="BOA-UI License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
@@ -168,14 +168,14 @@ if __name__ == '__main__':
 
                 cf = ClientFrame(None,
                                  setting,
-                                 title="PEC-GUI License Client",
+                                 title="boaui License Client",
                                  message=message,
                                  size=(400, 400))
                 app.MainLoop()
 
             valid_license = True
 
-    # splash = SplashScreen(image_path=os.path.join(os.path.dirname(__file__), 'peui', 'splash', 'PEC_SMALL.JPG'),
+    # splash = SplashScreen(image_path=os.path.join(os.path.dirname(__file__), 'boaui', 'splash', 'PEC_SMALL.JPG'),
     #                       shadowcolour=wx.WHITE,
     #                       agwStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_NO_TIMEOUT)
 
@@ -259,7 +259,7 @@ if __name__ == '__main__':
     )
 
     controller.add_page(
-        ImageCanvas(parent=frame, image_path=os.path.join(os.path.dirname(__file__), 'peui', 'splash', 'PEC.jpg'), id=wx.ID_ANY),
+        ImageCanvas(parent=frame, image_path=os.path.join(os.path.dirname(__file__), 'boaui', 'splash', 'PEC.jpg'), id=wx.ID_ANY),
         wx.NewId(),
         'Image',
         False

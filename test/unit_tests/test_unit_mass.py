@@ -1,11 +1,11 @@
 from unittest import TestCase
-from peui.units import mass
+from boaui.units import mass
 
-from peui.units.mass import MassUnit
+from boaui.units.mass import MassUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestMass(BaseUnitTest):

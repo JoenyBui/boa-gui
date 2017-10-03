@@ -1,8 +1,8 @@
 from base import BaseUnitTest
 
-from peui.units.torque import TorqueUnit
+from boaui.units.torque import TorqueUnit
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestTorque(BaseUnitTest):

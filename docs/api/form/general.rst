@@ -1,8 +1,8 @@
 .. _api_form_general:
 
 *****************
-peui.form.general
+boaui.form.general
 *****************
 
-.. automodule:: peui.form.general
+.. automodule:: boaui.form.general
     :members:

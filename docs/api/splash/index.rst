@@ -1,7 +1,7 @@
 .. _api_splash:
 
 ***********
-peui.splash
+boaui.splash
 ***********
 
 .. toctree::

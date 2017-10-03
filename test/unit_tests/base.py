@@ -1,6 +1,6 @@
 import unittest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class BaseUnitTest(unittest.TestCase):

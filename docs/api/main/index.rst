@@ -1,7 +1,7 @@
 .. _api_main:
 
 *********
-peui.main
+boaui.main
 *********
 
 .. toctree::

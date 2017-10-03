@@ -1,9 +1,9 @@
 .. _api_config:
 
 ***********
-peui.config
+boaui.config
 ***********
 
-.. py:module:: peui.config
-.. automodule:: peui.config
+.. py:module:: boaui.config
+.. automodule:: boaui.config
     :members:

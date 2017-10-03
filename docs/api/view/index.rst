@@ -1,7 +1,7 @@
 .. _api_view:
 
 *********
-peui.view
+boaui.view
 *********
 
 .. toctree::

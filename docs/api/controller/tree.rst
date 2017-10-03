@@ -1,8 +1,8 @@
 .. _api_controller_tree:
 
 ********************
-peui.controller.tree
+boaui.controller.tree
 ********************
 
-.. automodule:: peui.controller.tree
+.. automodule:: boaui.controller.tree
     :members:

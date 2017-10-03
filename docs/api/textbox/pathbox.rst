@@ -1,8 +1,8 @@
 .. _api_textbox_pathbox:
 
 ********************
-peui.textbox.pathbox
+boaui.textbox.pathbox
 ********************
 
-.. automodule:: peui.textbox.pathbox
+.. automodule:: boaui.textbox.pathbox
     :members:

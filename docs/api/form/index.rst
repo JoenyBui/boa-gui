@@ -1,7 +1,7 @@
 .. _api_form:
 
 *********
-peui.form
+boaui.form
 *********
 
 .. toctree::

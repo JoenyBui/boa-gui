@@ -1,7 +1,7 @@
 .. _api_textbox:
 
 ************
-peui.textbox
+boaui.textbox
 ************
 
 .. toctree::

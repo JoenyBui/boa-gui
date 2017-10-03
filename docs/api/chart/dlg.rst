@@ -1,8 +1,8 @@
 .. _api_chart_dlg:
 
 **************
-peui.chart.dlg
+boaui.chart.dlg
 **************
 
-.. automodule:: peui.chart.dlg
+.. automodule:: boaui.chart.dlg
     :members:

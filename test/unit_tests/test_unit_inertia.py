@@ -1,9 +1,9 @@
 from unittest import TestCase
-from peui.units.inertia import InertiaUnit
+from boaui.units.inertia import InertiaUnit
 
 from base import BaseUnitTest
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestInertia(BaseUnitTest):

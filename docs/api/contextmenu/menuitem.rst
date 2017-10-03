@@ -1,8 +1,8 @@
 .. _api_contextmenu_menuitem:
 
 *************************
-peui.contextmenu.menuitem
+boaui.contextmenu.menuitem
 *************************
 
-.. automodule:: peui.contextmenu.menuitem
+.. automodule:: boaui.contextmenu.menuitem
     :members:

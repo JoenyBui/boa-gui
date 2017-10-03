@@ -1,8 +1,8 @@
 .. _api_controller_property:
 
 ************************
-peui.controller.property
+boaui.controller.property
 ************************
 
-.. automodule:: peui.controller.property
+.. automodule:: boaui.controller.property
     :members:

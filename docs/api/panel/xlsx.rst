@@ -1,8 +1,8 @@
 .. _api_panel_xlsx:
 
 ***************
-peui.panel.xlsx
+boaui.panel.xlsx
 ***************
 
-.. automodule:: peui.panel.xlsx
+.. automodule:: boaui.panel.xlsx
     :members:

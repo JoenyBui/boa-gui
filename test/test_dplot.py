@@ -2,10 +2,10 @@ import unittest
 
 import os
 
-from peui.chart.dplot import Dplot
+from boaui.chart.dplot import Dplot
 
 
-__author__ = 'jbui'
+__author__ = 'Joeny'
 
 
 class TestDPLOT(unittest.TestCase):

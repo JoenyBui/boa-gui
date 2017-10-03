@@ -1,7 +1,7 @@
 .. _api_model:
 
 **********
-peui.model
+boaui.model
 **********
 
 .. toctree::
