@@ -251,50 +251,50 @@ if __name__ == '__main__':
         False
     )
 
-    controller.add_page(
-        Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data, id=cfg.METHOD_WINDOW_CHART), figsize=(1, 10)),
-        wx.NewId(),
-        'Multi-Chart',
-        True
-    )
+    # controller.add_page(
+    #     Chart2d(frame, controller,  MultiChart2dController(controller, None, project.data, id=cfg.METHOD_WINDOW_CHART), figsize=(1, 10)),
+    #     wx.NewId(),
+    #     'Multi-Chart',
+    #     True
+    # )
 
-    controller.add_page(
-        ImageCanvas(parent=frame, image_path=os.path.join(os.path.dirname(__file__), 'boaui', 'splash', 'PEC.jpg'), id=wx.ID_ANY),
-        wx.NewId(),
-        'Image',
-        False
-    )
+    # controller.add_page(
+    #     ImageCanvas(parent=frame, image_path=os.path.join(os.path.dirname(__file__), 'boaui', 'splash', 'PEC.jpg'), id=wx.ID_ANY),
+    #     wx.NewId(),
+    #     'Image',
+    #     False
+    # )
 
-    data = (("A", "B"),
-            ("C", "D"),
-            ("E", "F"),
-            ("G", "G"),
-            ("F", "F"),
-            ("Q", "Q"))
+    # data = (("A", "B"),
+    #         ("C", "D"),
+    #         ("E", "F"),
+    #         ("G", "G"),
+    #         ("F", "F"),
+    #         ("Q", "Q"))
 
-    colLabels = ("1st", "2nd", "3rd", "4th")
-    data = [
-        np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
-        np.sin(0.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
-        np.cos(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
-        np.cos(7.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
-    ]
+    # colLabels = ("1st", "2nd", "3rd", "4th")
+    # data = [
+    #     np.sin(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+    #     np.sin(0.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
+    #     np.cos(2 * np.pi * np.arange(0.0, 3.0, 0.01)),
+    #     np.cos(7.5 * np.pi * np.arange(0.0, 3.0, 0.01)),
+    # ]
 
-    table = GeneralColumnTable(data=data)
+    # table = GeneralColumnTable(data=data)
 
-    controller.add_page(
-        SpreadSheet(controller.notebook,
-                    controller,
-                    XlsxController(
-                        controller,
-                        None,
-                        table=table,
-                        id=cfg.METHOD_WINDOW_XLSX
-                    )),
-        cfg.METHOD_WINDOW_XLSX,
-        'XLSX',
-        True
-    )
+    # controller.add_page(
+    #     SpreadSheet(controller.notebook,
+    #                 controller,
+    #                 XlsxController(
+    #                     controller,
+    #                     None,
+    #                     table=table,
+    #                     id=cfg.METHOD_WINDOW_XLSX
+    #                 )),
+    #     cfg.METHOD_WINDOW_XLSX,
+    #     'XLSX',
+    #     True
+    # )
 
     # Load Model
     frame.Show(True)

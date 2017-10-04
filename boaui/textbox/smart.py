@@ -1234,6 +1234,14 @@ class SmartButton(wx.Button):
         if enable is not None:
             self.Enable(enable)
 
+    def bind_click(self, handle):
+        """
+        Bind check box click.
+        :param handle:
+        :return:
+        """
+        self.Bind(wx.EVT_BUTTON, handle)
+
 
 class SmartCheckBox(wx.CheckBox):
     """

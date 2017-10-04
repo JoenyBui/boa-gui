@@ -30,7 +30,7 @@ def get_packages(package):
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 
-version = get_version('boagui')
+version = get_version('boaui')
 
 setup(
       name="boaui",
