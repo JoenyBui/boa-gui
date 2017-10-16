@@ -4,7 +4,7 @@ from wx.lib.pubsub import pub
 __author__ = 'Joeny'
 
 
-class BindOjbect(object):
+class BindObject(object):
     """
     Bind Object Model
 

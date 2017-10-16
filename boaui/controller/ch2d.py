@@ -815,3 +815,367 @@ class MultiChart2dController(Chart2dController):
 
         # Update figure text.
         # self.update_text()
+
+
+class ChartController(TabPageController):
+    """
+    Chart Controller that requires the usage of Figure/Plot/DataSet
+
+    """
+
+    def __init__(self, parent, parent_view, data_handle, *args, **kwargs):
+        """
+
+        :param parent:
+        :param parent_view:
+        :param data_handle:
+        :param args:
+        :param kwargs:
+        """
+        TabPageController.__init__(self, parent, parent_view, *args, **kwargs)
+
+        # TODO: Colors are currently overriding the style of the plot.  Need to resolve it somehow.
+
+        self.settings = {
+            'color_set': palettable.colorbrewer.qualitative.Dark2_7.mpl_colors,
+            # 'color_set': plt.get_cmap().colors,
+            'figure': [],
+            'show_origin_axis': False,
+            'margin': 0.1,
+            'right': 0.9,
+            'left': 0.125
+        }
+
+        # Figure
+        self.data = None
+
+        # Data Function
+        self.data_handle = data_handle
+        self.data_handle_args = kwargs.get('data_handle_kwargs', ())
+        self.data_handle_kwargs = kwargs.get('data_handle_kwargs', {})
+
+    def plot_data(self):
+        """
+        Plot Data
+
+        :return:
+        """
+        if self.data:
+            self.data.plot_data()
+
+    def do_layout(self):
+        """
+        Set and bind the view.
+
+        :return:
+        """
+        # self.data = self.data_handle()
+        self.data = self.data_handle(*self.data_handle_args, **self.data_handle_kwargs)
+
+        if self.data:
+            self.data.preset()
+
+            # Draw the Grid Spec.
+            gs = gridspec.GridSpec(self.data.nrows, self.data.ncols)
+
+            # TODO: Adjust gridspec features.
+            # gs.update()
+
+            for index, item in enumerate(self.data.plots):
+                row, column = self.data.plot_layout[index]
+
+                # Add main axis.
+                item.axes = self.view.figure.add_subplot(
+                    gs[row - 1, column - 1]
+                )
+
+                # Set Title Position
+                # item.axes.title.set_position([.5, 11.05])
+
+                # Set Margin
+                # item.axes.margins(0.3, 0.3)
+
+                # Add any additional twin axis.
+                for key, twinx in item.twinx.items():
+                    item.twinx[key] = item.axes.twinx()
+
+        # Call the binding for custom toolbar figure.
+        self.bind_toolbar_figure()
+
+        # Make the grid nice.
+        # self.view.figure.tight_layout()
+        self.view.figure.subplots_adjust(
+            left=self.settings.get('left', 0.125),
+            right=self.settings.get('right', 0.9),
+            bottom=self.settings.get('bottom', 0.1),
+            top=self.settings.get('top', 0.90),
+            wspace=self.settings.get('wspace', 0.2),
+            hspace=self.settings.get('hspace', 0.5)
+        )
+
+    def sync_data(self):
+        pass
+
+    def update_data(self):
+        """
+        Update data.
+
+        :return:
+        """
+        # Get new data and transfer the data to existing structures.
+        new_data = self.data_handle(*self.data_handle_args, **self.data_handle_kwargs)
+
+        # Update the new data set.
+        if self.data:
+            for index, item in enumerate(self.data.plots):
+                item.data_set = new_data.plots[index].data_set
+
+    def refresh(self):
+        """
+        Refresh data
+
+        :return:
+        """
+        self.clear_control()
+
+        if self.data:
+            self.data.refresh(self.settings)
+
+        self.view.figure.canvas.draw()
+
+    def bind_toolbar_figure(self):
+        """
+        Bind Toolbar Figure
+
+        :return:
+        """
+        tb = self.view.toolbar
+
+        tb.Bind(wx.EVT_TOOL, self.on_custom_figure_setting, None, tb.ON_CUSTOM_FIGURE_SETTING)
+        tb.Bind(wx.EVT_TOOL, self.on_click_save_xy_data, None, tb.ON_CUSTOM_DPLOT)
+
+    def clear_control(self):
+        """
+        Clear the axis control.
+
+        """
+        if self.data and self.data.plots:
+            for plot in self.data.plots:
+                if plot.axes:
+                    plot.axes.cla()
+
+                for key, item in plot.twinx.items():
+                    item.cla()
+
+    def get_figure_settings(self):
+        """
+        Get the figure setting array for each plot.
+
+        :return:
+        """
+        fs_array = []
+
+        for plot in self.data.plots:
+            # axes = plot.axes
+            #
+            # fs = FigureSetting()
+            #
+            # fs.title = axes.get_title()
+            # fs.x_title = axes.get_xlabel()
+            # fs.y_title = axes.get_ylabel()
+            #
+            # xlim = axes.get_xlim()
+            # ylim = axes.get_ylim()
+            #
+            # fs.x_min = xlim[0]
+            # fs.x_max = xlim[1]
+            # fs.y_min = ylim[0]
+            # fs.y_max = ylim[1]
+
+            fs_array.append(plot.settings)
+
+        return fs_array
+
+    def on_custom_figure_setting(self, event):
+        """
+
+        :param event:
+        :return:
+        """
+        dlg = FigureSettingDialog(self.view, self, setting=self.get_figure_settings())
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.update_figure_setting(dlg.local.settings)
+
+    def update_figure_setting(self, settings):
+        """
+        Update figure setting text
+
+        :param settings: update the title axes
+        :return:
+        """
+
+        for index, setting in enumerate(settings):
+            self.data.plots[index].settings = setting
+            # self.data.plots[index].y_label = setting.y_label
+            # self.data.plots[index].x_label = setting.x_label
+            #
+            # self.data.plots[index].axes.set_xlim(left=setting.x_min, right=setting.x_max)
+            # self.data.plots[index].axes.set_ylim(bottom=setting.y_min, top=setting.y_max)
+
+        self.refresh()
+
+    def on_click_save_xy_data(self, event):
+        """
+        On click save xy data.
+
+        :param event:
+        :return:
+        """
+        if len(self.data.plots) == 1:
+            dlg = SaveXYDialog(self.view)
+        else:
+            dlg = PlotChooseAxisDialog(self.view)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+
+            axis_index = dlg.get_axis_index()
+            filename = dlg.GetFilename()
+
+            file, ext = os.path.splitext(filename)
+
+            if ext == '.csv':
+                self.save_xy_data(path, axis_index)
+            elif ext == '.grf':
+                self.save_dplot_data(path, axis_index)
+
+        dlg.Destroy()
+
+    def get_data_block(self, axis_index):
+        """
+        Get data in numpy matrix block.
+
+        :param axis_index:
+        :return:
+        """
+        data = []
+
+        axes = self.data.plots[axis_index].axes
+        for line in axes.lines:
+            x = line.get_xdata()
+            y = line.get_ydata()
+
+            data.append(x)
+            data.append(y)
+
+        return np.array(data)
+
+    def get_data_list(self, axis_index):
+        """
+        Get the data in list of tuple.
+
+        :param axis_index:
+        :return:
+        """
+        data = []
+
+        # for axes in self.view.axes[axis_index]:
+        # axes = self.view.axes[axis_index]
+        axes = self.data.plots[axis_index].axes
+
+        if self.settings['show_origin_axis']:
+            for line in axes.lines[:-2]:
+                data.append((line.get_xdata(), line.get_ydata()))
+
+        else:
+            for line in axes.lines:
+                data.append((line.get_xdata(), line.get_ydata()))
+
+        return data
+
+    def save_xy_data(self, pathname, axis_index):
+        """
+        Save data file to csv x, y.
+
+        :param pathname: file path name
+        :param axis_index:
+        :return:
+        """
+        data = self.get_data_block(axis_index)
+
+        try:
+            np.savetxt(
+                pathname,
+                data.transpose(),
+                delimiter=','
+            )
+        except TypeError as e:
+            print(e)
+
+            wx.MessageBox('TypeError: Data is not aligned and cannot be saved as csv.')
+
+    def save_dplot_data(self, pathname, axis_index):
+        """
+        Save DPLOT data
+
+        :param pathname:
+        :param axis_index:
+        :return:
+        """
+
+        try:
+            # Create a DPLOT file.
+            dp = Dplot()
+
+            # Get data set.
+            data = self.get_data_list(axis_index)
+
+            # Get plot axes.
+            axes = self.data.plots[axis_index].axes
+
+            # Title
+            dp.title_1 = axes.get_title()
+
+            # X-Title
+            x_axis = axes.get_xaxis()
+            dp.x_axis = x_axis.get_label().get_text()
+
+            # Y-Title
+            y_axis = axes.get_yaxis()
+            dp.y_axis = y_axis.get_label().get_text()
+
+            xscale = x_axis.get_scale()
+            yscale = y_axis.get_scale()
+
+            if xscale == 'linear' and yscale == 'linear':
+                dp.scale_mode = dp.scaling_list['A'][1]
+            elif xscale == 'linear' and yscale == 'log':
+                dp.scale_mode = dp.scaling_list['D'][1]
+            elif xscale == 'log' and yscale == 'linear':
+                dp.scale_mode = dp.scaling_list['B'][1]
+            elif xscale == 'log' and yscale == 'log':
+                dp.scale_mode = dp.scaling_list['E'][1]
+
+            for x, y in data:
+                dp.add_curve(
+                    DplotCurve(list(x), list(y))
+                )
+
+            # Draw Legend
+            legend = axes.get_legend()
+
+            if legend:
+                texts = legend.get_texts()
+                for index in range(0, len(texts)):
+                    text = texts[index]
+
+                    dp.data[index].legend_title = text.get_text()
+
+            # TODO: Legend needs to account for the secondary list.
+
+            dp.write_dplot(pathname)
+
+        except IOError as e:
+
+            print(str(e))
